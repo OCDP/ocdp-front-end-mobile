@@ -1,4 +1,4 @@
-package com.projetofacu.generated;
+package com.sobrevida.generated;
 
 import java.util.Arrays;
 import java.util.List;

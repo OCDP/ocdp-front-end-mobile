@@ -1,4 +1,4 @@
-package com.projetofacu;
+package com.sobrevida;
 
 import android.app.Application;
 
@@ -8,7 +8,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.projetofacu.generated.BasePackageList;
+import com.sobrevida.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ReactAdapterPackage;
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
