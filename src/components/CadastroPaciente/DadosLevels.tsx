@@ -77,8 +77,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
           >
             <View style={{ flex: 1, alignItems: "center" }}>
-              <DadosPessoais navigation={navigation} />
               <DadosLocais navigation={navigation} />
+              <DadosPessoais navigation={navigation} />
             </View>
           </ProgressStep>
           <ProgressStep
