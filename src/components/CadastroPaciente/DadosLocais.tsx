@@ -6,8 +6,6 @@ import { cidades, bairros } from "../../utils/constants";
 
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
-  const [seleCidade, setSeleCidade] = useState(null);
-  const [seleBairro, setSeleBairro] = useState(null);
 
   const styles = useStyleSheet({
     lineContent: {
@@ -20,23 +18,15 @@ const DadosLocais = ({ navigation }) => {
     }
   });
 
-  useEffect(() => {
-    setCidade(seleCidade);
-  }, [seleCidade]);
-
-  useEffect(() => {
-    setBairro(seleBairro);
-  }, [seleBairro]);
-
   return (
     <>
       <View style={styles.lineContent}>
         <Layout style={styles.heightInput}>
           <Select
             data={cidades}
-            placeholder="Selecionar cidades"
-            selectedOption={seleCidade}
-            onSelect={setSeleCidade}
+            placeholder="selecionar cidade"
+            selectedOption={{ text: cidade }}
+            onSelect={e => setCidade(e["text"])}
           />
         </Layout>
       </View>
@@ -44,9 +34,9 @@ const DadosLocais = ({ navigation }) => {
         <Layout style={styles.heightInput}>
           <Select
             data={bairros}
-            placeholder="Selecionar bairros"
-            selectedOption={seleBairro}
-            onSelect={setSeleBairro}
+            placeholder={bairro || "selecionar bairro"}
+            selectedOption={{ text: bairro }}
+            onSelect={e => setBairro(e["text"])}
           />
         </Layout>
       </View>
