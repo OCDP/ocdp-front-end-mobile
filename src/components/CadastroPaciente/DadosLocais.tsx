@@ -1,12 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View } from "react-native";
-import { useStyleSheet, Autocomplete } from "@ui-kitten/components";
-import { pin, map } from "../../assets/Icons";
+import { useStyleSheet, Select, Layout } from "@ui-kitten/components";
 import PacienteContext from "../../contexts/PacienteContext";
 import { cidades, bairros } from "../../utils/constants";
 
 const DadosLocais = ({ navigation }) => {
-  const { setCidade, setBairro } = useContext(PacienteContext);
+  const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
+  const [seleCidade, setSeleCidade] = useState(null);
+  const [seleBairro, setSeleBairro] = useState(null);
 
   const styles = useStyleSheet({
     lineContent: {
@@ -15,69 +16,39 @@ const DadosLocais = ({ navigation }) => {
       marginVertical: 8
     },
     heightInput: {
-      height: 40
+      maxHeight: 50
     }
   });
 
-  const [dataBairros, setDataBairros] = React.useState(bairros);
-  const [valueBairro, setValueBairro] = React.useState(null);
-  const [dataCidades, setDataCidades] = React.useState(cidades);
-  const [valueCidade, setValueCidade] = React.useState(null);
+  useEffect(() => {
+    setCidade(seleCidade);
+  }, [seleCidade]);
 
-  const onSelectBairro = ({ title }) => {
-    setBairro(title);
-    setValueBairro(title);
-  };
-
-  const onSelectCidade = ({ title }) => {
-    setCidade(title);
-    setValueCidade(title);
-  };
-
-  const onChangeTextBairro = query => {
-    setValueBairro(query);
-    setDataBairros(
-      bairros.filter(e => e.title.toLowerCase().includes(query.toLowerCase()))
-    );
-  };
-
-  const onChangeTextCidade = query => {
-    setValueCidade(query);
-    setDataCidades(
-      cidades.filter(e => e.title.toLowerCase().includes(query.toLowerCase()))
-    );
-  };
+  useEffect(() => {
+    setBairro(seleBairro);
+  }, [seleBairro]);
 
   return (
     <>
       <View style={styles.lineContent}>
-        <View></View>
-        <View>
-          <Autocomplete
-            style={styles.heightInput}
-            icon={map}
-            onFocus={() => setValueCidade(null)}
-            placeholder="Cidade"
-            value={valueCidade}
-            data={dataCidades}
-            onChangeText={onChangeTextCidade}
-            onSelect={onSelectCidade}
+        <Layout style={styles.heightInput}>
+          <Select
+            data={cidades}
+            placeholder="Selecionar cidades"
+            selectedOption={seleCidade}
+            onSelect={setSeleCidade}
           />
-        </View>
+        </Layout>
       </View>
       <View style={styles.lineContent}>
-        <View>
-          <Autocomplete
-            style={styles.heightInput}
-            icon={pin}
-            onFocus={() => setValueBairro(null)}
-            placeholder="Bairro"
-            value={valueBairro}
-            data={dataBairros}
-            onChangeText={onChangeTextBairro}
-            onSelect={onSelectBairro}
+        <Layout style={styles.heightInput}>
+          <Select
+            data={bairros}
+            placeholder="Selecionar bairros"
+            selectedOption={seleBairro}
+            onSelect={setSeleBairro}
           />
-        </View>
+        </Layout>
       </View>
     </>
   );
