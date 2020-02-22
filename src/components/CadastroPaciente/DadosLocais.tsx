@@ -34,7 +34,7 @@ const DadosLocais = ({ navigation }) => {
         <Layout style={styles.heightInput}>
           <Select
             data={bairros}
-            placeholder={bairro || "selecionar bairro"}
+            placeholder="selecionar bairro"
             selectedOption={{ text: bairro }}
             onSelect={e => setBairro(e["text"])}
           />
