@@ -37,7 +37,7 @@ const DadosLocais = ({ navigation }) => {
       setBairros(result);
     }
     loadBairros();
-  }, [setCidade]);
+  }, [cidade]);
 
   const styles = useStyleSheet({
     lineContent: {
@@ -66,6 +66,7 @@ const DadosLocais = ({ navigation }) => {
         <Layout style={styles.heightInput}>
           <Select
             data={bairros}
+            disabled={bairros.length > 0 ? false : true}
             placeholder="selecionar bairro"
             selectedOption={{ text: bairro }}
             onSelect={e => setBairro(e["text"])}
