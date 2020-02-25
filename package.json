@@ -25,6 +25,7 @@
     "react-dom": "~16.9.0",
     "react-native": "~0.61.4",
     "react-native-gesture-handler": "^1.6.0",
+    "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-progress-steps": "^1.2.8",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",

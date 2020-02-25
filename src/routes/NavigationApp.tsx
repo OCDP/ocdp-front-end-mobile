@@ -1,15 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList
 } from "@react-navigation/drawer";
+import BemVindo from "../pages/BemVindo.page";
+import LoginPage from "../pages/Login";
 import HomeScreen from "../pages/Home.page";
 import { PacienteProvider } from "../contexts/PacienteContext";
 import CadastrarPaciente from "../pages/CadastrarPaciente.page";
 import SafeAreaLayout from "../components/SafeAreaLayout";
-import LoginPage from "../pages/Login.page";
 
 function CustomDrawerContent(props) {
   return (
@@ -26,12 +27,14 @@ export const AppNavigator = () => (
     <PacienteProvider>
       <SafeAreaLayout style={{ flex: 1 }} insets="top">
         <Drawer.Navigator
-          initialRouteName="Home"
+          initialRouteName="BemVindo"
           drawerContent={props => CustomDrawerContent(props)}
         >
-          <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="CadastrarPaciente" component={CadastrarPaciente} />
+          <Drawer.Screen name="BemVindo" component={BemVindo} />
           <Drawer.Screen name="Login" component={LoginPage} />
+          <Drawer.Screen name="Home" component={HomeScreen} />
+          <Drawer.Screen name="CadastrarPaciente" component={CadastrarPaciente}
+          />
         </Drawer.Navigator>
       </SafeAreaLayout>
     </PacienteProvider>
