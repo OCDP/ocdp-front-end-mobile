@@ -4,9 +4,7 @@ import {
   LoginCard,
   LoginButton,
   LoginInput,
-  PasswordInput,
-  PswdRecoveryButton,
-  RegisterButton
+  PasswordInput
 } from "./Login.page.styles";
 import { Icon, Text, Button } from "@ui-kitten/components";
 import AppContext from "../../contexts/AppContext";
@@ -41,7 +39,6 @@ export default function({ navigation }) {
           onIconPress={seePassowrd}
           secureTextEntry={secureTextEntry}
         />
-        <PswdRecoveryButton onPress={() => navigation.navigate("Home")} />
         <LoginButton onPress={() => navigation.navigate("Home")} />
       </LoginCard>
     </Container>
