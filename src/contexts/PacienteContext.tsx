@@ -18,6 +18,11 @@ export interface Paciente {
   bairro: string;
 }
 
+export interface Bairro {
+  id: string;
+  nome: string;
+}
+
 interface PacienteContextProps {
   nome: string;
   setNome?: Dispatch<SetStateAction<string>>;
@@ -132,6 +137,8 @@ export function usePaciente(): Paciente {
 }
 
 export const PacienteConsumer = PacienteContext.Consumer;
+
+
 
 export const useFlushPaciente = () => {
   const { flush } = useContext(PacienteContext);

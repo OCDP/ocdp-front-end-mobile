@@ -1,13 +1,43 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { View } from "react-native";
 import { useStyleSheet, Select, Layout } from "@ui-kitten/components";
 import PacienteContext from "../../contexts/PacienteContext";
-import { cidades, bairros } from "../../utils/constants";
+import api from "../../services/api";
 
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
-  const [seleCidade, setSeleCidade] = useState(null);
-  const [seleBairro, setSeleBairro] = useState(null);
+  const [cidades, setCidades] = useState([]);
+  const [bairros, setBairros] = useState([]);
+
+  useEffect(() => {
+    async function loadCidades() {
+      const response = await api.get("/acompanhamento/cidades");
+      const cidadesServ = response.data;
+      let result = cidadesServ.map(a => {
+        return {
+          text: a.nome
+        };
+      });
+      setCidades(result);
+    }
+    loadCidades();
+  }, []);
+
+  useEffect(() => {
+    async function loadBairros() {
+      const response = await api.get(
+        `/acompanhamento/bairros/{nomeCidade}?nomeCidade=${cidade}`
+      );
+      const bairrosServ = response.data;
+      let result = bairrosServ.map(a => {
+        return {
+          text: a.nome
+        };
+      });
+      setBairros(result);
+    }
+    loadBairros();
+  }, [cidade]);
 
   const styles = useStyleSheet({
     lineContent: {
@@ -20,23 +50,15 @@ const DadosLocais = ({ navigation }) => {
     }
   });
 
-  useEffect(() => {
-    setCidade(seleCidade);
-  }, [seleCidade]);
-
-  useEffect(() => {
-    setBairro(seleBairro);
-  }, [seleBairro]);
-
   return (
     <>
       <View style={styles.lineContent}>
         <Layout style={styles.heightInput}>
           <Select
             data={cidades}
-            placeholder="Selecionar cidades"
-            selectedOption={seleCidade}
-            onSelect={setSeleCidade}
+            placeholder="selecionar cidade"
+            selectedOption={{ text: cidade }}
+            onSelect={e => setCidade(e["text"])}
           />
         </Layout>
       </View>
@@ -44,9 +66,10 @@ const DadosLocais = ({ navigation }) => {
         <Layout style={styles.heightInput}>
           <Select
             data={bairros}
-            placeholder="Selecionar bairros"
-            selectedOption={seleBairro}
-            onSelect={setSeleBairro}
+            disabled={bairros.length > 0 ? false : true}
+            placeholder="selecionar bairro"
+            selectedOption={{ text: bairro }}
+            onSelect={e => setBairro(e["text"])}
           />
         </Layout>
       </View>
