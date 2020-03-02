@@ -29,7 +29,7 @@ export default function({ navigation }) {
 
   return (
     <Container>
-      <Logo size={200} style={{ paddingBottom: 20 }}/>
+      <Logo size={200}/>
       <LoginCard>
         <LoginInput value={login} onChangeText={setLogin} />
         <PasswordInput

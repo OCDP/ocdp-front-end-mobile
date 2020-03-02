@@ -39,6 +39,7 @@ export const LoginCard = styled(Card).attrs({
 })`
   ${shadow}
   border-radius: 8px;
+  margin-top: 36px;
   width: 90%;
   max-width: 400px;
   flex-direction: column;
