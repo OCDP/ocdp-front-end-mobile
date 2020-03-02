@@ -49,3 +49,15 @@ export const pin: (style: ImageStyle) => IconElement = style => (
 export const calendar: (style: ImageStyle) => IconElement = style => (
   <Icon {...style} name="calendar-outline" />
 );
+
+export const search: (style: ImageStyle) => IconElement = style => (
+  <Icon {...style} name="search-outline" />
+);
+
+export const add: (style: ImageStyle) => IconElement = style => (
+  <Icon {...style} name="plus-outline" />
+);
+
+export const clear: (style: ImageStyle) => IconElement = style => (
+  <Icon {...style} name="backspace-outline" />
+);
