@@ -11,6 +11,7 @@ import ligthTheme from "../themes/LightTheme";
 import darkTheme from "../themes/DarkTheme";
 import { Paciente } from "./PacienteContext";
 import useSecStorage from "../hooks/useSecStorage";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const defaultTheme: AppTheme = {
   name: "ligth",
@@ -27,6 +28,8 @@ export interface AppContextType {
   theme: AppTheme;
   dadosPacientes: Paciente[];
   setDadosPacientes: Dispatch<SetStateAction<Paciente[]>>;
+  loadingState?: [boolean, Dispatch<SetStateAction<boolean>>];
+  loadingMessage?: [string, Dispatch<SetStateAction<string>>];
   switchTheme?: () => void;
 }
 const AppContext = createContext<AppContextType>({
@@ -42,6 +45,14 @@ export const AppProvider = ({ children }) => {
     "pacientes",
     []
   );
+  const loadingState = useState(false);
+  const loadingMessage = useState("");
+
+  useEffect(() => {
+    if (!loadingState[0]) {
+      loadingMessage[1]("");
+    }
+  }, [loadingState[0]]);
 
   function switchTheme() {
     setTheme(old => ({
@@ -54,6 +65,13 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{ theme, switchTheme, dadosPacientes, setDadosPacientes }}
     >
+      <Spinner
+        visible={loadingState[0]}
+        animation="fade"
+        textContent={loadingMessage[0]}
+        color={theme.vars["color-primary-500"]}
+        overlayColor="#fff9"
+      />
       {children}
     </AppContext.Provider>
   );
@@ -67,6 +85,11 @@ export function useDadosPacientes(): [
   const { dadosPacientes, setDadosPacientes } = useContext(AppContext);
   return [dadosPacientes, setDadosPacientes];
 }
+
+export const useLoadingMessage = () => {
+  const { loadingMessage } = useContext(AppContext);
+  return loadingMessage;
+};
 
 export const AppConsumer = AppContext.Consumer;
 

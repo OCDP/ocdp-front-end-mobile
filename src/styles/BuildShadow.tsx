@@ -15,11 +15,11 @@ export default (elevation: number) =>
   });
 
 export const buildStyledShadow = (elevation: number) => `
-  elevation: ${elevation};
-  shadow-color: #000;
-  shadow-radius: ${elevation}px;
-  shadow-offset: {
-    height: ${elevation / 2}px
-  };
-  shadow-opacity: 0.1;
+  elevation: ${elevation};\n
+  shadow-color: #000;\n
+  shadow-radius: ${elevation}px;\n
+  shadow-offset: {\n
+    height: ${elevation / 2}px\n
+  };\n
+  shadow-opacity: 0.1;\n
 `
