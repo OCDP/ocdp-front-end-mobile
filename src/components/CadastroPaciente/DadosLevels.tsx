@@ -1,15 +1,10 @@
 import React from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { View } from "react-native";
-import {
-  useStyleSheet,
-  withStyles,
-  Button,
-  Layout
-} from "@ui-kitten/components";
+import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
-import ExibeDadosPaciente from "./ExibeDados";
+import MapeamentoSintomas from "./MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
 import { usePaciente, useFlushPaciente } from "../../contexts/PacienteContext";
 import ListarPacientes from "./ListarPacientes";
@@ -92,7 +87,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onNext={salvarPacienteLocal}
           >
             <View style={{ alignItems: "center" }}>
-              <ExibeDadosPaciente navigation={navigation} />
+              <MapeamentoSintomas navigation={navigation} />
             </View>
           </ProgressStep>
           <ProgressStep
