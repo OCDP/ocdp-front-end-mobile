@@ -54,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <PageContainer title="bem vindo!" navigation={navigation}>
+    <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
         <Autocomplete
           style={styles.picker}
