@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
-import MapeamentoSintomas from "./MapeamentoSintomas";
+import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
 import { usePaciente, useFlushPaciente } from "../../contexts/PacienteContext";
 import ListarPacientes from "./ListarPacientes";
