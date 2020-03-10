@@ -20,8 +20,22 @@ const Lesoes = ({ navigation }) => {
       height: 200,
       maxWidth: "100%",
       borderRadius: 8
+    },
+    modalContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: 256,
+      padding: 16
+    },
+    backdrop: {
+      backgroundColor: "rgba(0, 0, 0, 0.5)"
     }
   });
+  const [visible, setVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setVisible(!visible);
+  };
 
   //styled components e em seguida transformar em componentes diferentes
 
@@ -79,7 +93,6 @@ const Lesoes = ({ navigation }) => {
         </View>
       </CardLesoes>
 
-
       <CardLesoes>
         <View style={styles.container}>
           <TextHeader>Região E</TextHeader>
@@ -91,7 +104,6 @@ const Lesoes = ({ navigation }) => {
           />
         </View>
       </CardLesoes>
-
 
       <CardLesoes>
         <View style={styles.container}>
@@ -105,7 +117,6 @@ const Lesoes = ({ navigation }) => {
         </View>
       </CardLesoes>
 
-
       <CardLesoes>
         <View style={styles.container}>
           <TextHeader>Região G</TextHeader>
@@ -117,7 +128,6 @@ const Lesoes = ({ navigation }) => {
           />
         </View>
       </CardLesoes>
-
 
       <CardLesoes>
         <View style={styles.container}>
@@ -142,16 +152,16 @@ const Lesoes = ({ navigation }) => {
         </View>
       </CardLesoes>
       <CardLesoes>
-      <View style={styles.container}>
-        <TextHeader>Região J</TextHeader>
-      </View>
-      <View>
-        <Image
-          style={styles.imageContent}
-          source={require("../../../assets/regioes_boca/regiaoJ.jpg")}
-        />
-      </View>
-    </CardLesoes>
+        <View style={styles.container}>
+          <TextHeader>Região J</TextHeader>
+        </View>
+        <View>
+          <Image
+            style={styles.imageContent}
+            source={require("../../../assets/regioes_boca/regiaoJ.jpg")}
+          />
+        </View>
+      </CardLesoes>
     </View>
   );
 };
