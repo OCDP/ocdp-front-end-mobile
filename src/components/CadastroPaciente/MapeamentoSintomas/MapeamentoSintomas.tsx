@@ -4,6 +4,7 @@ import { useStyleSheet, CheckBox, Text } from "@ui-kitten/components";
 import { buildStyledShadow } from "../../../styles/buildShadow";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
+import { regioes } from "../../../utils/constants";
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
@@ -89,8 +90,21 @@ const MapeamentoSintomas = ({ navigation }) => {
           </View>
         </View>
       </HeaderContainer>
-
-      {activeChecked ? <Lesoes navigation={navigation} /> : <Text> oi selecione a opcao p aparecer o menu</Text>}
+      {activeChecked ? (
+        <View>
+          {regioes.map(({ name, description }, i) => (
+            <View key={i}>
+              <Lesoes
+                navigation={navigation}
+                title={description}
+                imgRegiao={name}
+              />
+            </View>
+      ))}
+        </View>
+      ) : (
+        <Text> oi selecione a opcao p aparecer o menu</Text>
+      )}
     </View>
   );
 };
