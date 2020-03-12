@@ -1,6 +1,15 @@
 import React from "react";
 import { View } from "react-native";
-import { useStyleSheet, CheckBox, Text } from "@ui-kitten/components";
+import {
+  useStyleSheet,
+  CheckBox,
+  Text,
+  Layout,
+  Button,
+  Modal,
+  ListItem,
+  List
+} from "@ui-kitten/components";
 import { buildStyledShadow } from "../../../styles/buildShadow";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
@@ -10,6 +19,10 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
   const onActiveChange = isChecked => {
     setActiveChecked(isChecked);
+  };
+  const [visible, setVisible] = React.useState(false);
+  const toggleModal = () => {
+    setVisible(!visible);
   };
 
   const styles = useStyleSheet({
@@ -34,8 +47,37 @@ const MapeamentoSintomas = ({ navigation }) => {
     },
     checkItem: {
       marginVertical: 8
+    },
+    modalContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      width: 256
+    },
+    backdrop: {
+      backgroundColor: "rgba(0, 0, 0, 0.1)"
+    },
+    contentContainer: {
+      width: 300
     }
   });
+
+  const renderItem = ({ item }) => (
+    <>
+      <ListItem title={`${item.title}`} />
+      <Button onPress={() => console.log("o q é item title >>> ", item.title)} />
+    </>
+  );
+
+  const renderModalElement = data => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Text> oioioi </Text>
+      <List
+        contentContainerStyle={styles.contentContainer}
+        data={data}
+        renderItem={renderItem}
+      />
+    </Layout>
+  );
 
   return (
     <View style={styles.lineContent}>
@@ -94,13 +136,21 @@ const MapeamentoSintomas = ({ navigation }) => {
         <View>
           {regioes.map(({ name, description }, i) => (
             <View key={i}>
+              <Modal
+                backdropStyle={styles.backdrop}
+                onBackdropPress={toggleModal}
+                visible={visible}
+              >
+                {renderModalElement(regioes[i].list)}
+              </Modal>
               <Lesoes
                 navigation={navigation}
                 title={description}
                 imgRegiao={name}
               />
+              <Button onPress={toggleModal}>{description}</Button>
             </View>
-      ))}
+          ))}
         </View>
       ) : (
         <Text> oi selecione a opcao p aparecer o menu</Text>

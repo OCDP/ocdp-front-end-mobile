@@ -20,22 +20,8 @@ const Lesoes = ({ navigation, title, imgRegiao }) => {
       height: 200,
       maxWidth: "100%",
       borderRadius: 8
-    },
-    modalContainer: {
-      justifyContent: "center",
-      alignItems: "center",
-      width: 256,
-      padding: 16
-    },
-    backdrop: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)"
     }
   });
-  const [visible, setVisible] = React.useState(false);
-
-  const toggleModal = () => {
-    setVisible(!visible);
-  };
 
   return (
     <View style={styles.lineContent}>
