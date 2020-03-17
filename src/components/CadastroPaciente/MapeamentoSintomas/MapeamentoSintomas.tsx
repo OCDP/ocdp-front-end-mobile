@@ -14,15 +14,12 @@ import { buildStyledShadow } from "../../../styles/buildShadow";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
 import { regioes } from "../../../utils/constants";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
   const onActiveChange = isChecked => {
     setActiveChecked(isChecked);
-  };
-  const [visible, setVisible] = React.useState(false);
-  const toggleModal = () => {
-    setVisible(!visible);
   };
 
   const styles = useStyleSheet({
@@ -61,21 +58,25 @@ const MapeamentoSintomas = ({ navigation }) => {
     }
   });
 
-  const renderItem = ({ item }) => (
-    <>
-      <ListItem title={`${item.title}`} />
-      <Button onPress={() => console.log("o q é item title >>> ", item.title)} />
-    </>
-  );
+  const [visible, setVisible] = React.useState(false);
+  const [listRegioes, setListRegioes] = React.useState([]);
 
-  const renderModalElement = data => (
+  const toggleModal = (list?) => {
+    setVisible(visible ? false : true);
+    setListRegioes(list);
+  };
+
+  const dismiss = () => {
+    setVisible(visible ? false : true);
+  };
+
+  const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
-      <Text> oioioi </Text>
-      <List
-        contentContainerStyle={styles.contentContainer}
-        data={data}
-        renderItem={renderItem}
-      />
+      {listRegioes.map(({ desc }, j) => (
+        <View key={j}>
+          <Text>{desc}</Text>
+        </View>
+      ))}
     </Layout>
   );
 
@@ -134,22 +135,25 @@ const MapeamentoSintomas = ({ navigation }) => {
       </HeaderContainer>
       {activeChecked ? (
         <View>
-          {regioes.map(({ name, description }, i) => (
-            <View key={i}>
+          {regioes.map(({ name, description, list }, i) => (
+            <>
+              <View key={i}>
+                <TouchableOpacity onPress={() => toggleModal(list)}>
+                  <Lesoes
+                    navigation={navigation}
+                    title={description}
+                    imgRegiao={name}
+                  />
+                </TouchableOpacity>
+              </View>
               <Modal
                 backdropStyle={styles.backdrop}
-                onBackdropPress={toggleModal}
+                onBackdropPress={dismiss}
                 visible={visible}
               >
-                {renderModalElement(regioes[i].list)}
+                {renderModalElement()}
               </Modal>
-              <Lesoes
-                navigation={navigation}
-                title={description}
-                imgRegiao={name}
-              />
-              <Button onPress={toggleModal}>{description}</Button>
-            </View>
+            </>
           ))}
         </View>
       ) : (
