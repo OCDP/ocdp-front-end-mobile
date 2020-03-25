@@ -13,10 +13,11 @@ import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 
 export default function({ navigation }) {
-  const [login, setLogin] = useState("");
-  const [pswd, setPswd] = useState();
+  const [login, setLogin] = useState("admin");
+  const [pswd, setPswd] = useState("p@55w0Rd");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
+
 
   const seePassowrd = () => {
     setSecureTextEntry(!secureTextEntry);
