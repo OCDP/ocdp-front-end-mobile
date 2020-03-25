@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { View } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
@@ -8,6 +8,7 @@ import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
 import { usePaciente, useFlushPaciente } from "../../contexts/PacienteContext";
 import ListarPacientes from "./ListarPacientes";
+import apiFunc from '../../services/api'
 import { CommonActions } from "@react-navigation/native";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
@@ -19,6 +20,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       height: 40
     }
   });
+
 
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
   const paciente = usePaciente();

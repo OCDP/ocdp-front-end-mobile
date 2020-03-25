@@ -20,7 +20,6 @@ const DadosLocais = ({ navigation }) => {
       response = await apiFunc("admin", "p@55w0Rd").get(
         "/cidade"
       );
-      console.log(response.data);
       const cidadesServ = response.data;
       let result = cidadesServ.map(a => {
         return {
@@ -40,7 +39,6 @@ const DadosLocais = ({ navigation }) => {
         const response = await apiFunc('admin', 'p@55w0Rd').get(
           `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
         );
-        console.log(response.data);
         const bairrosServ = response.data;
         let result = bairrosServ.map(a => {
           return {

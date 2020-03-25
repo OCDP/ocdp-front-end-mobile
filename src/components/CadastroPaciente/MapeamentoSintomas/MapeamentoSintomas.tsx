@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useContext} from "react";
 import { View } from "react-native";
 import {
   useStyleSheet,
@@ -13,14 +13,30 @@ import {
 import { buildStyledShadow } from "../../../styles/buildShadow";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
+import FatoresContext from "../../../contexts/FatoresContext"
 import { regioes } from "../../../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import apiFunc from "../../../services/api";
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
+  const {fatores, setFatores} = useContext(FatoresContext)
+
   const onActiveChange = isChecked => {
     setActiveChecked(isChecked);
   };
+
+  useEffect(() => {
+    async function loadFatores(){
+      try{
+        let resp = await apiFunc('admin', 'p@55w0Rd').get('/fatorRisco')
+        setFatores(resp.data)
+      }catch(err){
+        console.log("err", err);
+      }
+    }
+    loadFatores()
+  }, [])
 
   const styles = useStyleSheet({
     container: {
@@ -86,49 +102,15 @@ const MapeamentoSintomas = ({ navigation }) => {
         <View style={styles.container}>
           <TextHeader>Fatores de risco</TextHeader>
           <View style={styles.columnsContent}>
-            <View style={styles.columnCheck}>
-              <View style={styles.checkItem}>
+            <View style={styles.columnCheck} >
+              {fatores.map(({}, i)=>(
+              <View key={i} style={styles.checkItem}>
                 <CheckBox
-                  text="Idade"
+                  text={fatores.nome}
                   checked={activeChecked}
                   onChange={onActiveChange}
                 />
-              </View>
-              <View style={styles.checkItem}>
-                <CheckBox
-                  text="Fumante"
-                  checked={activeChecked}
-                  onChange={onActiveChange}
-                />
-              </View>
-              <View style={styles.checkItem}>
-                <CheckBox
-                  text="Sol"
-                  checked={activeChecked}
-                  onChange={onActiveChange}
-                />
-              </View>
-              <View style={styles.checkItem}>
-                <CheckBox
-                  text="Alcool"
-                  checked={activeChecked}
-                  onChange={onActiveChange}
-                />
-              </View>
-              <View style={styles.checkItem}>
-                <CheckBox
-                  text="Historia de doenca secundaria"
-                  checked={activeChecked}
-                  onChange={onActiveChange}
-                />
-              </View>
-              <View style={styles.checkItem}>
-                <CheckBox
-                  text="Presença de lesão"
-                  checked={activeChecked}
-                  onChange={onActiveChange}
-                />
-              </View>
+              </View>))}
             </View>
           </View>
         </View>
