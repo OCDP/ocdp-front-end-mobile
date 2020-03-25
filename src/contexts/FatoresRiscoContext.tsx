@@ -4,16 +4,18 @@ import React, {
   Dispatch,
   SetStateAction
 } from "react";
-import { fatoresInterface } from "../utils/models/fatoresInterface";
+import { fatoresInterface } from "../utils/models/FatoresInterface";
 
 interface FatoresContextProps {
   fatores: Array<fatoresInterface>;
   setFatores?: Dispatch<SetStateAction<[]>>;
 }
 
+
 const defaultFatores = {
   fatores: []
 };
+
 
 const FatoresContext = createContext<FatoresContextProps>(defaultFatores);
 

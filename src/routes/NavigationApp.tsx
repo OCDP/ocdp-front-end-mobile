@@ -12,7 +12,7 @@ import { PacienteProvider } from "../contexts/PacienteContext";
 import { UsuarioLogadoProvider } from "../contexts/UsuarioLogadoContext";
 import CadastrarPaciente from "../pages/CadastrarPaciente.page";
 import SafeAreaLayout from "../components/SafeAreaLayout";
-import { FatoresProvider } from "../contexts/FatoresContext";
+import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 
 function CustomDrawerContent(props) {
   return (

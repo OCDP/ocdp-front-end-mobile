@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { buildStyledShadow } from "../../../styles/buildShadow";
+import { buildStyledShadow } from "../../../styles/BuildShadow";
 import { View } from "react-native";
 import { Text } from "@ui-kitten/components";
 

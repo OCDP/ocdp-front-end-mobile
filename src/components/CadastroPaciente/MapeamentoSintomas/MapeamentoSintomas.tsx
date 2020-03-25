@@ -12,7 +12,7 @@ import {
 } from "@ui-kitten/components";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
-import FatoresContext from "../../../contexts/FatoresContext";
+import FatoresContext from "../../../contexts/FatoresRiscoContext";
 import { regioes } from "../../../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
