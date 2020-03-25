@@ -5,7 +5,6 @@ import PacienteContext from "../../contexts/PacienteContext";
 import api from "../../services/api";
 import apiFunc from "../../services/api";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
-
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
@@ -16,9 +15,12 @@ const DadosLocais = ({ navigation }) => {
   useEffect(() => {
     async function loadCidades() {
       console.log("aooooooo ????");
-      const response = await apiFunc("admin", "p@55w0Rd").get(
-        "/acompanhamento/cidades"
+      let response
+      try{
+      response = await apiFunc("admin", "p@55w0Rd").get(
+        "/cidade"
       );
+      console.log(response.data);
       const cidadesServ = response.data;
       let result = cidadesServ.map(a => {
         return {
@@ -26,25 +28,32 @@ const DadosLocais = ({ navigation }) => {
         };
       });
       setCidades(result);
-    }
+      }catch(err){
+        console.log(err)
+      }}
     loadCidades();
   }, []);
 
-  // useEffect(() => {
-  //   async function loadBairros() {
-  //     const response = await api.get(
-  //       `/acompanhamento/bairros/{nomeCidade}?nomeCidade=${cidade}`
-  //     );
-  //     const bairrosServ = response.data;
-  //     let result = bairrosServ.map(a => {
-  //       return {
-  //         text: a.nome
-  //       };
-  //     });
-  //     setBairros(result);
-  //   }
-  //   loadBairros();
-  // }, [cidade]);
+  useEffect(() => {
+    async function loadBairros() {
+      try{
+        const response = await apiFunc('admin', 'p@55w0Rd').get(
+          `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
+        );
+        console.log(response.data);
+        const bairrosServ = response.data;
+        let result = bairrosServ.map(a => {
+          return {
+            text: a.nome
+          };
+        });
+        setBairros(result);
+      }catch(err){
+        console.log(err)
+      }
+    }
+    loadBairros();
+  }, [cidade]);
 
   const styles = useStyleSheet({
     lineContent: {
