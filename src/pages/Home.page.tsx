@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
 import { StyleSheet, View } from "react-native";
+import HistoricoProcedimento from "../components/HistoricoProcedimento";
+import PacienteContext from "../contexts/PacienteContext";
+import EmptyContent from "../components/EmptyContent";
+import { historicoMockup } from "../utils/constants";
 
 const DATA = [
   {
@@ -35,9 +39,11 @@ const DATA = [
 const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [data, setData] = React.useState(DATA);
+  const { historico, setHistorico } = useContext(PacienteContext);
 
   const onSelect = ({ title }) => {
     setValue(title);
+    setHistorico(historicoMockup);
   };
 
   const onChangeText = query => {
@@ -66,6 +72,15 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={onChangeText}
           onSelect={onSelect}
         />
+        {historico.length > 0 ? (
+          <HistoricoProcedimento navigation={navigation} />
+        ) : (
+          <EmptyContent
+            navigation={navigation}
+            title="Nenhum registro encontrado"
+            textContent="Faça uma busca ou cadastre um novo paciente!"
+          />
+        )}
         <Button
           style={styles.button}
           status="primary"

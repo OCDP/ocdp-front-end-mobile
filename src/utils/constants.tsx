@@ -102,6 +102,45 @@ export const regioes = [
   }
 ];
 
+export const historicoMockup = [
+  {
+    id: 1,
+    descricao: "Primeia consulta (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "21/12/2019"
+  },
+  {
+    id: 2,
+    descricao: "Acompanhamento (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "22/12/2019"
+  },
+  {
+    id: 3,
+    descricao: "Acompanhamento (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "23/12/2019"
+  },
+  {
+    id: 4,
+    descricao: "Acompanhamento (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "24/12/2019"
+  },
+  {
+    id: 5,
+    descricao: "Acompanhamento (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "25/12/2019"
+  },
+  {
+    id: 6,
+    descricao: "Acompanhamento (6 meses)",
+    responsavel: "Doutor fulano de tal",
+    data: "26/12/2019"
+  }
+];
+
 export const cidades = [
   {
     text: "sao paulooo"

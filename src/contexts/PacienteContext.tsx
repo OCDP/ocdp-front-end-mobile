@@ -5,8 +5,10 @@ import React, {
   SetStateAction,
   useContext
 } from "react";
+import { historicoInterface } from "../utils/models/historicoInterface";
 
 export interface Paciente {
+  historico: Array<historicoInterface>;
   nome: string;
   dtNasci: Date;
   sexo: string;
@@ -18,12 +20,9 @@ export interface Paciente {
   bairro: string;
 }
 
-export interface Bairro {
-  id: string;
-  nome: string;
-}
-
 interface PacienteContextProps {
+  historico: Array<historicoInterface>;
+  setHistorico?: Dispatch<SetStateAction<[]>>;
   nome: string;
   setNome?: Dispatch<SetStateAction<string>>;
   dtNasci: Date;
@@ -46,6 +45,7 @@ interface PacienteContextProps {
 }
 
 const defaultPaciente: Paciente = {
+  historico: [],
   nome: null,
   dtNasci: null,
   sexo: null,
@@ -60,6 +60,7 @@ const defaultPaciente: Paciente = {
 const PacienteContext = createContext<PacienteContextProps>(defaultPaciente);
 
 export function PacienteProvider({ children }) {
+  const [historico, setHistorico] = useState([]);
   const [nome, setNome] = useState<string>(null);
   const [dtNasci, setDtNasci] = useState<Date>(null);
   const [sexo, setSexo] = useState<string>(null);
@@ -85,6 +86,8 @@ export function PacienteProvider({ children }) {
   return (
     <PacienteContext.Provider
       value={{
+        historico,
+        setHistorico,
         nome,
         setNome,
         dtNasci,
@@ -113,6 +116,7 @@ export function PacienteProvider({ children }) {
 
 export function usePaciente(): Paciente {
   const {
+    historico,
     nome,
     dtNasci,
     sexo,
@@ -124,6 +128,7 @@ export function usePaciente(): Paciente {
     bairro
   } = useContext(PacienteContext);
   return {
+    historico,
     nome,
     dtNasci,
     sexo,
@@ -137,8 +142,6 @@ export function usePaciente(): Paciente {
 }
 
 export const PacienteConsumer = PacienteContext.Consumer;
-
-
 
 export const useFlushPaciente = () => {
   const { flush } = useContext(PacienteContext);
