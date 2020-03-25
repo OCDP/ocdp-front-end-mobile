@@ -9,12 +9,12 @@ const HistoricoProcedimento = ({ navigation }) => {
   const { historico } = useContext(PacienteContext);
 
   const dataTimeline = historico.map(a => {
+    let dataAtual = new Date().getDate() + '/' + new Date().getMonth() + '/' +new Date().getFullYear();
     return {
-      diferencaDias: a.diferencaDias,
-      profissionalDeSaude: a.profissionalDeSaude,
-      idAtendimento: a.idAtendimento,
-      localAtendimento: a.localAtendimento,
-      // profissionalDeSaude: a.profissionalDeSaude,
+      title: a.profissionalDeSaude,
+      description: a.tipoAtendiemtento + ' (' + a.diferencaDias + ' ' +
+      dataAtual + ' )',
+      id: a.idAtendimento,
     };
   });
 
