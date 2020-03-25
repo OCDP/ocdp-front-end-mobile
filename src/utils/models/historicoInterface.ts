@@ -1,6 +1,8 @@
 export interface historicoInterface {
-  id: number;
-  descricao: string;
-  responsavel: string;
-  data: string;
+  dataAtendimento: string;
+  diferencaDias: string;
+  idAtendimento: string;
+  localAtendimento: string;
+  profissionalDeSaude: string;
+  tipoAtendiemtento: string;
 }

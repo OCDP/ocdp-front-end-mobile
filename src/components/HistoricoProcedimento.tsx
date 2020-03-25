@@ -10,11 +10,11 @@ const HistoricoProcedimento = ({ navigation }) => {
 
   const dataTimeline = historico.map(a => {
     return {
-      time: a.data,
-      title: a.responsavel,
-      description: a.descricao,
-      id: a.id,
-      banana: a.id
+      diferencaDias: a.diferencaDias,
+      profissionalDeSaude: a.profissionalDeSaude,
+      idAtendimento: a.idAtendimento,
+      localAtendimento: a.localAtendimento,
+      // profissionalDeSaude: a.profissionalDeSaude,
     };
   });
 

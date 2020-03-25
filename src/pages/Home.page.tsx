@@ -6,7 +6,17 @@ import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
+import apiFunc from '../services/api'
 import { historicoMockup } from "../utils/constants";
+
+async function loadHistorico(data){
+  console.log('data', data);
+  let resp = await apiFunc('admin', 'p@55w0Rd').get(`/historico/atendimentos/${data}`);
+  let historico = resp.data
+  console.log('loadHistorico', historico);
+  
+  return historico;
+}
 
 const DATA = [
   {
@@ -43,11 +53,16 @@ const HomeScreen = ({ navigation }) => {
 
   const onSelect = ({ title }) => {
     setValue(title);
-    setHistorico(historicoMockup);
+    // let historico = await loadHistorico(title);
+    // setHistorico(historico);
   };
 
-  const onChangeText = query => {
+  const onChangeText = async query => {
     setValue(query);
+    let resp = await loadHistorico(query);
+    console.log('respHistorico', resp);
+    setHistorico(resp);
+    console.log(historico);
     setData(
       DATA.filter(item =>
         item.title.toLowerCase().includes(query.toLowerCase())
@@ -72,7 +87,7 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={onChangeText}
           onSelect={onSelect}
         />
-        {historico.length > 0 ? (
+        {historico && historico.length > 0 ? (
           <HistoricoProcedimento navigation={navigation} />
         ) : (
           <EmptyContent
