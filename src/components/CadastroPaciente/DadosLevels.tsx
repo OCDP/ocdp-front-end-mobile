@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 import { View } from "react-native";
-import {
-  useStyleSheet,
-  withStyles,
-  Button,
-  Layout
-} from "@ui-kitten/components";
+import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
-import ExibeDadosPaciente from "./ExibeDados";
+import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
 import { usePaciente, useFlushPaciente } from "../../contexts/PacienteContext";
 import ListarPacientes from "./ListarPacientes";
+import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
+import FatoresContext from "../../contexts/FatoresRiscoContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -28,11 +25,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
   const paciente = usePaciente();
   const flush = useFlushPaciente();
-
-  const salvarPacienteLocal = () => {
-    setDadosPacientes(old => [...old, paciente]);
-    flush();
-  };
+  const { setFatores } = useContext(FatoresContext);
 
   const buttonTextStyle = {
     color: "#fff",
@@ -53,6 +46,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
         routes: [{ name: "Home" }]
       })
     );
+  };
+
+  const salvarPacienteLocal = () => {
+    setDadosPacientes(old => [...old, paciente]);
+    flush();
   };
 
   return (
@@ -89,10 +87,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnTextStyle={buttonTextStyle}
             previousBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
-            onNext={salvarPacienteLocal}
           >
             <View style={{ alignItems: "center" }}>
-              <ExibeDadosPaciente navigation={navigation} />
+              <MapeamentoSintomas navigation={navigation} />
             </View>
           </ProgressStep>
           <ProgressStep

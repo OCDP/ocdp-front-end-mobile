@@ -3,15 +3,23 @@ import { View } from "react-native";
 import { useStyleSheet, Select, Layout } from "@ui-kitten/components";
 import PacienteContext from "../../contexts/PacienteContext";
 import api from "../../services/api";
-
+import apiFunc from "../../services/api";
+import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
+
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const [cidades, setCidades] = useState([]);
   const [bairros, setBairros] = useState([]);
 
   useEffect(() => {
     async function loadCidades() {
-      const response = await api.get("/acompanhamento/cidades");
+      console.log("aooooooo ????");
+      let response
+      try{
+      response = await apiFunc("admin", "p@55w0Rd").get(
+        "/cidade"
+      );
       const cidadesServ = response.data;
       let result = cidadesServ.map(a => {
         return {
@@ -19,22 +27,28 @@ const DadosLocais = ({ navigation }) => {
         };
       });
       setCidades(result);
-    }
+      }catch(err){
+        console.log(err)
+      }}
     loadCidades();
   }, []);
 
   useEffect(() => {
     async function loadBairros() {
-      const response = await api.get(
-        `/acompanhamento/bairros/{nomeCidade}?nomeCidade=${cidade}`
-      );
-      const bairrosServ = response.data;
-      let result = bairrosServ.map(a => {
-        return {
-          text: a.nome
-        };
-      });
-      setBairros(result);
+      try{
+        const response = await apiFunc('admin', 'p@55w0Rd').get(
+          `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
+        );
+        const bairrosServ = response.data;
+        let result = bairrosServ.map(a => {
+          return {
+            text: a.nome
+          };
+        });
+        setBairros(result);
+      }catch(err){
+        console.log(err)
+      }
     }
     loadBairros();
   }, [cidade]);

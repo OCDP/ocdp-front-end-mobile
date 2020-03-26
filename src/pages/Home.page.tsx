@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
 import { StyleSheet, View } from "react-native";
+import HistoricoProcedimento from "../components/HistoricoProcedimento";
+import PacienteContext from "../contexts/PacienteContext";
+import EmptyContent from "../components/EmptyContent";
+import apiFunc from "../services/api";
+import { historicoMockup } from "../utils/constants";
+import { useLoading } from "../contexts/AppContext";
+import FatoresContext from "../contexts/FatoresRiscoContext";
 
 const DATA = [
   {
@@ -35,13 +42,45 @@ const DATA = [
 const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [data, setData] = React.useState(DATA);
+  const { historico, setHistorico } = useContext(PacienteContext);
+  const { fatores, setFatores } = useContext(FatoresContext);
+  const [, setLoading] = useLoading();
+
+  async function loadHistorico(data) {
+    let resp = await apiFunc("admin", "p@55w0Rd").get(
+      `/historico/atendimentos/${data}`
+    );
+    let historico = resp.data;
+    return historico;
+  }
+
+  async function loadFatores() {
+    try {
+      setLoading(true);
+      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
+      console.log("fatores >>> ", resp.data);
+      setFatores(resp.data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log("err", err);
+    }
+  }
+
+  useEffect(() => {
+    loadFatores();
+  }, []);
 
   const onSelect = ({ title }) => {
     setValue(title);
+    // let historico = await loadHistorico(title);
+    // setHistorico(historico);
   };
 
-  const onChangeText = query => {
+  const onChangeText = async query => {
     setValue(query);
+    let resp = await loadHistorico(query);
+    setHistorico(resp);
     setData(
       DATA.filter(item =>
         item.title.toLowerCase().includes(query.toLowerCase())
@@ -54,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <PageContainer title="bem vindo!" navigation={navigation}>
+    <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
         <Autocomplete
           style={styles.picker}
@@ -66,6 +105,15 @@ const HomeScreen = ({ navigation }) => {
           onChangeText={onChangeText}
           onSelect={onSelect}
         />
+        {historico && historico.length > 0 ? (
+          <HistoricoProcedimento navigation={navigation} />
+        ) : (
+          <EmptyContent
+            navigation={navigation}
+            title="Nenhum registro encontrado"
+            textContent="Faça uma busca ou cadastre um novo paciente!"
+          />
+        )}
         <Button
           style={styles.button}
           status="primary"

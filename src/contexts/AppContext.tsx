@@ -63,7 +63,7 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ theme, switchTheme, dadosPacientes, setDadosPacientes }}
+      value={{ theme, switchTheme, dadosPacientes, setDadosPacientes, loadingState }}
     >
       <Spinner
         visible={loadingState[0]}
@@ -77,7 +77,16 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-//hook de context para pegar apenas dados especificos do contexto geral
+export const useLoading = () => {
+  const { loadingState } = useContext(AppContext);
+  return loadingState;
+};
+
+export const useLoadingMessage = () => {
+  const { loadingMessage } = useContext(AppContext);
+  return loadingMessage;
+};
+
 export function useDadosPacientes(): [
   Paciente[],
   Dispatch<SetStateAction<Paciente[]>>
@@ -85,11 +94,6 @@ export function useDadosPacientes(): [
   const { dadosPacientes, setDadosPacientes } = useContext(AppContext);
   return [dadosPacientes, setDadosPacientes];
 }
-
-export const useLoadingMessage = () => {
-  const { loadingMessage } = useContext(AppContext);
-  return loadingMessage;
-};
 
 export const AppConsumer = AppContext.Consumer;
 
