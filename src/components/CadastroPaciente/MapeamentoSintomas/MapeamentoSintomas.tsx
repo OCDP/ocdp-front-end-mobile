@@ -20,28 +20,12 @@ import { useLoading } from "../../../contexts/AppContext";
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
-  const { fatores, setFatores } = useContext(FatoresContext);
+  const { fatores } = useContext(FatoresContext);
   const [, setLoading] = useLoading();
 
   const onActiveChange = isChecked => {
     setActiveChecked(isChecked);
   };
-
-  async function loadFatores() {
-    try {
-      setLoading(true);
-      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
-      console.log("fatores >>> ", resp.data);
-      setFatores(resp.data);
-      setLoading(false);
-    } catch (err) {
-      console.log("err", err);
-    }
-  }
-
-  useEffect(() => {
-    loadFatores();
-  }, []);
 
   const styles = useStyleSheet({
     container: {

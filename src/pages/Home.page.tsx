@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
@@ -6,17 +6,10 @@ import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
-import apiFunc from '../services/api'
+import apiFunc from "../services/api";
 import { historicoMockup } from "../utils/constants";
-
-async function loadHistorico(data){
-  console.log('data', data);
-  let resp = await apiFunc('admin', 'p@55w0Rd').get(`/historico/atendimentos/${data}`);
-  let historico = resp.data
-  console.log('loadHistorico', historico);
-  
-  return historico;
-}
+import { useLoading } from "../contexts/AppContext";
+import FatoresContext from "../contexts/FatoresRiscoContext";
 
 const DATA = [
   {
@@ -50,6 +43,33 @@ const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
+  const { fatores, setFatores } = useContext(FatoresContext);
+  const [, setLoading] = useLoading();
+
+  async function loadHistorico(data) {
+    let resp = await apiFunc("admin", "p@55w0Rd").get(
+      `/historico/atendimentos/${data}`
+    );
+    let historico = resp.data;
+    return historico;
+  }
+
+  async function loadFatores() {
+    try {
+      setLoading(true);
+      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
+      console.log("fatores >>> ", resp.data);
+      setFatores(resp.data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      console.log("err", err);
+    }
+  }
+
+  useEffect(() => {
+    loadFatores();
+  }, []);
 
   const onSelect = ({ title }) => {
     setValue(title);
@@ -60,9 +80,7 @@ const HomeScreen = ({ navigation }) => {
   const onChangeText = async query => {
     setValue(query);
     let resp = await loadHistorico(query);
-    console.log('respHistorico', resp);
     setHistorico(resp);
-    console.log(historico);
     setData(
       DATA.filter(item =>
         item.title.toLowerCase().includes(query.toLowerCase())
