@@ -11,13 +11,14 @@ import api from "../../services/api";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
+import { useLoading } from "../../contexts/AppContext";
 
 export default function({ navigation }) {
   const [login, setLogin] = useState("admin");
   const [pswd, setPswd] = useState("p@55w0Rd");
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
-
+  const [, setLoading] = useLoading();
 
   const seePassowrd = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -28,12 +29,12 @@ export default function({ navigation }) {
 
   async function loginAction() {
     try {
+      setLoading(true);
       let resp = await api(login, pswd).get(
         `/usuario/byCpf/${login}?cpf=${login}`
       );
-      console.log("resposta >>> ", resp.data);
       setUsuarioLogado(resp.data);
-      await console.log("usuario logado >>>> ", usuarioLogado);
+      setLoading(false);
       navigation.navigate("Home");
     } catch (err) {
       console.log(err);

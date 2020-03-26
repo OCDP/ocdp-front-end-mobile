@@ -16,25 +16,30 @@ import FatoresContext from "../../../contexts/FatoresRiscoContext";
 import { regioes } from "../../../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
+import { useLoading } from "../../../contexts/AppContext";
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
   const { fatores, setFatores } = useContext(FatoresContext);
+  const [, setLoading] = useLoading();
 
   const onActiveChange = isChecked => {
     setActiveChecked(isChecked);
   };
 
-  useEffect(() => {
-    async function loadFatores() {
-      try {
-        let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
-        console.log(resp.data);
-        setFatores(resp.data);
-      } catch (err) {
-        console.log("err", err);
-      }
+  async function loadFatores() {
+    try {
+      setLoading(true);
+      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
+      console.log("fatores >>> ", resp.data);
+      setFatores(resp.data);
+      setLoading(false);
+    } catch (err) {
+      console.log("err", err);
     }
+  }
+
+  useEffect(() => {
     loadFatores();
   }, []);
 
