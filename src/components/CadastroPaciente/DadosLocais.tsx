@@ -5,30 +5,35 @@ import PacienteContext from "../../contexts/PacienteContext";
 import api from "../../services/api";
 import apiFunc from "../../services/api";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
+import { useLoading } from "../../contexts/AppContext";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const [cidades, setCidades] = useState([]);
   const [bairros, setBairros] = useState([]);
+  const [, setLoading] = useLoading();
 
   useEffect(() => {
     async function loadCidades() {
       console.log("aooooooo ????");
-      let response
       try{
-      response = await apiFunc("admin", "p@55w0Rd").get(
+        setLoading(true);
+      await apiFunc("admin", "p@55w0Rd").get(
         "/cidade"
-      );
-      const cidadesServ = response.data;
-      let result = cidadesServ.map(a => {
-        return {
-          text: a.nome
-        };
+      ).then((response)=> {
+        const cidadesServ = response.data;
+        let result = cidadesServ.map(a => {
+          return {
+            text: a.nome
+          };
+        });
+        setCidades(result);
       });
-      setCidades(result);
       }catch(err){
         console.log(err)
+      }finally{
+        setLoading(false);
       }}
     loadCidades();
   }, []);
@@ -36,16 +41,18 @@ const DadosLocais = ({ navigation }) => {
   useEffect(() => {
     async function loadBairros() {
       try{
-        const response = await apiFunc('admin', 'p@55w0Rd').get(
+        setLoading(true);
+        await apiFunc('admin', 'p@55w0Rd').get(
           `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
-        );
-        const bairrosServ = response.data;
-        let result = bairrosServ.map(a => {
-          return {
-            text: a.nome
-          };
+        ).then((response)=>{
+          const bairrosServ = response.data;
+          let result = bairrosServ.map(a => {
+            return {
+              text: a.nome
+            };
+          });
+          setBairros(result);
         });
-        setBairros(result);
       }catch(err){
         console.log(err)
       }
