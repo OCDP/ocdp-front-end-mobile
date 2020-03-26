@@ -27,6 +27,7 @@ const MapeamentoSintomas = ({ navigation }) => {
     setActiveChecked(isChecked);
   };
 
+
   const styles = useStyleSheet({
     container: {
       paddingLeft: 36,

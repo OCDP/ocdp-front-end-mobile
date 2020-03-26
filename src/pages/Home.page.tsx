@@ -6,10 +6,24 @@ import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
-import apiFunc from "../services/api";
-import { historicoMockup } from "../utils/constants";
+import apiFunc from '../services/api'
 import { useLoading } from "../contexts/AppContext";
+import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
+
+
+async function loadHistorico(data){
+  console.log('data', data);
+  try{
+    let resp = await apiFunc('admin', 'p@55w0Rd').get(`/historico/atendimentos/${data}`);
+    let historico = resp.data
+    console.log('loadHistorico', historico);
+    
+    return historico;
+  }catch(err){
+    console.log(err);
+  }
+}
 
 const DATA = [
   {
@@ -40,10 +54,11 @@ const DATA = [
 ];
 
 const HomeScreen = ({ navigation }) => {
+  
+  const { setFatores } = useContext(FatoresContext);
   const [value, setValue] = React.useState(null);
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
-  const { fatores, setFatores } = useContext(FatoresContext);
   const [, setLoading] = useLoading();
 
   async function loadHistorico(data) {
@@ -57,12 +72,12 @@ const HomeScreen = ({ navigation }) => {
   async function loadFatores() {
     try {
       setLoading(true);
-      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
-      console.log("fatores >>> ", resp.data);
-      setFatores(resp.data);
-      setLoading(false);
+      await apiFunc("admin", "p@55w0Rd").get("/fatorRisco").then((resp) => {
+        console.log("fatores >>> ", resp.data);
+        setFatores(resp.data);
+        setLoading(false);
+      });
     } catch (err) {
-      setLoading(false);
       console.log("err", err);
     }
   }
@@ -79,13 +94,25 @@ const HomeScreen = ({ navigation }) => {
 
   const onChangeText = async query => {
     setValue(query);
-    let resp = await loadHistorico(query);
-    setHistorico(resp);
-    setData(
-      DATA.filter(item =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+    if(query.length > 3){
+      setLoading(true);
+      await loadHistorico(query).then((resp)=>{
+        setLoading(false);
+        console.log('respHistorico', resp);
+        if(resp == []){
+          setHistorico([]);
+        }else{
+          setHistorico(resp);
+        }
+        console.log('historico ', historico)
+        setData(
+          DATA.filter(item =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          )
+        );
+      });
+    }
+    
   };
 
   const clearInput = () => {
