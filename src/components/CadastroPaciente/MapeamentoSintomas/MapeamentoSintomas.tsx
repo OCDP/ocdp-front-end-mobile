@@ -27,22 +27,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     setActiveChecked(isChecked);
   };
 
-  async function loadFatores() {
-    try {
-      setLoading(true);
-      await apiFunc("admin", "p@55w0Rd").get("/fatorRisco").then((resp) => {
-        console.log("fatores >>> ", resp.data);
-        setFatores(resp.data);
-        setLoading(false);
-      });
-    } catch (err) {
-      console.log("err", err);
-    }
-  }
-
-  useEffect(() => {
-    loadFatores();
-  }, []);
 
   const styles = useStyleSheet({
     container: {

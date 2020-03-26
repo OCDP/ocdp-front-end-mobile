@@ -9,7 +9,6 @@ import EmptyContent from "../components/EmptyContent";
 import apiFunc from '../services/api'
 import { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
-import { useLoading } from "../contexts/AppContext";
 import FatoresContext from "../contexts/FatoresRiscoContext";
 
 
@@ -55,6 +54,8 @@ const DATA = [
 ];
 
 const HomeScreen = ({ navigation }) => {
+  
+  const { setFatores } = useContext(FatoresContext);
   const [value, setValue] = React.useState(null);
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
@@ -71,12 +72,12 @@ const HomeScreen = ({ navigation }) => {
   async function loadFatores() {
     try {
       setLoading(true);
-      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
-      console.log("fatores >>> ", resp.data);
-      setFatores(resp.data);
-      setLoading(false);
+      await apiFunc("admin", "p@55w0Rd").get("/fatorRisco").then((resp) => {
+        console.log("fatores >>> ", resp.data);
+        setFatores(resp.data);
+        setLoading(false);
+      });
     } catch (err) {
-      setLoading(false);
       console.log("err", err);
     }
   }
@@ -93,7 +94,7 @@ const HomeScreen = ({ navigation }) => {
 
   const onChangeText = async query => {
     setValue(query);
-    // if(query.length > 2){
+    if(query.length > 3){
       setLoading(true);
       await loadHistorico(query).then((resp)=>{
         setLoading(false);
@@ -110,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
           )
         );
       });
-    // }
+    }
     
   };
 
