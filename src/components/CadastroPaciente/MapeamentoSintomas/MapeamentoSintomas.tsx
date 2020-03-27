@@ -61,6 +61,15 @@ const MapeamentoSintomas = ({ navigation }) => {
     },
     contentContainer: {
       width: 300
+    },
+    itemContainer: {
+      marginVertical: 10,
+      marginHorizontal: 5
+    },
+    textItem: {
+      fontWeight: "bold",
+      fontSize: 16,
+      textAlign: "center"
     }
   });
 
@@ -79,10 +88,18 @@ const MapeamentoSintomas = ({ navigation }) => {
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
       {listRegioes.map(({ desc }, j) => (
-        <View key={j}>
-          <Text>{desc}</Text>
+        <View key={j} style={styles.itemContainer}>
+          <TouchableOpacity onPress={() => rendeDetailLesao}>
+            <Text style={styles.textItem}>{desc}</Text>
+          </TouchableOpacity>
         </View>
       ))}
+    </Layout>
+  );
+
+  const rendeDetailLesao = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <Text style={styles.textItem}>toptop</Text>
     </Layout>
   );
 
@@ -118,16 +135,13 @@ const MapeamentoSintomas = ({ navigation }) => {
                     imgRegiao={name}
                   />
                 </TouchableOpacity>
-                <Button onPress={() => console.log("fatores >>", fatores)}>
-                  fatores?
-                </Button>
               </View>
               <Modal
                 backdropStyle={styles.backdrop}
                 onBackdropPress={dismiss}
                 visible={visible}
               >
-                {renderModalElement()}
+                {2 > 1 ? renderModalElement() : rendeDetailLesao()}
               </Modal>
             </>
           ))}
