@@ -6,9 +6,11 @@ import React, {
   useContext
 } from "react";
 import { historicoInterface } from "../utils/models/historicoInterface";
+import { listaFatoresCheck } from "../utils/models/listaFatoresCheck";
 
 export interface Paciente {
   historico: Array<historicoInterface>;
+  listaFatores: Array<listaFatoresCheck>;
   nome: string;
   dtNasci: Date;
   sexo: string;
@@ -23,6 +25,8 @@ export interface Paciente {
 interface PacienteContextProps {
   historico: Array<historicoInterface>;
   setHistorico?: Dispatch<SetStateAction<[]>>;
+  listaFatores: Array<listaFatoresCheck>;
+  setListaFatores?: Dispatch<SetStateAction<[]>>;
   nome: string;
   setNome?: Dispatch<SetStateAction<string>>;
   dtNasci: Date;
@@ -46,6 +50,7 @@ interface PacienteContextProps {
 
 const defaultPaciente: Paciente = {
   historico: [],
+  listaFatores: [],
   nome: null,
   dtNasci: null,
   sexo: null,
@@ -61,6 +66,7 @@ const PacienteContext = createContext<PacienteContextProps>(defaultPaciente);
 
 export function PacienteProvider({ children }) {
   const [historico, setHistorico] = useState([]);
+  const [listaFatores, setListaFatores] = useState([]);
   const [nome, setNome] = useState<string>(null);
   const [dtNasci, setDtNasci] = useState<Date>(null);
   const [sexo, setSexo] = useState<string>(null);
@@ -88,6 +94,8 @@ export function PacienteProvider({ children }) {
       value={{
         historico,
         setHistorico,
+        listaFatores,
+        setListaFatores,
         nome,
         setNome,
         dtNasci,
@@ -117,6 +125,7 @@ export function PacienteProvider({ children }) {
 export function usePaciente(): Paciente {
   const {
     historico,
+    listaFatores,
     nome,
     dtNasci,
     sexo,
@@ -129,6 +138,7 @@ export function usePaciente(): Paciente {
   } = useContext(PacienteContext);
   return {
     historico,
+    listaFatores,
     nome,
     dtNasci,
     sexo,

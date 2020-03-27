@@ -1,5 +1,5 @@
 export interface fatoresInterface {
-    id:string,
-    nome:string
-  }
-  
+  id: string;
+  nome: string;
+  check?: boolean;
+}

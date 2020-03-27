@@ -8,7 +8,10 @@ import {
   Button,
   Modal,
   ListItem,
-  List
+  List,
+  RadioGroup,
+  Radio,
+  Select
 } from "@ui-kitten/components";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
@@ -18,15 +21,35 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 
+const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
+
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
+  const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
+  const [checkedLesao, setCheckedLesao] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   const { fatores } = useContext(FatoresContext);
   const [, setLoading] = useLoading();
+  const [visible, setVisible] = React.useState(false);
+  const [listRegioes, setListRegioes] = React.useState([]);
+  const [subregiao, setSubregiao] = React.useState(null);
+  const [selectedOption, setSelectedOption] = React.useState(null);
 
-  const onActiveChange = isChecked => {
-    setActiveChecked(isChecked);
+  const onActiveChange = onSelect => {
+    setActiveChecked(onSelect);
   };
 
+  const checkedLesoes = onSelect => {
+    setCheckedLesao(onSelect);
+  };
+
+  const onActiveChangeLesao = onSelect => {
+    setActiveCheckedLesao(onSelect);
+  };
+
+  const onCheckedChange = index => {
+    setSelectedIndex(index);
+  };
 
   const styles = useStyleSheet({
     container: {
@@ -54,7 +77,7 @@ const MapeamentoSintomas = ({ navigation }) => {
     modalContainer: {
       justifyContent: "center",
       alignItems: "center",
-      width: 256
+      width: 300
     },
     backdrop: {
       backgroundColor: "rgba(0, 0, 0, 0.1)"
@@ -70,11 +93,28 @@ const MapeamentoSintomas = ({ navigation }) => {
       fontWeight: "bold",
       fontSize: 16,
       textAlign: "center"
+    },
+    textItemSmall: {
+      fontSize: 15,
+      textAlign: "center",
+      marginTop: 8
+    },
+    lesaoContent: {
+      marginVertical: 8
+    },
+    radio: {
+      marginVertical: 8
+    },
+    rowCheck: {
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+    colCheck: {
+      margin: 4,
+      flex: 1,
+      height: 36
     }
   });
-
-  const [visible, setVisible] = React.useState(false);
-  const [listRegioes, setListRegioes] = React.useState([]);
 
   const toggleModal = (list?) => {
     setVisible(visible ? false : true);
@@ -83,13 +123,14 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   const dismiss = () => {
     setVisible(visible ? false : true);
+    setSubregiao(null);
   };
 
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
       {listRegioes.map(({ desc }, j) => (
         <View key={j} style={styles.itemContainer}>
-          <TouchableOpacity onPress={() => rendeDetailLesao}>
+          <TouchableOpacity onPress={() => setSubregiao(desc)}>
             <Text style={styles.textItem}>{desc}</Text>
           </TouchableOpacity>
         </View>
@@ -99,7 +140,49 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   const rendeDetailLesao = () => (
     <Layout level="3" style={styles.modalContainer}>
-      <Text style={styles.textItem}>toptop</Text>
+      <Text style={styles.textItemSmall}>{subregiao}</Text>
+      <View style={styles.lesaoContent}>
+        <CheckBox
+          text="Potencialmente maligna:"
+          checked={activeCheckedLesao}
+          onChange={onActiveChangeLesao}
+        />
+        <View style={{ marginTop: 16 }}>
+          <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
+            <Radio style={styles.radio} text="Leucoplasia" />
+            <Radio style={styles.radio} text="Eritoplasia" />
+            <Radio style={styles.radio} text="Quelite Actinica" />
+            <Radio style={styles.radio} text="Eritoleucoplasia" />
+            <Radio style={styles.radio} text="Líquen" />
+          </RadioGroup>
+        </View>
+        <View style={styles.rowCheck}>
+          <View style={styles.colCheck}>
+            <CheckBox
+              text="Maligna"
+              checked={checkedLesao}
+              onChange={checkedLesoes}
+            />
+          </View>
+          <View style={styles.colCheck}>
+            <CheckBox
+              text="Outras"
+              checked={checkedLesao}
+              onChange={checkedLesoes}
+            />
+          </View>
+        </View>
+        <View>
+          <Select
+            disabled={checkedLesao ? false : true}
+            size="small"
+            data={data}
+            placeholder="Classificação"
+            selectedOption={selectedOption}
+            onSelect={setSelectedOption}
+          />
+        </View>
+      </View>
     </Layout>
   );
 
@@ -141,7 +224,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                 onBackdropPress={dismiss}
                 visible={visible}
               >
-                {2 > 1 ? renderModalElement() : rendeDetailLesao()}
+                {subregiao ? rendeDetailLesao() : renderModalElement()}
               </Modal>
             </>
           ))}
