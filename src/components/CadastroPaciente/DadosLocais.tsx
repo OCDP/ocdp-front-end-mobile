@@ -51,6 +51,7 @@ const DadosLocais = ({ navigation }) => {
               text: a.nome
             };
           });
+          setLoading(false);
           setBairros(result);
         });
       }catch(err){
