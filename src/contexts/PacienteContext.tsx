@@ -6,11 +6,11 @@ import React, {
   useContext
 } from "react";
 import { historicoInterface } from "../utils/models/historicoInterface";
-import { listaFatoresCheck } from "../utils/models/listaFatoresCheck";
+import { fatoresInterface } from "../utils/models/fatoresInterface";
 
 export interface Paciente {
   historico: Array<historicoInterface>;
-  listaFatores: Array<listaFatoresCheck>;
+  listaFatores: Array<fatoresInterface>;
   nome: string;
   dtNasci: Date;
   sexo: string;
@@ -26,7 +26,7 @@ export interface Paciente {
 interface PacienteContextProps {
   historico: Array<historicoInterface>;
   setHistorico?: Dispatch<SetStateAction<[]>>;
-  listaFatores: Array<listaFatoresCheck>;
+  listaFatores: Array<fatoresInterface>;
   setListaFatores?: Dispatch<SetStateAction<[]>>;
   nome: string;
   setNome?: Dispatch<SetStateAction<string>>;
