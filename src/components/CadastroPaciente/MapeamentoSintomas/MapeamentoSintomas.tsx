@@ -20,6 +20,7 @@ import { regioes } from "../../../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
+import EmptyContent from "../../EmptyContent";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -230,7 +231,11 @@ const MapeamentoSintomas = ({ navigation }) => {
           ))}
         </View>
       ) : (
-        <Text> oi selecione a opcao p aparecer o menu</Text>
+        <EmptyContent
+          navigation={navigation}
+          title="Alguma região com lesão?"
+          textContent="selecione o fator de risco lesão para definir as regiões afetadas!"
+        />
       )}
     </View>
   );

@@ -11,6 +11,7 @@ import ListarPacientes from "./ListarPacientes";
 import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
+import CadastroConduta from "../CadastroConduta";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -81,7 +82,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           </ProgressStep>
           <ProgressStep
             label="Passo 2"
-            nextBtnText="cadastrar"
+            nextBtnText="avançar"
             previousBtnText="voltar"
             previousBtnStyle={btnStyle}
             nextBtnTextStyle={buttonTextStyle}
@@ -104,7 +105,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              <ListarPacientes navigation={navigation} />
+              <CadastroConduta navigation={navigation} />
             </View>
           </ProgressStep>
         </ProgressSteps>

@@ -30,7 +30,7 @@ const ImplementFutura = ({ navigation, title, textContent }) => {
     <Layout level="1" style={styles.container}>
       <View style={styles.boxText}>
         <View style={{ marginVertical: 36 }}>
-          <Empty size={150} />
+          <Empty size={100} />
         </View>
         <Text style={styles.itemText} appearance="hint">
           {title}
