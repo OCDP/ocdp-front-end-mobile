@@ -20,6 +20,8 @@ const DadosPessoais = ({ navigation }) => {
     setSexo,
     email,
     setEmail,
+    endereco,
+    setEndereco,
     telCell,
     setTelCell,
     telResp,
@@ -53,6 +55,16 @@ const DadosPessoais = ({ navigation }) => {
             icon={user}
             value={nome}
             onChangeText={setNome}
+          />
+        </View>
+      </View>
+      <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="Endereço Completo"
+            icon={user}
+            value={endereco}
+            onChangeText={setEndereco}
           />
         </View>
       </View>
