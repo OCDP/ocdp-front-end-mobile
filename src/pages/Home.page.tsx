@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
@@ -10,6 +10,7 @@ import apiFunc from "../services/api";
 import { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
+import LocaisContext from "../contexts/LocaisContext";
 
 async function loadHistorico(data) {
   console.log("data", data);
@@ -45,6 +46,7 @@ const HomeScreen = ({ navigation }) => {
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
   const [, setLoading] = useLoading();
+  const {locais, setLocais} = useContext(LocaisContext);
 
   async function loadHistorico(data) {
     let resp = await apiFunc("admin", "p@55w0Rd").get(
@@ -66,6 +68,24 @@ const HomeScreen = ({ navigation }) => {
       console.log("err", err);
     }
   }
+
+  useEffect(() => {
+    async function loadLocais(){
+      try{
+        await apiFunc('admin', 'p@55w0Rd').get('/localAtendimento').then((locais) => {
+          let result = locais.data.map(a => {
+          return {
+            text: a.nome
+          };
+        });
+          setLocais(result)
+        })
+      }catch(err){
+        console.log(err);
+      }
+    }
+    loadLocais();
+  }, [])
 
   useEffect(() => {
     loadFatores();
