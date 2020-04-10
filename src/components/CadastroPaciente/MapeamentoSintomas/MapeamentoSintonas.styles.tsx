@@ -13,7 +13,9 @@ export const HeaderContainer = withStyles(
     border-radius: 8px;
     margin-top: 16px;
     margin-horizontal: 16px;
-  `
+    background-color: ${({ themedStyle }) => themedStyle.bgColor};
+  `,
+  (theme) => ({ bgColor: theme["background-basic-color-4"] })
 );
 
 export const TextHeader = styled(Text).attrs({ category: "h6" })`

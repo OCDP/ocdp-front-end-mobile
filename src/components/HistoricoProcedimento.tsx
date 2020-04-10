@@ -10,12 +10,11 @@ import {
 import PacienteContext from "../contexts/PacienteContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Timeline from "react-native-timeline-flatlist";
-import { map } from "../assets/Icons";
 
 const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
   const { historico } = useContext(PacienteContext);
-  const [selected, setSelected] = React.useState(null);
-
+  const [selected, setSelected] = React.useState();
+  const { setAcomp } = useContext(PacienteContext);
   const dataTimeline = historico.map((a) => {
     let dataAtual =
       new Date().getDate() +
@@ -40,14 +39,15 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
       padding: 16,
       backgroundColor: "white",
     },
-    button: {
-      margin: 2,
-    }
   });
 
   async function onEventPress(data) {
     await setSelected(data);
-    //item selecionado do historico
+  }
+
+  async function acompActions() {
+    await setAcomp(true);
+    navigation.navigate("CadastrarPaciente");
   }
 
   return (
@@ -59,14 +59,18 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
             fontSize: 20,
             textAlign: "center",
             fontWeight: "bold",
-            color: "#000",
           }}
         >
           Histórico do paciente
         </Text>
-        <Button onPress={() => navigation.navigate("CadastrarPaciente")} style={styles.button} status='success' accessoryLeft={map}>
-        SUCCESS
-      </Button>
+        <Button
+          onPress={acompActions}
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          adicionar procedimento
+        </Button>
         <Timeline
           onEventPress={onEventPress}
           style={{ flex: 1 }}

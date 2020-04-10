@@ -2,12 +2,12 @@ import React, { useContext, useMemo } from "react";
 import {
   BackgroundContainer,
   ForegroundContainer,
-  Fade,
+  Fade
 } from "./PageContainer.styles";
 import {
   TopNavigationAction,
   withStyles,
-  TopNavigation,
+  TopNavigation
 } from "@ui-kitten/components";
 import { arrowBack, home, menu } from "../../assets/Icons";
 import { Animated } from "react-native";
@@ -30,7 +30,7 @@ function Pagecontainer({
   navigation,
   subtitle,
   noPadding,
-  themedStyle,
+  themedStyle
 }: PageContainerProps) {
   const fadeAnim = new Animated.Value(0);
 
@@ -46,7 +46,7 @@ function Pagecontainer({
   const resetNav = () => {
     navigation.dispatch(
       CommonActions.reset({
-        routes: [{ name: "Home" }],
+        routes: [{ name: "Home" }]
       })
     );
   };
@@ -60,22 +60,22 @@ function Pagecontainer({
     />
   );
 
-  const renderRightControls = () => (
+  const renderRightControls = () => [
     <TopNavigationAction icon={home} onPress={() => resetNav()} />
-  );
+  ];
 
   return (
     <BackgroundContainer>
       <TopNavigation
         style={{
-          backgroundColor: theme.vars["background-basic-color-4"],
-          height: 65,
+          backgroundColor: themedStyle.bgColor,
+          height: 65
         }}
         title={title}
         subtitle={subtitle}
         alignment="center"
-        accessoryLeft={renderMenuControl}
-        accessoryRight={renderRightControls}
+        leftControl={renderMenuControl()}
+        rightControls={renderRightControls()}
       />
       <ForegroundContainer noPadding={noPadding}>
         <Fade
@@ -83,13 +83,13 @@ function Pagecontainer({
             opacity: fadeAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 1],
-              extrapolate: "clamp",
+              extrapolate: "clamp"
             }),
             zIndex: fadeAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 2],
-              extrapolate: "clamp",
-            }),
+              extrapolate: "clamp"
+            })
           }}
         />
         {children}
@@ -98,5 +98,6 @@ function Pagecontainer({
   );
 }
 
-export default withStyles(Pagecontainer, (theme) => ({
+export default withStyles(Pagecontainer, theme => ({
+  bgColor: theme["background-basic-color-4"]
 }));

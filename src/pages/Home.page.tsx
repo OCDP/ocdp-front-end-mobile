@@ -7,9 +7,10 @@ import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
-import { useLoading } from "../contexts/AppContext";
+import AppContext, { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 
 async function loadHistorico(data) {
   console.log("data", data);
@@ -45,6 +46,9 @@ const HomeScreen = ({ navigation }) => {
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
   const [, setLoading] = useLoading();
+  const { setAcomp } = useContext(PacienteContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { switchTheme } = useContext(AppContext);
 
   async function loadHistorico(data) {
     let resp = await apiFunc("admin", "p@55w0Rd").get(
@@ -69,6 +73,9 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadFatores();
+    if (usuarioLogado.nivelAtencao === "SECUNDARIA") {
+      switchTheme();
+    }
   }, []);
 
   const onSelect = ({ title }) => {
@@ -101,6 +108,11 @@ const HomeScreen = ({ navigation }) => {
     setValue("");
   };
 
+  async function cadastroActions() {
+    await setAcomp(false);
+    navigation.navigate("CadastrarPaciente");
+  }
+
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
@@ -115,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <View style={{ backgroundColor: '#FF4B1E' }}>
+          <View style={{ backgroundColor: "#FF4B1E" }}>
             <HistoricoProcedimento navigation={navigation} />
           </View>
         ) : (
@@ -130,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
           status="primary"
           size="tiny"
           icon={add}
-          onPress={() => navigation.navigate("CadastrarPaciente")}
+          onPress={cadastroActions}
         />
       </Layout>
     </PageContainer>

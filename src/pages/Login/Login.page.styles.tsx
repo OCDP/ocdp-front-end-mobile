@@ -4,10 +4,9 @@ import { KeyboardAvoidingView } from "react-native";
 import {
   Card,
   Button,
+  CardHeader,
   Input,
   withStyles,
-  Layout,
-  Text,
 } from "@ui-kitten/components";
 import { buildStyledShadow } from "../../styles/BuildShadow";
 import { map } from "../../assets/Icons";
@@ -26,7 +25,30 @@ export const Container = withStyles(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  `
+    background-color: ${({ themedStyle }) => themedStyle.bgColor};
+  `,
+  (theme) => ({ bgColor: theme["background-basic-color-2"] })
+);
+
+const renderHeader = () => (
+  <CardHeader title="Já possui cadastro?" description="Faça o login agora" />
+);
+
+export const LoginCard = withStyles(
+  styled(Card).attrs({
+    appearance: "filled",
+    header: renderHeader,
+  })`
+    ${shadow}
+    border-radius: 8px;
+    margin-top: 36px;
+    width: 90%;
+    max-width: 400px;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: ${({ themedStyle }) => themedStyle.bgColor};
+  `,
+  (theme) => ({ bgColor: theme["background-basic-color-4"] })
 );
 
 export const LoginInput = styled(Input).attrs({
