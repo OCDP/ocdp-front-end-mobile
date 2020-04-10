@@ -4,18 +4,20 @@ import { KeyboardAvoidingView } from "react-native";
 import {
   Card,
   Button,
-  CardHeader,
   Input,
-  withStyles
+  withStyles,
+  Layout,
+  Text,
 } from "@ui-kitten/components";
 import { buildStyledShadow } from "../../styles/BuildShadow";
-import { map } from "../../assets/Icons"
+import { map } from "../../assets/Icons";
 
 const shadow = buildStyledShadow(16);
 
 interface ContainerProps {
-  themedStyle?: any
+  themedStyle?: any;
 }
+
 export const Container = withStyles(
   styled(KeyboardAvoidingView).attrs({
     behavior: "padding",
@@ -24,28 +26,8 @@ export const Container = withStyles(
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${({ themedStyle }) => themedStyle.bgColor};
-  `,
-  theme => ({ bgColor: theme["background-basic-color-2"] })
+  `
 );
-
-const renderHeader = () => (
-  <CardHeader title="Já possui cadastro?" description="Faça o login agora" />
-);
-
-export const LoginCard = styled(Card).attrs({
-  appearance: "filled",
-  header: renderHeader,
-})`
-  ${shadow}
-  border-radius: 8px;
-  margin-top: 36px;
-  width: 90%;
-  max-width: 400px;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: white;
-`;
 
 export const LoginInput = styled(Input).attrs({
   placeholder: "insira o CPF",
@@ -68,7 +50,7 @@ export const LoginButton = styled(Button).attrs({
 
 export const PswdRecoveryButton = styled(Button).attrs({
   children: "Esqueceu sua senha?",
-  status: 'basic',
+  status: "basic",
   appearance: "ghost",
   size: "small",
   icon: map,
@@ -80,9 +62,9 @@ export const PswdRecoveryButton = styled(Button).attrs({
 
 export const RegisterButton = styled(Button).attrs({
   children: "Ainda não possui cadastro?",
-  status: 'warning',
-  appearance: 'ghost',
-  size: 'giant',
+  status: "warning",
+  appearance: "ghost",
+  size: "giant",
 })`
   position: absolute;
   bottom: 0;

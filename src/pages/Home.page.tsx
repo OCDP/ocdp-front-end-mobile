@@ -30,13 +30,13 @@ const DATA = [
   {
     id: 1,
     title: "João",
-    releaseYear: 1977
+    releaseYear: 1977,
   },
   {
     id: 2,
     title: "Maria",
-    releaseYear: 1985
-  }
+    releaseYear: 1985,
+  },
 ];
 
 const HomeScreen = ({ navigation }) => {
@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
     try {
       await apiFunc("admin", "p@55w0Rd")
         .get("/fatorRisco")
-        .then(resp => {
+        .then((resp) => {
           console.log("fatores >>> ", resp.data);
           setFatores(resp.data);
         });
@@ -77,10 +77,10 @@ const HomeScreen = ({ navigation }) => {
     // setHistorico(historico);
   };
 
-  const onChangeText = async query => {
+  const onChangeText = async (query) => {
     setValue(query);
     if (query.length > 3) {
-      await loadHistorico(query).then(resp => {
+      await loadHistorico(query).then((resp) => {
         console.log("respHistorico", resp);
         if (resp == []) {
           setHistorico([]);
@@ -89,7 +89,7 @@ const HomeScreen = ({ navigation }) => {
         }
         console.log("historico ", historico);
         setData(
-          DATA.filter(item =>
+          DATA.filter((item) =>
             item.title.toLowerCase().includes(query.toLowerCase())
           )
         );
@@ -115,7 +115,9 @@ const HomeScreen = ({ navigation }) => {
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <HistoricoProcedimento navigation={navigation} />
+          <View style={{ backgroundColor: '#FF4B1E' }}>
+            <HistoricoProcedimento navigation={navigation} />
+          </View>
         ) : (
           <EmptyContent
             navigation={navigation}
@@ -138,13 +140,13 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   picker: {
     width: "100%",
     display: "flex",
     paddingHorizontal: 8,
-    paddingTop: 8
+    paddingTop: 8,
   },
   button: {
     width: 50,
@@ -158,10 +160,10 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       height: 4,
-      width: 0
+      width: 0,
     },
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
 export default HomeScreen;

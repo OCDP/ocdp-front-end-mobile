@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
   },
   boxDatePicker: {
     marginHorizontal: 8,
-    backgroundColor: "#fcfcfc",
     paddingVertical: 16,
     borderRadius: 10,
     elevation: 8,

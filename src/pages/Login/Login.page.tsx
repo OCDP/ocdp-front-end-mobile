@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   Container,
-  LoginCard,
   LoginButton,
   LoginInput,
   PasswordInput
 } from "./Login.page.styles";
-import { Icon } from "@ui-kitten/components";
+import { Icon, useStyleSheet, Card, Layout, Text } from "@ui-kitten/components";
 import api from "../../services/api";
 
 import Logo from "../../assets/vectors/Logo.jsx";
@@ -27,6 +26,17 @@ export default function({ navigation }) {
     <Icon {...style} name={secureTextEntry ? "eye-off" : "eye"} />
   );
 
+  const styles = useStyleSheet({
+    cardStyles: {
+      borderRadius: 8,
+      marginTop: 36,
+      width: "90%",
+      maxWidth: 400,
+      flexDirection: "column",
+      justifyContent: "space-between"
+    }
+  });
+
   async function loginAction() {
     try {
       setLoading(true);
@@ -42,10 +52,17 @@ export default function({ navigation }) {
     }
   }
 
+  const Header = (evaProps) => (
+    <Layout {...evaProps}>
+      <Text category="h6">Já possui cadastro?</Text>
+      <Text category="h6">Faça o login agora</Text>
+    </Layout>
+  );
+
   return (
     <Container>
       <Logo size={200} />
-      <LoginCard>
+      <Card header={Header} style={styles.cardStyles}>
         <LoginInput value={login} onChangeText={setLogin} />
         <PasswordInput
           value={pswd}
@@ -55,7 +72,7 @@ export default function({ navigation }) {
           secureTextEntry={secureTextEntry}
         />
         <LoginButton onPress={() => loginAction()} />
-      </LoginCard>
+      </Card>
     </Container>
   );
 }

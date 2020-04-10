@@ -14,8 +14,8 @@ import useSecStorage from "../hooks/useSecStorage";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const defaultTheme: AppTheme = {
-  name: "ligth",
-  vars: ligthTheme
+  name: "dark",
+  vars: darkTheme
 };
 
 export type ThemeName = "ligth" | "dark";
