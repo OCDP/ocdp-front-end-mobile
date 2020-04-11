@@ -4,26 +4,33 @@ import {
   LoginCard,
   LoginButton,
   LoginInput,
-  PasswordInput
+  PasswordInput,
 } from "./Login.page.styles";
 import { Icon } from "@ui-kitten/components";
 import api from "../../services/api";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
-import { useLoading } from "../../contexts/AppContext";
+import AppContext, { useLoading } from "../../contexts/AppContext";
 
-export default function({ navigation }) {
-  const [login, setLogin] = useState("admin");
-  const [pswd, setPswd] = useState("p@55w0Rd");
+export default function ({ navigation }) {
+  //ATENCAO PRIMARIA
+  const [login, setLogin] = useState("222.222.222-22");
+  const [pswd, setPswd] = useState("teste123");
+
+  // ATENCAO SECUNDARIA
+  // const [login, setLogin] = useState("111.111.111-11");
+  // const [pswd, setPswd] = useState("p@55w0Rd");
+
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
+  const { setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
+  const { switchTheme } = useContext(AppContext);
 
   const seePassowrd = () => {
     setSecureTextEntry(!secureTextEntry);
   };
-  const renderPasswordIcon = style => (
+  const renderPasswordIcon = (style) => (
     <Icon {...style} name={secureTextEntry ? "eye-off" : "eye"} />
   );
 
@@ -39,6 +46,7 @@ export default function({ navigation }) {
     } catch (err) {
       console.log(err);
       alert("Email ou senha incorreta!");
+      setLoading(false);
     }
   }
 

@@ -82,7 +82,6 @@ const DadosPessoais = ({ navigation }) => {
       <View style={styles.lineContent}>
         <View
           style={{
-            backgroundColor: "#f7f9fc",
             marginHorizontal: 16,
             borderRadius: 4
           }}

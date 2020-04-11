@@ -7,10 +7,10 @@ import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
-import { useLoading } from "../contexts/AppContext";
+import AppContext, { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
-import LocaisContext from "../contexts/LocaisContext";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 
 async function loadHistorico(data) {
   console.log("data", data);
@@ -31,13 +31,13 @@ const DATA = [
   {
     id: 1,
     title: "João",
-    releaseYear: 1977
+    releaseYear: 1977,
   },
   {
     id: 2,
     title: "Maria",
-    releaseYear: 1985
-  }
+    releaseYear: 1985,
+  },
 ];
 
 const HomeScreen = ({ navigation }) => {
@@ -46,7 +46,9 @@ const HomeScreen = ({ navigation }) => {
   const [data, setData] = React.useState(DATA);
   const { historico, setHistorico } = useContext(PacienteContext);
   const [, setLoading] = useLoading();
-  const {locais, setLocais} = useContext(LocaisContext);
+  const { setAcomp } = useContext(PacienteContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { switchTheme } = useContext(AppContext);
 
   async function loadHistorico(data) {
     let resp = await apiFunc("admin", "p@55w0Rd").get(
@@ -60,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
     try {
       await apiFunc("admin", "p@55w0Rd")
         .get("/fatorRisco")
-        .then(resp => {
+        .then((resp) => {
           console.log("fatores >>> ", resp.data);
           setFatores(resp.data);
         });
@@ -89,6 +91,9 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadFatores();
+    if (usuarioLogado.nivelAtencao === "SECUNDARIA") {
+      switchTheme();
+    }
   }, []);
 
   const onSelect = ({ title }) => {
@@ -97,10 +102,10 @@ const HomeScreen = ({ navigation }) => {
     // setHistorico(historico);
   };
 
-  const onChangeText = async query => {
+  const onChangeText = async (query) => {
     setValue(query);
     if (query.length > 3) {
-      await loadHistorico(query).then(resp => {
+      await loadHistorico(query).then((resp) => {
         console.log("respHistorico", resp);
         if (resp == []) {
           setHistorico([]);
@@ -109,7 +114,7 @@ const HomeScreen = ({ navigation }) => {
         }
         console.log("historico ", historico);
         setData(
-          DATA.filter(item =>
+          DATA.filter((item) =>
             item.title.toLowerCase().includes(query.toLowerCase())
           )
         );
@@ -120,6 +125,11 @@ const HomeScreen = ({ navigation }) => {
   const clearInput = () => {
     setValue("");
   };
+
+  async function cadastroActions() {
+    await setAcomp(false);
+    navigation.navigate("CadastrarPaciente");
+  }
 
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
@@ -135,7 +145,9 @@ const HomeScreen = ({ navigation }) => {
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <HistoricoProcedimento navigation={navigation} />
+          <View style={{ backgroundColor: "#FF4B1E" }}>
+            <HistoricoProcedimento navigation={navigation} />
+          </View>
         ) : (
           <EmptyContent
             navigation={navigation}
@@ -148,7 +160,7 @@ const HomeScreen = ({ navigation }) => {
           status="primary"
           size="tiny"
           icon={add}
-          onPress={() => navigation.navigate("CadastrarPaciente")}
+          onPress={cadastroActions}
         />
       </Layout>
     </PageContainer>
@@ -158,13 +170,13 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   picker: {
     width: "100%",
     display: "flex",
     paddingHorizontal: 8,
-    paddingTop: 8
+    paddingTop: 8,
   },
   button: {
     width: 50,
@@ -178,10 +190,10 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       height: 4,
-      width: 0
+      width: 0,
     },
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
 export default HomeScreen;

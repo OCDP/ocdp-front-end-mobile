@@ -21,6 +21,7 @@ export interface Paciente {
   nmMae: string;
   cidade: string;
   bairro: string;
+  acomp: boolean
 }
 
 interface PacienteContextProps {
@@ -48,6 +49,8 @@ interface PacienteContextProps {
   setCidade?: Dispatch<SetStateAction<string>>;
   bairro: string;
   setBairro?: Dispatch<SetStateAction<string>>;
+  acomp: boolean;
+  setAcomp?: Dispatch<SetStateAction<boolean>>;
   flush?: () => void;
 }
 
@@ -63,7 +66,8 @@ const defaultPaciente: Paciente = {
   telResp: null,
   nmMae: null,
   cidade: null,
-  bairro: null
+  bairro: null,
+  acomp: false
 };
 
 const PacienteContext = createContext<PacienteContextProps>(defaultPaciente);
@@ -81,6 +85,8 @@ export function PacienteProvider({ children }) {
   const [nmMae, setNmMae] = useState<string>(null);
   const [cidade, setCidade] = useState<string>(null);
   const [bairro, setBairro] = useState<string>(null);
+  const [acomp, setAcomp] = useState<boolean>(false);
+
 
   const flush = () => {
     setNome(defaultPaciente.nome);
@@ -122,6 +128,8 @@ export function PacienteProvider({ children }) {
         setCidade,
         bairro,
         setBairro,
+        acomp,
+        setAcomp,
         flush
       }}
     >
@@ -143,7 +151,8 @@ export function usePaciente(): Paciente {
     telResp,
     nmMae,
     cidade,
-    bairro
+    bairro,
+    acomp
   } = useContext(PacienteContext);
   return {
     historico,
@@ -157,7 +166,8 @@ export function usePaciente(): Paciente {
     telResp,
     nmMae,
     cidade,
-    bairro
+    bairro,
+    acomp
   };
 }
 
