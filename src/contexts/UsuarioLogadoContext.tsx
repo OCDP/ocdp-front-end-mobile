@@ -4,11 +4,11 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { usuarioInterface } from "../utils/models/usuarioInterface";
+import { UsuarioInterface } from "../utils/models/UsuarioInterface";
 
 interface UsuarioLogadoContextProps {
-  usuarioLogado: usuarioInterface;
-  setUsuarioLogado?: Dispatch<SetStateAction<usuarioInterface>>;
+  usuarioLogado: UsuarioInterface;
+  setUsuarioLogado?: Dispatch<SetStateAction<UsuarioInterface>>;
 }
 
 const defaultUsuarioLogado = {

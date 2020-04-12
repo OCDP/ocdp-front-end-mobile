@@ -34,7 +34,12 @@ const DATA = [
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [activeChecked, setActiveChecked] = React.useState(false);
-  const { nomesLocais, setNomesLocais } = useContext(LocaisContext);
+  const {
+    nomesLocais,
+    setNomesLocais,
+    tiposLocais,
+    setTiposLocais,
+  } = useContext(LocaisContext);
 
   const onSelect = ({ title }) => {
     setValue(title);
@@ -57,8 +62,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
           <Layout style={styles.heightInput}>
             <Select
               data={nomesLocais}
-              placeholder="Local de atendimento"
-              selectedOption={{ text: nomesLocais }}
+              placeholder="nome do estab"
               onSelect={() => {}}
             />
           </Layout>
@@ -66,9 +70,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
         <View style={styles.lineContent}>
           <Layout style={styles.heightInput}>
             <Select
-              data={nomesLocais}
-              placeholder="Local que será encaminhado"
-              selectedOption={{ text: nomesLocais }}
+              data={tiposLocais}
+              placeholder="tipos stab"
               onSelect={() => {}}
             />
           </Layout>

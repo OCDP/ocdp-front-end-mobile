@@ -12,6 +12,12 @@ import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import LocaisContext from "../contexts/LocaisContext";
+import { AxiosResponse } from "axios";
+import {
+  RespLocaisInterface,
+  NomeSelect,
+  TipoLocalAtendimento,
+} from "../utils/models/RespLocaisInterface";
 
 const DATA = [
   {
@@ -66,24 +72,38 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     async function loadLocais() {
       try {
-        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-          .get("/localAtendimento")
-          .then((locais) => {
-            let nomesLocaisArr = locais.data.map((a) => {
-              return {
-                id: a.id,
-                text: a.nome,
-              };
-            });
-            setNomesLocais(nomesLocaisArr);
+        const locais: AxiosResponse<RespLocaisInterface[]> = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).get("/localAtendimento");
+        let nomesLocaisArr: NomeSelect[] = [];
+        let tiposLocaisArr: TipoLocalAtendimento[] = [];
 
-            let tiposLocaisArr = locais.data.map((a) => {
-              return {
-                tipos: a.tipoLocalAtendimento,
-              };
-            });
-            setTiposLocais(tiposLocaisArr);
-          });
+        await locais.data.forEach(({ id, nome }) => {
+          nomesLocaisArr.push({ id, nome });
+        });
+
+        const nomesContext = nomesLocaisArr.map((a) => {
+          return {
+            id: a.id,
+            text: a.nome,
+          };
+        });
+        setNomesLocais(nomesContext);
+
+        await locais.data.forEach(({ tipoLocalAtendimento }, i) => {
+          if (tipoLocalAtendimento) {
+            tiposLocaisArr.push(tipoLocalAtendimento);
+          }
+        });
+
+        const tiposContext = tiposLocaisArr.map((a) => {
+          return {
+            id: a.id,
+            text: a.nome,
+          };
+        });
+        setTiposLocais(tiposContext);
       } catch (err) {
         console.log(err);
       }
@@ -131,6 +151,12 @@ const HomeScreen = ({ navigation }) => {
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
+        <Button onPressIn={() => console.log("tipos >>>>>>>", tiposLocais)}>
+          tipos
+        </Button>
+        <Button onPressIn={() => console.log("nomes >>>>>>>", nomesLocais)}>
+          nomes
+        </Button>
         <Autocomplete
           style={styles.picker}
           placeholder="Localizar paciente"

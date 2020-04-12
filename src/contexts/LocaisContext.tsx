@@ -4,14 +4,14 @@ import React, {
     Dispatch,
     SetStateAction
   } from "react";
-import { nomesLocaisInterfaces } from "../utils/models/nomesLocaisInterface";
-import { tiposLocaisInterfaces } from "../utils/models/tiposLocaisInterface";
+import { NomesLocaisInterfaces } from "../utils/models/NomesLocaisInterface";
+import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
   
   interface LocaisContextProps {
-    nomesLocais: Array<nomesLocaisInterfaces>;
-    setNomesLocais?: Dispatch<SetStateAction<[]>>;
-    tiposLocais: Array<tiposLocaisInterfaces>;
-    setTiposLocais?: Dispatch<SetStateAction<[]>>;
+    nomesLocais: Array<NomesLocaisInterfaces>;
+    setNomesLocais?: Dispatch<SetStateAction<{}>>;
+    tiposLocais: Array<TiposLocaisInterfaces>;
+    setTiposLocais?: Dispatch<SetStateAction<{}>>;
   }
   
   

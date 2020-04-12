@@ -1,4 +1,4 @@
-export interface nomesLocaisInterfaces {
+export interface NomesLocaisInterfaces {
   id: string;
   text: string;
 }
