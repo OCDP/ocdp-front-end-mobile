@@ -15,17 +15,16 @@ import AppContext, { useLoading } from "../../contexts/AppContext";
 
 export default function ({ navigation }) {
   //ATENCAO PRIMARIA
-  const [login, setLogin] = useState("222.222.222-22");
-  const [pswd, setPswd] = useState("teste123");
-
-  // ATENCAO SECUNDARIA
   // const [login, setLogin] = useState("111.111.111-11");
   // const [pswd, setPswd] = useState("p@55w0Rd");
+
+  //ATENCAO SECUNDARIA
+  const [login, setLogin] = useState("222.222.222-22");
+  const [pswd, setPswd] = useState("teste123");
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
-  const { switchTheme } = useContext(AppContext);
 
   const seePassowrd = () => {
     setSecureTextEntry(!secureTextEntry);

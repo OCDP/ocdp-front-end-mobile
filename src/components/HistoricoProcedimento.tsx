@@ -16,17 +16,12 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
   const [selected, setSelected] = React.useState();
   const { setAcomp } = useContext(PacienteContext);
   const dataTimeline = historico.map((a) => {
-    let dataAtual =
-      new Date().getDate() +
-      "/" +
-      new Date().getMonth() +
-      "/" +
-      new Date().getFullYear();
     return {
-      title: a.profissionalDeSaude,
-      description:
-        a.tipoAtendiemtento + " (" + a.diferencaDias + " " + dataAtual + " )",
       id: a.idAtendimento,
+      title: `${a.tipoAtendiemtento}\n(${a.diferencaMeses})`,
+      description: `${a.localAtendimento}\n${a.profissionalDeSaude}\n${
+        a.dataAtendimento.split(" ")[0]
+      }`,
     };
   });
 
@@ -37,7 +32,6 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
     timeline: {
       flex: 1,
       padding: 16,
-      backgroundColor: "white",
     },
   });
 
@@ -75,6 +69,8 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
           onEventPress={onEventPress}
           style={{ flex: 1 }}
           data={dataTimeline}
+          titleStyle={{ fontSize: 10 }}
+          descriptionStyle={{ fontSize: 12 }}
           detailContainerStyle={{
             marginBottom: 20,
             paddingLeft: 5,

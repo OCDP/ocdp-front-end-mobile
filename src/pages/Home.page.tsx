@@ -127,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <View style={{ backgroundColor: "#FF4B1E" }}>
+          <View>
             <HistoricoProcedimento navigation={navigation} />
           </View>
         ) : (
