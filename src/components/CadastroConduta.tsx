@@ -9,7 +9,7 @@ import {
   Datepicker,
   Select,
   Autocomplete,
-  CheckBox
+  CheckBox,
 } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
@@ -21,28 +21,28 @@ import LocaisContext from "../contexts/LocaisContext";
 const DATA = [
   {
     id: 1,
-    title: "João",
-    releaseYear: 1977
+    title: "CAIS",
+    releaseYear: 1977,
   },
   {
     id: 2,
-    title: "Maria",
-    releaseYear: 1985
-  }
+    title: "POSTINHO",
+    releaseYear: 1985,
+  },
 ];
-
 
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [activeChecked, setActiveChecked] = React.useState(false);
-  const {locais, setLocais} = useContext(LocaisContext);
+  const { nomesLocais, setNomesLocais } = useContext(LocaisContext);
+
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
     // setHistorico(historico);
   };
 
-  const onChangeText = async query => {
+  const onChangeText = async (query) => {
     setValue(query);
   };
 
@@ -54,24 +54,24 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
         <View style={styles.lineContent}>
-            <Layout style={styles.heightInput}>
-              <Select
-                data={locais}
-                placeholder="Local de atendimento"
-                selectedOption={{ text: locais }}
-                onSelect={e => setLocais(e["text"])}
-              />
-            </Layout>
+          <Layout style={styles.heightInput}>
+            <Select
+              data={nomesLocais}
+              placeholder="Local de atendimento"
+              selectedOption={{ text: nomesLocais }}
+              onSelect={() => {}}
+            />
+          </Layout>
         </View>
         <View style={styles.lineContent}>
-            <Layout style={styles.heightInput}>
-              <Select
-                data={locais}
-                placeholder="Local que será encaminhado"
-                selectedOption={{ text: locais }}
-                onSelect={e => setLocais(e["text"])}
-              />
-            </Layout>
+          <Layout style={styles.heightInput}>
+            <Select
+              data={nomesLocais}
+              placeholder="Local que será encaminhado"
+              selectedOption={{ text: nomesLocais }}
+              onSelect={() => {}}
+            />
+          </Layout>
         </View>
         <View>
           <Text appearance="hint">Retorno para:</Text>
@@ -79,7 +79,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
             <View style={styles.boxDatePicker}>
               <View
                 style={{
-                  marginHorizontal: 16
+                  marginHorizontal: 16,
                 }}
               >
                 <View style={{ marginVertical: 8 }}>
@@ -108,7 +108,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
             <View style={styles.boxDatePicker}>
               <View
                 style={{
-                  marginHorizontal: 16
+                  marginHorizontal: 16,
                 }}
               >
                 <View style={{ marginVertical: 8 }}>
@@ -143,20 +143,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    marginVertical: 8
+    marginVertical: 8,
   },
   lineContent: {
     width: "100%",
-    marginVertical: 8
+    marginVertical: 8,
   },
   heightInput: {
-    height: 40
+    height: 40,
   },
   picker: {
     width: "100%",
     display: "flex",
     paddingHorizontal: 8,
-    paddingTop: 8
+    paddingTop: 8,
   },
   boxDatePicker: {
     marginHorizontal: 8,
@@ -167,14 +167,14 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       height: 1,
-      width: 0
+      width: 0,
     },
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
-export default withStyles(CadastroConduta, theme => ({
+export default withStyles(CadastroConduta, (theme) => ({
   primary: theme["color-primary-500"],
   primaryDark: theme["color-primary-900"],
-  primaryLigth: theme["color-primary-400"]
+  primaryLigth: theme["color-primary-400"],
 }));

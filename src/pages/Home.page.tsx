@@ -13,22 +13,6 @@ import FatoresContext from "../contexts/FatoresRiscoContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import LocaisContext from "../contexts/LocaisContext";
 
-async function loadHistorico(data) {
-  const { usuarioLogado } = useContext(UsuarioLogadoContext);
-  console.log("data", data);
-  try {
-    let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-      `/historico/atendimentos/${data}`
-    );
-    let historico = resp.data;
-    console.log("loadHistorico", historico);
-
-    return historico;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 const DATA = [
   {
     id: 1,
@@ -37,21 +21,28 @@ const DATA = [
   },
   {
     id: 2,
-    title: "Maria",
+    title: "Jose",
     releaseYear: 1985,
   },
 ];
 
 const HomeScreen = ({ navigation }) => {
-  const { setFatores } = useContext(FatoresContext);
+  const { fatores, setFatores } = useContext(FatoresContext);
   const [value, setValue] = React.useState(null);
-  const [data, setData] = React.useState(DATA);
+  const [nomes, setNomes] = React.useState([]);
   const { historico, setHistorico } = useContext(PacienteContext);
   const [, setLoading] = useLoading();
   const { setAcomp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { switchTheme } = useContext(AppContext);
-  const {locais, setLocais} = useContext(LocaisContext);
+  const {
+    nomesLocais,
+    setNomesLocais,
+    tiposLocais,
+    setTiposLocais,
+  } = useContext(LocaisContext);
+  let arrLocais = null;
+
   async function loadHistorico(data) {
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
       `/historico/atendimentos/${data}`
@@ -65,7 +56,6 @@ const HomeScreen = ({ navigation }) => {
       await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
         .get("/fatorRisco")
         .then((resp) => {
-          console.log("fatores >>> ", resp.data);
           setFatores(resp.data);
         });
     } catch (err) {
@@ -74,22 +64,32 @@ const HomeScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    async function loadLocais(){
-      try{
-        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get('/localAtendimento').then((locais) => {
-          let result = locais.data.map(a => {
-          return {
-            text: a.nome
-          };
-        });
-          setLocais(result)
-        })
-      }catch(err){
+    async function loadLocais() {
+      try {
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+          .get("/localAtendimento")
+          .then((locais) => {
+            let nomesLocaisArr = locais.data.map((a) => {
+              return {
+                id: a.id,
+                text: a.nome,
+              };
+            });
+            setNomesLocais(nomesLocaisArr);
+
+            let tiposLocaisArr = locais.data.map((a) => {
+              return {
+                tipos: a.tipoLocalAtendimento,
+              };
+            });
+            setTiposLocais(tiposLocaisArr);
+          });
+      } catch (err) {
         console.log(err);
       }
     }
     loadLocais();
-  }, [])
+  }, []);
 
   useEffect(() => {
     loadFatores();
@@ -98,30 +98,25 @@ const HomeScreen = ({ navigation }) => {
     }
   }, []);
 
-  const onSelect = ({ title }) => {
+  const onSelect = async ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
     // setHistorico(historico);
+    await loadHistorico(title).then((resp) => {
+      if (resp == []) {
+        setHistorico([]);
+      } else {
+        setHistorico(resp);
+      }
+    });
   };
-
   const onChangeText = async (query) => {
     setValue(query);
-    if (query.length > 3) {
-      await loadHistorico(query).then((resp) => {
-        console.log("respHistorico", resp);
-        if (resp == []) {
-          setHistorico([]);
-        } else {
-          setHistorico(resp);
-        }
-        console.log("historico ", historico);
-        setData(
-          DATA.filter((item) =>
-            item.title.toLowerCase().includes(query.toLowerCase())
-          )
-        );
-      });
-    }
+    setNomes(
+      DATA.filter((item) =>
+        item.title.toLowerCase().includes(query.toLowerCase())
+      )
+    );
   };
 
   const clearInput = () => {
@@ -140,7 +135,7 @@ const HomeScreen = ({ navigation }) => {
           style={styles.picker}
           placeholder="Localizar paciente"
           value={value}
-          data={data}
+          data={nomes}
           icon={value?.length > 0 ? clear : search}
           onIconPress={clearInput}
           onChangeText={onChangeText}

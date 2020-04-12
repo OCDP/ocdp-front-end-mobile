@@ -8,7 +8,6 @@ import {
   Button,
 } from "@ui-kitten/components";
 import PacienteContext from "../contexts/PacienteContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Timeline from "react-native-timeline-flatlist";
 
 const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
