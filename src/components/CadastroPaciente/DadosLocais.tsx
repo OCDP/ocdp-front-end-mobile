@@ -19,7 +19,7 @@ const DadosLocais = ({ navigation }) => {
       console.log("aooooooo ????");
       try{
         setLoading(true);
-      await apiFunc("admin", "p@55w0Rd").get(
+      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
         "/cidade"
       ).then((response)=> {
         const cidadesServ = response.data;
@@ -42,7 +42,7 @@ const DadosLocais = ({ navigation }) => {
     async function loadBairros() {
       try{
         setLoading(true);
-        await apiFunc('admin', 'p@55w0Rd').get(
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
           `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
         ).then((response)=>{
           const bairrosServ = response.data;

@@ -7,4 +7,5 @@ export interface usuarioInterface {
   telefone: string;
   nivelAtencao: string;
   tipoUsuario: string;
+  senhaUsuario?: string;
 }
