@@ -23,7 +23,7 @@ export default function ({ navigation }) {
   const [pswd, setPswd] = useState("teste123");
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { setUsuarioLogado } = useContext(UsuarioLogadoContext);
+  const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
 
   const seePassowrd = () => {
@@ -39,7 +39,10 @@ export default function ({ navigation }) {
       let resp = await api(login, pswd).get(
         `/usuario/byCpf/${login}?cpf=${login}`
       );
+      resp.data.senhaUsuario = pswd;
       setUsuarioLogado(resp.data);
+      console.log('usuarioLogado', usuarioLogado.senhaUsuario);
+      
       setLoading(false);
       navigation.navigate("Home");
     } catch (err) {

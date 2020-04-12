@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
@@ -11,11 +11,13 @@ import AppContext, { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
 import FatoresContext from "../contexts/FatoresRiscoContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import LocaisContext from "../contexts/LocaisContext";
 
 async function loadHistorico(data) {
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
   console.log("data", data);
   try {
-    let resp = await apiFunc("admin", "p@55w0Rd").get(
+    let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
       `/historico/atendimentos/${data}`
     );
     let historico = resp.data;
@@ -49,9 +51,9 @@ const HomeScreen = ({ navigation }) => {
   const { setAcomp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { switchTheme } = useContext(AppContext);
-
+  const {locais, setLocais} = useContext(LocaisContext);
   async function loadHistorico(data) {
-    let resp = await apiFunc("admin", "p@55w0Rd").get(
+    let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
       `/historico/atendimentos/${data}`
     );
     let historico = resp.data;
@@ -60,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
 
   async function loadFatores() {
     try {
-      await apiFunc("admin", "p@55w0Rd")
+      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
         .get("/fatorRisco")
         .then((resp) => {
           console.log("fatores >>> ", resp.data);
@@ -70,6 +72,24 @@ const HomeScreen = ({ navigation }) => {
       console.log("err", err);
     }
   }
+
+  useEffect(() => {
+    async function loadLocais(){
+      try{
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get('/localAtendimento').then((locais) => {
+          let result = locais.data.map(a => {
+          return {
+            text: a.nome
+          };
+        });
+          setLocais(result)
+        })
+      }catch(err){
+        console.log(err);
+      }
+    }
+    loadLocais();
+  }, [])
 
   useEffect(() => {
     loadFatores();

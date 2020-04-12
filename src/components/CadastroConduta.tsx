@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   useStyleSheet,
   Layout,
@@ -7,6 +7,7 @@ import {
   Card,
   Input,
   Datepicker,
+  Select,
   Autocomplete,
   CheckBox
 } from "@ui-kitten/components";
@@ -14,6 +15,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
+import apiFunc from "../services/api";
+import LocaisContext from "../contexts/LocaisContext";
 
 const DATA = [
   {
@@ -28,10 +31,11 @@ const DATA = [
   }
 ];
 
+
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [activeChecked, setActiveChecked] = React.useState(false);
-
+  const {locais, setLocais} = useContext(LocaisContext);
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
@@ -50,34 +54,24 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
         <View style={styles.lineContent}>
-          <View>
-            <Text appearance="hint">Local que está sendo atendido:</Text>
-            <Autocomplete
-              style={styles.picker}
-              placeholder="Localizar paciente"
-              value={value}
-              data={DATA}
-              icon={value?.length > 0 ? clear : search}
-              onIconPress={clearInput}
-              onChangeText={onChangeText}
-              onSelect={onSelect}
-            />
-          </View>
+            <Layout style={styles.heightInput}>
+              <Select
+                data={locais}
+                placeholder="Local de atendimento"
+                selectedOption={{ text: locais }}
+                onSelect={e => setLocais(e["text"])}
+              />
+            </Layout>
         </View>
         <View style={styles.lineContent}>
-          <View>
-            <Text appearance="hint">Local que será encaminhado:</Text>
-            <Autocomplete
-              style={styles.picker}
-              placeholder="Localizar paciente"
-              value={value}
-              data={DATA}
-              icon={value?.length > 0 ? clear : search}
-              onIconPress={clearInput}
-              onChangeText={onChangeText}
-              onSelect={onSelect}
-            />
-          </View>
+            <Layout style={styles.heightInput}>
+              <Select
+                data={locais}
+                placeholder="Local que será encaminhado"
+                selectedOption={{ text: locais }}
+                onSelect={e => setLocais(e["text"])}
+              />
+            </Layout>
         </View>
         <View>
           <Text appearance="hint">Retorno para:</Text>
