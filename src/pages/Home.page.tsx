@@ -18,24 +18,13 @@ import {
   NomeSelect,
   TipoLocalAtendimento,
 } from "../utils/models/RespLocaisInterface";
-
-const DATA = [
-  {
-    id: 1,
-    title: "João",
-    releaseYear: 1977,
-  },
-  {
-    id: 2,
-    title: "Jose",
-    releaseYear: 1985,
-  },
-];
+import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
 
 const HomeScreen = ({ navigation }) => {
   const { fatores, setFatores } = useContext(FatoresContext);
   const [value, setValue] = React.useState(null);
   const [nomes, setNomes] = React.useState([]);
+  const [listaNomes, setListaNomes] = React.useState([]);
   const { historico, setHistorico } = useContext(PacienteContext);
   const [, setLoading] = useLoading();
   const { setAcomp } = useContext(PacienteContext);
@@ -51,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
 
   async function loadHistorico(data) {
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-      `/historico/atendimentos/${data}`
+      `/historico/atendimentos/cpf/${data}`
     );
     let historico = resp.data;
     return historico;
@@ -91,24 +80,28 @@ const HomeScreen = ({ navigation }) => {
         });
         setNomesLocais(nomesContext);
 
-        
-        locais.data.forEach(({tipoLocalAtendimento})=>{
-            let incluir = true;
-            if(tipoLocalAtendimento){
-                if(tiposLocaisArr.length == 0){
-                    tiposLocaisArr.push({id: tipoLocalAtendimento.id, nome: tipoLocalAtendimento.nome})
-                    console.log(tiposLocaisArr);
-                }
-                for(let i of tiposLocaisArr){
-                    if(i.nome == tipoLocalAtendimento.nome){
-                        incluir = false;
-                    }
-                }
-                if(incluir == true){
-                    tiposLocaisArr.push({id: tipoLocalAtendimento.id, nome: tipoLocalAtendimento.nome})
-                }
+        locais.data.forEach(({ tipoLocalAtendimento }) => {
+          let incluir = true;
+          if (tipoLocalAtendimento) {
+            if (tiposLocaisArr.length == 0) {
+              tiposLocaisArr.push({
+                id: tipoLocalAtendimento.id,
+                nome: tipoLocalAtendimento.nome,
+              });
             }
-        })
+            for (let i of tiposLocaisArr) {
+              if (i.nome == tipoLocalAtendimento.nome) {
+                incluir = false;
+              }
+            }
+            if (incluir == true) {
+              tiposLocaisArr.push({
+                id: tipoLocalAtendimento.id,
+                nome: tipoLocalAtendimento.nome,
+              });
+            }
+          }
+        });
 
         const tiposContext = tiposLocaisArr.map((a) => {
           return {
@@ -131,11 +124,11 @@ const HomeScreen = ({ navigation }) => {
     }
   }, []);
 
-  const onSelect = async ({ title }) => {
+  const onSelect = async ({ title, id }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
     // setHistorico(historico);
-    await loadHistorico(title).then((resp) => {
+    await loadHistorico(id).then((resp) => {
       if (resp == []) {
         setHistorico([]);
       } else {
@@ -143,13 +136,36 @@ const HomeScreen = ({ navigation }) => {
       }
     });
   };
+
+  let DATA = [];
+
   const onChangeText = async (query) => {
     setValue(query);
-    setNomes(
-      DATA.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+    if (query.length > 2) {
+      try {
+        const pacientes: AxiosResponse<
+          BuscaPacienteInterface[]
+        > = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
+          `/historico/pacientes/${query}`
+        );
+        let arrUsers = pacientes.data;
+        const listaArr = arrUsers.map((a) => {
+          return {
+            id: a.cpf,
+            title: `${a.nome} - ${a.cpf}`,
+          };
+        });
+        setListaNomes(listaArr);
+        console.log("lista >>>>", listaNomes);
+        setNomes(
+          listaNomes.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          )
+        );
+      } catch (err) {
+        console.log("err", err);
+      }
+    }
   };
 
   const clearInput = () => {
@@ -164,12 +180,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
-        <Button onPressIn={() => console.log("tipos >>>>>>>", tiposLocais)}>
-          tipos
-        </Button>
-        <Button onPressIn={() => console.log("nomes >>>>>>>", nomesLocais)}>
-          nomes
-        </Button>
         <Autocomplete
           style={styles.picker}
           placeholder="Localizar paciente"
@@ -181,7 +191,7 @@ const HomeScreen = ({ navigation }) => {
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <View>
+          <View style={{ height: "90%" }}>
             <HistoricoProcedimento navigation={navigation} />
           </View>
         ) : (
