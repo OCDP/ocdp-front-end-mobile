@@ -5,7 +5,7 @@ import {
   Radio,
   RadioGroup,
   Input,
-  Datepicker
+  Datepicker,
 } from "@ui-kitten/components";
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
@@ -18,6 +18,8 @@ const DadosPessoais = ({ navigation }) => {
     dtNasci,
     setDtNasci,
     setSexo,
+    cpf,
+    setCpf,
     email,
     setEmail,
     endereco,
@@ -27,7 +29,7 @@ const DadosPessoais = ({ navigation }) => {
     telResp,
     setTelResp,
     nmMae,
-    setNmMae
+    setNmMae,
   } = useContext(PacienteContext);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -39,11 +41,11 @@ const DadosPessoais = ({ navigation }) => {
     lineContent: {
       flex: 1,
       width: "100%",
-      marginVertical: 8
+      marginVertical: 8,
     },
     heightInput: {
-      height: 40
-    }
+      height: 40,
+    },
   });
 
   return (
@@ -83,7 +85,7 @@ const DadosPessoais = ({ navigation }) => {
         <View
           style={{
             marginHorizontal: 16,
-            borderRadius: 4
+            borderRadius: 4,
           }}
         >
           <RadioGroup
@@ -91,9 +93,9 @@ const DadosPessoais = ({ navigation }) => {
               {
                 flexDirection: "row",
                 justifyContent: "space-between",
-                paddingHorizontal: 16
+                paddingHorizontal: 16,
               },
-              styles.heightInput
+              styles.heightInput,
             ]}
             selectedIndex={selectedIndex}
             onChange={setSelectedIndex}
@@ -101,6 +103,16 @@ const DadosPessoais = ({ navigation }) => {
             <Radio text="Masculino" />
             <Radio text="Feminino" />
           </RadioGroup>
+        </View>
+      </View>
+      <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="CPF"
+            icon={user}
+            onChangeText={setCpf}
+            value={cpf}
+          />
         </View>
       </View>
       <View style={styles.lineContent}>

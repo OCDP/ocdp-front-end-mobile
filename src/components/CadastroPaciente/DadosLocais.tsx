@@ -6,6 +6,8 @@ import api from "../../services/api";
 import apiFunc from "../../services/api";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import { useLoading } from "../../contexts/AppContext";
+import { AxiosResponse } from "axios";
+import { BairrosInterface } from "../../utils/models/BairrosInterface";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
@@ -16,46 +18,47 @@ const DadosLocais = ({ navigation }) => {
 
   useEffect(() => {
     async function loadCidades() {
-      console.log("aooooooo ????");
-      try{
+      try {
         setLoading(true);
-      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-        "/cidade"
-      ).then((response)=> {
-        const cidadesServ = response.data;
-        let result = cidadesServ.map(a => {
-          return {
-            text: a.nome
-          };
-        });
-        setCidades(result);
-      });
-      }catch(err){
-        console.log(err)
-      }finally{
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+          .get("/cidade")
+          .then((response) => {
+            const cidadesServ = response.data;
+            let result = cidadesServ.map((a) => {
+              return {
+                text: a.nome,
+              };
+            });
+            setCidades(result);
+          });
+      } catch (err) {
+        console.log(err);
+      } finally {
         setLoading(false);
-      }}
+      }
+    }
     loadCidades();
   }, []);
 
   useEffect(() => {
     async function loadBairros() {
-      try{
+      try {
         setLoading(true);
-        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-          `/bairro/byCidade/${cidade}?nomeCidade=${cidade}`
-        ).then((response)=>{
-          const bairrosServ = response.data;
-          let result = bairrosServ.map(a => {
-            return {
-              text: a.nome
-            };
-          });
-          setLoading(false);
-          setBairros(result);
+        const bairrosResp: AxiosResponse<BairrosInterface[]> = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).get(`/bairro/byCidade/${cidade}?nomeCidade=${cidade}`);
+        const bairrosServ = bairrosResp.data;
+        let result = bairrosServ.map((a) => {
+          return {
+            text: a.nome,
+            id: a.id,
+          };
         });
-      }catch(err){
-        console.log(err)
+        setLoading(false);
+        setBairros(result);
+      } catch (err) {
+        console.log(err);
       }
     }
     loadBairros();
@@ -65,11 +68,11 @@ const DadosLocais = ({ navigation }) => {
     lineContent: {
       flex: 1,
       width: "100%",
-      marginVertical: 8
+      marginVertical: 8,
     },
     heightInput: {
-      maxHeight: 50
-    }
+      maxHeight: 50,
+    },
   });
 
   return (
@@ -80,7 +83,7 @@ const DadosLocais = ({ navigation }) => {
             data={cidades}
             placeholder="selecionar cidade"
             selectedOption={{ text: cidade }}
-            onSelect={e => setCidade(e["text"])}
+            onSelect={(e) => setCidade(e["text"])}
           />
         </Layout>
       </View>
@@ -91,7 +94,7 @@ const DadosLocais = ({ navigation }) => {
             disabled={bairros.length > 0 ? false : true}
             placeholder="selecionar bairro"
             selectedOption={{ text: bairro }}
-            onSelect={e => setBairro(e["text"])}
+            onSelect={(e) => setBairro(e["text"])}
           />
         </Layout>
       </View>
