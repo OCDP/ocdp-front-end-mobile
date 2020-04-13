@@ -91,11 +91,24 @@ const HomeScreen = ({ navigation }) => {
         });
         setNomesLocais(nomesContext);
 
-        await locais.data.forEach(({ tipoLocalAtendimento }, i) => {
-          if (tipoLocalAtendimento) {
-            tiposLocaisArr.push(tipoLocalAtendimento);
-          }
-        });
+        
+        locais.data.forEach(({tipoLocalAtendimento})=>{
+            let incluir = true;
+            if(tipoLocalAtendimento){
+                if(tiposLocaisArr.length == 0){
+                    tiposLocaisArr.push({id: tipoLocalAtendimento.id, nome: tipoLocalAtendimento.nome})
+                    console.log(tiposLocaisArr);
+                }
+                for(let i of tiposLocaisArr){
+                    if(i.nome == tipoLocalAtendimento.nome){
+                        incluir = false;
+                    }
+                }
+                if(incluir == true){
+                    tiposLocaisArr.push({id: tipoLocalAtendimento.id, nome: tipoLocalAtendimento.nome})
+                }
+            }
+        })
 
         const tiposContext = tiposLocaisArr.map((a) => {
           return {
