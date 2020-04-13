@@ -32,14 +32,11 @@ const DATA = [
 ];
 
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
-  const [value, setValue] = React.useState(null);
   const [activeChecked, setActiveChecked] = React.useState(false);
-  const {
-    nomesLocais,
-    setNomesLocais,
-    tiposLocais,
-    setTiposLocais,
-  } = useContext(LocaisContext);
+  const [value, setValue] = React.useState(null);
+  const [tipoAtendido, setTipoAtendido] = React.useState(null);
+  const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
+  const { nomesLocais, tiposLocais } = useContext(LocaisContext);
 
   const onSelect = ({ title }) => {
     setValue(title);
@@ -55,29 +52,76 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     setValue("");
   };
 
+  const tipoAtendidoActions = async (text) => {
+    setTipoAtendido(text);
+  };
+
   return (
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
         <View style={styles.lineContent}>
-          <Layout style={styles.heightInput}>
-            <Select
-              data={nomesLocais}
-              placeholder="nome do estab"
-              onSelect={() => {}}
-            />
-          </Layout>
+          <View style={styles.boxDatePicker}>
+            <View
+              style={{
+                marginHorizontal: 16,
+              }}
+            >
+              <View>
+                <Text appearance="hint">
+                  Selecione o local em que está sendo atendido
+                </Text>
+              </View>
+              <View style={{ marginVertical: 8 }}>
+                <Select
+                  data={tiposLocais}
+                  placeholder="Selecionar um tipo"
+                  onSelect={(e) => tipoAtendidoActions(e["text"])}
+                  selectedOption={{ text: tipoAtendido }}
+                />
+              </View>
+              <View>
+                <Select
+                  disabled={tipoAtendido ? false : true}
+                  data={nomesLocais}
+                  placeholder="Local em que está sendo atendido"
+                  onSelect={() => {}}
+                />
+              </View>
+            </View>
+          </View>
         </View>
+
         <View style={styles.lineContent}>
-          <Layout style={styles.heightInput}>
-            <Select
-              data={tiposLocais}
-              placeholder="tipos stab"
-              onSelect={() => {}}
-            />
-          </Layout>
+          <View style={styles.boxDatePicker}>
+            <View
+              style={{
+                marginHorizontal: 16,
+              }}
+            >
+              <View>
+                <Text appearance="hint">
+                  Selecione o local para o qual será encaminhado
+                </Text>
+              </View>
+              <View style={{ marginVertical: 8 }}>
+                <Select
+                  data={tiposLocais}
+                  placeholder="Selecionar um tipo"
+                  onSelect={() => {}}
+                />
+              </View>
+              <View>
+                <Select
+                  data={nomesLocais}
+                  placeholder="Local que será encaminhado"
+                  onSelect={() => {}}
+                />
+              </View>
+            </View>
+          </View>
         </View>
+
         <View>
-          <Text appearance="hint">Retorno para:</Text>
           <View style={styles.lineContent}>
             <View style={styles.boxDatePicker}>
               <View
@@ -85,6 +129,14 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                   marginHorizontal: 16,
                 }}
               >
+                <Text
+                  style={{
+                    marginBottom: 4,
+                  }}
+                  appearance="hint"
+                >
+                  Retorno para:
+                </Text>
                 <View style={{ marginVertical: 8 }}>
                   <CheckBox
                     text="Acompanhamento"
@@ -146,11 +198,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    marginVertical: 8,
   },
   lineContent: {
     width: "100%",
-    marginVertical: 8,
+    marginVertical: 2,
   },
   heightInput: {
     height: 40,
@@ -163,7 +214,7 @@ const styles = StyleSheet.create({
   },
   boxDatePicker: {
     marginHorizontal: 8,
-    paddingVertical: 16,
+    paddingVertical: 10,
     borderRadius: 10,
     elevation: 8,
     shadowRadius: 8,

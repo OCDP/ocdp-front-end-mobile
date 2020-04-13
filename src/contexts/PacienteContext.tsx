@@ -3,7 +3,7 @@ import React, {
   useState,
   Dispatch,
   SetStateAction,
-  useContext
+  useContext,
 } from "react";
 import { HistoricoInterface } from "../utils/models/HistoricoInterface";
 import { FatoresInterface } from "../utils/models/FatoresInterface";
@@ -12,6 +12,7 @@ export interface Paciente {
   historico: Array<HistoricoInterface>;
   listaFatores: Array<FatoresInterface>;
   nome: string;
+  cpf: string;
   dtNasci: Date;
   sexo: string;
   email: string;
@@ -21,7 +22,7 @@ export interface Paciente {
   nmMae: string;
   cidade: string;
   bairro: string;
-  acomp: boolean
+  acomp: boolean;
 }
 
 interface PacienteContextProps {
@@ -31,6 +32,8 @@ interface PacienteContextProps {
   setListaFatores?: Dispatch<SetStateAction<[]>>;
   nome: string;
   setNome?: Dispatch<SetStateAction<string>>;
+  cpf: string;
+  setCpf?: Dispatch<SetStateAction<string>>;
   dtNasci: Date;
   setDtNasci?: Dispatch<SetStateAction<Date>>;
   sexo: string;
@@ -58,6 +61,7 @@ const defaultPaciente: Paciente = {
   historico: [],
   listaFatores: [],
   nome: null,
+  cpf: null,
   dtNasci: null,
   sexo: null,
   email: null,
@@ -67,7 +71,7 @@ const defaultPaciente: Paciente = {
   nmMae: null,
   cidade: null,
   bairro: null,
-  acomp: false
+  acomp: false,
 };
 
 const PacienteContext = createContext<PacienteContextProps>(defaultPaciente);
@@ -76,6 +80,7 @@ export function PacienteProvider({ children }) {
   const [historico, setHistorico] = useState([]);
   const [listaFatores, setListaFatores] = useState([]);
   const [nome, setNome] = useState<string>(null);
+  const [cpf, setCpf] = useState<string>(null);
   const [dtNasci, setDtNasci] = useState<Date>(null);
   const [sexo, setSexo] = useState<string>(null);
   const [email, setEmail] = useState<string>(null);
@@ -86,7 +91,6 @@ export function PacienteProvider({ children }) {
   const [cidade, setCidade] = useState<string>(null);
   const [bairro, setBairro] = useState<string>(null);
   const [acomp, setAcomp] = useState<boolean>(false);
-
 
   const flush = () => {
     setNome(defaultPaciente.nome);
@@ -112,6 +116,8 @@ export function PacienteProvider({ children }) {
         setEndereco,
         nome,
         setNome,
+        cpf,
+        setCpf,
         dtNasci,
         setDtNasci,
         sexo,
@@ -130,7 +136,7 @@ export function PacienteProvider({ children }) {
         setBairro,
         acomp,
         setAcomp,
-        flush
+        flush,
       }}
     >
       {children}
@@ -143,6 +149,7 @@ export function usePaciente(): Paciente {
     historico,
     listaFatores,
     nome,
+    cpf,
     dtNasci,
     sexo,
     endereco,
@@ -152,12 +159,13 @@ export function usePaciente(): Paciente {
     nmMae,
     cidade,
     bairro,
-    acomp
+    acomp,
   } = useContext(PacienteContext);
   return {
     historico,
     listaFatores,
     nome,
+    cpf,
     dtNasci,
     sexo,
     endereco,
@@ -167,7 +175,7 @@ export function usePaciente(): Paciente {
     nmMae,
     cidade,
     bairro,
-    acomp
+    acomp,
   };
 }
 
