@@ -59,11 +59,11 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
         >
           {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
             <>
-              <Radio status="control" text="Acompanhamento"></Radio>
-              <Radio status="control" text="Intervencao"></Radio>
+              <Radio text="Acompanhamento"></Radio>
+              <Radio text="Retorno"></Radio>
             </>
           ) : (
-            <Radio status="control" text="Acompanhamento"></Radio>
+            <Radio status="control" text="Retorno"></Radio>
           )}
         </RadioGroup>
       </View>

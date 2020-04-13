@@ -4,29 +4,37 @@ import React, {
     Dispatch,
     SetStateAction
   } from "react";
-  import { locaisInterface } from "../utils/models/locaisInterface";
+import { NomesLocaisInterfaces } from "../utils/models/NomesLocaisInterface";
+import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
   
   interface LocaisContextProps {
-    locais: Array<locaisInterface>;
-    setLocais?: Dispatch<SetStateAction<[]>>;
+    nomesLocais: Array<NomesLocaisInterfaces>;
+    setNomesLocais?: Dispatch<SetStateAction<{}>>;
+    tiposLocais: Array<TiposLocaisInterfaces>;
+    setTiposLocais?: Dispatch<SetStateAction<{}>>;
   }
   
   
   const defaultLocais = {
-    locais: []
+    nomesLocais: [],
+    tiposLocais: []
   };
   
   
   const LocaisContext = createContext<LocaisContextProps>(defaultLocais);
   
   export function LocaisProvider({ children }) {
-    const [locais, setLocais] = useState();
+    const [nomesLocais, setNomesLocais] = useState();
+    const [tiposLocais, setTiposLocais] = useState();
+
   
     return (
       <LocaisContext.Provider
         value={{
-          locais,
-          setLocais
+          nomesLocais,
+          setNomesLocais,
+          tiposLocais,
+          setTiposLocais
         }}
       >
         {children}
