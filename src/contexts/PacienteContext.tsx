@@ -21,7 +21,7 @@ export interface Paciente {
   telResp: string;
   nmMae: string;
   cidade: string;
-  bairro: string;
+  bairro: BairroInterFace;
   acomp: boolean;
 }
 
@@ -50,11 +50,16 @@ interface PacienteContextProps {
   setNmMae?: Dispatch<SetStateAction<string>>;
   cidade: string;
   setCidade?: Dispatch<SetStateAction<string>>;
-  bairro: string;
-  setBairro?: Dispatch<SetStateAction<string>>;
+  bairro: BairroInterFace;
+  setBairro?: Dispatch<SetStateAction<BairroInterFace>>;
   acomp: boolean;
   setAcomp?: Dispatch<SetStateAction<boolean>>;
   flush?: () => void;
+}
+
+interface BairroInterFace{
+  id: string;
+  nome: string;
 }
 
 const defaultPaciente: Paciente = {
@@ -70,7 +75,7 @@ const defaultPaciente: Paciente = {
   telResp: null,
   nmMae: null,
   cidade: null,
-  bairro: null,
+  bairro: {id: null, nome: null},
   acomp: false,
 };
 
@@ -89,7 +94,7 @@ export function PacienteProvider({ children }) {
   const [telResp, setTelResp] = useState<string>(null);
   const [nmMae, setNmMae] = useState<string>(null);
   const [cidade, setCidade] = useState<string>(null);
-  const [bairro, setBairro] = useState<string>(null);
+  const [bairro, setBairro] = useState<BairroInterFace>({id:null, nome:null});
   const [acomp, setAcomp] = useState<boolean>(false);
 
   const flush = () => {
