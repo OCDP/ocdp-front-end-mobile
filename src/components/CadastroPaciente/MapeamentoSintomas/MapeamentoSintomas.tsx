@@ -11,7 +11,7 @@ import {
   List,
   RadioGroup,
   Radio,
-  Select
+  Select,
 } from "@ui-kitten/components";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
@@ -33,48 +33,53 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
 
   const [maligna, setMaligna] = React.useState(false);
-  const [potencialmente, setPotencialmente] = React.useState(false);
   const [outros, setOutros] = React.useState(false);
   const { fatores } = useContext(FatoresContext);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
+  const [nomeFator, setNomeFator] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
+  let arrFatores = [];
 
-  const onActiveChange = onSelect => {
-    setActiveChecked(onSelect);
+  const [potencialmente, setPotencialmente] = React.useState(false);
+  const onActiveChange = (nome, i) => {
+    setActiveChecked(true);
+    setNomeFator(arrFatores);
+    arrFatores.push(nome);
+    console.log("arr", arrFatores);
   };
 
-  const checkedLesoes = onSelect => {
+  const checkedLesoes = (onSelect) => {
     setCheckedLesao(onSelect);
   };
 
-  const onActiveChangeLesao = onSelect => {
+  const onActiveChangeLesao = (onSelect) => {
     setActiveCheckedLesao(onSelect);
   };
 
-  const onActiveMaligna = onSelect => {
+  const onActiveMaligna = (onSelect) => {
     setMaligna(onSelect);
   };
 
-  const onActivePotencial = onSelect => {
+  const onActivePotencial = (onSelect) => {
     setPotencialmente(onSelect);
     console.log("nada aq");
   };
 
-  const onActiveOutros = onSelect => {
+  const onActiveOutros = (onSelect) => {
     setOutros(onSelect);
   };
 
-  const onCheckedChange = index => {
+  const onCheckedChange = (index) => {
     setSelectedIndex(index);
     console.log("principal");
   };
 
-  const onCheckedPotencial = index => {
+  const onCheckedPotencial = (index) => {
     setSelectedIndexPotencial(index);
   };
 
-  const onCheckedOutros = index => {
+  const onCheckedOutros = (index) => {
     setSelectedIndexOutros(index);
   };
 
@@ -83,45 +88,45 @@ const MapeamentoSintomas = ({ navigation }) => {
       paddingLeft: 36,
       alignItems: "flex-start",
       justifyContent: "center",
-      marginVertical: 16
+      marginVertical: 16,
     },
     lineContent: {
       flex: 1,
-      width: "100%"
+      width: "100%",
     },
     columnsContent: {
       flex: 1,
       flexDirection: "row",
       marginHorizontal: 4,
-      marginTop: 8
+      marginTop: 8,
     },
     columnCheck: {
-      flexDirection: "column"
+      flexDirection: "column",
     },
     checkItem: {
-      marginVertical: 8
+      marginVertical: 8,
     },
     modalContainer: {
       justifyContent: "center",
       alignItems: "center",
-      width: 320
+      width: 320,
     },
     backdrop: {
-      backgroundColor: "rgba(0, 0, 0, 0.1)"
+      backgroundColor: "rgba(0, 0, 0, 0.1)",
     },
     itemContainer: {
       marginVertical: 10,
-      marginHorizontal: 5
+      marginHorizontal: 5,
     },
     textItem: {
       fontWeight: "bold",
       fontSize: 16,
-      textAlign: "center"
+      textAlign: "center",
     },
     textItemSmall: {
       fontSize: 15,
       textAlign: "center",
-      marginVertical: 8
+      marginVertical: 8,
     },
     lesaoContent: {
       paddingVertical: 16,
@@ -134,22 +139,22 @@ const MapeamentoSintomas = ({ navigation }) => {
       shadowColor: "#000",
       shadowOffset: {
         height: 1,
-        width: 0
+        width: 0,
       },
-      shadowOpacity: 0.1
+      shadowOpacity: 0.1,
     },
     radio: {
-      marginVertical: 8
+      marginVertical: 8,
     },
     rowCheck: {
       flexDirection: "row",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
     },
     colCheck: {
       margin: 4,
       flex: 1,
-      height: 36
-    }
+      height: 36,
+    },
   });
 
   const toggleModal = (list?) => {
@@ -196,7 +201,11 @@ const MapeamentoSintomas = ({ navigation }) => {
             selectedIndex={selectedIndexPotencial}
             onChange={onCheckedPotencial}
           >
-            <Radio disabled={onCheckedPotencial ? true : false} style={styles.radio} text="Leucoplasia" />
+            <Radio
+              disabled={onCheckedPotencial ? true : false}
+              style={styles.radio}
+              text="Leucoplasia"
+            />
             <Radio style={styles.radio} text="Eritoplasia" />
             <Radio style={styles.radio} text="Quelite Actinica" />
             <Radio style={styles.radio} text="Eritoleucoplasia" />
@@ -236,8 +245,8 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={activeChecked}
-                    onChange={onActiveChange}
+                    checked={nomeFator.includes(nome) ? false : true}
+                    onChange={() => onActiveChange(nome, i)}
                   />
                 </View>
               ))}
@@ -245,36 +254,28 @@ const MapeamentoSintomas = ({ navigation }) => {
           </View>
         </View>
       </HeaderContainer>
-      {activeChecked ? (
-        <View>
-          {regioes.map(({ name, description, list }, i) => (
-            <>
-              <View key={i}>
-                <TouchableOpacity onPress={() => toggleModal(list)}>
-                  <Lesoes
-                    navigation={navigation}
-                    title={description}
-                    imgRegiao={name}
-                  />
-                </TouchableOpacity>
-              </View>
-              <Modal
-                backdropStyle={styles.backdrop}
-                onBackdropPress={dismiss}
-                visible={visible}
-              >
-                {subregiao ? rendeDetailLesao() : renderModalElement()}
-              </Modal>
-            </>
-          ))}
-        </View>
-      ) : (
-        <EmptyContent
-          navigation={navigation}
-          title="Alguma região com lesão?"
-          textContent="selecione o fator de risco lesão para definir as regiões afetadas!"
-        />
-      )}
+      <View>
+        {regioes.map(({ name, description, list }, i) => (
+          <>
+            <View key={i}>
+              <TouchableOpacity onPress={() => toggleModal(list)}>
+                <Lesoes
+                  navigation={navigation}
+                  title={description}
+                  imgRegiao={name}
+                />
+              </TouchableOpacity>
+            </View>
+            <Modal
+              backdropStyle={styles.backdrop}
+              onBackdropPress={dismiss}
+              visible={visible}
+            >
+              {subregiao ? rendeDetailLesao() : renderModalElement()}
+            </Modal>
+          </>
+        ))}
+      </View>
     </View>
   );
 };

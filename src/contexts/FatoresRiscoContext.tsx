@@ -4,10 +4,10 @@ import React, {
   Dispatch,
   SetStateAction
 } from "react";
-import { fatoresInterface } from "../utils/models/FatoresInterface";
+import { FatoresInterface } from "../utils/models/FatoresInterface";
 
 interface FatoresContextProps {
-  fatores: Array<fatoresInterface>;
+  fatores: Array<FatoresInterface>;
   setFatores?: Dispatch<SetStateAction<[]>>;
 }
 
