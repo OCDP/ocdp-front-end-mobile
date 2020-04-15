@@ -93,8 +93,10 @@ const DadosLocais = ({ navigation }) => {
             data={bairros}
             disabled={bairros.length > 0 ? false : true}
             placeholder="selecionar bairro"
-            selectedOption={{ text: bairro }}
-            onSelect={(e) => setBairro(e["text"])}
+            selectedOption={{ text: bairro.nome }}
+            onSelect={(e) => {
+              setBairro({id: e["id"], nome: e["text"]})
+            }}
           />
         </Layout>
       </View>

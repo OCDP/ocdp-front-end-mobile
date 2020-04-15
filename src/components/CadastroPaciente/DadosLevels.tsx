@@ -16,6 +16,7 @@ import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
+import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -28,10 +29,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   });
 
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
-  const { acomp } = useContext(PacienteContext);
   const paciente = usePaciente();
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
+  const {usuarioLogado } = useContext(UsuarioLogadoContext)
+  const {acomp,bairro,cpf, cidade,dtNasci,email,endereco,historico
+  ,listaFatores, nmMae, nome,sexo,telCell,telResp } = useContext(PacienteContext)
 
   const buttonTextStyle = {
     color: "#fff",
@@ -46,7 +49,44 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     borderRadius: 4,
   };
 
-  const resetNav = () => {
+  const resetNav = async () => {
+    const {cpf, email, id, nivelAtencao, nome, 
+      status, telefone, tipoUsuario} = usuarioLogado
+  //   acomp,bairro,cidade,dtNasci,email,endereco,historico
+  // ,listaFatores, nmMae, nome,sexo,telCell,telResp
+    let arrObj = {
+        atendimento: {
+          paciente:{
+          bairro:{
+            id:bairro.id,
+            nome: bairro.nome
+          },
+          cpf,
+          dataNascimento: dtNasci,
+          email,
+          enderecoCompleto: endereco,
+          id: "",
+          nome,
+          nomeDaMae: nmMae,
+          sexo,
+          telefoneCelular: telCell,
+          telefoneResponsavel: telResp
+        },
+        tipoAtendimento: "ACOMPANHAMENTO",
+        usuario:{
+          cpf,
+          email,
+          id,
+          nivelAtencao,
+          nome,
+          status,
+          telefone,
+          tipoUsuario
+        }
+      }
+    }
+    console.log(arrObj);
+    
     navigation.dispatch(
       CommonActions.reset({
         routes: [{ name: "Home" }],
