@@ -25,7 +25,7 @@ import EmptyContent from "../../EmptyContent";
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
 const MapeamentoSintomas = ({ navigation }) => {
-  const [activeChecked, setActiveChecked] = React.useState(false);
+  const [activeChecked, setActiveChecked] = React.useState([false]);
   const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
   const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -39,14 +39,25 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
-  let arrFatores = [];
+  const [newNome, setNewNome] = React.useState([])
+  const [isChecked, setIsChecked] = React.useState(false)
 
   const [potencialmente, setPotencialmente] = React.useState(false);
-  const onActiveChange = (nome, i) => {
-    setActiveChecked(true);
-    setNomeFator(arrFatores);
-    arrFatores.push(nome);
-    console.log("arr", arrFatores);
+  const onActiveChange = (length, i) => {
+    
+    let fator = [];
+    console.log(isChecked);
+    if(isChecked == false){
+      for(let j = 0; j<length; j++){ 
+        fator.push(false)
+      }
+    }else if(isChecked == true){
+      fator = [...activeChecked]
+    }
+    setIsChecked(true);
+    fator[i] = fator[i] == true ? false : true;
+    console.log('fator',fator);
+          setActiveChecked(fator);
   };
 
   const checkedLesoes = (onSelect) => {
@@ -245,8 +256,8 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={nomeFator.includes(nome) ? false : true}
-                    onChange={() => onActiveChange(nome, i)}
+                    checked={activeChecked[i]}
+                    onChange={() => onActiveChange(fatores.length, i)}
                   />
                 </View>
               ))}
