@@ -14,6 +14,7 @@ import ListarPacientes from "./ListarPacientes";
 import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
+import PostFatoresContext from "../../contexts/PostFatoresContext"
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -32,6 +33,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const paciente = usePaciente();
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
+  const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const {usuarioLogado } = useContext(UsuarioLogadoContext)
   const {acomp,bairro,cpf, cidade,dtNasci,email,endereco,historico
   ,listaFatores, nmMae, nome,sexo,telCell,telResp } = useContext(PacienteContext)
@@ -82,7 +84,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           status,
           telefone,
           tipoUsuario
-        }
+        },
+        fatoresDeRisco:postFatores
       }
     }
     console.log(arrObj);
