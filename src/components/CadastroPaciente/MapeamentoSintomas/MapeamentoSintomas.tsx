@@ -25,7 +25,7 @@ import EmptyContent from "../../EmptyContent";
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
 const MapeamentoSintomas = ({ navigation }) => {
-  const [activeChecked, setActiveChecked] = React.useState([false]);
+  const [activeChecked, setActiveChecked] = React.useState([]);
   const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
   const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -43,19 +43,21 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [isChecked, setIsChecked] = React.useState(false)
 
   const [potencialmente, setPotencialmente] = React.useState(false);
-  const onActiveChange = (length, i) => {
+  const onActiveChange = (length, i, nome, id) => {
     
     let fator = [];
     console.log(isChecked);
     if(isChecked == false){
       for(let j = 0; j<length; j++){ 
-        fator.push(false)
+        fator.push({id: null, nome: '', marcado: false})
       }
     }else if(isChecked == true){
       fator = [...activeChecked]
     }
     setIsChecked(true);
-    fator[i] = fator[i] == true ? false : true;
+    fator[i].id = id;
+    fator[i].nome = nome;
+    fator[i].marcado = fator[i].marcado == true ? false : true;
     console.log('fator',fator);
           setActiveChecked(fator);
   };
@@ -256,8 +258,8 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={activeChecked[i]}
-                    onChange={() => onActiveChange(fatores.length, i)}
+                    checked={activeChecked[i] ? activeChecked[i].marcado : false}
+                    onChange={() => onActiveChange(fatores.length, i, nome, id)}
                   />
                 </View>
               ))}
