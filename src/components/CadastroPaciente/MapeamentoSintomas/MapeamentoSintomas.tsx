@@ -21,27 +21,22 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 import EmptyContent from "../../EmptyContent";
+import PacienteContext from "../../../contexts/PacienteContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
 const MapeamentoSintomas = ({ navigation }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
-  const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
-  const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
-  const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
-
   const [maligna, setMaligna] = React.useState(false);
-  const [outros, setOutros] = React.useState(false);
   const { fatores } = useContext(FatoresContext);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
+  const { classifLesoes, setClassifLesoes } = useContext(PacienteContext);
   let arrFatores = [];
 
-  const [potencialmente, setPotencialmente] = React.useState(false);
   const onActiveChange = (nome, i) => {
     setActiveChecked(true);
     setNomeFator(arrFatores);
@@ -49,38 +44,13 @@ const MapeamentoSintomas = ({ navigation }) => {
     console.log("arr", arrFatores);
   };
 
-  const checkedLesoes = (onSelect) => {
-    setCheckedLesao(onSelect);
-  };
-
-  const onActiveChangeLesao = (onSelect) => {
-    setActiveCheckedLesao(onSelect);
-  };
-
   const onActiveMaligna = (onSelect) => {
     setMaligna(onSelect);
-  };
-
-  const onActivePotencial = (onSelect) => {
-    setPotencialmente(onSelect);
-    console.log("nada aq");
-  };
-
-  const onActiveOutros = (onSelect) => {
-    setOutros(onSelect);
   };
 
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
     console.log("principal");
-  };
-
-  const onCheckedPotencial = (index) => {
-    setSelectedIndexPotencial(index);
-  };
-
-  const onCheckedOutros = (index) => {
-    setSelectedIndexOutros(index);
   };
 
   const styles = useStyleSheet({
@@ -179,57 +149,51 @@ const MapeamentoSintomas = ({ navigation }) => {
     </Layout>
   );
 
+  const classificacaoLesoes = [
+    {
+      title: "Maligna",
+      content: ["Maligna"],
+    },
+    {
+      title: "Potencialmente Malígna",
+      content: [
+        "Leucoplasia",
+        "Eritoplasia",
+        "Quelite Acnitica",
+        "Eritoleucoplasia",
+        "Liquen",
+      ],
+    },
+    {
+      title: "Outros",
+      content: ["Autoimune", "Infecciosa", "Inflamatorio", "Neoplastica"],
+    },
+  ];
+
+  const checkActions = (title) => {};
+
   const rendeDetailLesao = () => (
     <Layout level="3" style={styles.modalContainer}>
       <Text style={styles.textItemSmall}>{subregiao}</Text>
       <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
-        <Radio
-          style={styles.lesaoContent}
-          text="Maligna"
-          checked={maligna}
-          onChange={onActiveMaligna}
-        />
-
-        <Radio
-          style={styles.lesaoContent}
-          text="Potencialmente maligna:"
-          checked={potencialmente}
-          onChange={onActivePotencial}
-        />
-        <View style={{ marginTop: 8, marginLeft: 8 }}>
-          <RadioGroup
-            selectedIndex={selectedIndexPotencial}
-            onChange={onCheckedPotencial}
-          >
-            <Radio
-              disabled={onCheckedPotencial ? true : false}
-              style={styles.radio}
-              text="Leucoplasia"
-            />
-            <Radio style={styles.radio} text="Eritoplasia" />
-            <Radio style={styles.radio} text="Quelite Actinica" />
-            <Radio style={styles.radio} text="Eritoleucoplasia" />
-            <Radio style={styles.radio} text="Líquen" />
-          </RadioGroup>
-        </View>
-
-        <Radio
-          style={styles.lesaoContent}
-          text="Outros"
-          checked={outros}
-          onChange={onActiveOutros}
-        />
-        <View style={{ marginTop: 8, marginLeft: 8 }}>
-          <RadioGroup
-            selectedIndex={selectedIndexOutros}
-            onChange={onCheckedOutros}
-          >
-            <Radio style={styles.radio} text="Autoimune" />
-            <Radio style={styles.radio} text="Infecciosa" />
-            <Radio style={styles.radio} text="Inflamatório" />
-            <Radio style={styles.radio} text="Neoplásica" />
-          </RadioGroup>
-        </View>
+        {classificacaoLesoes.map(({ title, content }, i) => (
+          <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
+            <CheckBox checked={true} onChange={() => checkActions(title)}>
+              {title}
+            </CheckBox>
+            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+              {title}
+            </Text>
+            {content.map((i) => (
+              <Radio
+                style={styles.radio}
+                text={i}
+                checked={maligna}
+                onChange={onActiveMaligna}
+              />
+            ))}
+          </View>
+        ))}
       </RadioGroup>
     </Layout>
   );
@@ -245,7 +209,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={nomeFator.includes(nome) ? false : true}
+                    checked={nomeFator.includes(nome) ? true : false}
                     onChange={() => onActiveChange(nome, i)}
                   />
                 </View>
