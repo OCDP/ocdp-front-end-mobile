@@ -33,47 +33,45 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
   const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
-  const {fatores, setFatores} = useContext(FatoresContext)
-  const {postFatores, setPostFatores} = useContext(PostFatoresContext)
-  const [maligna, setMaligna] = React.useState(false);
+  const { fatores, setFatores } = useContext(FatoresContext);
+  const { postFatores, setPostFatores } = useContext(PostFatoresContext);
+  const [tipoLesao, setTipoLesao] = React.useState([]);
   const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
-  const [newNome, setNewNome] = React.useState([])
-  const [isChecked, setIsChecked] = React.useState(false)
+  const [newNome, setNewNome] = React.useState([]);
+  const [isChecked, setIsChecked] = React.useState(false);
 
   const [potencialmente, setPotencialmente] = React.useState(false);
   const onActiveChange = (length, i, nome, id) => {
-    
     let fator = [];
-    let fatoresReq = fatores
+    let fatoresReq = fatores;
     console.log(isChecked);
-    if(isChecked == false){
-      for(let j = 0; j<length; j++){        
-        fator.push({id: fatoresReq[j].id, nome: fatoresReq[j].nome, marcado: false})
+    if (isChecked == false) {
+      for (let j = 0; j < length; j++) {
+        fator.push({
+          id: fatoresReq[j].id,
+          nome: fatoresReq[j].nome,
+          marcado: false,
+        });
       }
-    }else if(isChecked == true){
-      fator = [...activeChecked]
+    } else if (isChecked == true) {
+      fator = [...activeChecked];
     }
     setIsChecked(true);
     fator[i].marcado = fator[i].marcado == true ? false : true;
-    console.log('fator',fator);
+    console.log("fator", fator);
     setActiveChecked(fator);
     let objSetFatores = [];
-    for(let f of fator){
-      if(f.marcado == true){
-        objSetFatores.push({id: f.id, nome: f.nome})
+    for (let f of fator) {
+      if (f.marcado == true) {
+        objSetFatores.push({ id: f.id, nome: f.nome });
       }
     }
-    console.log('objSetFatores', objSetFatores);
-    setPostFatores(objSetFatores)
-    console.log('postFatores', postFatores);
-  };
-
-  const onActiveMaligna = (onSelect) => {
-    setMaligna(onSelect);
+    setPostFatores(objSetFatores);
+    console.log("postFatores", postFatores);
   };
 
   const onCheckedChange = (index) => {
@@ -122,7 +120,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       textAlign: "center",
     },
     textItemSmall: {
-      fontSize: 15,
+      fontSize: 18,
       textAlign: "center",
       marginVertical: 8,
     },
@@ -163,6 +161,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const dismiss = () => {
     setVisible(visible ? false : true);
     setSubregiao(null);
+    setTipoLesao([]);
   };
 
   const renderModalElement = () => (
@@ -177,52 +176,63 @@ const MapeamentoSintomas = ({ navigation }) => {
     </Layout>
   );
 
-  const classificacaoLesoes = [
-    {
-      title: "Maligna",
-      content: ["Maligna"],
-    },
-    {
-      title: "Potencialmente Malígna",
-      content: [
-        "Leucoplasia",
-        "Eritoplasia",
-        "Quelite Acnitica",
-        "Eritoleucoplasia",
-        "Liquen",
-      ],
-    },
-    {
-      title: "Outros",
-      content: ["Autoimune", "Infecciosa", "Inflamatorio", "Neoplastica"],
-    },
+  const malignaArr = ["Maligna"];
+
+  const potencialMalignaArr = [
+    "Leucoplasia",
+    "Eritoplasia",
+    "Quelite Acnitica",
+    "Eritoleucoplasia",
+    "Liquen",
   ];
 
-  const checkActions = (title) => {};
+  const outrosArr = ["Autoimune", "Infecciosa", "Inflamatorio", "Neoplastica"];
+
+  const renderEscolhaTipo = () => (
+    <Layout level="3" style={styles.modalContainer}>
+      <View>
+        <Text style={styles.textItemSmall}>{tipoLesao}</Text>
+        <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
+          {tipoLesao.map((i) => (
+            <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
+              <Radio style={styles.radio} text={i} />
+            </View>
+          ))}
+        </RadioGroup>
+      </View>
+    </Layout>
+  );
 
   const rendeDetailLesao = () => (
     <Layout level="3" style={styles.modalContainer}>
       <Text style={styles.textItemSmall}>{subregiao}</Text>
-      <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
-        {classificacaoLesoes.map(({ title, content }, i) => (
-          <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
-            <CheckBox checked={true} onChange={() => checkActions(title)}>
-              {title}
-            </CheckBox>
-            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-              {title}
-            </Text>
-            {content.map((i) => (
-              <Radio
-                style={styles.radio}
-                text={i}
-                checked={maligna}
-                onChange={onActiveMaligna}
-              />
-            ))}
-          </View>
-        ))}
-      </RadioGroup>
+      <Text
+        style={[styles.textItemSmall, { marginHorizontal: 8 }]}
+        appearance="hint"
+      >
+        que tipo de lesão você deseja cadastrar nessa subregiao?
+      </Text>
+      <TouchableOpacity onPress={() => setTipoLesao(malignaArr)}>
+        <View style={{ marginTop: 4, marginLeft: 8 }}>
+          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+            Maligna
+          </Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setTipoLesao(potencialMalignaArr)}>
+        <View style={{ marginTop: 4, marginLeft: 8 }}>
+          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+            Potencialmente maligna
+          </Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => setTipoLesao(outrosArr)}>
+        <View style={{ marginTop: 4, marginLeft: 8 }}>
+          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+            Outros
+          </Text>
+        </View>
+      </TouchableOpacity>
     </Layout>
   );
 
@@ -237,7 +247,9 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={activeChecked[i] ? activeChecked[i].marcado : false}
+                    checked={
+                      activeChecked[i] ? activeChecked[i].marcado : false
+                    }
                     onChange={() => onActiveChange(fatores.length, i, nome, id)}
                   />
                 </View>
@@ -263,7 +275,11 @@ const MapeamentoSintomas = ({ navigation }) => {
               onBackdropPress={dismiss}
               visible={visible}
             >
-              {subregiao ? rendeDetailLesao() : renderModalElement()}
+              {tipoLesao.length != 0
+                ? renderEscolhaTipo()
+                : subregiao
+                ? rendeDetailLesao()
+                : renderModalElement()}
             </Modal>
           </>
         ))}
