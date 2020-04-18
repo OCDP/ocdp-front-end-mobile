@@ -8,33 +8,45 @@ import { NomesLocaisInterfaces } from "../utils/models/NomesLocaisInterface";
 import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
   
   interface LocaisContextProps {
-    nomesLocais: Array<NomesLocaisInterfaces>;
-    setNomesLocais?: Dispatch<SetStateAction<{}>>;
-    tiposLocais: Array<TiposLocaisInterfaces>;
-    setTiposLocais?: Dispatch<SetStateAction<{}>>;
+    nomesLocaisAtendido: Array<NomesLocaisInterfaces>;
+    setNomesLocaisAtendido?: Dispatch<SetStateAction<{}>>;
+    tiposLocaisAtendido: Array<TiposLocaisInterfaces>;
+    setTiposLocaisAtendido?: Dispatch<SetStateAction<{}>>;
+    nomesLocaisEncaminhado: Array<NomesLocaisInterfaces>;
+    setNomesLocaisEncaminhado?: Dispatch<SetStateAction<{}>>;
+    tiposLocaisEncaminhado: Array<TiposLocaisInterfaces>;
+    setTiposLocaisEncaminhado?: Dispatch<SetStateAction<{}>>;
   }
   
   
   const defaultLocais = {
-    nomesLocais: [],
-    tiposLocais: []
+    nomesLocaisAtendido: [],
+    tiposLocaisAtendido: [],
+    nomesLocaisEncaminhado: [],
+    tiposLocaisEncaminhado: []
   };
   
   
   const LocaisContext = createContext<LocaisContextProps>(defaultLocais);
   
   export function LocaisProvider({ children }) {
-    const [nomesLocais, setNomesLocais] = useState();
-    const [tiposLocais, setTiposLocais] = useState();
+    const [nomesLocaisAtendido, setNomesLocaisAtendido] = useState();
+    const [tiposLocaisAtendido, setTiposLocaisAtendido] = useState();
+    const [nomesLocaisEncaminhado, setNomesLocaisEncaminhado] = useState();
+    const [tiposLocaisEncaminhado, setTiposLocaisEncaminhado] = useState();
 
   
     return (
       <LocaisContext.Provider
         value={{
-          nomesLocais,
-          setNomesLocais,
-          tiposLocais,
-          setTiposLocais
+          nomesLocaisAtendido,
+          setNomesLocaisAtendido,
+          tiposLocaisAtendido,
+          setTiposLocaisAtendido,
+          nomesLocaisEncaminhado,
+          setNomesLocaisEncaminhado,
+          tiposLocaisEncaminhado,
+          setTiposLocaisEncaminhado
         }}
       >
         {children}

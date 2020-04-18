@@ -31,10 +31,14 @@ const HomeScreen = ({ navigation }) => {
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { switchTheme } = useContext(AppContext);
   const {
-    nomesLocais,
-    setNomesLocais,
-    tiposLocais,
-    setTiposLocais,
+    nomesLocaisAtendido,
+    setNomesLocaisAtendido,
+    tiposLocaisAtendido,
+    setTiposLocaisAtendido,
+    nomesLocaisEncaminhado,
+    setNomesLocaisEncaminhado,
+    tiposLocaisEncaminhado,
+    setTiposLocaisEncaminhado
   } = useContext(LocaisContext);
   let arrLocais = null;
 
@@ -78,7 +82,8 @@ const HomeScreen = ({ navigation }) => {
             text: a.nome,
           };
         });
-        setNomesLocais(nomesContext);
+        setNomesLocaisAtendido(nomesContext);
+        setNomesLocaisEncaminhado(nomesContext);
 
         locais.data.forEach(({ tipoLocalAtendimento }) => {
           let incluir = true;
@@ -109,7 +114,8 @@ const HomeScreen = ({ navigation }) => {
             text: a.nome,
           };
         });
-        setTiposLocais(tiposContext);
+        setTiposLocaisAtendido(tiposContext);
+        setTiposLocaisEncaminhado(tiposContext);
       } catch (err) {
         console.log(err);
       }

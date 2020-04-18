@@ -17,6 +17,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 
 const DATA = [
   {
@@ -34,15 +35,61 @@ const DATA = [
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [activeChecked, setActiveChecked] = React.useState(false);
   const [value, setValue] = React.useState(null);
+  const {usuarioLogado} = useContext(UsuarioLogadoContext)
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
-  const { nomesLocais, tiposLocais } = useContext(LocaisContext);
+  const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
+  const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
 
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
     // setHistorico(historico);
   };
+
+  useEffect(()=>{
+    async function loadLocaisAtendido(){
+      let url = `localAtendimento/byTipo/${tipoAtendido}`;
+      console.log('loadLocaisAtendido', tipoAtendido);
+      console.log(url);
+      try{
+        
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+        .get(url).then((resp)=>{
+          for(let i of resp.data){
+            i.text = i.nome;
+          }
+          setNomesLocaisAtendido(resp.data)
+          
+        })
+      }catch(err){
+        console.log(err);
+        
+      }
+    }
+    loadLocaisAtendido();
+  }, [tipoAtendido])
+
+  useEffect(()=>{
+    async function loadLocaisAtendido(){
+      let url = `localAtendimento/byTipo/${tipoEncaminhado}`;
+      console.log('loadLocaisAtendido', tipoEncaminhado);
+      console.log(url);
+      try{
+        
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+        .get(url).then((resp)=>{
+          for(let i of resp.data){
+            i.text = i.nome;
+          }
+          setNomesLocaisEncaminhado(resp.data)
+        })
+      }catch(err){
+        console.log(err);
+      }
+    }
+    loadLocaisAtendido();
+  }, [tipoEncaminhado])
 
   const onChangeText = async (query) => {
     setValue(query);
@@ -55,6 +102,18 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const tipoAtendidoActions = async (text) => {
     setTipoAtendido(text);
   };
+
+  const nomeAtendidoActions = async (text) => {
+    setNomesLocaisAtendido(text);
+  }
+    
+  const tipoEncaminhadoActions = async (text) => {
+    setTipoEncaminhado(text);
+  };
+
+  const nomeEncaminhadoActions = async (text) => {
+    setNomesLocaisEncaminhado(text);
+  }
 
   return (
     <Layout style={styles.container}>
@@ -73,7 +132,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
               </View>
               <View style={{ marginVertical: 8 }}>
                 <Select
-                  data={tiposLocais}
+                  data={tiposLocaisAtendido}
                   placeholder="Selecionar um tipo"
                   onSelect={(e) => tipoAtendidoActions(e["text"])}
                   selectedOption={{ text: tipoAtendido }}
@@ -82,9 +141,10 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
               <View>
                 <Select
                   disabled={tipoAtendido ? false : true}
-                  data={nomesLocais}
+                  data={nomesLocaisAtendido}
                   placeholder="Local em que está sendo atendido"
-                  onSelect={() => {}}
+                  onSelect={(e) => nomeAtendidoActions(e["text"])}
+                  // selectedOption={{ text: tipoAtendido }}
                 />
               </View>
             </View>
@@ -105,16 +165,17 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
               </View>
               <View style={{ marginVertical: 8 }}>
                 <Select
-                  data={tiposLocais}
+                  data={tiposLocaisEncaminhado}
                   placeholder="Selecionar um tipo"
-                  onSelect={() => {}}
+                  onSelect={(e) => tipoEncaminhadoActions(e["text"])}
+                  selectedOption={{ text: tipoEncaminhado }}
                 />
               </View>
               <View>
                 <Select
-                  data={nomesLocais}
+                  data={nomesLocaisEncaminhado}
                   placeholder="Local que será encaminhado"
-                  onSelect={() => {}}
+                  onSelect={(e) => nomeEncaminhadoActions(e["text"])}
                 />
               </View>
             </View>

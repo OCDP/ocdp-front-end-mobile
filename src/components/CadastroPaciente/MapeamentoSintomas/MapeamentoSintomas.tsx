@@ -21,27 +21,55 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 import EmptyContent from "../../EmptyContent";
+import PostFatoresContext from "../../../contexts/PostFatoresContext";
 import PacienteContext from "../../../contexts/PacienteContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
 const MapeamentoSintomas = ({ navigation }) => {
-  const [activeChecked, setActiveChecked] = React.useState(false);
+  const [activeChecked, setActiveChecked] = React.useState([]);
+  const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
+  const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
+  const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
+  const {fatores, setFatores} = useContext(FatoresContext)
+  const {postFatores, setPostFatores} = useContext(PostFatoresContext)
   const [maligna, setMaligna] = React.useState(false);
-  const { fatores } = useContext(FatoresContext);
+  const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
-  const { classifLesoes, setClassifLesoes } = useContext(PacienteContext);
-  let arrFatores = [];
+  const [newNome, setNewNome] = React.useState([])
+  const [isChecked, setIsChecked] = React.useState(false)
 
-  const onActiveChange = (nome, i) => {
-    setActiveChecked(true);
-    setNomeFator(arrFatores);
-    arrFatores.push(nome);
-    console.log("arr", arrFatores);
+  const [potencialmente, setPotencialmente] = React.useState(false);
+  const onActiveChange = (length, i, nome, id) => {
+    
+    let fator = [];
+    let fatoresReq = fatores
+    console.log(isChecked);
+    if(isChecked == false){
+      for(let j = 0; j<length; j++){        
+        fator.push({id: fatoresReq[j].id, nome: fatoresReq[j].nome, marcado: false})
+      }
+    }else if(isChecked == true){
+      fator = [...activeChecked]
+    }
+    setIsChecked(true);
+    fator[i].marcado = fator[i].marcado == true ? false : true;
+    console.log('fator',fator);
+    setActiveChecked(fator);
+    let objSetFatores = [];
+    for(let f of fator){
+      if(f.marcado == true){
+        objSetFatores.push({id: f.id, nome: f.nome})
+      }
+    }
+    console.log('objSetFatores', objSetFatores);
+    setPostFatores(objSetFatores)
+    console.log('postFatores', postFatores);
   };
 
   const onActiveMaligna = (onSelect) => {
@@ -209,8 +237,8 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <View key={i} style={styles.checkItem}>
                   <CheckBox
                     text={nome}
-                    checked={nomeFator.includes(nome) ? true : false}
-                    onChange={() => onActiveChange(nome, i)}
+                    checked={activeChecked[i] ? activeChecked[i].marcado : false}
+                    onChange={() => onActiveChange(fatores.length, i, nome, id)}
                   />
                 </View>
               ))}
