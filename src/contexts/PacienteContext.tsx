@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { HistoricoInterface } from "../utils/models/HistoricoInterface";
 import { FatoresInterface } from "../utils/models/FatoresInterface";
+import { ClassificLesaoInterface } from "../utils/models/ClassificLesaoInterface";
 
 export interface Paciente {
   historico: Array<HistoricoInterface>;
@@ -23,6 +24,7 @@ export interface Paciente {
   cidade: string;
   bairro: BairroInterFace;
   acomp: boolean;
+  classifLesoes: ClassificLesaoInterface;
 }
 
 interface PacienteContextProps {
@@ -54,10 +56,12 @@ interface PacienteContextProps {
   setBairro?: Dispatch<SetStateAction<BairroInterFace>>;
   acomp: boolean;
   setAcomp?: Dispatch<SetStateAction<boolean>>;
+  classifLesoes: ClassificLesaoInterface;
+  setClassifLesoes?: Dispatch<SetStateAction<{}>>;
   flush?: () => void;
 }
 
-interface BairroInterFace{
+interface BairroInterFace {
   id: string;
   nome: string;
 }
@@ -75,8 +79,9 @@ const defaultPaciente: Paciente = {
   telResp: null,
   nmMae: null,
   cidade: null,
-  bairro: {id: null, nome: null},
+  bairro: { id: null, nome: null },
   acomp: false,
+  classifLesoes: null,
 };
 
 const PacienteContext = createContext<PacienteContextProps>(defaultPaciente);
@@ -94,8 +99,15 @@ export function PacienteProvider({ children }) {
   const [telResp, setTelResp] = useState<string>(null);
   const [nmMae, setNmMae] = useState<string>(null);
   const [cidade, setCidade] = useState<string>(null);
-  const [bairro, setBairro] = useState<BairroInterFace>({id:null, nome:null});
+  const [bairro, setBairro] = useState<BairroInterFace>({
+    id: null,
+    nome: null,
+  });
   const [acomp, setAcomp] = useState<boolean>(false);
+  const [classifLesoes, setClassifLesoes] = useState<ClassificLesaoInterface>({
+    title: null,
+    content: null,
+  });
 
   const flush = () => {
     setNome(defaultPaciente.nome);
@@ -142,6 +154,8 @@ export function PacienteProvider({ children }) {
         acomp,
         setAcomp,
         flush,
+        classifLesoes,
+        setClassifLesoes,
       }}
     >
       {children}
@@ -165,6 +179,7 @@ export function usePaciente(): Paciente {
     cidade,
     bairro,
     acomp,
+    classifLesoes,
   } = useContext(PacienteContext);
   return {
     historico,
@@ -181,6 +196,7 @@ export function usePaciente(): Paciente {
     cidade,
     bairro,
     acomp,
+    classifLesoes,
   };
 }
 

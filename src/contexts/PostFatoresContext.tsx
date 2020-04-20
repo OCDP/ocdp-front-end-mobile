@@ -2,22 +2,22 @@ import React, {
   createContext,
   useState,
   Dispatch,
-  SetStateAction
+  SetStateAction,
 } from "react";
 import { FatoresInterface } from "../utils/models/FatoresInterface";
 
 interface PostFatoresContextProps {
   postFatores: Array<FatoresInterface>;
-  setPostFatores?: Dispatch<SetStateAction<[]>>;
+  setPostFatores?: Dispatch<SetStateAction<any>>;
 }
 
-
 const defaultFatores = {
-  postFatores: []
+  postFatores: [],
 };
 
-
-const PostFatoresContext = createContext<PostFatoresContextProps>(defaultFatores);
+const PostFatoresContext = createContext<PostFatoresContextProps>(
+  defaultFatores
+);
 
 export function PostFatoresProvider({ children }) {
   const [postFatores, setPostFatores] = useState();
@@ -26,7 +26,7 @@ export function PostFatoresProvider({ children }) {
     <PostFatoresContext.Provider
       value={{
         postFatores,
-        setPostFatores
+        setPostFatores,
       }}
     >
       {children}
