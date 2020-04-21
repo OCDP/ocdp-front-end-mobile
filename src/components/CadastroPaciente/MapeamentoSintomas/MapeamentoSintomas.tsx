@@ -129,6 +129,8 @@ const MapeamentoSintomas = ({ navigation }) => {
       marginVertical: 8,
     },
     lesaoContent: {
+      paddingVertical: 16,
+      paddingHorizontal: 32,
       marginVertical: 8,
       backgroundColor: "#fcfcfc",
       borderRadius: 10,
