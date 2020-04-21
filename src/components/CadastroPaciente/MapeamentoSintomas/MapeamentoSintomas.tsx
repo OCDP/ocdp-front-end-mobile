@@ -16,13 +16,13 @@ import {
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
 import FatoresContext from "../../../contexts/FatoresRiscoContext";
-import { regioes } from "../../../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 import EmptyContent from "../../EmptyContent";
 import PostFatoresContext from "../../../contexts/PostFatoresContext";
 import PacienteContext from "../../../contexts/PacienteContext";
+import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -34,14 +34,17 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
   const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
   const { fatores, setFatores } = useContext(FatoresContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const [tipoLesao, setTipoLesao] = React.useState([]);
   const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
+  const [regioesArr, serRegioesArr] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
   const [newNome, setNewNome] = React.useState([]);
+  const [, setLoading] = useLoading();
   const [isChecked, setIsChecked] = React.useState(false);
 
   const [potencialmente, setPotencialmente] = React.useState(false);
@@ -153,10 +156,29 @@ const MapeamentoSintomas = ({ navigation }) => {
     },
   });
 
-  const toggleModal = (list?) => {
-    setVisible(visible ? false : true);
-    setListRegioes(list);
-  };
+  async function chamarListaSubregioes(name) {
+    setLoading(true);
+    try {
+      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+        .get(`regiaoBoca/bySiglaRegiao/${name}?sigla=${name}`)
+        .then((resp) => {
+          const listaAtual = resp.data;
+          let regArrList = listaAtual.map((a) => {
+            return {
+              desc: a.nome,
+              id: a.id,
+              // braz, se vc quiser setar o base64 por sabe
+              //  Deus qual motivo,faça isso: base64: a.siglaRegiaoBoca
+            };
+          });
+          setLoading(false);
+          setVisible(visible ? false : true);
+          setListRegioes(regArrList);
+        });
+    } catch (err) {
+      console.log("err", err);
+    }
+  }
 
   const dismiss = () => {
     setVisible(visible ? false : true);
@@ -175,6 +197,30 @@ const MapeamentoSintomas = ({ navigation }) => {
       ))}
     </Layout>
   );
+
+  useEffect(() => {
+    async function loadFatores() {
+      setLoading(true);
+      try {
+        await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+          .get("/siglaRegiaoBoca")
+          .then((resp) => {
+            const dataAtual = resp.data;
+            let regArrImage = dataAtual.map((a) => {
+              return {
+                description: a.nome,
+                name: a.imagemBase64,
+              };
+            });
+            serRegioesArr(regArrImage);
+            setLoading(false);
+          });
+      } catch (err) {
+        console.log("err", err);
+      }
+    }
+    loadFatores();
+  }, []);
 
   const malignaArr = ["Maligna"];
 
@@ -212,27 +258,29 @@ const MapeamentoSintomas = ({ navigation }) => {
       >
         que tipo de lesão você deseja cadastrar nessa subregiao?
       </Text>
-      <TouchableOpacity onPress={() => setTipoLesao(malignaArr)}>
-        <View style={{ marginTop: 4, marginLeft: 8 }}>
-          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-            Maligna
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => setTipoLesao(potencialMalignaArr)}>
-        <View style={{ marginTop: 4, marginLeft: 8 }}>
-          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-            Potencialmente maligna
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => setTipoLesao(outrosArr)}>
-        <View style={{ marginTop: 4, marginLeft: 8 }}>
-          <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-            Outros
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity onPress={() => setTipoLesao(malignaArr)}>
+          <View style={{ marginTop: 4, marginLeft: 8 }}>
+            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+              Maligna
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setTipoLesao(potencialMalignaArr)}>
+          <View style={{ marginTop: 4, marginLeft: 8 }}>
+            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+              Potencialmente maligna
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setTipoLesao(outrosArr)}>
+          <View style={{ marginTop: 4, marginLeft: 8, marginBottom: 8 }}>
+            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+              Outros
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </Layout>
   );
 
@@ -259,10 +307,12 @@ const MapeamentoSintomas = ({ navigation }) => {
         </View>
       </HeaderContainer>
       <View>
-        {regioes.map(({ name, description, list }, i) => (
+        {regioesArr.map(({ name, description, list }, i) => (
           <>
             <View key={i}>
-              <TouchableOpacity onPress={() => toggleModal(list)}>
+              <TouchableOpacity
+                onPress={() => chamarListaSubregioes(description)}
+              >
                 <Lesoes
                   navigation={navigation}
                   title={description}
