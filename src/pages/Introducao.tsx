@@ -17,6 +17,7 @@ import {
   NomeSelect,
   TipoLocalAtendimento,
 } from "../utils/models/RespLocaisInterface";
+import { add, user } from "../assets/Icons";
 
 const Introducao = ({ navigation }) => {
   const { setFatores } = useContext(FatoresContext);
@@ -112,9 +113,13 @@ const Introducao = ({ navigation }) => {
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
-        <Button onPressIn={() => navigation.navigate("Home")}>
-          boas vindos, ir pra home
-        </Button>
+        <Button
+          style={styles.button}
+          status="primary"
+          size="tiny"
+          icon={user}
+          onPress={() => navigation.navigate("Home")}
+        />
       </Layout>
     </PageContainer>
   );
@@ -125,18 +130,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-  picker: {
-    width: "100%",
-    display: "flex",
-    paddingHorizontal: 8,
-    paddingTop: 8,
-  },
   button: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
     position: "absolute",
-    bottom: 36,
-    right: 16,
     borderRadius: 50,
     elevation: 8,
     shadowRadius: 8,
