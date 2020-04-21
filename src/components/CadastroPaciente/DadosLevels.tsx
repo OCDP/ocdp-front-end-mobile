@@ -18,6 +18,7 @@ import PostFatoresContext from "../../contexts/PostFatoresContext"
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
+import LocaisContext from "../../contexts/LocaisContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -34,7 +35,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
-  const {usuarioLogado } = useContext(UsuarioLogadoContext)
+  const {usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
+  const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
   const {acomp,bairro,cpf, cidade,dtNasci,email,endereco,historico
   ,listaFatores, nmMae, nome,sexo,telCell,telResp } = useContext(PacienteContext)
 
@@ -74,6 +77,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           telefoneCelular: telCell,
           telefoneResponsavel: telResp
         },
+        localAtendimento: nomesLocaisAtendido,
+        localEncaminhado: nomesLocaisEncaminhado,
         tipoAtendimento: "ACOMPANHAMENTO",
         usuario:{
           cpf,

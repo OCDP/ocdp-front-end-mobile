@@ -36,6 +36,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const { fatores, setFatores } = useContext(FatoresContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
+  const [lesao, setLesao] = React.useState([]);
   const [tipoLesao, setTipoLesao] = React.useState([]);
   const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
@@ -183,7 +184,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const dismiss = () => {
     setVisible(visible ? false : true);
     setSubregiao(null);
-    setTipoLesao([]);
+    setLesao([]);
   };
 
   const renderModalElement = () => (
@@ -222,6 +223,34 @@ const MapeamentoSintomas = ({ navigation }) => {
     loadFatores();
   }, []);
 
+  useEffect(()=>{
+    async function loadTipoLesao(){
+      try{
+        let resp = await apiFunc(usuarioLogado.cpf,usuarioLogado.senhaUsuario).get('/tipoLesao')
+        console.log(resp.data);
+        
+        setTipoLesao(resp.data)
+        console.log('tipoLesao', tipoLesao);
+      }catch(err){
+        console.log(err);
+      }
+    }
+    loadTipoLesao()
+  }, [])
+
+  async function setarLesao(idTipoLesao){
+    let resp = await apiFunc(usuarioLogado.cpf,usuarioLogado.senhaUsuario).get('/lesao');
+    let lesao = [];
+    console.log(resp.data.tipoLesao)
+    for(let i of resp.data){
+      if(i.tipoLesao.id == idTipoLesao){
+        lesao.push(i)
+      }
+    }
+    setLesao(lesao);
+    
+  }
+
   const malignaArr = ["Maligna"];
 
   const potencialMalignaArr = [
@@ -237,9 +266,9 @@ const MapeamentoSintomas = ({ navigation }) => {
   const renderEscolhaTipo = () => (
     <Layout level="3" style={styles.modalContainer}>
       <View>
-        <Text style={styles.textItemSmall}>{tipoLesao}</Text>
+        <Text style={styles.textItemSmall}>{lesao}</Text>
         <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
-          {tipoLesao.map((i) => (
+          {lesao.map((i) => (
             <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
               <Radio style={styles.radio} text={i} />
             </View>
@@ -258,29 +287,17 @@ const MapeamentoSintomas = ({ navigation }) => {
       >
         que tipo de lesão você deseja cadastrar nessa subregiao?
       </Text>
-      <View>
-        <TouchableOpacity onPress={() => setTipoLesao(malignaArr)}>
-          <View style={{ marginTop: 4, marginLeft: 8 }}>
-            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-              Maligna
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTipoLesao(potencialMalignaArr)}>
-          <View style={{ marginTop: 4, marginLeft: 8 }}>
-            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-              Potencialmente maligna
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setTipoLesao(outrosArr)}>
-          <View style={{ marginTop: 4, marginLeft: 8, marginBottom: 8 }}>
-            <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-              Outros
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      {tipoLesao.map(({id, nome}, i)=>{
+        <View key={i}>
+          <TouchableOpacity onPress={() => setarLesao(id)}>
+            <View style={{ marginTop: 4, marginLeft: 8 }}>
+              <Text style={[styles.textItemSmall, styles.lesaoContent]}>
+                aaaa
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      })}
     </Layout>
   );
 
@@ -325,7 +342,7 @@ const MapeamentoSintomas = ({ navigation }) => {
               onBackdropPress={dismiss}
               visible={visible}
             >
-              {tipoLesao.length != 0
+              {lesao.length != 0
                 ? renderEscolhaTipo()
                 : subregiao
                 ? rendeDetailLesao()
