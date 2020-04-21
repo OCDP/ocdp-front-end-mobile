@@ -33,17 +33,20 @@ const DATA = [
 ];
 
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
-  const [activeChecked, setActiveChecked] = React.useState(false);
+  const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
+  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
   const [value, setValue] = React.useState(null);
   const {usuarioLogado} = useContext(UsuarioLogadoContext)
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
+  const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = useContext(LocaisContext);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
   const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState('');
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
+  const [dataAtual, setDataAtual] = React.useState(null);
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
@@ -72,6 +75,20 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     }
     loadLocaisAtendido();
   }, [tipoAtendido])
+
+  // useEffect(()=>{
+  //   function loadDataAtual(){
+  //     let mes = new Date().getMonth().toString();
+  //     if(mes.length == 1){
+  //       mes = '0' + mes;
+  //     }
+  //     let st = new Date().getFullYear() + '-' + mes + '-' + new Date().getDate()
+  //     setDataAtual(st);
+  //     console.log('dataAtual', dataAtual);
+  //   }
+  //   loadDataAtual
+    
+  // }, [])
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
@@ -225,18 +242,23 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 <View style={{ marginVertical: 8 }}>
                   <CheckBox
                     text="Acompanhamento"
-                    checked={activeChecked}
-                    onChange={setActiveChecked}
+                    checked={activeCheckedAcompanhamento}
+                    onChange={setActiveCheckedAcompanhamento}
                   />
                 </View>
                 <View>
                   <Datepicker
-                    disabled={activeChecked ? false : true}
+                    disabled={activeCheckedAcompanhamento ? false : true}
                     min={new Date("1900-12-25")}
-                    date={new Date("2020-03-29")}
+                    date={new Date("2020-12-25")}
                     placeholder="Data de Nascimento"
-                    onSelect={() =>
-                      console.log("o que eu faco qnd selecioa uma data ")
+                    onSelect={(a) =>{
+                      console.log(a)
+                      
+                      let data = a.toString()
+                      setDataSugeridaAcompanhamento(data)
+
+                    }
                     }
                     icon={calendar}
                   />
@@ -254,18 +276,22 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 <View style={{ marginVertical: 8 }}>
                   <CheckBox
                     text="Tratamento de lesão"
-                    checked={activeChecked}
-                    onChange={setActiveChecked}
+                    checked={activeCheckedTratamento}
+                    onChange={setActiveCheckedTratamento}
                   />
                 </View>
                 <View>
                   <Datepicker
-                    disabled={activeChecked ? false : true}
+                    disabled={activeCheckedTratamento ? false : true}
                     min={new Date("1900-12-25")}
-                    date={new Date("2020-03-29")}
+                    date={new Date("2020-12-25")}
                     placeholder="Data de Nascimento"
-                    onSelect={() =>
-                      console.log("o que eu faco qnd selecioa uma data ")
+                    onSelect={(a) => {
+                      let data = a.toString()
+                      setDataSugeridaTratamento(data)
+
+                    }
+                      
                     }
                     icon={calendar}
                   />

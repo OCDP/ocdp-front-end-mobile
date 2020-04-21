@@ -279,7 +279,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       </Text>
       {tipoLesaoOptions.map(({ id, nome }, i) => (
         <View key={i}>
-          <TouchableOpacity onPress={() => setarLesao(id)}>
+          <TouchableOpacity onPress={() => setarLesao(nome)}>
             <View style={{ marginTop: 4, marginLeft: 8 }}>
               <Text style={[styles.textItemSmall, styles.lesaoContent]}>
                 {nome}
