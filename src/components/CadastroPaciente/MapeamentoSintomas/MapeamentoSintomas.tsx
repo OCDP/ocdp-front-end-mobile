@@ -37,12 +37,12 @@ const MapeamentoSintomas = ({ navigation }) => {
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const [lesao, setLesao] = React.useState([]);
-  const [tipoLesao, setTipoLesao] = React.useState([]);
+  const [tipoLesaoOptions, setTipoLesaoOptions] = React.useState([]);
   const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
-  const [regioesArr, serRegioesArr] = React.useState([]);
+  const [regioesArr, setRegioesArr] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState(null);
   const [newNome, setNewNome] = React.useState([]);
   const [, setLoading] = useLoading();
@@ -129,8 +129,6 @@ const MapeamentoSintomas = ({ navigation }) => {
       marginVertical: 8,
     },
     lesaoContent: {
-      paddingVertical: 16,
-      paddingHorizontal: 32,
       marginVertical: 8,
       backgroundColor: "#fcfcfc",
       borderRadius: 10,
@@ -168,8 +166,6 @@ const MapeamentoSintomas = ({ navigation }) => {
             return {
               desc: a.nome,
               id: a.id,
-              // braz, se vc quiser setar o base64 por sabe
-              //  Deus qual motivo,faça isso: base64: a.siglaRegiaoBoca
             };
           });
           setLoading(false);
@@ -187,11 +183,16 @@ const MapeamentoSintomas = ({ navigation }) => {
     setLesao([]);
   };
 
+  function subRegiaoActions(desc) {
+    setSubregiao(desc);
+    loadTipoLesao();
+  }
+
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
       {listRegioes.map(({ desc }, j) => (
         <View key={j} style={styles.itemContainer}>
-          <TouchableOpacity onPress={() => setSubregiao(desc)}>
+          <TouchableOpacity onPress={() => subRegiaoActions(desc)}>
             <Text style={styles.textItem}>{desc}</Text>
           </TouchableOpacity>
         </View>
@@ -213,7 +214,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                 name: a.imagemBase64,
               };
             });
-            serRegioesArr(regArrImage);
+            setRegioesArr(regArrImage);
             setLoading(false);
           });
       } catch (err) {
@@ -223,45 +224,34 @@ const MapeamentoSintomas = ({ navigation }) => {
     loadFatores();
   }, []);
 
-  useEffect(()=>{
-    async function loadTipoLesao(){
-      try{
-        let resp = await apiFunc(usuarioLogado.cpf,usuarioLogado.senhaUsuario).get('/tipoLesao')
-        console.log(resp.data);
-        
-        setTipoLesao(resp.data)
-        console.log('tipoLesao', tipoLesao);
-      }catch(err){
-        console.log(err);
-      }
+  async function loadTipoLesao() {
+    setLoading(true);
+    try {
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).get("/tipoLesao");
+      const arrTiposLesoes = resp.data;
+      setTipoLesaoOptions(arrTiposLesoes);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
     }
-    loadTipoLesao()
-  }, [])
+  }
 
-  async function setarLesao(idTipoLesao){
-    let resp = await apiFunc(usuarioLogado.cpf,usuarioLogado.senhaUsuario).get('/lesao');
+  async function setarLesao(idTipoLesao) {
+    let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
+      "/lesao"
+    );
     let lesao = [];
-    console.log(resp.data.tipoLesao)
-    for(let i of resp.data){
-      if(i.tipoLesao.id == idTipoLesao){
-        lesao.push(i)
+    console.log(resp.data.tipoLesao);
+    for (let i of resp.data) {
+      if (i.tipoLesao.id == idTipoLesao) {
+        lesao.push(i);
       }
     }
     setLesao(lesao);
-    
   }
-
-  const malignaArr = ["Maligna"];
-
-  const potencialMalignaArr = [
-    "Leucoplasia",
-    "Eritoplasia",
-    "Quelite Acnitica",
-    "Eritoleucoplasia",
-    "Liquen",
-  ];
-
-  const outrosArr = ["Autoimune", "Infecciosa", "Inflamatorio", "Neoplastica"];
 
   const renderEscolhaTipo = () => (
     <Layout level="3" style={styles.modalContainer}>
@@ -287,17 +277,17 @@ const MapeamentoSintomas = ({ navigation }) => {
       >
         que tipo de lesão você deseja cadastrar nessa subregiao?
       </Text>
-      {tipoLesao.map(({id, nome}, i)=>{
+      {tipoLesaoOptions.map(({ id, nome }, i) => (
         <View key={i}>
           <TouchableOpacity onPress={() => setarLesao(id)}>
             <View style={{ marginTop: 4, marginLeft: 8 }}>
               <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-                aaaa
+                {nome}
               </Text>
             </View>
           </TouchableOpacity>
         </View>
-      })}
+      ))}
     </Layout>
   );
 
@@ -324,7 +314,7 @@ const MapeamentoSintomas = ({ navigation }) => {
         </View>
       </HeaderContainer>
       <View>
-        {regioesArr.map(({ name, description, list }, i) => (
+        {regioesArr.map(({ name, description }, i) => (
           <>
             <View key={i}>
               <TouchableOpacity
