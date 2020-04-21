@@ -62,7 +62,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
             marginBottom: 16,
           }}
         >
-          adicionar procedimento
+          adicionar retorno
         </Button>
         <Timeline
           onEventPress={onEventPress}
