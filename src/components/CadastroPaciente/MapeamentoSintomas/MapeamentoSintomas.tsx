@@ -230,6 +230,7 @@ const MapeamentoSintomas = ({ navigation }) => {
         console.log(resp.data);
         
         setTipoLesao(resp.data)
+        console.log('tipoLesao', tipoLesao);
       }catch(err){
         console.log(err);
       }
@@ -246,7 +247,7 @@ const MapeamentoSintomas = ({ navigation }) => {
         lesao.push(i)
       }
     }
-    console.log(lesao);
+    setLesao(lesao);
     
   }
 
@@ -291,7 +292,7 @@ const MapeamentoSintomas = ({ navigation }) => {
           <TouchableOpacity onPress={() => setarLesao(id)}>
             <View style={{ marginTop: 4, marginLeft: 8 }}>
               <Text style={[styles.textItemSmall, styles.lesaoContent]}>
-                {nome}
+                aaaa
               </Text>
             </View>
           </TouchableOpacity>
