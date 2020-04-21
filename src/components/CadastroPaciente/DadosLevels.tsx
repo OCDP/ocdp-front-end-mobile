@@ -38,6 +38,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const {usuarioLogado } = useContext(UsuarioLogadoContext);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
+  const { dataSugeridaAcompanhamento, dataSugeridaTratamento } = useContext(LocaisContext);
   const {acomp,bairro,cpf, cidade,dtNasci,email,endereco,historico
   ,listaFatores, nmMae, nome,sexo,telCell,telResp } = useContext(PacienteContext)
 
@@ -77,6 +78,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           telefoneCelular: telCell,
           telefoneResponsavel: telResp
         },
+        dataSugeridaAcompanhamento, 
+        dataSugeridaTratamento,
         localAtendimento: nomesLocaisAtendido,
         localEncaminhado: nomesLocaisEncaminhado,
         tipoAtendimento: "ACOMPANHAMENTO",

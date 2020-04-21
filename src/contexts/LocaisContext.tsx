@@ -16,6 +16,10 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
     setNomesLocaisEncaminhado?: Dispatch<SetStateAction<{}>>;
     tiposLocaisEncaminhado: Array<TiposLocaisInterfaces>;
     setTiposLocaisEncaminhado?: Dispatch<SetStateAction<{}>>;
+    dataSugeridaAcompanhamento: string,
+    setDataSugeridaAcompanhamento?: Dispatch<SetStateAction<string>>;
+    dataSugeridaTratamento: string,
+    setDataSugeridaTratamento?: Dispatch<SetStateAction<string>>;
   }
   
   
@@ -23,7 +27,9 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
     nomesLocaisAtendido: [],
     tiposLocaisAtendido: [],
     nomesLocaisEncaminhado: [],
-    tiposLocaisEncaminhado: []
+    tiposLocaisEncaminhado: [],
+    dataSugeridaAcompanhamento: null,
+    dataSugeridaTratamento: null,
   };
   
   
@@ -34,7 +40,10 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
     const [tiposLocaisAtendido, setTiposLocaisAtendido] = useState();
     const [nomesLocaisEncaminhado, setNomesLocaisEncaminhado] = useState();
     const [tiposLocaisEncaminhado, setTiposLocaisEncaminhado] = useState();
+    const [dataSugeridaAcompanhamento, setDataSugeridaAcompanhamento] = useState();
+    const [dataSugeridaTratamento, setDataSugeridaTratamento] = useState();
 
+    
   
     return (
       <LocaisContext.Provider
@@ -46,7 +55,11 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
           nomesLocaisEncaminhado,
           setNomesLocaisEncaminhado,
           tiposLocaisEncaminhado,
-          setTiposLocaisEncaminhado
+          setTiposLocaisEncaminhado,
+          dataSugeridaAcompanhamento,
+          setDataSugeridaAcompanhamento,
+          dataSugeridaTratamento,
+          setDataSugeridaTratamento
         }}
       >
         {children}
