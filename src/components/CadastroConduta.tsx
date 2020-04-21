@@ -40,7 +40,10 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
-
+  const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
+  const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState('');
+  const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
+  const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
@@ -50,8 +53,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(()=>{
     async function loadLocaisAtendido(){
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
-      console.log('loadLocaisAtendido', tipoAtendido);
-      console.log(url);
+      // console.log('loadLocaisAtendido', tipoAtendido);
+      // console.log(url);
       try{
         
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -59,7 +62,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
           for(let i of resp.data){
             i.text = i.nome;
           }
-          setNomesLocaisAtendido(resp.data)
+          setNomesAtendidosAll(resp.data)
           
         })
       }catch(err){
@@ -73,8 +76,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(()=>{
     async function loadLocaisAtendido(){
       let url = `localAtendimento/byTipo/${tipoEncaminhado}`;
-      console.log('loadLocaisAtendido', tipoEncaminhado);
-      console.log(url);
+      // console.log('loadLocaisAtendido', tipoEncaminhado);
+      // console.log(url);
       try{
         
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -82,7 +85,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
           for(let i of resp.data){
             i.text = i.nome;
           }
-          setNomesLocaisEncaminhado(resp.data)
+          setNomesEncaminhadosAll(resp.data)
         })
       }catch(err){
         console.log(err);
@@ -99,20 +102,39 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     setValue("");
   };
 
-  const tipoAtendidoActions = async (text) => {
+  const tipoAtendidoActions = (text) => {
+    // console.log('tipoAtendidoActions', text);
+    setTipoAtendido('');
     setTipoAtendido(text);
+    //console.log('tipoAtendido', tipoAtendido);
   };
 
-  const nomeAtendidoActions = async (text) => {
-    setNomesLocaisAtendido(text);
+  const nomeAtendidoActions = (text) => {
+    //console.log('nomeAtendidoActions', text)
+    //console.log('nomeAtendido', nomesLocaisAtendido);
+    setnomesAtendidosSelect(text);
+    for(let i of nomesAtendidosAll){
+      if(i.text == text){
+        setNomesLocaisAtendido(i);
+      }
+    }
   }
     
-  const tipoEncaminhadoActions = async (text) => {
+  const tipoEncaminhadoActions = (text) => {
+    setTipoEncaminhado('');
     setTipoEncaminhado(text);
   };
 
-  const nomeEncaminhadoActions = async (text) => {
-    setNomesLocaisEncaminhado(text);
+  const nomeEncaminhadoActions = (text) => {
+    //console.log('nomeEncaminhadoActions', text)
+    // setNomesLocaisEncaminhado('');
+    // setNomesLocaisEncaminhado(text);
+    setNomesEncaminhadoSelect(text);
+    for(let i of nomesEncaminhadosAll){
+      if(i.text == text){
+        setNomesLocaisEncaminhado(i);
+      }
+    }
   }
 
   return (
@@ -141,10 +163,10 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
               <View>
                 <Select
                   disabled={tipoAtendido ? false : true}
-                  data={nomesLocaisAtendido}
+                  data={nomesAtendidosAll}
                   placeholder="Local em que está sendo atendido"
                   onSelect={(e) => nomeAtendidoActions(e["text"])}
-                  // selectedOption={{ text: tipoAtendido }}
+                  selectedOption={{ text: nomesAtendidosSelect }}
                 />
               </View>
             </View>
@@ -173,9 +195,11 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
               </View>
               <View>
                 <Select
-                  data={nomesLocaisEncaminhado}
+                  disabled={tipoEncaminhado ? false : true}
+                  data={nomesEncaminhadosAll}
                   placeholder="Local que será encaminhado"
                   onSelect={(e) => nomeEncaminhadoActions(e["text"])}
+                  selectedOption={{ text: nomesEncaminhadoSelect }}
                 />
               </View>
             </View>
