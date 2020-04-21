@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
@@ -7,40 +7,17 @@ import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext from "../contexts/PacienteContext";
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
-import AppContext, { useLoading } from "../contexts/AppContext";
-import { historicoMockup } from "../utils/constants";
-import FatoresContext from "../contexts/FatoresRiscoContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
-import LocaisContext from "../contexts/LocaisContext";
 import { AxiosResponse } from "axios";
-import {
-  RespLocaisInterface,
-  NomeSelect,
-  TipoLocalAtendimento,
-} from "../utils/models/RespLocaisInterface";
 import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
 
 const HomeScreen = ({ navigation }) => {
-  const { fatores, setFatores } = useContext(FatoresContext);
   const [value, setValue] = React.useState(null);
   const [nomes, setNomes] = React.useState([]);
   const [listaNomes, setListaNomes] = React.useState([]);
   const { historico, setHistorico } = useContext(PacienteContext);
-  const [, setLoading] = useLoading();
   const { setAcomp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
-  const { switchTheme } = useContext(AppContext);
-  const {
-    nomesLocaisAtendido,
-    setNomesLocaisAtendido,
-    tiposLocaisAtendido,
-    setTiposLocaisAtendido,
-    nomesLocaisEncaminhado,
-    setNomesLocaisEncaminhado,
-    tiposLocaisEncaminhado,
-    setTiposLocaisEncaminhado
-  } = useContext(LocaisContext);
-  let arrLocais = null;
 
   async function loadHistorico(data) {
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
@@ -50,90 +27,8 @@ const HomeScreen = ({ navigation }) => {
     return historico;
   }
 
-  async function loadFatores() {
-    try {
-      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-        .get("/fatorRisco")
-        .then((resp) => {
-          setFatores(resp.data);
-        });
-    } catch (err) {
-      console.log("err", err);
-    }
-  }
-
-  useEffect(() => {
-    async function loadLocais() {
-      try {
-        const locais: AxiosResponse<RespLocaisInterface[]> = await apiFunc(
-          usuarioLogado.cpf,
-          usuarioLogado.senhaUsuario
-        ).get("/localAtendimento");
-        let nomesLocaisArr: NomeSelect[] = [];
-        let tiposLocaisArr: TipoLocalAtendimento[] = [];
-
-        await locais.data.forEach(({ id, nome }) => {
-          nomesLocaisArr.push({ id, nome });
-        });
-
-        const nomesContext = nomesLocaisArr.map((a) => {
-          return {
-            id: a.id,
-            text: a.nome,
-          };
-        });
-        setNomesLocaisAtendido(nomesContext);
-        setNomesLocaisEncaminhado(nomesContext);
-
-        locais.data.forEach(({ tipoLocalAtendimento }) => {
-          let incluir = true;
-          if (tipoLocalAtendimento) {
-            if (tiposLocaisArr.length == 0) {
-              tiposLocaisArr.push({
-                id: tipoLocalAtendimento.id,
-                nome: tipoLocalAtendimento.nome,
-              });
-            }
-            for (let i of tiposLocaisArr) {
-              if (i.nome == tipoLocalAtendimento.nome) {
-                incluir = false;
-              }
-            }
-            if (incluir == true) {
-              tiposLocaisArr.push({
-                id: tipoLocalAtendimento.id,
-                nome: tipoLocalAtendimento.nome,
-              });
-            }
-          }
-        });
-
-        const tiposContext = tiposLocaisArr.map((a) => {
-          return {
-            id: a.id,
-            text: a.nome,
-          };
-        });
-        setTiposLocaisAtendido(tiposContext);
-        setTiposLocaisEncaminhado(tiposContext);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    loadLocais();
-  }, []);
-
-  useEffect(() => {
-    loadFatores();
-    if (usuarioLogado.nivelAtencao === "SECUNDARIA") {
-      switchTheme();
-    }
-  }, []);
-
   const onSelect = async ({ title, id }) => {
     setValue(title);
-    // let historico = await loadHistorico(title);
-    // setHistorico(historico);
     await loadHistorico(id).then((resp) => {
       if (resp == []) {
         setHistorico([]);
@@ -142,8 +37,6 @@ const HomeScreen = ({ navigation }) => {
       }
     });
   };
-
-  let DATA = [];
 
   const onChangeText = async (query) => {
     setValue(query);
@@ -162,7 +55,6 @@ const HomeScreen = ({ navigation }) => {
           };
         });
         setListaNomes(listaArr);
-        console.log("lista >>>>", listaNomes);
         setNomes(
           listaNomes.filter((item) =>
             item.title.toLowerCase().includes(query.toLowerCase())
