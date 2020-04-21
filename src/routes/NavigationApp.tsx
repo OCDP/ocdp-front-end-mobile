@@ -15,6 +15,7 @@ import SafeAreaLayout from "../components/SafeAreaLayout";
 import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 import { LocaisProvider } from "../contexts/LocaisContext";
 import { PostFatoresProvider } from "../contexts/PostFatoresContext";
+import Introducao from "../pages/Introducao";
 
 function CustomDrawerContent(props) {
   return (
@@ -32,23 +33,24 @@ export const AppNavigator = () => (
       <UsuarioLogadoProvider>
         <FatoresProvider>
           <PostFatoresProvider>
-          <LocaisProvider>
-            <SafeAreaLayout style={{ flex: 1 }} insets="top">
-              <Drawer.Navigator
-                initialRouteName="BemVindo"
-                drawerContent={(props) => CustomDrawerContent(props)}
+            <LocaisProvider>
+              <SafeAreaLayout style={{ flex: 1 }} insets="top">
+                <Drawer.Navigator
+                  initialRouteName="BemVindo"
+                  drawerContent={(props) => CustomDrawerContent(props)}
                 >
-                <Drawer.Screen name="BemVindo" component={BemVindo} />
-                <Drawer.Screen name="Login" component={LoginPage} />
-                <Drawer.Screen name="Home" component={HomeScreen} />
-                <Drawer.Screen
-                  name="CadastrarPaciente"
-                  component={CadastrarPaciente}
+                  <Drawer.Screen name="BemVindo" component={BemVindo} />
+                  <Drawer.Screen name="Login" component={LoginPage} />
+                  <Drawer.Screen name="Introducao" component={Introducao} />
+                  <Drawer.Screen name="Home" component={HomeScreen} />
+                  <Drawer.Screen
+                    name="CadastrarPaciente"
+                    component={CadastrarPaciente}
                   />
-              </Drawer.Navigator>
-            </SafeAreaLayout>
-          </LocaisProvider>
-                  </PostFatoresProvider>
+                </Drawer.Navigator>
+              </SafeAreaLayout>
+            </LocaisProvider>
+          </PostFatoresProvider>
         </FatoresProvider>
       </UsuarioLogadoProvider>
     </PacienteProvider>

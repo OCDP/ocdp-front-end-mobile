@@ -44,7 +44,7 @@ export default function ({ navigation }) {
       console.log('usuarioLogado', usuarioLogado.senhaUsuario);
       
       setLoading(false);
-      navigation.navigate("Home");
+      navigation.navigate("Introducao");
     } catch (err) {
       console.log(err);
       alert("Email ou senha incorreta!");
