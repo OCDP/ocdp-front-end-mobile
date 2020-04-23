@@ -37,17 +37,20 @@ const MapeamentoSintomas = ({ navigation }) => {
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const [lesao, setLesao] = React.useState([]);
+  const [lesaoAll, setLesaoAll] = React.useState([]);
+  const [lesaoSelecionado, setLesaoSelecionado] = React.useState([]);
   const [tipoLesaoOptions, setTipoLesaoOptions] = React.useState([]);
   const [outros, setOutros] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [regioesArr, setRegioesArr] = React.useState([]);
-  const [subregiao, setSubregiao] = React.useState(null);
+  const [subregiao, setSubregiao] = React.useState([]);
+  const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null)
   const [newNome, setNewNome] = React.useState([]);
   const [, setLoading] = useLoading();
   const [isChecked, setIsChecked] = React.useState(false);
-
+  const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
@@ -76,11 +79,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     }
     setPostFatores(objSetFatores);
     console.log("postFatores", postFatores);
-  };
-
-  const onCheckedChange = (index) => {
-    setSelectedIndex(index);
-    console.log("principal");
   };
 
   const styles = useStyleSheet({
@@ -183,6 +181,12 @@ const MapeamentoSintomas = ({ navigation }) => {
     setLesao([]);
   };
 
+  // function subRegiaoActions(id, indice) {
+  //   console.log(id);
+    
+  //   if(listRegioes[indice].id == id){
+  //     setSubregiao(listRegioes[indice]);
+  //   }
   function subRegiaoActions(desc) {
     setSubregiao(desc);
     loadTipoLesao();
@@ -192,7 +196,7 @@ const MapeamentoSintomas = ({ navigation }) => {
     <Layout level="3" style={styles.modalContainer}>
       {listRegioes.map(({ desc }, j) => (
         <View key={j} style={styles.itemContainer}>
-          <TouchableOpacity onPress={() => subRegiaoActions(desc)}>
+          <TouchableOpacity onPress={() => subRegiaoActions(id, j)}>
             <Text style={styles.textItem}>{desc}</Text>
           </TouchableOpacity>
         </View>
@@ -239,28 +243,45 @@ const MapeamentoSintomas = ({ navigation }) => {
     }
   }
 
-  async function setarLesao(idTipoLesao) {
+  async function setarLesao(nomeTipoLesao) {
+    setLoading(true);
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-      "/lesao"
+      `/lesao/byTipo/${nomeTipoLesao}`
     );
-    let lesao = [];
-    console.log(resp.data.tipoLesao);
-    for (let i of resp.data) {
-      if (i.tipoLesao.id == idTipoLesao) {
-        lesao.push(i);
-      }
+    setLoading(false);
+    let lesao = resp.data;
+    setLesaoAll(lesao);
+    setNomeTipoLesao(nomeTipoLesao);
+    let nomeLesao = lesao.map((a)=>{
+      return a.nome
+    })
+    setLesao(nomeLesao);
+  }
+
+  function selectLesoesCtrl(nome, indice, length){
+    let lesaoCheck = [];
+    for(let i=0;i<length;i++){
+      lesaoCheck.push(false);
     }
-    setLesao(lesao);
+    lesaoCheck[indice] = true;
+    setLesaoSelecionado(lesaoAll[indice])
+    setOnCheckedChange(lesaoCheck)
+  }
+
+  function confirmarLesoesRegiao(){
+    console.log(lesaoSelecionado, setSubregiao)
   }
 
   const renderEscolhaTipo = () => (
     <Layout level="3" style={styles.modalContainer}>
       <View>
-        <Text style={styles.textItemSmall}>{lesao}</Text>
-        <RadioGroup selectedIndex={selectedIndex} onChange={onCheckedChange}>
-          {lesao.map((i) => (
+        <Text style={styles.textItemSmall}>{nomeTipoLesao}</Text>
+        <RadioGroup>
+          {lesao.map((a,i) => (
             <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
-              <Radio style={styles.radio} text={i} />
+              <Radio onChange={(r)=>{
+                selectLesoesCtrl(a,i,lesao.length)
+              }}style={styles.radio} text={a} checked={onCheckedChange[i]}/>
             </View>
           ))}
         </RadioGroup>
