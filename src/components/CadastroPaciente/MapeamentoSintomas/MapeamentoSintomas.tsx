@@ -267,6 +267,9 @@ const MapeamentoSintomas = ({ navigation }) => {
           ))}
         </RadioGroup>
       </View>
+      <Button onPressIn={() => console.log("lesao cadastrada")}>
+        cadastrar lesão
+      </Button>
     </Layout>
   );
 
@@ -334,7 +337,7 @@ const MapeamentoSintomas = ({ navigation }) => {
               onBackdropPress={dismiss}
               visible={visible}
             >
-              {lesao.length != 0
+              {lesao.length > 0
                 ? renderEscolhaTipo()
                 : subregiao
                 ? rendeDetailLesao()
