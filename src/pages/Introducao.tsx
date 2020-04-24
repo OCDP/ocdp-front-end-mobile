@@ -1,10 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import { Button, Layout, Autocomplete } from "@ui-kitten/components";
+import { Button, Layout, Autocomplete, Text } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
-import { StyleSheet } from "react-native";
-import HistoricoProcedimento from "../components/HistoricoProcedimento";
-import PacienteContext from "../contexts/PacienteContext";
-import EmptyContent from "../components/EmptyContent";
+import { StyleSheet, View } from "react-native";
 import apiFunc from "../services/api";
 import AppContext, { useLoading } from "../contexts/AppContext";
 import { historicoMockup } from "../utils/constants";
@@ -17,7 +14,7 @@ import {
   NomeSelect,
   TipoLocalAtendimento,
 } from "../utils/models/RespLocaisInterface";
-import { add, user } from "../assets/Icons";
+import { add, user, map } from "../assets/Icons";
 
 const Introducao = ({ navigation }) => {
   const { setFatores } = useContext(FatoresContext);
@@ -113,13 +110,37 @@ const Introducao = ({ navigation }) => {
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
       <Layout style={styles.container}>
-        <Button
-          style={styles.button}
-          status="primary"
-          size="tiny"
-          icon={user}
-          onPress={() => navigation.navigate("Home")}
-        />
+        <View style={styles.btnBox}>
+          <View style={styles.btnItem}>
+            <View>
+              <Button
+                style={styles.button}
+                status="primary"
+                size="large"
+                icon={user}
+                onPress={() => navigation.navigate("Home")}
+              />
+            </View>
+            <View>
+              <Text>Perfil do usuário</Text>
+            </View>
+          </View>
+
+          <View>
+            <View>
+              <Button
+                style={styles.button}
+                status="primary"
+                size="large"
+                icon={map}
+                onPress={() => navigation.navigate("Home")}
+              />
+            </View>
+            <View>
+              <Text>Registrar atendimento</Text>
+            </View>
+          </View>
+        </View>
       </Layout>
     </PageContainer>
   );
@@ -130,10 +151,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
+  btnBox: {
+    width: "60%",
+    paddingTop: 80,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  btnItem: {
+    justifyContent: "center"
+  },
   button: {
     width: 80,
     height: 80,
-    position: "absolute",
     borderRadius: 50,
     elevation: 8,
     shadowRadius: 8,
