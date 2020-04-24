@@ -260,6 +260,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       return a.nome;
     });
     setLesao(nomeLesao);
+
   }
 
   function selectLesoesCtrl(nome, indice, length) {
@@ -272,9 +273,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     setOnCheckedChange(lesaoCheck);
   }
 
-  function confirmarLesoesRegiao() {
-    console.log(lesaoSelecionado, setSubregiao);
-  }
 
   const renderEscolhaTipo = () => (
     <Layout level="3" style={styles.modalContainer}>
@@ -297,7 +295,9 @@ const MapeamentoSintomas = ({ navigation }) => {
       </View>
       <Button
         style={{ marginVertical: 8 }}
-        onPressIn={() => console.log("lesao cadastrada")}
+        onPressIn={() => 
+          console.log(lesaoSelecionado, regiaoSelect
+            )}
       >
         cadastrar lesão
       </Button>
