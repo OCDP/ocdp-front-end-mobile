@@ -47,7 +47,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [regioesArr, setRegioesArr] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState([]);
   const [regiaoSelect, setRegiaoSelect] = React.useState([]);
-  const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null)
+  const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null);
   const [newNome, setNewNome] = React.useState([]);
   const [, setLoading] = useLoading();
   const [isChecked, setIsChecked] = React.useState(false);
@@ -186,12 +186,12 @@ const MapeamentoSintomas = ({ navigation }) => {
   };
 
   function subRegiaoActions(id, indice) {
-    let reg = [...listRegioes]
+    let reg = [...listRegioes];
     //console.log('reg[indice]', reg[indice]);
-      setSubregiao(reg[indice].nome);
-      setRegiaoSelect(reg[indice]);
-  // function subRegiaoActions(desc) {
-  //   setSubregiao(desc);
+    setSubregiao(reg[indice].nome);
+    setRegiaoSelect(reg[indice]);
+    // function subRegiaoActions(desc) {
+    //   setSubregiao(desc);
     loadTipoLesao();
   }
 
@@ -232,7 +232,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   }, []);
 
   async function loadTipoLesao() {
-    console.log('regiaoSelect', regiaoSelect)
+    console.log("regiaoSelect", regiaoSelect);
     setLoading(true);
     try {
       let resp = await apiFunc(
@@ -256,24 +256,24 @@ const MapeamentoSintomas = ({ navigation }) => {
     let lesao = resp.data;
     setLesaoAll(lesao);
     setNomeTipoLesao(nomeTipoLesao);
-    let nomeLesao = lesao.map((a)=>{
-      return a.nome
-    })
+    let nomeLesao = lesao.map((a) => {
+      return a.nome;
+    });
     setLesao(nomeLesao);
   }
 
-  function selectLesoesCtrl(nome, indice, length){
+  function selectLesoesCtrl(nome, indice, length) {
     let lesaoCheck = [];
-    for(let i=0;i<length;i++){
+    for (let i = 0; i < length; i++) {
       lesaoCheck.push(false);
     }
     lesaoCheck[indice] = true;
-    setLesaoSelecionado(lesaoAll[indice])
-    setOnCheckedChange(lesaoCheck)
+    setLesaoSelecionado(lesaoAll[indice]);
+    setOnCheckedChange(lesaoCheck);
   }
 
-  function confirmarLesoesRegiao(){
-    console.log(lesaoSelecionado, setSubregiao)
+  function confirmarLesoesRegiao() {
+    console.log(lesaoSelecionado, setSubregiao);
   }
 
   const renderEscolhaTipo = () => (
@@ -281,16 +281,24 @@ const MapeamentoSintomas = ({ navigation }) => {
       <View>
         <Text style={styles.textItemSmall}>{nomeTipoLesao}</Text>
         <RadioGroup>
-          {lesao.map((a,i) => (
+          {lesao.map((a, i) => (
             <View style={{ marginTop: 8, marginLeft: 8 }} key={i}>
-              <Radio onChange={(r)=>{
-                selectLesoesCtrl(a,i,lesao.length)
-              }}style={styles.radio} text={a} checked={onCheckedChange[i]}/>
+              <Radio
+                onChange={(r) => {
+                  selectLesoesCtrl(a, i, lesao.length);
+                }}
+                style={styles.radio}
+                text={a}
+                checked={onCheckedChange[i]}
+              />
             </View>
           ))}
         </RadioGroup>
       </View>
-      <Button onPressIn={() => console.log("lesao cadastrada")}>
+      <Button
+        style={{ marginVertical: 8 }}
+        onPressIn={() => console.log("lesao cadastrada")}
+      >
         cadastrar lesão
       </Button>
     </Layout>
