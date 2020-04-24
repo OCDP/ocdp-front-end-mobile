@@ -46,6 +46,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [nomeFator, setNomeFator] = React.useState([]);
   const [regioesArr, setRegioesArr] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState([]);
+  const [regiaoSelect, setRegiaoSelect] = React.useState([]);
   const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null)
   const [newNome, setNewNome] = React.useState([]);
   const [, setLoading] = useLoading();
@@ -162,7 +163,8 @@ const MapeamentoSintomas = ({ navigation }) => {
           const listaAtual = resp.data;
           let regArrList = listaAtual.map((a) => {
             return {
-              desc: a.nome,
+              siglaRegiaoBoca: a.siglaRegiaoBoca,
+              nome: a.nome,
               id: a.id,
             };
           });
@@ -181,23 +183,22 @@ const MapeamentoSintomas = ({ navigation }) => {
     setLesao([]);
   };
 
-  // function subRegiaoActions(id, indice) {
-  //   console.log(id);
-    
-  //   if(listRegioes[indice].id == id){
-  //     setSubregiao(listRegioes[indice]);
-  //   }
-  function subRegiaoActions(desc) {
-    setSubregiao(desc);
+  function subRegiaoActions(id, indice) {
+    let reg = [...listRegioes]
+    //console.log('reg[indice]', reg[indice]);
+      setSubregiao(reg[indice].nome);
+      setRegiaoSelect(reg[indice]);
+  // function subRegiaoActions(desc) {
+  //   setSubregiao(desc);
     loadTipoLesao();
   }
 
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
-      {listRegioes.map(({ desc }, j) => (
+      {listRegioes.map(({ id, nome }, j) => (
         <View key={j} style={styles.itemContainer}>
           <TouchableOpacity onPress={() => subRegiaoActions(id, j)}>
-            <Text style={styles.textItem}>{desc}</Text>
+            <Text style={styles.textItem}>{nome}</Text>
           </TouchableOpacity>
         </View>
       ))}
@@ -229,6 +230,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   }, []);
 
   async function loadTipoLesao() {
+    console.log('regiaoSelect', regiaoSelect)
     setLoading(true);
     try {
       let resp = await apiFunc(

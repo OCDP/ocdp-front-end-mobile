@@ -36,15 +36,15 @@ export default function ({ navigation }) {
   async function loginAction() {
     try {
       setLoading(true);
-      let resp = await api(login, pswd).get(
+      await api(login, pswd).get(
         `/usuario/byCpf/${login}?cpf=${login}`
-      );
-      resp.data.senhaUsuario = pswd;
-      setUsuarioLogado(resp.data);
-      console.log('usuarioLogado', usuarioLogado.senhaUsuario);
-      
-      setLoading(false);
-      navigation.navigate("Introducao");
+      ).then((resp)=>{
+        resp.data.senhaUsuario = pswd;
+        setUsuarioLogado(resp.data);
+        
+        setLoading(false);
+        navigation.navigate("Introducao");
+      });
     } catch (err) {
       console.log(err);
       alert("Email ou senha incorreta!");
