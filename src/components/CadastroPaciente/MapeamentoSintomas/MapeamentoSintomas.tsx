@@ -23,6 +23,7 @@ import EmptyContent from "../../EmptyContent";
 import PostFatoresContext from "../../../contexts/PostFatoresContext";
 import PacienteContext from "../../../contexts/PacienteContext";
 import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
+import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -53,6 +54,9 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
+  //aqui o contexto novo braz...
+  const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
+
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
     let fatoresReq = fatores;
@@ -260,7 +264,6 @@ const MapeamentoSintomas = ({ navigation }) => {
       return a.nome;
     });
     setLesao(nomeLesao);
-
   }
 
   function selectLesoesCtrl(nome, indice, length) {
@@ -272,7 +275,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     setLesaoSelecionado(lesaoAll[indice]);
     setOnCheckedChange(lesaoCheck);
   }
-
 
   const renderEscolhaTipo = () => (
     <Layout level="3" style={styles.modalContainer}>
@@ -295,9 +297,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       </View>
       <Button
         style={{ marginVertical: 8 }}
-        onPressIn={() => 
-          console.log(lesaoSelecionado, regiaoSelect
-            )}
+        onPressIn={() => console.log(lesaoSelecionado, regiaoSelect)}
       >
         cadastrar lesão
       </Button>
