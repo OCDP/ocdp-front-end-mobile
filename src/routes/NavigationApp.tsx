@@ -16,6 +16,7 @@ import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 import { LocaisProvider } from "../contexts/LocaisContext";
 import { PostFatoresProvider } from "../contexts/PostFatoresContext";
 import Introducao from "../pages/Introducao";
+import { LesoesRegiaoProvider } from "../contexts/LesoesFatoresPost";
 
 function CustomDrawerContent(props) {
   return (
@@ -34,21 +35,23 @@ export const AppNavigator = () => (
         <FatoresProvider>
           <PostFatoresProvider>
             <LocaisProvider>
-              <SafeAreaLayout style={{ flex: 1 }} insets="top">
-                <Drawer.Navigator
-                  initialRouteName="BemVindo"
-                  drawerContent={(props) => CustomDrawerContent(props)}
-                >
-                  <Drawer.Screen name="BemVindo" component={BemVindo} />
-                  <Drawer.Screen name="Login" component={LoginPage} />
-                  <Drawer.Screen name="Introducao" component={Introducao} />
-                  <Drawer.Screen name="Home" component={HomeScreen} />
-                  <Drawer.Screen
-                    name="CadastrarPaciente"
-                    component={CadastrarPaciente}
-                  />
-                </Drawer.Navigator>
-              </SafeAreaLayout>
+              <LesoesRegiaoProvider>
+                <SafeAreaLayout style={{ flex: 1 }} insets="top">
+                  <Drawer.Navigator
+                    initialRouteName="BemVindo"
+                    drawerContent={(props) => CustomDrawerContent(props)}
+                  >
+                    <Drawer.Screen name="BemVindo" component={BemVindo} />
+                    <Drawer.Screen name="Login" component={LoginPage} />
+                    <Drawer.Screen name="Introducao" component={Introducao} />
+                    <Drawer.Screen name="Home" component={HomeScreen} />
+                    <Drawer.Screen
+                      name="CadastrarPaciente"
+                      component={CadastrarPaciente}
+                    />
+                  </Drawer.Navigator>
+                </SafeAreaLayout>
+              </LesoesRegiaoProvider>
             </LocaisProvider>
           </PostFatoresProvider>
         </FatoresProvider>
