@@ -6,6 +6,7 @@ import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
 import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
+import moment from 'moment';
 import PacienteContext, {
   usePaciente,
   useFlushPaciente,
@@ -15,6 +16,7 @@ import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
 import PostFatoresContext from "../../contexts/PostFatoresContext"
+import LesoesRegioesContext from "../../contexts/LesoesRegioesContext"
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -35,7 +37,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
-  const {usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { lesoesRegioes } = useContext(LesoesRegioesContext)
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
   const { dataSugeridaAcompanhamento, dataSugeridaTratamento } = useContext(LocaisContext);
@@ -60,28 +63,35 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       status, telefone, tipoUsuario} = usuarioLogado
   //   acomp,bairro,cidade,dtNasci,email,endereco,historico
   // ,listaFatores, nmMae, nome,sexo,telCell,telResp
+  // let localAtendimento = [...nomesLocaisAtendido]
+  // delete localAtendimento.text;
+  // let localEncaminhado = [...nomesLocaisEncaminhado]
+  // delete localEncaminhado.text;
+  delete nomesLocaisAtendido.text;
+  delete nomesLocaisEncaminhado.text;
+  console.log(nomesLocaisAtendido)
     let arrObj = {
-        atendimento: {
-          paciente:{
+      atendimento: {
+        dataAtendimento: moment().format('YYYY-MM-DD HH:mm:ss'),
+        id:"",
+        localAtendimento: nomesLocaisAtendido,
+        localEncaminhado: nomesLocaisEncaminhado,
+        paciente:{
           bairro:{
             id:bairro.id,
             nome: bairro.nome
           },
           cpf,
-          dataNascimento: dtNasci,
+          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
           email,
           enderecoCompleto: endereco,
           id: "",
           nome,
           nomeDaMae: nmMae,
-          sexo,
+          sexo: sexo.toUpperCase(),
           telefoneCelular: telCell,
           telefoneResponsavel: telResp
         },
-        dataSugeridaAcompanhamento, 
-        dataSugeridaTratamento,
-        localAtendimento: nomesLocaisAtendido,
-        localEncaminhado: nomesLocaisEncaminhado,
         tipoAtendimento: "ACOMPANHAMENTO",
         usuario:{
           cpf,
@@ -93,17 +103,33 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           telefone,
           tipoUsuario
         },
-        fatoresDeRisco:postFatores
-      }
+      },
+      regioesLesoes: lesoesRegioes,
+      dataSugeridaAcompanhamento: dataSugeridaAcompanhamento == undefined ? "" : dataSugeridaAcompanhamento, 
+      dataSugeridaTratamento: dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+      fatoresDeRisco:postFatores
     }
     console.log(arrObj);
+
+    await enviarPost(arrObj)
     
-    navigation.dispatch(
-      CommonActions.reset({
-        routes: [{ name: "Home" }],
-      })
-    );
+    
   };
+
+  async function enviarPost(arrObj){
+    try{
+      let postJson = JSON.stringify(arrObj);
+      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post('/acompanhamento/salvar', postJson);
+      console.log(resp)
+      navigation.dispatch(
+        CommonActions.reset({
+          routes: [{ name: "Home" }],
+        })
+      );
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
     console.log("acomp >>>>", acomp);

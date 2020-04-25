@@ -16,7 +16,7 @@ import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 import { LocaisProvider } from "../contexts/LocaisContext";
 import { PostFatoresProvider } from "../contexts/PostFatoresContext";
 import Introducao from "../pages/Introducao";
-import { LesoesRegiaoProvider } from "../contexts/LesoesFatoresPost";
+import { LesoesRegiaoProvider } from "../contexts/LesoesRegioesContext";
 
 function CustomDrawerContent(props) {
   return (

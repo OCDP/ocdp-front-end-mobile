@@ -47,7 +47,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [nomeFator, setNomeFator] = React.useState([]);
   const [regioesArr, setRegioesArr] = React.useState([]);
   const [subregiao, setSubregiao] = React.useState([]);
-  const [regiaoSelect, setRegiaoSelect] = React.useState([]);
+  const [regiaoSelect, setRegiaoSelect] = React.useState();
   const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null);
   const [newNome, setNewNome] = React.useState([]);
   const [, setLoading] = useLoading();
@@ -297,12 +297,31 @@ const MapeamentoSintomas = ({ navigation }) => {
       </View>
       <Button
         style={{ marginVertical: 8 }}
-        onPressIn={() => console.log(lesaoSelecionado, regiaoSelect)}
+        onPressIn={() => setarRegiaoLesao()}
       >
         cadastrar lesão
       </Button>
     </Layout>
   );
+
+  function setarRegiaoLesao(){
+    console.log(regiaoSelect.siglaRegiaoBoca.imagemBase64);
+    regiaoSelect.siglaRegiaoBoca.imagemBase64 = ""
+    let objRL = {
+      lesao: lesaoSelecionado,
+      regiaoBoca: regiaoSelect
+    }
+    let lesaoRegiaoContext = [];
+    console.log('lesoesRegioes', lesoesRegioes);
+    if(lesoesRegioes == undefined || lesoesRegioes.length == 0){
+      lesaoRegiaoContext.push(objRL);
+      setLesoesRegioes(lesaoRegiaoContext)
+    }else{
+      lesaoRegiaoContext = [...lesoesRegioes];
+      lesaoRegiaoContext.push(objRL);
+      setLesoesRegioes(lesaoRegiaoContext)
+    }
+  }
 
   const rendeDetailLesao = () => (
     <Layout level="3" style={styles.modalContainer}>

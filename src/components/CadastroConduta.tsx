@@ -12,6 +12,7 @@ import {
   CheckBox,
 } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
+import moment from 'moment';
 import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
@@ -255,7 +256,9 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                     onSelect={(a) =>{
                       console.log(a)
                       
-                      let data = a.toString()
+                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
+                      
+                      console.log(data)
                       setDataSugeridaAcompanhamento(data)
 
                     }
@@ -287,7 +290,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                     date={new Date("2020-12-25")}
                     placeholder="Data de Nascimento"
                     onSelect={(a) => {
-                      let data = a.toString()
+                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
+
                       setDataSugeridaTratamento(data)
 
                     }
