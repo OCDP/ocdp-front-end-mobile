@@ -58,13 +58,11 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
           onChange={(index) => setSelectedIndex(index)}
         >
           {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
-            <>
-              <Radio text="Acompanhamento"></Radio>
-              <Radio text="Retorno"></Radio>
-            </>
+            <Radio text="Intervenção"></Radio>
           ) : (
-            <Radio status="control" text="Retorno"></Radio>
+            <></>
           )}
+          <Radio text="Acompanhamento"></Radio>
         </RadioGroup>
       </View>
 
