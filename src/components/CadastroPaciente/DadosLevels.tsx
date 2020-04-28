@@ -23,6 +23,7 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import LocaisContext from "../../contexts/LocaisContext";
 import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -38,6 +39,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const paciente = usePaciente();
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
+  const { idNovoAcomp } = useContext(NovoAcompContext)
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { lesoesRegioes } = useContext(LesoesRegioesContext);
@@ -214,10 +216,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
           >
             <View style={{ alignItems: "center" }}>
-              {2 > 3 ? (
+              {idNovoAcomp == 1 ? (
                 <MapeamentoSintomas navigation={navigation} />
-              ) : (
-                <HipoteseDiagnostico navigation={navigation} />
+              ): (<HipoteseDiagnostico navigation={navigation}/>
               )}
             </View>
           </ProgressStep>
