@@ -65,3 +65,7 @@ export const clear: (style: ImageStyle) => IconElement = (style) => (
 export const fileAgend: (style: ImageStyle) => IconElement = (style) => (
   <Icon {...style} name="file-text-outline" />
 );
+
+export const editText: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="edit-2-outline" />
+);

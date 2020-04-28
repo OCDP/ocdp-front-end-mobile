@@ -6,7 +6,7 @@ import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
 import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
-import moment from 'moment';
+import moment from "moment";
 import PacienteContext, {
   usePaciente,
   useFlushPaciente,
@@ -15,12 +15,14 @@ import ListarPacientes from "./ListarPacientes";
 import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
-import PostFatoresContext from "../../contexts/PostFatoresContext"
-import LesoesRegioesContext from "../../contexts/LesoesRegioesContext"
+import PostFatoresContext from "../../contexts/PostFatoresContext";
+import LesoesRegioesContext from "../../contexts/LesoesRegioesContext";
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import LocaisContext from "../../contexts/LocaisContext";
+import HipoteseDiagnostico from "../HipoteseDiagnostico";
+import CondutaIntervencao from "../CondutaIntervencao";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -38,12 +40,36 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const { setFatores } = useContext(FatoresContext);
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
-  const { lesoesRegioes } = useContext(LesoesRegioesContext)
-  const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
-  const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
-  const { dataSugeridaAcompanhamento, dataSugeridaTratamento } = useContext(LocaisContext);
-  const {acomp,bairro,cpf, cidade,dtNasci,email,endereco,historico
-  ,listaFatores, nmMae, nome,sexo,telCell,telResp } = useContext(PacienteContext)
+  const { lesoesRegioes } = useContext(LesoesRegioesContext);
+  const {
+    nomesLocaisAtendido,
+    tiposLocaisAtendido,
+    setNomesLocaisAtendido,
+  } = useContext(LocaisContext);
+  const {
+    nomesLocaisEncaminhado,
+    tiposLocaisEncaminhado,
+    setNomesLocaisEncaminhado,
+  } = useContext(LocaisContext);
+  const { dataSugeridaAcompanhamento, dataSugeridaTratamento } = useContext(
+    LocaisContext
+  );
+  const {
+    acomp,
+    bairro,
+    cpf,
+    cidade,
+    dtNasci,
+    email,
+    endereco,
+    historico,
+    listaFatores,
+    nmMae,
+    nome,
+    sexo,
+    telCell,
+    telResp,
+  } = useContext(PacienteContext);
 
   const buttonTextStyle = {
     color: "#fff",
@@ -73,14 +99,14 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   delete nomesLocaisEncaminhado.text;
     let arrObj = {
       atendimento: {
-        dataAtendimento: moment().format('YYYY-MM-DD HH:mm:ss'),
-        id:"",
+        dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+        id: "",
         localAtendimento: nomesLocaisAtendido,
         localEncaminhado: nomesLocaisEncaminhado,
-        paciente:{
-          bairro:{
-            id:bairro.id,
-            nome: bairro.nome
+        paciente: {
+          bairro: {
+            id: bairro.id,
+            nome: bairro.nome,
           },
           cpf: cpf,
           dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
@@ -91,7 +117,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           nomeDaMae: nmMae,
           sexo: sexo.toUpperCase(),
           telefoneCelular: telCell,
-          telefoneResponsavel: telResp
+          telefoneResponsavel: telResp,
         },
         tipoAtendimento: "ACOMPANHAMENTO",
         usuario:{
@@ -106,29 +132,34 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
         },
       },
       regioesLesoes: lesoesRegioes,
-      dataSugeridaAcompanhamento: dataSugeridaAcompanhamento == undefined ? "" : dataSugeridaAcompanhamento, 
-      dataSugeridaTratamento: dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
-      fatoresDeRisco:postFatores
-    }
+      dataSugeridaAcompanhamento:
+        dataSugeridaAcompanhamento == undefined
+          ? ""
+          : dataSugeridaAcompanhamento,
+      dataSugeridaTratamento:
+        dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+      fatoresDeRisco: postFatores,
+    };
     console.log(arrObj);
 
-    await enviarPost(arrObj)
-    
-    
+    await enviarPost(arrObj);
   };
 
-  async function enviarPost(arrObj){
-    try{
+  async function enviarPost(arrObj) {
+    try {
       let postJson = JSON.stringify(arrObj);
-      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post('/acompanhamento/salvar', postJson);
-      console.log(resp)
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/acompanhamento/salvar", postJson);
+      console.log(resp);
       navigation.dispatch(
         CommonActions.reset({
           routes: [{ name: "Home" }],
         })
       );
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -183,7 +214,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
           >
             <View style={{ alignItems: "center" }}>
-              <MapeamentoSintomas navigation={navigation} />
+              {2 > 3 ? (
+                <MapeamentoSintomas navigation={navigation} />
+              ) : (
+                <HipoteseDiagnostico navigation={navigation} />
+              )}
             </View>
           </ProgressStep>
           <ProgressStep
@@ -198,7 +233,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              <CadastroConduta navigation={navigation} />
+              {2 > 1 ? (
+                <CondutaIntervencao navigation={navigation} />
+              ) : (
+                <CadastroConduta navigation={navigation} />
+              )}
             </View>
           </ProgressStep>
         </ProgressSteps>
