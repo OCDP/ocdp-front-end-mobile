@@ -14,7 +14,7 @@ import {
   NomeSelect,
   TipoLocalAtendimento,
 } from "../utils/models/RespLocaisInterface";
-import { add, user, map } from "../assets/Icons";
+import { add, user, map, fileAgend } from "../assets/Icons";
 
 const Introducao = ({ navigation }) => {
   const { setFatores } = useContext(FatoresContext);
@@ -126,18 +126,18 @@ const Introducao = ({ navigation }) => {
             </View>
           </View>
 
-          <View>
+          <View style={styles.btnItem}>
             <View>
               <Button
                 style={styles.button}
                 status="primary"
                 size="large"
-                icon={map}
+                icon={fileAgend}
                 onPress={() => navigation.navigate("Home")}
               />
             </View>
             <View>
-              <Text>Registrar atendimento</Text>
+              <Text>Atendimento</Text>
             </View>
           </View>
         </View>
@@ -152,13 +152,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   btnBox: {
-    width: "60%",
+    width: "100%",
     paddingTop: 80,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
+
   },
   btnItem: {
-    justifyContent: "center"
+    justifyContent: "center",
+    alignItems: "center"
   },
   button: {
     width: 80,
