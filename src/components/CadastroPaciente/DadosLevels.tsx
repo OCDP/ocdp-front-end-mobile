@@ -52,10 +52,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
 
   const btnStyle = {
     textAlign: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    //position: fixed,
+    botton: 0,
+    // paddingHorizontal: 8,
+    // paddingVertical: 4,
     backgroundColor: themedStyle.primary,
-    borderRadius: 4,
+    // borderRadius: 4,
   };
 
   const resetNav = async () => {
@@ -69,7 +71,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   // delete localEncaminhado.text;
   delete nomesLocaisAtendido.text;
   delete nomesLocaisEncaminhado.text;
-  console.log(nomesLocaisAtendido)
     let arrObj = {
       atendimento: {
         dataAtendimento: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -81,12 +82,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             id:bairro.id,
             nome: bairro.nome
           },
-          cpf,
+          cpf: cpf,
           dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-          email,
+          email: email,
           enderecoCompleto: endereco,
           id: "",
-          nome,
+          nome: nome,
           nomeDaMae: nmMae,
           sexo: sexo.toUpperCase(),
           telefoneCelular: telCell,
@@ -94,14 +95,14 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
         },
         tipoAtendimento: "ACOMPANHAMENTO",
         usuario:{
-          cpf,
-          email,
-          id,
-          nivelAtencao,
-          nome,
-          status,
-          telefone,
-          tipoUsuario
+          cpf: usuarioLogado.cpf,
+          email: usuarioLogado.email,
+          id: usuarioLogado.id,
+          nivelAtencao: usuarioLogado.nivelAtencao,
+          nome: usuarioLogado.nome,
+          status: usuarioLogado.status,
+          telefone: usuarioLogado.telefone,
+          tipoUsuario: usuarioLogado.tipoUsuario
         },
       },
       regioesLesoes: lesoesRegioes,
