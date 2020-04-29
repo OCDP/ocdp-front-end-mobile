@@ -6,6 +6,7 @@ import {
   withStyles,
   Card,
   Input,
+  Select,
   Datepicker,
   Autocomplete,
   CheckBox,
@@ -19,6 +20,7 @@ import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
 import apiFunc from "../services/api";
+import LocaisContext from "../contexts/LocaisContext";
 
 const DATA = [
   {
@@ -99,6 +101,15 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     setValue("");
   };
 
+  useEffect(()=>{
+    function setarNovoAcompanhamento(){
+      console.log('selectedIndex', selectedIndex)
+      setIdNovoAcomp(selectedIndex);
+    }
+    setarNovoAcompanhamento()
+  }, [selectedIndex])
+
+
   return (
     <Layout style={styles.container}>
       <View style={styles.lineContent}>
@@ -106,7 +117,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
           selectedIndex={selectedIndex}
           onChange={(index) => {
             setSelectedIndex(index)
-            setIdNovoAcomp(index);
           }}
         >
           {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (

@@ -11,13 +11,19 @@ import {
 import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText } from "../assets/Icons";
+import IntervencaoContext from "../contexts/IntervencaoContext";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
+  const [value2, setValue2] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
+  // const {} = React.useEffect(IntervencaoContext)
 
   const onCheckedChange = (index) => {
+    console.log(index);
     setSelectedIndex(index);
+    index == 0 ? setConfirmaSuspeita(true) : setConfirmaSuspeita(false);
   };
 
   useEffect(() => {}, []);
@@ -73,8 +79,8 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   icon={editText}
                   size="large"
                   placeholder="Texto sobre a observação"
-                  value={value}
-                  onChangeText={setValue}
+                  value={value2}
+                  onChangeText={setValue2}
                 />
               </View>
             </View>

@@ -15,8 +15,10 @@ import SafeAreaLayout from "../components/SafeAreaLayout";
 import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 import { LocaisProvider } from "../contexts/LocaisContext";
 import { PostFatoresProvider } from "../contexts/PostFatoresContext";
+import { NovoAcompProvider } from "../contexts/NovoAcompContext";
 import Introducao from "../pages/Introducao";
 import { LesoesRegiaoProvider } from "../contexts/LesoesRegioesContext";
+import { IntervencaoProvider } from "../contexts/IntervencaoContext";
 
 function CustomDrawerContent(props) {
   return (
@@ -35,23 +37,28 @@ export const AppNavigator = () => (
         <FatoresProvider>
           <PostFatoresProvider>
             <LocaisProvider>
-              <LesoesRegiaoProvider>
-                <SafeAreaLayout style={{ flex: 1 }} insets="top">
-                  <Drawer.Navigator
-                    initialRouteName="BemVindo"
-                    drawerContent={(props) => CustomDrawerContent(props)}
-                  >
-                    <Drawer.Screen name="BemVindo" component={BemVindo} />
-                    <Drawer.Screen name="Login" component={LoginPage} />
-                    <Drawer.Screen name="Introducao" component={Introducao} />
-                    <Drawer.Screen name="Home" component={HomeScreen} />
-                    <Drawer.Screen
-                      name="CadastrarPaciente"
-                      component={CadastrarPaciente}
-                    />
-                  </Drawer.Navigator>
-                </SafeAreaLayout>
-              </LesoesRegiaoProvider>
+              <NovoAcompProvider>
+                <IntervencaoProvider>
+
+                  <LesoesRegiaoProvider>
+                    <SafeAreaLayout style={{ flex: 1 }} insets="top">
+                      <Drawer.Navigator
+                        initialRouteName="BemVindo"
+                        drawerContent={(props) => CustomDrawerContent(props)}
+                      >
+                        <Drawer.Screen name="BemVindo" component={BemVindo} />
+                        <Drawer.Screen name="Login" component={LoginPage} />
+                        <Drawer.Screen name="Introducao" component={Introducao} />
+                        <Drawer.Screen name="Home" component={HomeScreen} />
+                        <Drawer.Screen
+                          name="CadastrarPaciente"
+                          component={CadastrarPaciente}
+                        />
+                      </Drawer.Navigator>
+                    </SafeAreaLayout>
+                  </LesoesRegiaoProvider>
+                </IntervencaoProvider>
+              </NovoAcompProvider>
             </LocaisProvider>
           </PostFatoresProvider>
         </FatoresProvider>

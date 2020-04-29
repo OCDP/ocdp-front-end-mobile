@@ -7,19 +7,19 @@ import React, {
   
   interface NovoAcompContextProps {
     idNovoAcomp: number;
-    setIdNovoAcomp?: Dispatch<SetStateAction<number>>;
+    setIdNovoAcomp?: Dispatch<SetStateAction<any>>;
   }
   
   
-  const defaultLocais = {
-    idNovoAcomp: null,
+  const defaultNovoAcomp = {
+    idNovoAcomp: undefined,
   };
   
   
-  const NovoAcompContext = createContext<NovoAcompContextProps>(defaultLocais);
+  const NovoAcompContext = createContext<NovoAcompContextProps>(defaultNovoAcomp);
   
   export function NovoAcompProvider({ children }) {
-    const [idNovoAcomp, setIdNovoAcomp] = useState();
+    const [idNovoAcomp, setIdNovoAcomp] = useState<number>();
 
     
   

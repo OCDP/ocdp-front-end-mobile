@@ -6,6 +6,7 @@ import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
 import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 import moment from "moment";
 import PacienteContext, {
   usePaciente,
@@ -23,7 +24,7 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import LocaisContext from "../../contexts/LocaisContext";
 import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
-import NovoAcompContext from "../../contexts/NovoAcompContext";
+import IntervencaoContext from "../../contexts/IntervencaoContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -48,6 +49,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     tiposLocaisAtendido,
     setNomesLocaisAtendido,
   } = useContext(LocaisContext);
+  // const {  } = useEffect(IntervencaoContext)
   const {
     nomesLocaisEncaminhado,
     tiposLocaisEncaminhado,
@@ -234,10 +236,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              {2 > 1 ? (
-                <CondutaIntervencao navigation={navigation} />
-              ) : (
+              {idNovoAcomp == 1 ? (
                 <CadastroConduta navigation={navigation} />
+              ): (<CondutaIntervencao navigation={navigation}/>
               )}
             </View>
           </ProgressStep>
