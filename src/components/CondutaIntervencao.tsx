@@ -14,21 +14,54 @@ import {
 import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText, calendar } from "../assets/Icons";
-
+import moment from 'moment';
+import LocaisContext from "../contexts/LocaisContext";
+import IntervencaoContext from "../contexts/IntervencaoContext";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [checked, setChecked] = React.useState(false);
-
+  const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
+  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
+  const [checked, setChecked] = React.useState([false, false,false,false]);
+  const [obs0, setObs0] = React.useState("");    
+  const [obs1, setObs1] = React.useState("");    
+  const [obs2, setObs2] = React.useState("");    
+  const [obs3, setObs3] = React.useState("");    
+  const {procedimento, setProcedimento} = React.useContext(IntervencaoContext)
+  const [procedimentos, setProcedimentos] = React.useState([
+    {nome: 'Biópsia incisional', observacao: ''},
+    {nome: 'Biópsia exisional', observacao: ''},
+    {nome: 'Citologia', observacao: ''},
+    {nome: 'Outros', observacao: ''},
+  ]);
+  const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = React.useContext(LocaisContext);0
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
   };
 
-  const onCheckedChangeToggle = (isChecked) => {
-    setChecked(isChecked);
+  function onCheckedChangeToggle(i) {
+    let ch = [...checked];
+    ch[i] = ch[i] == false ? true : false;
+    setChecked(ch);
   };
+  
+  useEffect(() => {
+    function setProced(){
+      let arrObs = [obs0, obs1, obs2, obs3]
+      console.log("checked", checked);
+      let proced = [];
+      for(let i in checked){
+        if(checked[i] == true){
+          procedimentos[i].observacao = arrObs[i];
+          proced.push({nome: procedimentos[i].nome, observacao: procedimentos[i].observacao});
+        }
+      }
+      console.log(proced);
+      setProcedimento(proced);
+    }
+    setProced();
 
-  useEffect(() => {}, []);
+  }, [checked, obs0, obs1, obs2, obs3]);
 
   return (
     <Layout style={styles.container}>
@@ -50,38 +83,38 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 <View style={styles.toggleInit}>
                   <View style={{ marginBottom: 4 }}>
                     <Toggle
-                      text={`Biópsia incisonal: ${checked}`}
-                      checked={checked}
-                      onChange={onCheckedChangeToggle}
+                      text={`Biópsia incisonal: ${checked[0]}`}
+                      checked={checked[0]}
+                      onChange={()=>onCheckedChangeToggle(0)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
                     <Input
-                      disabled={checked ? false : true}
+                      disabled={checked[0] ? false : true}
                       icon={editText}
                       size="large"
                       placeholder="Observação biópsia incisonal"
-                      value={value}
-                      onChangeText={setValue}
+                      value={obs0}
+                      onChangeText={setObs0}
                     />
                   </View>
                 </View>
                 <View style={styles.toggleInit}>
                   <View style={{ marginBottom: 4 }}>
                     <Toggle
-                      text={`Biópsia incisonal: ${checked}`}
-                      checked={checked}
-                      onChange={onCheckedChangeToggle}
+                      text={`Biópsia exisional: ${checked[1]}`}
+                      checked={checked[1]}
+                      onChange={()=>onCheckedChangeToggle(1)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
                     <Input
-                      disabled={checked ? false : true}
+                      disabled={checked[1] ? false : true}
                       icon={editText}
                       size="large"
-                      placeholder="Observação biópsia incisonal"
-                      value={value}
-                      onChangeText={setValue}
+                      placeholder="Observação biópsia exisional"
+                      value={obs1}
+                      onChangeText={setObs1}
                     />
                   </View>
                 </View>
@@ -96,19 +129,19 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 <View style={styles.toggleInit}>
                   <View style={{ marginBottom: 4 }}>
                     <Toggle
-                      text={`Citologia: ${checked}`}
-                      checked={checked}
-                      onChange={onCheckedChangeToggle}
+                      text={`Citologia: ${checked[2]}`}
+                      checked={checked[2]}
+                      onChange={()=>onCheckedChangeToggle(2)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
                     <Input
-                      disabled={checked ? false : true}
+                      disabled={checked[2] ? false : true}
                       icon={editText}
                       size="large"
                       placeholder="Observação citologia"
-                      value={value}
-                      onChangeText={setValue}
+                      value={obs2}
+                      onChangeText={setObs2}
                     />
                   </View>
                 </View>
@@ -123,19 +156,19 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 <View style={styles.toggleInit}>
                   <View style={{ marginBottom: 4 }}>
                     <Toggle
-                      text={`Outros: ${checked}`}
-                      checked={checked}
-                      onChange={onCheckedChangeToggle}
+                      text={`Outros: ${checked[3]}`}
+                      checked={checked[3]}
+                      onChange={()=>onCheckedChangeToggle(3)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
                     <Input
-                      disabled={checked ? false : true}
+                      disabled={checked[3] ? false : true}
                       icon={editText}
                       size="large"
                       placeholder="Observação outros"
-                      value={value}
-                      onChangeText={setValue}
+                      value={obs3}
+                      onChangeText={setObs3}
                     />
                   </View>
                 </View>
@@ -163,17 +196,26 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 <View style={{ marginVertical: 8 }}>
                   <CheckBox
                     text="Acompanhamento"
-                    checked={checked}
-                    onChange={onCheckedChangeToggle}
+                    checked={activeCheckedAcompanhamento}
+                    onChange={setActiveCheckedAcompanhamento}
                   />
                 </View>
                 <View>
                   <Datepicker
-                    disabled={2 > 3 ? false : true}
+                    disabled={activeCheckedAcompanhamento ? false : true}
                     min={new Date("1900-12-25")}
                     date={new Date("2020-12-25")}
-                    placeholder="Data sugerida"
-                    onSelect={() => {}}
+                    placeholder="Data de Nascimento"
+                    onSelect={(a) =>{
+                      console.log(a)
+                      
+                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
+                      
+                      console.log(data)
+                      setDataSugeridaAcompanhamento(data)
+
+                    }
+                    }
                     icon={calendar}
                   />
                 </View>
@@ -190,17 +232,24 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 <View style={{ marginVertical: 8 }}>
                   <CheckBox
                     text="Tratamento de lesão"
-                    checked={checked}
-                    onChange={onCheckedChangeToggle}
+                    checked={activeCheckedTratamento}
+                    onChange={setActiveCheckedTratamento}
                   />
                 </View>
                 <View>
                   <Datepicker
-                    disabled={2 > 3 ? false : true}
+                    disabled={activeCheckedTratamento ? false : true}
                     min={new Date("1900-12-25")}
                     date={new Date("2020-12-25")}
-                    placeholder="Data sugerida"
-                    onSelect={() => {}}
+                    placeholder="Data de Nascimento"
+                    onSelect={(a) => {
+                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
+
+                      setDataSugeridaTratamento(data)
+
+                    }
+                      
+                    }
                     icon={calendar}
                   />
                 </View>

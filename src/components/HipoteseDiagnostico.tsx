@@ -18,12 +18,12 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value2, setValue2] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
-  // const {} = React.useEffect(IntervencaoContext)
+  const { setConfirmaRastreamento, setObservacao, setProcedimento, setHipoteseDiagnostico } = React.useContext(IntervencaoContext)
 
   const onCheckedChange = (index) => {
     console.log(index);
     setSelectedIndex(index);
-    index == 0 ? setConfirmaSuspeita(true) : setConfirmaSuspeita(false);
+    index == 0 ? setConfirmaRastreamento(true) : setConfirmaRastreamento(false);
   };
 
   useEffect(() => {}, []);
@@ -43,7 +43,10 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   size="large"
                   placeholder="Texto sobre a hipótese de diagnóstico"
                   value={value}
-                  onChangeText={setValue}
+                  onChangeText={()=>{
+                    setValue
+                    setHipoteseDiagnostico(value);
+                  }}
                 />
               </View>
             </View>
@@ -80,7 +83,10 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   size="large"
                   placeholder="Texto sobre a observação"
                   value={value2}
-                  onChangeText={setValue2}
+                  onChangeText={()=>{
+                    setValue2
+                    setObservacao(value2);
+                  }}
                 />
               </View>
             </View>
