@@ -10,6 +10,7 @@ import {
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -32,10 +33,17 @@ const DadosPessoais = ({ navigation }) => {
     setNmMae,
   } = useContext(PacienteContext);
 
+  
+  const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     setSexo(sexos[selectedIndex].text);
   }, [selectedIndex]);
+
+  useEffect(()=>{
+    setIdNovoAcomp(2)
+  },[])
 
   const styles = useStyleSheet({
     lineContent: {

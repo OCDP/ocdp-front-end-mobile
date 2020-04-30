@@ -17,6 +17,7 @@ export interface Paciente {
   dtNasci: Date;
   sexo: string;
   email: string;
+  id: string;
   telCell: string;
   endereco: string;
   telResp: string;
@@ -38,6 +39,8 @@ interface PacienteContextProps {
   setCpf?: Dispatch<SetStateAction<string>>;
   dtNasci: Date;
   setDtNasci?: Dispatch<SetStateAction<Date>>;
+  id: string;
+  setId?: Dispatch<SetStateAction<string>>;
   sexo: string;
   setSexo?: Dispatch<SetStateAction<string>>;
   endereco: string;
@@ -73,6 +76,7 @@ const defaultPaciente: Paciente = {
   cpf: null,
   dtNasci: null,
   sexo: null,
+  id: null,
   email: null,
   endereco: null,
   telCell: null,
@@ -93,6 +97,7 @@ export function PacienteProvider({ children }) {
   const [cpf, setCpf] = useState<string>(null);
   const [dtNasci, setDtNasci] = useState<Date>(null);
   const [sexo, setSexo] = useState<string>(null);
+  const [id, setId] = useState<string>(null);
   const [email, setEmail] = useState<string>(null);
   const [endereco, setEndereco] = useState<string>(null);
   const [telCell, setTelCell] = useState<string>(null);
@@ -110,6 +115,7 @@ export function PacienteProvider({ children }) {
   });
 
   const flush = () => {
+    setId(defaultPaciente.id);
     setNome(defaultPaciente.nome);
     setDtNasci(defaultPaciente.dtNasci);
     setSexo(defaultPaciente.sexo);
@@ -131,6 +137,8 @@ export function PacienteProvider({ children }) {
         setListaFatores,
         endereco,
         setEndereco,
+        id, 
+        setId,
         nome,
         setNome,
         cpf,
@@ -173,6 +181,7 @@ export function usePaciente(): Paciente {
     sexo,
     endereco,
     email,
+    id,
     telCell,
     telResp,
     nmMae,
@@ -190,6 +199,7 @@ export function usePaciente(): Paciente {
     sexo,
     endereco,
     email,
+    id,
     telCell,
     telResp,
     nmMae,

@@ -49,7 +49,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     tiposLocaisAtendido,
     setNomesLocaisAtendido,
   } = useContext(LocaisContext);
-  // const {  } = useEffect(IntervencaoContext)
+  const {
+    confirmaRastreamento, 
+    hipoteseDiagnostico, 
+    observacao, 
+    procedimento
+  } = useContext(IntervencaoContext)
   const {
     nomesLocaisEncaminhado,
     tiposLocaisEncaminhado,
@@ -91,8 +96,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   const resetNav = async () => {
-    const {cpf, email, id, nivelAtencao, nome, 
-      status, telefone, tipoUsuario} = usuarioLogado
+    const {} = usuarioLogado
   //   acomp,bairro,cidade,dtNasci,email,endereco,historico
   // ,listaFatores, nmMae, nome,sexo,telCell,telResp
   // let localAtendimento = [...nomesLocaisAtendido]
@@ -101,7 +105,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   // delete localEncaminhado.text;
   delete nomesLocaisAtendido.text;
   delete nomesLocaisEncaminhado.text;
-    let arrObj = {
+  let arrObj;
+  if(idNovoAcomp == 2 || idNovoAcomp == 1){
+    arrObj = {
       atendimento: {
         dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
         id: "",
@@ -135,35 +141,94 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           tipoUsuario: usuarioLogado.tipoUsuario
         },
       },
-      regioesLesoes: lesoesRegioes,
-      dataSugeridaAcompanhamento:
-        dataSugeridaAcompanhamento == undefined
-          ? ""
-          : dataSugeridaAcompanhamento,
-      dataSugeridaTratamento:
-        dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
-      fatoresDeRisco: postFatores,
-    };
-    console.log(arrObj);
-
-    await enviarPost(arrObj);
+        regioesLesoes: lesoesRegioes,
+        dataSugeridaAcompanhamento:
+          dataSugeridaAcompanhamento == undefined
+            ? ""
+            : dataSugeridaAcompanhamento,
+        dataSugeridaTratamento:
+          dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+        fatoresDeRisco: postFatores,
+      };
+      console.log(arrObj);
+    }else if(idNovoAcomp == 0){
+      arrObj = {
+        atendimento: {
+          dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+          id: "",
+          localAtendimento: nomesLocaisAtendido,
+          localEncaminhado: null,
+          paciente: {
+            bairro: {
+              id: bairro.id,
+              nome: bairro.nome,
+            },
+            cpf: cpf,
+            dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+            email: email,
+            enderecoCompleto: endereco,
+            id: "",
+            nome: nome,
+            nomeDaMae: nmMae,
+            sexo: sexo.toUpperCase(),
+            telefoneCelular: telCell,
+            telefoneResponsavel: telResp,
+          },
+          tipoAtendimento: "INTERVENCAO",
+          usuario:{
+            cpf: usuarioLogado.cpf,
+            email: usuarioLogado.email,
+            id: usuarioLogado.id,
+            nivelAtencao: usuarioLogado.nivelAtencao,
+            nome: usuarioLogado.nome,
+            status: usuarioLogado.status,
+            telefone: usuarioLogado.telefone,
+            tipoUsuario: usuarioLogado.tipoUsuario
+          },
+        },
+        confirmaRastreamento: confirmaRastreamento,
+        hipoteseDiagnostico: hipoteseDiagnostico,
+        observacao: observacao,
+        procedimentos: procedimento
+      }
+    }
+    await enviarPost(arrObj, idNovoAcomp);
   };
 
-  async function enviarPost(arrObj) {
-    try {
-      let postJson = JSON.stringify(arrObj);
-      let resp = await apiFunc(
-        usuarioLogado.cpf,
-        usuarioLogado.senhaUsuario
-      ).post("/acompanhamento/salvar", postJson);
-      console.log(resp);
-      navigation.dispatch(
-        CommonActions.reset({
-          routes: [{ name: "Home" }],
-        })
-      );
-    } catch (err) {
-      console.log(err);
+  async function enviarPost(arrObj, id) {
+    console.log(arrObj)
+    if(id == 1 || id == 2){
+      try {
+        let postJson = JSON.stringify(arrObj);
+        let resp = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).post("/acompanhamento/salvar", postJson);
+        console.log(resp);
+        navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ name: "Home" }],
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }if(id == 0){
+      try {
+        let postJson = JSON.stringify(arrObj);
+        let resp = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).post("/intervencao/salvar", postJson);
+        console.log(resp);
+        navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ name: "Home" }],
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 

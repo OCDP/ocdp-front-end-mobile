@@ -16,7 +16,7 @@ import IntervencaoContext from "../contexts/IntervencaoContext";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [value2, setValue2] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState();
   const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
   const { setConfirmaRastreamento, setObservacao, setProcedimento, setHipoteseDiagnostico } = React.useContext(IntervencaoContext)
 
@@ -43,7 +43,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   size="large"
                   placeholder="Texto sobre a hipótese de diagnóstico"
                   value={value}
-                  onChangeText={()=>{
+                  onChangeText={(value)=>{
                     setValue
                     setHipoteseDiagnostico(value);
                   }}
@@ -83,7 +83,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   size="large"
                   placeholder="Texto sobre a observação"
                   value={value2}
-                  onChangeText={()=>{
+                  onChangeText={(value2)=>{
                     setValue2
                     setObservacao(value2);
                   }}

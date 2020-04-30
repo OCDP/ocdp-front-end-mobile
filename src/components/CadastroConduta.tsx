@@ -19,6 +19,7 @@ import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import NovoAcompContext from "../contexts/NovoAcompContext";
 
 const DATA = [
   {
@@ -37,7 +38,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
   const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
   const [value, setValue] = React.useState(null);
-  const {usuarioLogado} = useContext(UsuarioLogadoContext)
+  const {usuarioLogado} = useContext(UsuarioLogadoContext);
+  const { idNovoAcomp } = useContext(NovoAcompContext)
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
@@ -158,6 +160,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   return (
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
+        {idNovoAcomp !== 1 ? (
+
         <View style={styles.lineContent}>
           <View style={styles.boxDatePicker}>
             <View
@@ -190,6 +194,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
             </View>
           </View>
         </View>
+        ): <></>}
 
         <View style={styles.lineContent}>
           <View style={styles.boxDatePicker}>

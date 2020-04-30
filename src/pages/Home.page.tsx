@@ -15,8 +15,9 @@ const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [nomes, setNomes] = React.useState([]);
   const [listaNomes, setListaNomes] = React.useState([]);
+  const [listaNomesAll, setListaNomesAll] = React.useState([])
   const { historico, setHistorico } = useContext(PacienteContext);
-  const { setAcomp } = useContext(PacienteContext);
+  const { setId, setAcomp, setNome, setBairro, setCpf, setDtNasci, setEmail, setEndereco, setNmMae, setSexo, setTelCell, setTelResp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
 
   async function loadHistorico(data) {
@@ -28,6 +29,23 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const onSelect = async ({ title, id }) => {
+    let titleSplit = title.split(" ");
+    // console.log(listaNomesAll)
+    for(let i of listaNomesAll){
+      if(i.cpf == titleSplit[2]){
+        setBairro(i.bairro)
+        setCpf(i.cpf)
+        setDtNasci(i.dataNascimento)
+        setEmail(i.cpf)
+        setEndereco(i.enderecoCompleto)
+        setId(i.id)
+        setNome(i.nome)
+        setNmMae(i.nomeDaMae)
+        setSexo(i.sexo)
+        setTelCell(i.telefoneCelular)
+        setTelResp(i.telefoneResponsavel)
+      }
+    }
     setValue(title);
     await loadHistorico(id).then((resp) => {
       if (resp == []) {
@@ -54,6 +72,7 @@ const HomeScreen = ({ navigation }) => {
             title: `${a.nome} - ${a.cpf}`,
           };
         });
+        setListaNomesAll(pacientes.data)
         setListaNomes(listaArr);
         setNomes(
           listaNomes.filter((item) =>
