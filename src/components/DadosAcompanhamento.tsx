@@ -59,12 +59,12 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     async function setarBotao(){
       console.log('setarBotao', bloqBotaoProximo)
       console.log('nomesLocaisAtendido', nomesLocaisAtendido)
-      if(nomesLocaisAtendido && !nomesLocaisAtendido.length){
+      if(nomesLocaisAtendido && !nomesLocaisAtendido.length && idNovoAcomp){
         setBloqBotaoProximo(false);
       }
     }
     setarBotao();
-  }, [nomesLocaisAtendido])
+  }, [nomesLocaisAtendido, idNovoAcomp])
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
