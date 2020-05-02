@@ -25,6 +25,7 @@ import LocaisContext from "../../contexts/LocaisContext";
 import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
 import IntervencaoContext from "../../contexts/IntervencaoContext";
+import BotaoContext from "../../contexts/BotoesContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -79,6 +80,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telCell,
     telResp,
   } = useContext(PacienteContext);
+
+  const { bloqBotaoAnterior, bloqBotaoProximo } = useContext(BotaoContext)
 
   const buttonTextStyle = {
     color: "#fff",
@@ -261,6 +264,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnText="avançar"
             nextBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
+            nextBtnDisabled={bloqBotaoProximo}
           >
             <View style={{ flex: 1, alignItems: "center" }}>
               {acomp === true ? (

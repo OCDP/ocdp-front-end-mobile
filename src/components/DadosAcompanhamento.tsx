@@ -21,6 +21,7 @@ import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
 import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
+import BotaoContext from "../contexts/BotoesContext";
 
 const DATA = [
   {
@@ -44,6 +45,26 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
+  const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
+
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      console.log('nomesLocaisAtendido', nomesLocaisAtendido)
+      if(nomesLocaisAtendido && !nomesLocaisAtendido.length){
+        setBloqBotaoProximo(false);
+      }
+    }
+    setarBotao();
+  }, [nomesLocaisAtendido])
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
