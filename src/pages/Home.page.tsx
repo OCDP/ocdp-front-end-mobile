@@ -15,6 +15,8 @@ import { AxiosResponse } from "axios";
 import {useFlushPostFatores} from "../contexts/PostFatoresContext"
 import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
 import LocaisContext from "../contexts/LocaisContext";
+import BotaoContext from "../contexts/BotoesContext";
+import { useLoading } from "../contexts/AppContext";
 
 const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
@@ -24,9 +26,11 @@ const HomeScreen = ({ navigation }) => {
   const { historico, setHistorico } = useContext(PacienteContext);
   const { setId, setAcomp, setNome, setBairro, setCpf, setDtNasci, setEmail, setEndereco, setNmMae, setSexo, setTelCell, setTelResp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { setBloqBotaoProximo } = useContext(BotaoContext)
   const flushPaciente = useFlushPaciente();
   const flushLocais = useFlushLocais();
   const flushLesoesRegioes = useFlushLesoesRegioes();
+  const [, setLoading] = useLoading();
   // const flushPostFatores = useFlushPostFatores()
   async function loadHistorico(data) {
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
@@ -99,12 +103,15 @@ const HomeScreen = ({ navigation }) => {
   };
 
   async function cadastroActions() {
+    setLoading(true);
     console.log('flush')
-    flushPaciente();
+    // flushPaciente();
     flushLocais();
     flushLesoesRegioes();
+    setBloqBotaoProximo(true);
     // flushPostFatores();
     await setAcomp(false);
+    setLoading(false);
     navigation.navigate("CadastrarPaciente");
   }
 

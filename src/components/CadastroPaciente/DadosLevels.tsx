@@ -4,6 +4,8 @@ import { View } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
+import {useFlushLocais} from "../../contexts/LocaisContext";
+import {useFlushLesoesRegioes} from "../../contexts/LesoesRegioesContext";
 import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
@@ -40,6 +42,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
   const paciente = usePaciente();
   const flush = useFlushPaciente();
+  const flushLocais = useFlushLocais();
+  const flushLesoesRegioes = useFlushLesoesRegioes();
   const { setFatores } = useContext(FatoresContext);
   const { idNovoAcomp } = useContext(NovoAcompContext)
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
@@ -81,7 +85,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telResp,
   } = useContext(PacienteContext);
 
-  const { bloqBotaoAnterior, bloqBotaoProximo, setAuxBloqBotaoProximo } = useContext(BotaoContext)
+  const { bloqBotaoAnterior, bloqBotaoProximo, setBloqBotaoProximo, setAuxBloqBotaoProximo, setAuxBloqBotaoProximo2 } = useContext(BotaoContext)
 
   const buttonTextStyle = {
     color: "#fff",
@@ -246,6 +250,13 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     flush;
   };
 
+  async function resetarBotao(){
+    console.log('resetarBotao', bloqBotaoProximo)
+    setBloqBotaoProximo(true);
+    setAuxBloqBotaoProximo(true);
+    setAuxBloqBotaoProximo2(true);
+  }
+
   return (
     <View style={styles.lineContent}>
       <View style={{ flex: 1 }}>
@@ -267,6 +278,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
             nextBtnDisabled={bloqBotaoProximo}
+            onNext = {() => resetarBotao()}
           >
             <View style={{ flex: 1, alignItems: "center" }}>
               {acomp === true ? (
@@ -287,6 +299,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnTextStyle={buttonTextStyle}
             previousBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
+            nextBtnDisabled={bloqBotaoProximo}
+            onNext = {() => resetarBotao()}
+            onPrevious = {async ()=> 
+              setBloqBotaoProximo(false)
+            }
           >
             <View style={{ alignItems: "center" }}>
               {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
@@ -304,10 +321,16 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             previousBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
             finishBtnText="concluir"
+            onNext = {() => resetarBotao()}
+            onPrevious = { ()=> {
+                setBloqBotaoProximo(false)
+                flushLesoesRegioes()
+              }
+            }
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 ? (
+              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
                 <CadastroConduta navigation={navigation} />
               ): (<CondutaIntervencao navigation={navigation}/>
               )}

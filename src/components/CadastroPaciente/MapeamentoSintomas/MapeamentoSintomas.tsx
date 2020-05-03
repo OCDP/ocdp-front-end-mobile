@@ -162,19 +162,23 @@ const MapeamentoSintomas = ({ navigation }) => {
   });
 
   useEffect(()=>{
-    async function resetarBotao(){
-      console.log('resetarBotao', bloqBotaoProximo)
-      setBloqBotaoProximo(true);
+    async function setarBotao(){
+      console.log('postFatores', postFatores)
+      console.log('lesoesRegioes', lesoesRegioes)
+      if(lesoesRegioes.length > 0 && postFatores != undefined){
+        setBloqBotaoProximo(false);
+      }else setBloqBotaoProximo(true)
     }
-    resetarBotao();
+    setarBotao();
   }, [])
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('setarBotao', bloqBotaoProximo)
-      if(lesoesRegioes && postFatores){
+      console.log('postFatores', postFatores)
+      console.log('lesoesRegioes', lesoesRegioes)
+      if(lesoesRegioes.length > 0 && postFatores != undefined){
         setBloqBotaoProximo(false);
-      }
+      }else setBloqBotaoProximo(true)
     }
     setarBotao();
   }, [lesoesRegioes, postFatores])

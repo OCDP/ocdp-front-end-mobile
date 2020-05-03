@@ -20,6 +20,7 @@ import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
+import BotaoContext from "../contexts/BotoesContext";
 
 const DATA = [
   {
@@ -43,6 +44,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
+  const { setBloqBotaoProximo } = useContext(BotaoContext)
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
   const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = useContext(LocaisContext);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
@@ -156,6 +158,18 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
       }
     }
   }
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('postFatores', nomesLocaisAtendido.length)
+      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == 0 && nomesLocaisEncaminhado.length == 0) 
+      || nomesLocaisEncaminhado.length > 0){
+        setBloqBotaoProximo(false);
+      }else setBloqBotaoProximo(false)
+    }
+    setarBotao();
+  }, [nomesLocaisAtendido, nomesLocaisEncaminhado])
 
   return (
     <Layout style={styles.container}>
