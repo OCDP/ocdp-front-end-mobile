@@ -117,6 +117,7 @@ export function PacienteProvider({ children }) {
   const flush = () => {
     setId(defaultPaciente.id);
     setNome(defaultPaciente.nome);
+    setCpf(defaultPaciente.cpf)
     setDtNasci(defaultPaciente.dtNasci);
     setSexo(defaultPaciente.sexo);
     setEmail(defaultPaciente.email);

@@ -10,11 +10,14 @@ interface BotaoProps {
   setBloqBotaoAnterior?: Dispatch<SetStateAction<boolean>>;
   bloqBotaoProximo: boolean
   setBloqBotaoProximo?: Dispatch<SetStateAction<boolean>>;
+  auxBloqBotaoProximo: boolean;
+  setAuxBloqBotaoProximo?: Dispatch<SetStateAction<boolean>>
 }
 
 const defaultBotao = {
   bloqBotaoAnterior: true,
   bloqBotaoProximo: true,
+  auxBloqBotaoProximo: true,
 };
 
 const BotaoContext = createContext<BotaoProps>(
@@ -24,6 +27,7 @@ const BotaoContext = createContext<BotaoProps>(
 export function BotaoProvider({ children }) {
   const [bloqBotaoAnterior, setBloqBotaoAnterior] = useState();
   const [bloqBotaoProximo, setBloqBotaoProximo] = useState();
+  const [auxBloqBotaoProximo, setAuxBloqBotaoProximo] = useState()
 
   return (
     <BotaoContext.Provider
@@ -32,6 +36,8 @@ export function BotaoProvider({ children }) {
         setBloqBotaoAnterior,
         bloqBotaoProximo,
         setBloqBotaoProximo,
+        auxBloqBotaoProximo, 
+        setAuxBloqBotaoProximo
       }}
     >
       {children}

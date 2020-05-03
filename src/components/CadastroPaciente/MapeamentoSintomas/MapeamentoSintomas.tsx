@@ -24,6 +24,7 @@ import PostFatoresContext from "../../../contexts/PostFatoresContext";
 import PacienteContext from "../../../contexts/PacienteContext";
 import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
 import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
+import BotaoContext from "../../../contexts/BotoesContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -56,7 +57,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [potencialmente, setPotencialmente] = React.useState(false);
   //aqui o contexto novo braz...
   const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
-
+  const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext)
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
     let fatoresReq = fatores;
@@ -159,6 +160,24 @@ const MapeamentoSintomas = ({ navigation }) => {
       height: 36,
     },
   });
+
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      if(lesoesRegioes && postFatores){
+        setBloqBotaoProximo(false);
+      }
+    }
+    setarBotao();
+  }, [lesoesRegioes, postFatores])
 
   async function chamarListaSubregioes(name) {
     setLoading(true);

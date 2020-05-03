@@ -11,6 +11,7 @@ import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
+import BotaoContext from "../../contexts/BotoesContext";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -18,6 +19,7 @@ const DadosPessoais = ({ navigation }) => {
     setNome,
     dtNasci,
     setDtNasci,
+    sexo,
     setSexo,
     cpf,
     setCpf,
@@ -32,9 +34,34 @@ const DadosPessoais = ({ navigation }) => {
     nmMae,
     setNmMae,
   } = useContext(PacienteContext);
-
   
   const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo, setAuxBloqBotaoProximo} = useContext(BotaoContext)
+
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      if(nome && dtNasci && sexo && cpf && email && endereco && telCell &&
+        telResp && nmMae && idNovoAcomp){
+        if(auxBloqBotaoProximo == false){
+          setBloqBotaoProximo(false);
+        }else{
+          setAuxBloqBotaoProximo(false);
+        }
+      }
+    }
+    setarBotao();
+  }, [nome, dtNasci, sexo, cpf, email, endereco, telCell,
+    telResp, nmMae, idNovoAcomp])
+  
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {

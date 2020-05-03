@@ -2,7 +2,8 @@ import React, {
     createContext,
     useState,
     Dispatch,
-    SetStateAction
+    SetStateAction,
+    useContext
   } from "react";
 import { NomesLocaisInterfaces } from "../utils/models/NomesLocaisInterface";
 import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
@@ -19,6 +20,7 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
     dataSugeridaAcompanhamento: string,
     setDataSugeridaAcompanhamento?: Dispatch<SetStateAction<string>>;
     dataSugeridaTratamento: string,
+    flush?: () => void;
     setDataSugeridaTratamento?: Dispatch<SetStateAction<string>>;
   }
   
@@ -42,12 +44,21 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
     const [tiposLocaisEncaminhado, setTiposLocaisEncaminhado] = useState();
     const [dataSugeridaAcompanhamento, setDataSugeridaAcompanhamento] = useState();
     const [dataSugeridaTratamento, setDataSugeridaTratamento] = useState();
-
     
-  
+    
+    const flush = () => {
+      setNomesLocaisAtendido(defaultLocais.nomesLocaisAtendido);
+      setTiposLocaisAtendido(defaultLocais.tiposLocaisAtendido);
+      setNomesLocaisEncaminhado(defaultLocais.nomesLocaisEncaminhado)
+      setTiposLocaisEncaminhado(defaultLocais.tiposLocaisEncaminhado);
+      setDataSugeridaAcompanhamento(defaultLocais.dataSugeridaAcompanhamento);
+      setDataSugeridaTratamento(defaultLocais.dataSugeridaTratamento);
+    };
+    
+    
     return (
       <LocaisContext.Provider
-        value={{
+      value={{
           nomesLocaisAtendido,
           setNomesLocaisAtendido,
           tiposLocaisAtendido,
@@ -59,6 +70,7 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
           dataSugeridaAcompanhamento,
           setDataSugeridaAcompanhamento,
           dataSugeridaTratamento,
+          flush,
           setDataSugeridaTratamento
         }}
       >
@@ -66,6 +78,11 @@ import { TiposLocaisInterfaces } from "../utils/models/TiposLocaisInterface";
       </LocaisContext.Provider>
     );
   }
+  
+  export const useFlushLocais = () => {
+    const { flush } = useContext(LocaisContext);
+    return flush;
+  };
   
   export const LocaisConsumer = LocaisContext.Consumer;
   

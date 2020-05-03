@@ -39,7 +39,7 @@ const DATA = [
 const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const {idNovoAcomp, setIdNovoAcomp} = React.useContext(NovoAcompContext)
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState();
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
@@ -135,7 +135,7 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     <Layout style={styles.container}>
       <View style={styles.lineContent}>
         <RadioGroup
-          selectedIndex={selectedIndex}
+          selectedIndex={selectedIndex || idNovoAcomp}
           onChange={(index) => {
             setSelectedIndex(index)
           }}

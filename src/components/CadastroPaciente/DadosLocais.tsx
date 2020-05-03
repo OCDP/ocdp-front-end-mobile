@@ -8,6 +8,8 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import { useLoading } from "../../contexts/AppContext";
 import { AxiosResponse } from "axios";
 import { BairrosInterface } from "../../utils/models/BairrosInterface";
+import BotaoContext from "../../contexts/BotoesContext";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
@@ -15,6 +17,32 @@ const DadosLocais = ({ navigation }) => {
   const [cidades, setCidades] = useState([]);
   const [bairros, setBairros] = useState([]);
   const [, setLoading] = useLoading();
+  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo, setAuxBloqBotaoProximo} = useContext(BotaoContext)
+  const { idNovoAcomp } = useContext(NovoAcompContext)
+
+  
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      console.log('bairro', bairro)
+      if(bairro && idNovoAcomp){
+        if(auxBloqBotaoProximo == false){
+          setBloqBotaoProximo(false);
+        }else{
+          setAuxBloqBotaoProximo(false);
+        }
+      }
+    }
+    setarBotao();
+  }, [bairro, idNovoAcomp])
 
   useEffect(() => {
     async function loadCidades() {

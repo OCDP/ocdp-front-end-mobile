@@ -81,7 +81,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telResp,
   } = useContext(PacienteContext);
 
-  const { bloqBotaoAnterior, bloqBotaoProximo } = useContext(BotaoContext)
+  const { bloqBotaoAnterior, bloqBotaoProximo, setAuxBloqBotaoProximo } = useContext(BotaoContext)
 
   const buttonTextStyle = {
     color: "#fff",
@@ -237,11 +237,13 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     console.log("acomp >>>>", acomp);
+    setAuxBloqBotaoProximo(true);
+    flush;
   }, []);
 
   const salvarPacienteLocal = () => {
     setDadosPacientes((old) => [...old, paciente]);
-    flush();
+    flush;
   };
 
   return (
@@ -287,7 +289,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
           >
             <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 ? (
+              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
                 <MapeamentoSintomas navigation={navigation} />
               ): (<HipoteseDiagnostico navigation={navigation}/>
               )}

@@ -12,13 +12,39 @@ import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText } from "../assets/Icons";
 import IntervencaoContext from "../contexts/IntervencaoContext";
+import BotaoContext from "../contexts/BotoesContext";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [value2, setValue2] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState();
   const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
-  const { setConfirmaRastreamento, setObservacao, setProcedimento, setHipoteseDiagnostico } = React.useContext(IntervencaoContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
+  const { confirmaRastreamento,
+    setConfirmaRastreamento, 
+    observacao,
+    setObservacao, 
+    hipoteseDiagnostico,
+    setHipoteseDiagnostico 
+  } = React.useContext(IntervencaoContext)
+
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      if(confirmaRastreamento && observacao && hipoteseDiagnostico){
+        setBloqBotaoProximo(false);
+      }
+    }
+    setarBotao();
+  }, [confirmaRastreamento, observacao, hipoteseDiagnostico])
 
   const onCheckedChange = (index) => {
     console.log(index);
@@ -42,7 +68,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   icon={editText}
                   size="large"
                   placeholder="Texto sobre a hipótese de diagnóstico"
-                  value={value}
+                  value={value || hipoteseDiagnostico}
                   onChangeText={(value)=>{
                     setValue
                     setHipoteseDiagnostico(value);
@@ -82,7 +108,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   icon={editText}
                   size="large"
                   placeholder="Texto sobre a observação"
-                  value={value2}
+                  value={value2 || observacao}
                   onChangeText={(value2)=>{
                     setValue2
                     setObservacao(value2);
