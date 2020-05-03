@@ -305,7 +305,6 @@ const MapeamentoSintomas = ({ navigation }) => {
   );
 
   function setarRegiaoLesao(){
-    console.log(regiaoSelect.siglaRegiaoBoca.imagemBase64);
     regiaoSelect.siglaRegiaoBoca.imagemBase64 = ""
     let objRL = {
       lesao: lesaoSelecionado,

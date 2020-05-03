@@ -11,13 +11,19 @@ import {
 import { View, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText } from "../assets/Icons";
+import IntervencaoContext from "../contexts/IntervencaoContext";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [value2, setValue2] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState();
+  const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
+  const { setConfirmaRastreamento, setObservacao, setProcedimento, setHipoteseDiagnostico } = React.useContext(IntervencaoContext)
 
   const onCheckedChange = (index) => {
+    console.log(index);
     setSelectedIndex(index);
+    index == 0 ? setConfirmaRastreamento(true) : setConfirmaRastreamento(false);
   };
 
   useEffect(() => {}, []);
@@ -37,7 +43,10 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   size="large"
                   placeholder="Texto sobre a hipótese de diagnóstico"
                   value={value}
-                  onChangeText={setValue}
+                  onChangeText={(value)=>{
+                    setValue
+                    setHipoteseDiagnostico(value);
+                  }}
                 />
               </View>
             </View>
@@ -73,8 +82,11 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                   icon={editText}
                   size="large"
                   placeholder="Texto sobre a observação"
-                  value={value}
-                  onChangeText={setValue}
+                  value={value2}
+                  onChangeText={(value2)=>{
+                    setValue2
+                    setObservacao(value2);
+                  }}
                 />
               </View>
             </View>

@@ -6,6 +6,7 @@ import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
 import MapeamentoSintomas from "./MapeamentoSintomas/MapeamentoSintomas";
 import { useDadosPacientes } from "../../contexts/AppContext";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 import moment from "moment";
 import PacienteContext, {
   usePaciente,
@@ -23,6 +24,7 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import LocaisContext from "../../contexts/LocaisContext";
 import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
+import IntervencaoContext from "../../contexts/IntervencaoContext";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -38,6 +40,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const paciente = usePaciente();
   const flush = useFlushPaciente();
   const { setFatores } = useContext(FatoresContext);
+  const { idNovoAcomp } = useContext(NovoAcompContext)
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { lesoesRegioes } = useContext(LesoesRegioesContext);
@@ -46,6 +49,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     tiposLocaisAtendido,
     setNomesLocaisAtendido,
   } = useContext(LocaisContext);
+  const {
+    confirmaRastreamento, 
+    hipoteseDiagnostico, 
+    observacao, 
+    procedimento
+  } = useContext(IntervencaoContext)
   const {
     nomesLocaisEncaminhado,
     tiposLocaisEncaminhado,
@@ -78,33 +87,27 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
 
   const btnStyle = {
     textAlign: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    //position: fixed,
+    botton: 0,
+    // paddingHorizontal: 8,
+    // paddingVertical: 4,
     backgroundColor: themedStyle.primary,
-    borderRadius: 4,
+    // borderRadius: 4,
   };
 
   const resetNav = async () => {
-    const {
-      cpf,
-      email,
-      id,
-      nivelAtencao,
-      nome,
-      status,
-      telefone,
-      tipoUsuario,
-    } = usuarioLogado;
-    //   acomp,bairro,cidade,dtNasci,email,endereco,historico
-    // ,listaFatores, nmMae, nome,sexo,telCell,telResp
-    // let localAtendimento = [...nomesLocaisAtendido]
-    // delete localAtendimento.text;
-    // let localEncaminhado = [...nomesLocaisEncaminhado]
-    // delete localEncaminhado.text;
-    delete nomesLocaisAtendido.text;
-    delete nomesLocaisEncaminhado.text;
-    console.log(nomesLocaisAtendido);
-    let arrObj = {
+    const {} = usuarioLogado
+  //   acomp,bairro,cidade,dtNasci,email,endereco,historico
+  // ,listaFatores, nmMae, nome,sexo,telCell,telResp
+  // let localAtendimento = [...nomesLocaisAtendido]
+  // delete localAtendimento.text;
+  // let localEncaminhado = [...nomesLocaisEncaminhado]
+  // delete localEncaminhado.text;
+  delete nomesLocaisAtendido.text;
+  delete nomesLocaisEncaminhado.text;
+  let arrObj;
+  if(idNovoAcomp == 2 || idNovoAcomp == 1){
+    arrObj = {
       atendimento: {
         dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
         id: "",
@@ -115,58 +118,117 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             id: bairro.id,
             nome: bairro.nome,
           },
-          cpf,
-          dataNascimento: moment(dtNasci).format("YYYY-MM-DD HH:mm:ss"),
-          email,
+          cpf: cpf,
+          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+          email: email,
           enderecoCompleto: endereco,
           id: "",
-          nome,
+          nome: nome,
           nomeDaMae: nmMae,
           sexo: sexo.toUpperCase(),
           telefoneCelular: telCell,
           telefoneResponsavel: telResp,
         },
         tipoAtendimento: "ACOMPANHAMENTO",
-        usuario: {
-          cpf,
-          email,
-          id,
-          nivelAtencao,
-          nome,
-          status,
-          telefone,
-          tipoUsuario,
+        usuario:{
+          cpf: usuarioLogado.cpf,
+          email: usuarioLogado.email,
+          id: usuarioLogado.id,
+          nivelAtencao: usuarioLogado.nivelAtencao,
+          nome: usuarioLogado.nome,
+          status: usuarioLogado.status,
+          telefone: usuarioLogado.telefone,
+          tipoUsuario: usuarioLogado.tipoUsuario
         },
       },
-      regioesLesoes: lesoesRegioes,
-      dataSugeridaAcompanhamento:
-        dataSugeridaAcompanhamento == undefined
-          ? ""
-          : dataSugeridaAcompanhamento,
-      dataSugeridaTratamento:
-        dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
-      fatoresDeRisco: postFatores,
-    };
-    console.log(arrObj);
-
-    await enviarPost(arrObj);
+        regioesLesoes: lesoesRegioes,
+        dataSugeridaAcompanhamento:
+          dataSugeridaAcompanhamento == undefined
+            ? ""
+            : dataSugeridaAcompanhamento,
+        dataSugeridaTratamento:
+          dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+        fatoresDeRisco: postFatores,
+      };
+      console.log(arrObj);
+    }else if(idNovoAcomp == 0){
+      arrObj = {
+        atendimento: {
+          dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+          id: "",
+          localAtendimento: nomesLocaisAtendido,
+          localEncaminhado: null,
+          paciente: {
+            bairro: {
+              id: bairro.id,
+              nome: bairro.nome,
+            },
+            cpf: cpf,
+            dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+            email: email,
+            enderecoCompleto: endereco,
+            id: "",
+            nome: nome,
+            nomeDaMae: nmMae,
+            sexo: sexo.toUpperCase(),
+            telefoneCelular: telCell,
+            telefoneResponsavel: telResp,
+          },
+          tipoAtendimento: "INTERVENCAO",
+          usuario:{
+            cpf: usuarioLogado.cpf,
+            email: usuarioLogado.email,
+            id: usuarioLogado.id,
+            nivelAtencao: usuarioLogado.nivelAtencao,
+            nome: usuarioLogado.nome,
+            status: usuarioLogado.status,
+            telefone: usuarioLogado.telefone,
+            tipoUsuario: usuarioLogado.tipoUsuario
+          },
+        },
+        confirmaRastreamento: confirmaRastreamento,
+        hipoteseDiagnostico: hipoteseDiagnostico,
+        observacao: observacao,
+        procedimentos: procedimento
+      }
+    }
+    await enviarPost(arrObj, idNovoAcomp);
   };
 
-  async function enviarPost(arrObj) {
-    try {
-      let postJson = JSON.stringify(arrObj);
-      let resp = await apiFunc(
-        usuarioLogado.cpf,
-        usuarioLogado.senhaUsuario
-      ).post("/acompanhamento/salvar", postJson);
-      console.log(resp);
-      navigation.dispatch(
-        CommonActions.reset({
-          routes: [{ name: "Home" }],
-        })
-      );
-    } catch (err) {
-      console.log(err);
+  async function enviarPost(arrObj, id) {
+    console.log(arrObj)
+    if(id == 1 || id == 2){
+      try {
+        let postJson = JSON.stringify(arrObj);
+        let resp = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).post("/acompanhamento/salvar", postJson);
+        console.log(resp);
+        navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ name: "Home" }],
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }if(id == 0){
+      try {
+        let postJson = JSON.stringify(arrObj);
+        let resp = await apiFunc(
+          usuarioLogado.cpf,
+          usuarioLogado.senhaUsuario
+        ).post("/intervencao/salvar", postJson);
+        console.log(resp);
+        navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ name: "Home" }],
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
@@ -221,10 +283,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
           >
             <View style={{ alignItems: "center" }}>
-              {2 > 3 ? (
+              {idNovoAcomp == 1 ? (
                 <MapeamentoSintomas navigation={navigation} />
-              ) : (
-                <HipoteseDiagnostico navigation={navigation} />
+              ): (<HipoteseDiagnostico navigation={navigation}/>
               )}
             </View>
           </ProgressStep>
@@ -240,10 +301,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              {2 > 1 ? (
-                <CondutaIntervencao navigation={navigation} />
-              ) : (
+              {idNovoAcomp == 1 ? (
                 <CadastroConduta navigation={navigation} />
+              ): (<CondutaIntervencao navigation={navigation}/>
               )}
             </View>
           </ProgressStep>
