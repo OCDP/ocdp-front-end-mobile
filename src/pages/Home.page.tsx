@@ -30,6 +30,7 @@ const HomeScreen = ({ navigation }) => {
   const flushPaciente = useFlushPaciente();
   const flushLocais = useFlushLocais();
   const flushLesoesRegioes = useFlushLesoesRegioes();
+  const flushPostFatores = useFlushPostFatores();
   const [, setLoading] = useLoading();
   // const flushPostFatores = useFlushPostFatores()
   async function loadHistorico(data) {
@@ -106,8 +107,9 @@ const HomeScreen = ({ navigation }) => {
     setLoading(true);
     console.log('flush')
     // flushPaciente();
-    flushLocais();
+    // flushLocais();
     flushLesoesRegioes();
+    flushPostFatores();
     setBloqBotaoProximo(true);
     // flushPostFatores();
     await setAcomp(false);

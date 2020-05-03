@@ -159,14 +159,38 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     }
   }
 
+  
   useEffect(()=>{
     async function setarBotao(){
+      console.log("idNovoAcomp", idNovoAcomp)
       console.log('postFatores', nomesLocaisAtendido.length)
       console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
-      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == 1 && nomesLocaisEncaminhado.length == 1) 
-      || nomesLocaisEncaminhado.length > 0){
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
+      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
+        console.log('[]setBloqBotaoProximofalse')
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(true)
+      }else {
+        setBloqBotaoProximo(true); 
+        console.log('[]setBloqBotaoProximotrue')
+      }
+    }
+    setarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log("idNovoAcomp", idNovoAcomp)
+      console.log('postFatores', nomesLocaisAtendido.length)
+      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
+      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
+        
+        console.log('setBloqBotaoProximofalse')
+        setBloqBotaoProximo(false);
+      }else {
+        setBloqBotaoProximo(true)
+        console.log('setBloqBotaoProximotrue')
+      }
     }
     setarBotao();
   }, [nomesLocaisAtendido, nomesLocaisEncaminhado])

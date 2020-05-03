@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import {
   useStyleSheet,
   CheckBox,
@@ -326,15 +326,76 @@ const MapeamentoSintomas = ({ navigation }) => {
       </Button>
     </Layout>
   );
-
+  
   function setarRegiaoLesao(){
+    let st = "";
+    let incluir = true;
+    let indice = null;
+    console.log('lesoesRegioes', lesoesRegioes);
+    if(lesoesRegioes.length > 0){
+      let cont = 0;
+      st += "Regiões já cadastradas: \n"
+      for(let i of lesoesRegioes){
+        if((i.regiaoBoca.nome == regiaoSelect.nome) &&
+        (i.lesao.nome == lesaoSelecionado.nome) && (i.lesao.tipoLesao.nome == lesaoSelecionado.tipoLesao.nome)){
+          incluir = false;
+          indice = cont;
+          break;
+        }else{
+          //st += `Região: ${i.regiaoBoca.nome}\nLesão: ${i.lesao.nome} - ${i.lesao.tipoLesao.nome}\n`
+        }
+        cont = cont + 1;
+      }
+    }
+    
+    if (incluir == false){
+      Alert.alert(
+        'Atenção',
+        "Lesão já registrada: Deseja excluir?",
+        [
+          {text: 'Sim', onPress: () => excluirRegiaoLesao(indice)},
+          {
+            text: 'Não',
+            onPress: () => console.log("cancel pressed"),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    }
+    else{
+      st += `\nNovo cadastro: \nRegião: ${regiaoSelect.nome}\nLesão: ${lesaoSelecionado.nome} - ${lesaoSelecionado.tipoLesao.nome}`
+      Alert.alert(
+        'Atenção',
+        st,
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log("cancel pressed"),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => cadastrarRegiaoLesao()},
+        ],
+        {cancelable: false},
+      );
+    }
+  }
+
+  function excluirRegiaoLesao(i){
+    let rS = [...lesoesRegioes]
+    console.log(rS, i)
+    rS.splice(i, 1);
+    setLesoesRegioes(rS);
+    alert("Lesão Excluída");
+  }
+
+  function cadastrarRegiaoLesao(){
     regiaoSelect.siglaRegiaoBoca.imagemBase64 = ""
     let objRL = {
       lesao: lesaoSelecionado,
       regiaoBoca: regiaoSelect
     }
     let lesaoRegiaoContext = [];
-    console.log('lesoesRegioes', lesoesRegioes);
     if(lesoesRegioes == undefined || lesoesRegioes.length == 0){
       lesaoRegiaoContext.push(objRL);
       setLesoesRegioes(lesaoRegiaoContext)
@@ -343,6 +404,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       lesaoRegiaoContext.push(objRL);
       setLesoesRegioes(lesaoRegiaoContext)
     }
+      alert("Lesão armazenada. Para cadastrar, termine os passos");
   }
 
   const rendeDetailLesao = () => (
@@ -390,6 +452,8 @@ const MapeamentoSintomas = ({ navigation }) => {
           </View>
         </View>
       </HeaderContainer>
+      {postFatores.length > 0 ? (
+        
       <View>
         {regioesArr.map(({ name, description }, i) => (
           <>
@@ -418,6 +482,7 @@ const MapeamentoSintomas = ({ navigation }) => {
           </>
         ))}
       </View>
+      ): <></>}
     </View>
   );
 };

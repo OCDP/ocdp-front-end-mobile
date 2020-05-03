@@ -18,7 +18,7 @@ import ListarPacientes from "./ListarPacientes";
 import apiFunc from "../../services/api";
 import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
-import PostFatoresContext from "../../contexts/PostFatoresContext";
+import PostFatoresContext, { useFlushPostFatores } from "../../contexts/PostFatoresContext";
 import LesoesRegioesContext from "../../contexts/LesoesRegioesContext";
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
@@ -44,6 +44,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const flush = useFlushPaciente();
   const flushLocais = useFlushLocais();
   const flushLesoesRegioes = useFlushLesoesRegioes();
+  const flushPostFatores = useFlushPostFatores();
   const { setFatores } = useContext(FatoresContext);
   const { idNovoAcomp } = useContext(NovoAcompContext)
   const { postFatores, setPostFatores } = useContext(PostFatoresContext);
@@ -321,10 +322,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             previousBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
             finishBtnText="concluir"
+            nextBtnDisabled={bloqBotaoProximo}
             onNext = {() => resetarBotao()}
             onPrevious = { ()=> {
                 setBloqBotaoProximo(false)
-                flushLesoesRegioes()
+                flushLesoesRegioes();
+                flushPostFatores();
               }
             }
             onSubmit={() => resetNav()}
