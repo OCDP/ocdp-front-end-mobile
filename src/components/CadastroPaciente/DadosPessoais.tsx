@@ -38,32 +38,25 @@ const DadosPessoais = ({ navigation }) => {
   const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
   const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
     setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
-
-  useEffect(()=>{
-    async function resetarBotao(){
-      console.log('resetarBotao', bloqBotaoProximo)
-      setBloqBotaoProximo(true);
-    }
-    resetarBotao();
-  }, [])
-
   
   useEffect(()=>{
     async function setarBotao(){
-      console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
-      telResp, nmMae, idNovoAcomp)
-      if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
-        telResp != null && nmMae != null && idNovoAcomp != undefined){
-          if(auxBloqBotaoProximo == false){
-            setBloqBotaoProximo(false);
+      if(bloqBotaoProximo == true){
+        console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
+        telResp, nmMae, idNovoAcomp)
+        if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+          telResp != null && nmMae != null && idNovoAcomp != undefined){
+            if(auxBloqBotaoProximo == false){
+              setBloqBotaoProximo(false);
+            }else{
+              setAuxBloqBotaoProximo2(false);
+            }
           }else{
-            setAuxBloqBotaoProximo2(false);
+            setAuxBloqBotaoProximo2(true);
           }
-        }else{
-          setAuxBloqBotaoProximo2(true);
-        }
-        console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-        console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+          console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+          console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+      }
     }
     setarBotao();
   }, [])

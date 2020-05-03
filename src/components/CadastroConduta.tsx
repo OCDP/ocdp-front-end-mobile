@@ -163,10 +163,10 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     async function setarBotao(){
       console.log('postFatores', nomesLocaisAtendido.length)
       console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
-      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == 0 && nomesLocaisEncaminhado.length == 0) 
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == 1 && nomesLocaisEncaminhado.length == 1) 
       || nomesLocaisEncaminhado.length > 0){
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(false)
+      }else setBloqBotaoProximo(true)
     }
     setarBotao();
   }, [nomesLocaisAtendido, nomesLocaisEncaminhado])

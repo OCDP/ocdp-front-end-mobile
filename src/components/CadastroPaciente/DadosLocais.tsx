@@ -35,15 +35,17 @@ const DadosLocais = ({ navigation }) => {
       console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
       console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
       console.log('bairro', bairro, idNovoAcomp)
-      if(bairro.id != null && idNovoAcomp != undefined){
-        if(auxBloqBotaoProximo2 == false){
-          
-          setBloqBotaoProximo(false);
+      if(bloqBotaoProximo == true){
+        if(bairro.id != null && idNovoAcomp != undefined){
+          if(auxBloqBotaoProximo2 == false){
+            
+            setBloqBotaoProximo(false);
+          }else{
+            setAuxBloqBotaoProximo(false);
+          }
         }else{
-          setAuxBloqBotaoProximo(false);
+          setAuxBloqBotaoProximo(true);
         }
-      }else{
-        setAuxBloqBotaoProximo(true);
       }
     }
     setarBotao();
