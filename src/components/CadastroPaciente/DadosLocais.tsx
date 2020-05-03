@@ -32,8 +32,6 @@ const DadosLocais = ({ navigation }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
       console.log('bairro', bairro, idNovoAcomp)
       if(bloqBotaoProximo == true){
         if(bairro.id != null && idNovoAcomp != undefined){
@@ -47,6 +45,8 @@ const DadosLocais = ({ navigation }) => {
           setAuxBloqBotaoProximo(true);
         }
       }
+      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
     }
     setarBotao();
   }, [])

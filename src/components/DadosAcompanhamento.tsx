@@ -68,6 +68,7 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
+      setnomesAtendidosSelect("");
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       // console.log('loadLocaisAtendido', tipoAtendido);
       // console.log(url);

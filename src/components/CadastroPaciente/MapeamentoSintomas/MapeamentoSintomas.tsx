@@ -452,7 +452,7 @@ const MapeamentoSintomas = ({ navigation }) => {
           </View>
         </View>
       </HeaderContainer>
-      {postFatores.length > 0 ? (
+      {postFatores && postFatores.length > 0 ? (
         
       <View>
         {regioesArr.map(({ name, description }, i) => (
