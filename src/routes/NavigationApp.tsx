@@ -22,7 +22,6 @@ import { LesoesRegiaoProvider } from "../contexts/LesoesRegioesContext";
 import { IntervencaoProvider } from "../contexts/IntervencaoContext";
 import { AtendimentoProvider } from "../contexts/AtendimentosContext";
 import { BotaoProvider } from "../contexts/BotoesContext";
-import { AtendimentoProvider } from "../contexts/AtendimentosContext";
 
 function CustomDrawerContent(props) {
   return (
