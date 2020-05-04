@@ -8,6 +8,8 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import { useLoading } from "../../contexts/AppContext";
 import { AxiosResponse } from "axios";
 import { BairrosInterface } from "../../utils/models/BairrosInterface";
+import BotaoContext from "../../contexts/BotoesContext";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
@@ -15,6 +17,58 @@ const DadosLocais = ({ navigation }) => {
   const [cidades, setCidades] = useState([]);
   const [bairros, setBairros] = useState([]);
   const [, setLoading] = useLoading();
+  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo, setAuxBloqBotaoProximo, 
+  auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
+  const { idNovoAcomp } = useContext(NovoAcompContext)
+
+  
+  // useEffect(()=>{
+  //   async function resetarBotao(){
+  //     console.log('resetarBotao', bloqBotaoProximo)
+  //     setBloqBotaoProximo(true);
+  //   }
+  //   resetarBotao();
+  // }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('bairro', bairro, idNovoAcomp)
+      if(bloqBotaoProximo == true){
+        if(bairro.id != null && idNovoAcomp != undefined){
+          if(auxBloqBotaoProximo2 == false){
+            
+            setBloqBotaoProximo(false);
+          }else{
+            setAuxBloqBotaoProximo(false);
+          }
+        }else{
+          setAuxBloqBotaoProximo(true);
+        }
+      }
+      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+    }
+    setarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+      console.log('bairro', bairro, idNovoAcomp)
+      if(bairro.id != null && idNovoAcomp != undefined){
+        if(auxBloqBotaoProximo2 == false){
+          
+          setBloqBotaoProximo(false);
+        }else{
+          setAuxBloqBotaoProximo(false);
+        }
+      }else{
+        setAuxBloqBotaoProximo(true);
+      }
+    }
+    setarBotao();
+  }, [bairro, idNovoAcomp])
 
   useEffect(() => {
     async function loadCidades() {

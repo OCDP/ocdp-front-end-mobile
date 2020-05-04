@@ -21,6 +21,7 @@ import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
 import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
+import BotaoContext from "../contexts/BotoesContext";
 
 const DATA = [
   {
@@ -38,15 +39,36 @@ const DATA = [
 const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const {idNovoAcomp, setIdNovoAcomp} = React.useContext(NovoAcompContext)
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState();
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
+  const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
+
+  useEffect(()=>{
+    async function resetarBotao(){
+      console.log('resetarBotao', bloqBotaoProximo)
+      setBloqBotaoProximo(true);
+    }
+    resetarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log('setarBotao', bloqBotaoProximo)
+      console.log('nomesLocaisAtendido', nomesLocaisAtendido)
+      if(nomesLocaisAtendido && !nomesLocaisAtendido.length && idNovoAcomp){
+        setBloqBotaoProximo(false);
+      }
+    }
+    setarBotao();
+  }, [nomesLocaisAtendido, idNovoAcomp])
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
+      setnomesAtendidosSelect("");
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       // console.log('loadLocaisAtendido', tipoAtendido);
       // console.log(url);
@@ -114,7 +136,7 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     <Layout style={styles.container}>
       <View style={styles.lineContent}>
         <RadioGroup
-          selectedIndex={selectedIndex}
+          selectedIndex={selectedIndex || idNovoAcomp}
           onChange={(index) => {
             setSelectedIndex(index)
           }}

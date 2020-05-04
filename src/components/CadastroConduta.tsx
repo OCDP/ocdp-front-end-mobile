@@ -20,6 +20,7 @@ import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
+import BotaoContext from "../contexts/BotoesContext";
 
 const DATA = [
   {
@@ -43,6 +44,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
+  const { setBloqBotaoProximo } = useContext(BotaoContext)
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
   const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = useContext(LocaisContext);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
@@ -58,6 +60,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
+      setnomesAtendidosSelect("");
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       // console.log('loadLocaisAtendido', tipoAtendido);
       // console.log(url);
@@ -95,6 +98,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
+      setNomesEncaminhadoSelect("");
       let url = `localAtendimento/byTipo/${tipoEncaminhado}`;
       // console.log('loadLocaisAtendido', tipoEncaminhado);
       // console.log(url);
@@ -156,6 +160,42 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
       }
     }
   }
+
+  
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log("idNovoAcomp", idNovoAcomp)
+      console.log('postFatores', nomesLocaisAtendido.length)
+      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
+      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
+        console.log('[]setBloqBotaoProximofalse')
+        setBloqBotaoProximo(false);
+      }else {
+        setBloqBotaoProximo(true); 
+        console.log('[]setBloqBotaoProximotrue')
+      }
+    }
+    setarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log("idNovoAcomp", idNovoAcomp)
+      console.log('postFatores', nomesLocaisAtendido.length)
+      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
+      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
+      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
+        
+        console.log('setBloqBotaoProximofalse')
+        setBloqBotaoProximo(false);
+      }else {
+        setBloqBotaoProximo(true)
+        console.log('setBloqBotaoProximotrue')
+      }
+    }
+    setarBotao();
+  }, [nomesLocaisAtendido, nomesLocaisEncaminhado])
 
   return (
     <Layout style={styles.container}>

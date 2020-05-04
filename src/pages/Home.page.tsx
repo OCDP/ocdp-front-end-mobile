@@ -1,15 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
 import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
-import PacienteContext from "../contexts/PacienteContext";
+import PacienteContext, {useFlushPaciente} from "../contexts/PacienteContext";
+import {useFlushLocais} from "../contexts/LocaisContext";
+import {useFlushLesoesRegioes} from "../contexts/LesoesRegioesContext";
+
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import { AxiosResponse } from "axios";
+import {useFlushPostFatores} from "../contexts/PostFatoresContext"
 import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
+import LocaisContext from "../contexts/LocaisContext";
+import BotaoContext from "../contexts/BotoesContext";
+import { useLoading } from "../contexts/AppContext";
 
 const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
@@ -19,7 +26,13 @@ const HomeScreen = ({ navigation }) => {
   const { historico, setHistorico } = useContext(PacienteContext);
   const { setId, setAcomp, setNome, setBairro, setCpf, setDtNasci, setEmail, setEndereco, setNmMae, setSexo, setTelCell, setTelResp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
-
+  const { setBloqBotaoProximo } = useContext(BotaoContext)
+  const flushPaciente = useFlushPaciente();
+  const flushLocais = useFlushLocais();
+  const flushLesoesRegioes = useFlushLesoesRegioes();
+  const flushPostFatores = useFlushPostFatores();
+  const [, setLoading] = useLoading();
+  // const flushPostFatores = useFlushPostFatores()
   async function loadHistorico(data) {
     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
       `/historico/atendimentos/cpf/${data}`
@@ -27,6 +40,7 @@ const HomeScreen = ({ navigation }) => {
     let historico = resp.data;
     return historico;
   }
+
 
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
@@ -90,7 +104,16 @@ const HomeScreen = ({ navigation }) => {
   };
 
   async function cadastroActions() {
+    setLoading(true);
+    console.log('flush')
+    // flushPaciente();
+    // flushLocais();
+    flushLesoesRegioes();
+    flushPostFatores();
+    setBloqBotaoProximo(true);
+    // flushPostFatores();
     await setAcomp(false);
+    setLoading(false);
     navigation.navigate("CadastrarPaciente");
   }
 

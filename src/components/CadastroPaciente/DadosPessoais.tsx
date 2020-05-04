@@ -11,6 +11,7 @@ import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
+import BotaoContext from "../../contexts/BotoesContext";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -18,6 +19,7 @@ const DadosPessoais = ({ navigation }) => {
     setNome,
     dtNasci,
     setDtNasci,
+    sexo,
     setSexo,
     cpf,
     setCpf,
@@ -32,9 +34,54 @@ const DadosPessoais = ({ navigation }) => {
     nmMae,
     setNmMae,
   } = useContext(PacienteContext);
-
   
   const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
+    setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
+  
+  useEffect(()=>{
+    async function setarBotao(){
+      if(bloqBotaoProximo == true){
+        console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
+        telResp, nmMae, idNovoAcomp)
+        if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+          telResp != null && nmMae != null && idNovoAcomp != undefined){
+            if(auxBloqBotaoProximo == false){
+              setBloqBotaoProximo(false);
+            }else{
+              setAuxBloqBotaoProximo2(false);
+            }
+          }else{
+            setAuxBloqBotaoProximo2(true);
+          }
+          console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+          console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+      }
+    }
+    setarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
+      telResp, nmMae, idNovoAcomp)
+      if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+        telResp != null && nmMae != null && idNovoAcomp != undefined){
+          if(auxBloqBotaoProximo == false){
+            setBloqBotaoProximo(false);
+          }else{
+            setAuxBloqBotaoProximo2(false);
+          }
+        }else{
+          setAuxBloqBotaoProximo2(true);
+        }
+        console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+        console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+    }
+    setarBotao();
+  }, [nome, dtNasci, cpf, email, endereco, telCell,
+    telResp, nmMae, idNovoAcomp])
+  
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
