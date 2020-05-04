@@ -369,11 +369,11 @@ const MapeamentoSintomas = ({ navigation }) => {
         st,
         [
           {
-            text: 'Cancel',
+            text: 'Cancelar',
             onPress: () => console.log("cancel pressed"),
             style: 'cancel',
           },
-          {text: 'OK', onPress: () => cadastrarRegiaoLesao()},
+          {text: 'Cadastrar', onPress: () => cadastrarRegiaoLesao()},
         ],
         {cancelable: false},
       );

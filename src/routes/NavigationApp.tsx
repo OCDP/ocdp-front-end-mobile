@@ -20,6 +20,7 @@ import { PostFatoresProvider } from "../contexts/PostFatoresContext";
 import { NovoAcompProvider } from "../contexts/NovoAcompContext";
 import { LesoesRegiaoProvider } from "../contexts/LesoesRegioesContext";
 import { IntervencaoProvider } from "../contexts/IntervencaoContext";
+import { AtendimentoProvider } from "../contexts/AtendimentosContext";
 import { BotaoProvider } from "../contexts/BotoesContext";
 import { AtendimentoProvider } from "../contexts/AtendimentosContext";
 

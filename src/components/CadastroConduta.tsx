@@ -21,6 +21,7 @@ import LocaisContext from "../contexts/LocaisContext";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
 import BotaoContext from "../contexts/BotoesContext";
+import PostFatoresContext from "../contexts/PostFatoresContext";
 
 const DATA = [
   {
@@ -43,6 +44,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const { idNovoAcomp } = useContext(NovoAcompContext)
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
+  const { postFatores } = React.useContext(PostFatoresContext)
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
   const { setBloqBotaoProximo } = useContext(BotaoContext)
   const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
@@ -164,6 +166,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   
   useEffect(()=>{
     async function setarBotao(){
+      console.log("postFatores", postFatores)
       console.log("idNovoAcomp", idNovoAcomp)
       console.log('postFatores', nomesLocaisAtendido.length)
       console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
