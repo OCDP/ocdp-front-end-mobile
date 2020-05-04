@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Layout } from "@ui-kitten/components";
-import { buildStyledShadow } from "../../styles/BuildShadow";
+import { buildStyledShadow } from "../../styles/buildShadow";
 import { BlurView } from 'expo-blur';
 import { Animated, Dimensions } from "react-native";
 
