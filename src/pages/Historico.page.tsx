@@ -14,10 +14,10 @@ const Historico = ({ navigation }) => {
   );
 
   return (
-    <PageContainer title="Detalhes Atendimento" navigation={navigation}>
+    <PageContainer title="Detalhes historico" navigation={navigation}>
       <Layout style={styles.container}>
         <View>
-        
+          <Text>tope estamos aq no historico</Text>
         </View>
       </Layout>
     </PageContainer>
