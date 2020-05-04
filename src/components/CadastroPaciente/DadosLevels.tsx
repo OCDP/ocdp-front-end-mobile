@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
@@ -20,6 +20,7 @@ import { CommonActions } from "@react-navigation/native";
 import FatoresContext from "../../contexts/FatoresRiscoContext";
 import PostFatoresContext, { useFlushPostFatores } from "../../contexts/PostFatoresContext";
 import LesoesRegioesContext from "../../contexts/LesoesRegioesContext";
+import { useLoading } from "../../contexts/AppContext";
 import CadastroConduta from "../CadastroConduta";
 import DadosAcompanhamento from "../DadosAcompanhamento";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -85,6 +86,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telCell,
     telResp,
   } = useContext(PacienteContext);
+
+  const [, setLoading] = useLoading()
 
   const { bloqBotaoAnterior, bloqBotaoProximo, setBloqBotaoProximo, setAuxBloqBotaoProximo, setAuxBloqBotaoProximo2 } = useContext(BotaoContext)
 
@@ -207,19 +210,47 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     console.log(arrObj)
     if(id == 1 || id == 2){
       try {
+        setLoading(true)
         let postJson = JSON.stringify(arrObj);
         let resp = await apiFunc(
           usuarioLogado.cpf,
           usuarioLogado.senhaUsuario
         ).post("/acompanhamento/salvar", postJson);
-        console.log(resp);
-        navigation.dispatch(
-          CommonActions.reset({
-            routes: [{ name: "Home" }],
-          })
+        // console.log(resp);
+        Alert.alert(
+          'Enviado com sucesso',
+          "Voltar para tela inicial",
+          [
+            {text: 'Ok', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }},
+          ],
+          {cancelable: false},
         );
       } catch (err) {
         console.log(err);
+        Alert.alert(
+          'Problema de envio',
+          "Voltar para tela inicial?",
+          [
+            {text: 'Sim', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }},
+            {text: 'Tentar Novamente', style: 'cancel'},
+            
+          ],
+          {cancelable: false},
+        );
+      }finally{
+        setLoading(false)
       }
     }if(id == 0){
       try {
@@ -228,14 +259,38 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           usuarioLogado.cpf,
           usuarioLogado.senhaUsuario
         ).post("/intervencao/salvar", postJson);
-        console.log(resp);
-        navigation.dispatch(
-          CommonActions.reset({
-            routes: [{ name: "Home" }],
-          })
+        Alert.alert(
+          'Enviado com sucesso',
+          "Voltar para tela inicial",
+          [
+            {text: 'Ok', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }},
+          ],
+          {cancelable: false},
         );
       } catch (err) {
         console.log(err);
+        Alert.alert(
+          'Problema de envio',
+          "Voltar para tela inicial?",
+          [
+            {text: 'Sim', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }},
+            {text: 'Tentar Novamente', style: 'cancel'},
+            
+          ],
+          {cancelable: false},
+        );
       }
     }
   }
