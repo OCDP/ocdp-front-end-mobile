@@ -1,10 +1,11 @@
-export interface usuarioInterface {
-  cpf: string;
-  email: string;
+export interface UsuarioInterface {
   id: string;
+  cpf: string;
   nome: string;
   status: string;
+  email: string;
   telefone: string;
-  tipoAtencao?: any;
-  tipoUsuario?: any;
+  nivelAtencao: string;
+  tipoUsuario: string;
+  senhaUsuario?: string;
 }

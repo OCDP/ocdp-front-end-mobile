@@ -10,7 +10,7 @@ const CadastrarPaciente = ({ navigation }) => {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.view}>
           <View style={styles.picker}>
-            <DadosLevels navigation={navigation} />
+            <DadosLevels navigation={navigation}/>
           </View>
         </View>
       </KeyboardAvoidingView>

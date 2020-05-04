@@ -2,17 +2,17 @@ import React, {
   createContext,
   useState,
   Dispatch,
-  SetStateAction
+  SetStateAction,
 } from "react";
-import { usuarioInterface } from "../utils/models/usuarioInterface";
+import { UsuarioInterface } from "../utils/models/UsuarioInterface";
 
 interface UsuarioLogadoContextProps {
-  usuarioLogado: any;
-  setUsuarioLogado?: Dispatch<SetStateAction<[]>>;
+  usuarioLogado: UsuarioInterface;
+  setUsuarioLogado?: Dispatch<SetStateAction<UsuarioInterface>>;
 }
 
 const defaultUsuarioLogado = {
-  usuarioLogado: []
+  usuarioLogado: null,
 };
 
 const UsuarioLogadoContext = createContext<UsuarioLogadoContextProps>(
@@ -20,13 +20,13 @@ const UsuarioLogadoContext = createContext<UsuarioLogadoContextProps>(
 );
 
 export function UsuarioLogadoProvider({ children }) {
-  const [usuarioLogado, setUsuarioLogado] = useState([]);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
 
   return (
     <UsuarioLogadoContext.Provider
       value={{
         usuarioLogado,
-        setUsuarioLogado
+        setUsuarioLogado,
       }}
     >
       {children}

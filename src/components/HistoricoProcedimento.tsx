@@ -1,33 +1,67 @@
 import React, { useContext } from "react";
 import { View } from "react-native";
-import { useStyleSheet, Layout, Text } from "@ui-kitten/components";
+import {
+  useStyleSheet,
+  Layout,
+  Text,
+  withStyles,
+  Button,
+} from "@ui-kitten/components";
 import PacienteContext from "../contexts/PacienteContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useFlushLesoesRegioes } from "../contexts/LesoesRegioesContext";
 import Timeline from "react-native-timeline-flatlist";
+import { useLoading } from "../contexts/AppContext";
+import apiFunc from "../services/api";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import AtendimentoContext from "../contexts/AtendimentosContext";
 
-const HistoricoProcedimento = ({ navigation }) => {
+const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
+  const flushLesoesRegioes = useFlushLesoesRegioes();
   const { historico } = useContext(PacienteContext);
-
-  const dataTimeline = historico.map(a => {
-    let dataAtual = new Date().getDate() + '/' + new Date().getMonth() + '/' +new Date().getFullYear();
+  const { setAcomp } = useContext(PacienteContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { atendimento, setAtendimento } = useContext(AtendimentoContext);
+  const [, setLoading] = useLoading();
+  const dataTimeline = historico.map((a) => {
     return {
-      title: a.profissionalDeSaude,
-      description: a.tipoAtendiemtento + ' (' + a.diferencaDias + ' ' +
-      dataAtual + ' )',
       id: a.idAtendimento,
+      title: `${a.tipoAtendiemtento}\n(${a.diferencaMeses})`,
+      description: `${a.localAtendimento}\n${a.profissionalDeSaude}\n${
+        a.dataAtendimento.split(" ")[0]
+      }`,
     };
   });
 
   const styles = useStyleSheet({
     container: {
-      display: "flex"
+      display: "flex",
     },
     timeline: {
       flex: 1,
       padding: 16,
-      backgroundColor: "white"
-    }
+    },
   });
+
+  async function onEventPress(data) {
+    setLoading(true);
+    try {
+      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+        .get(`historico/atendimento/${data.id}`)
+        .then((resp) => {
+          setAtendimento(resp.data);
+          setLoading(false);
+          navigation.navigate("Historico");
+        });
+    } catch (err) {
+      console.log("err", err);
+    }
+  }
+
+  async function acompActions() {
+    flushLesoesRegioes();
+    await setAcomp(true);
+    navigation.navigate("CadastrarPaciente");
+  }
 
   return (
     <View style={styles.container}>
@@ -37,19 +71,43 @@ const HistoricoProcedimento = ({ navigation }) => {
             padding: 16,
             fontSize: 20,
             textAlign: "center",
-            fontWeight: "bold"
+            fontWeight: "bold",
           }}
         >
           Histórico do paciente
         </Text>
+        <Button
+          onPress={acompActions}
+          style={{
+            marginBottom: 16,
+          }}
+        >
+          adicionar retorno
+        </Button>
+        <Button onPress={() => console.log(atendimento)}>
+          ver dados no context
+        </Button>
         <Timeline
-          onEventPress={() => console.log()}
+          onEventPress={onEventPress}
           style={{ flex: 1 }}
           data={dataTimeline}
+          titleStyle={{ fontSize: 10 }}
+          descriptionStyle={{ fontSize: 12 }}
+          detailContainerStyle={{
+            marginBottom: 20,
+            paddingLeft: 5,
+            paddingRight: 5,
+            backgroundColor: themedStyle.primary,
+            borderRadius: 10,
+          }}
         />
       </View>
     </View>
   );
 };
 
-export default HistoricoProcedimento;
+export default withStyles(HistoricoProcedimento, (theme) => ({
+  primary: theme["color-primary-500"],
+  primaryDark: theme["color-primary-900"],
+  primaryLigth: theme["color-primary-400"],
+}));

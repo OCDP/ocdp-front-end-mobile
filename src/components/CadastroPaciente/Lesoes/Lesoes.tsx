@@ -9,18 +9,18 @@ const Lesoes = ({ navigation, title, imgRegiao }) => {
       paddingLeft: 36,
       alignItems: "flex-start",
       justifyContent: "center",
-      marginVertical: 16
+      marginVertical: 16,
     },
     lineContent: {
       flex: 1,
-      width: "100%"
+      width: "100%",
     },
     imageContent: {
       flex: 1,
       height: 200,
       maxWidth: "100%",
-      borderRadius: 8
-    }
+      borderRadius: 8,
+    },
   });
 
   return (
@@ -30,7 +30,7 @@ const Lesoes = ({ navigation, title, imgRegiao }) => {
           <TextHeader>{title}</TextHeader>
         </View>
         <View>
-          <Image style={styles.imageContent} source={imgRegiao} />
+          <Image style={styles.imageContent} source={{ uri: `${imgRegiao}` }} />
         </View>
       </CardLesoes>
     </View>

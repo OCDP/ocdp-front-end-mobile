@@ -4,18 +4,24 @@ import {
   LoginCard,
   LoginButton,
   LoginInput,
-  PasswordInput
+  PasswordInput,
 } from "./Login.page.styles";
 import { Icon } from "@ui-kitten/components";
 import api from "../../services/api";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
-import { useLoading } from "../../contexts/AppContext";
+import AppContext, { useLoading } from "../../contexts/AppContext";
 
-export default function({ navigation }) {
-  const [login, setLogin] = useState("admin");
-  const [pswd, setPswd] = useState("p@55w0Rd");
+export default function ({ navigation }) {
+  //ATENCAO PRIMARIA
+  // const [login, setLogin] = useState("111.111.111-11");
+  // const [pswd, setPswd] = useState("p@55w0Rd");
+
+  //ATENCAO SECUNDARIA
+  const [login, setLogin] = useState("222.222.222-22");
+  const [pswd, setPswd] = useState("teste123");
+
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
@@ -23,22 +29,26 @@ export default function({ navigation }) {
   const seePassowrd = () => {
     setSecureTextEntry(!secureTextEntry);
   };
-  const renderPasswordIcon = style => (
+  const renderPasswordIcon = (style) => (
     <Icon {...style} name={secureTextEntry ? "eye-off" : "eye"} />
   );
 
   async function loginAction() {
     try {
       setLoading(true);
-      let resp = await api(login, pswd).get(
+      await api(login, pswd).get(
         `/usuario/byCpf/${login}?cpf=${login}`
-      );
-      setUsuarioLogado(resp.data);
-      setLoading(false);
-      navigation.navigate("Home");
+      ).then((resp)=>{
+        resp.data.senhaUsuario = pswd;
+        setUsuarioLogado(resp.data);
+        
+        setLoading(false);
+        navigation.navigate("Introducao");
+      });
     } catch (err) {
       console.log(err);
       alert("Email ou senha incorreta!");
+      setLoading(false);
     }
   }
 

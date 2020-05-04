@@ -4,93 +4,118 @@ import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
 import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
-import PacienteContext from "../contexts/PacienteContext";
+import PacienteContext, {useFlushPaciente} from "../contexts/PacienteContext";
+import {useFlushLocais} from "../contexts/LocaisContext";
+import {useFlushLesoesRegioes} from "../contexts/LesoesRegioesContext";
+
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
-import { historicoMockup } from "../utils/constants";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import { AxiosResponse } from "axios";
+import {useFlushPostFatores} from "../contexts/PostFatoresContext"
+import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
+import LocaisContext from "../contexts/LocaisContext";
+import BotaoContext from "../contexts/BotoesContext";
 import { useLoading } from "../contexts/AppContext";
-import FatoresContext from "../contexts/FatoresRiscoContext";
-
-const DATA = [
-  {
-    id: 1,
-    title: "Star Wars",
-    releaseYear: 1977
-  },
-  {
-    id: 2,
-    title: "Back to the Future",
-    releaseYear: 1985
-  },
-  {
-    id: 3,
-    title: "The Matrix",
-    releaseYear: 1999
-  },
-  {
-    id: 4,
-    title: "Inception",
-    releaseYear: 2010
-  },
-  {
-    id: 5,
-    title: "Interstellar",
-    releaseYear: 2014
-  }
-];
 
 const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
-  const [data, setData] = React.useState(DATA);
+  const [nomes, setNomes] = React.useState([]);
+  const [listaNomes, setListaNomes] = React.useState([]);
+  const [listaNomesAll, setListaNomesAll] = React.useState([])
   const { historico, setHistorico } = useContext(PacienteContext);
-  const { fatores, setFatores } = useContext(FatoresContext);
+  const { setId, setAcomp, setNome, setBairro, setCpf, setDtNasci, setEmail, setEndereco, setNmMae, setSexo, setTelCell, setTelResp } = useContext(PacienteContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { setBloqBotaoProximo } = useContext(BotaoContext)
+  const flushPaciente = useFlushPaciente();
+  const flushLocais = useFlushLocais();
+  const flushLesoesRegioes = useFlushLesoesRegioes();
+  const flushPostFatores = useFlushPostFatores();
   const [, setLoading] = useLoading();
-
+  // const flushPostFatores = useFlushPostFatores()
   async function loadHistorico(data) {
-    let resp = await apiFunc("admin", "p@55w0Rd").get(
-      `/historico/atendimentos/${data}`
+    let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
+      `/historico/atendimentos/cpf/${data}`
     );
     let historico = resp.data;
     return historico;
   }
 
-  async function loadFatores() {
-    try {
-      setLoading(true);
-      let resp = await apiFunc("admin", "p@55w0Rd").get("/fatorRisco");
-      console.log("fatores >>> ", resp.data);
-      setFatores(resp.data);
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      console.log("err", err);
+
+  const onSelect = async ({ title, id }) => {
+    let titleSplit = title.split(" ");
+    // console.log(listaNomesAll)
+    for(let i of listaNomesAll){
+      if(i.cpf == titleSplit[2]){
+        setBairro(i.bairro)
+        setCpf(i.cpf)
+        setDtNasci(i.dataNascimento)
+        setEmail(i.cpf)
+        setEndereco(i.enderecoCompleto)
+        setId(i.id)
+        setNome(i.nome)
+        setNmMae(i.nomeDaMae)
+        setSexo(i.sexo)
+        setTelCell(i.telefoneCelular)
+        setTelResp(i.telefoneResponsavel)
+      }
     }
-  }
-
-  useEffect(() => {
-    loadFatores();
-  }, []);
-
-  const onSelect = ({ title }) => {
     setValue(title);
-    // let historico = await loadHistorico(title);
-    // setHistorico(historico);
+    await loadHistorico(id).then((resp) => {
+      if (resp == []) {
+        setHistorico([]);
+      } else {
+        setHistorico(resp);
+      }
+    });
   };
 
-  const onChangeText = async query => {
+  const onChangeText = async (query) => {
     setValue(query);
-    let resp = await loadHistorico(query);
-    setHistorico(resp);
-    setData(
-      DATA.filter(item =>
-        item.title.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+    if (query.length > 2) {
+      try {
+        const pacientes: AxiosResponse<
+          BuscaPacienteInterface[]
+        > = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
+          `/historico/pacientes/${query}`
+        );
+        let arrUsers = pacientes.data;
+        const listaArr = arrUsers.map((a) => {
+          return {
+            id: a.cpf,
+            title: `${a.nome} - ${a.cpf}`,
+          };
+        });
+        setListaNomesAll(pacientes.data)
+        setListaNomes(listaArr);
+        setNomes(
+          listaNomes.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          )
+        );
+      } catch (err) {
+        console.log("err", err);
+      }
+    }
   };
 
   const clearInput = () => {
     setValue("");
   };
+
+  async function cadastroActions() {
+    setLoading(true);
+    console.log('flush')
+    // flushPaciente();
+    // flushLocais();
+    flushLesoesRegioes();
+    flushPostFatores();
+    setBloqBotaoProximo(true);
+    // flushPostFatores();
+    await setAcomp(false);
+    setLoading(false);
+    navigation.navigate("CadastrarPaciente");
+  }
 
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
@@ -99,14 +124,16 @@ const HomeScreen = ({ navigation }) => {
           style={styles.picker}
           placeholder="Localizar paciente"
           value={value}
-          data={data}
+          data={nomes}
           icon={value?.length > 0 ? clear : search}
           onIconPress={clearInput}
           onChangeText={onChangeText}
           onSelect={onSelect}
         />
         {historico && historico.length > 0 ? (
-          <HistoricoProcedimento navigation={navigation} />
+          <View style={{ height: "90%" }}>
+            <HistoricoProcedimento navigation={navigation} />
+          </View>
         ) : (
           <EmptyContent
             navigation={navigation}
@@ -119,7 +146,7 @@ const HomeScreen = ({ navigation }) => {
           status="primary"
           size="tiny"
           icon={add}
-          onPress={() => navigation.navigate("CadastrarPaciente")}
+          onPress={cadastroActions}
         />
       </Layout>
     </PageContainer>
@@ -129,13 +156,13 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   picker: {
     width: "100%",
     display: "flex",
     paddingHorizontal: 8,
-    paddingTop: 8
+    paddingTop: 8,
   },
   button: {
     width: 50,
@@ -149,10 +176,10 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       height: 4,
-      width: 0
+      width: 0,
     },
-    shadowOpacity: 0.1
-  }
+    shadowOpacity: 0.1,
+  },
 });
 
 export default HomeScreen;

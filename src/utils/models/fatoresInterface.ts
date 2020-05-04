@@ -1,5 +1,4 @@
-export interface fatoresInterface {
-    id:string,
-    nome:string
-  }
-  
+export interface FatoresInterface {
+  id: string;
+  nome: string;
+}

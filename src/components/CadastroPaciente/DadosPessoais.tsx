@@ -5,11 +5,13 @@ import {
   Radio,
   RadioGroup,
   Input,
-  Datepicker
+  Datepicker,
 } from "@ui-kitten/components";
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
+import NovoAcompContext from "../../contexts/NovoAcompContext";
+import BotaoContext from "../../contexts/BotoesContext";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -17,31 +19,88 @@ const DadosPessoais = ({ navigation }) => {
     setNome,
     dtNasci,
     setDtNasci,
+    sexo,
     setSexo,
+    cpf,
+    setCpf,
     email,
     setEmail,
+    endereco,
+    setEndereco,
     telCell,
     setTelCell,
     telResp,
     setTelResp,
     nmMae,
-    setNmMae
+    setNmMae,
   } = useContext(PacienteContext);
+  
+  const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
+    setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
+  
+  useEffect(()=>{
+    async function setarBotao(){
+      if(bloqBotaoProximo == true){
+        console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
+        telResp, nmMae, idNovoAcomp)
+        if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+          telResp != null && nmMae != null && idNovoAcomp != undefined){
+            if(auxBloqBotaoProximo == false){
+              setBloqBotaoProximo(false);
+            }else{
+              setAuxBloqBotaoProximo2(false);
+            }
+          }else{
+            setAuxBloqBotaoProximo2(true);
+          }
+          console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+          console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+      }
+    }
+    setarBotao();
+  }, [])
+
+  useEffect(()=>{
+    async function setarBotao(){
+      console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
+      telResp, nmMae, idNovoAcomp)
+      if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+        telResp != null && nmMae != null && idNovoAcomp != undefined){
+          if(auxBloqBotaoProximo == false){
+            setBloqBotaoProximo(false);
+          }else{
+            setAuxBloqBotaoProximo2(false);
+          }
+        }else{
+          setAuxBloqBotaoProximo2(true);
+        }
+        console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
+        console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+    }
+    setarBotao();
+  }, [nome, dtNasci, cpf, email, endereco, telCell,
+    telResp, nmMae, idNovoAcomp])
+  
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     setSexo(sexos[selectedIndex].text);
   }, [selectedIndex]);
 
+  useEffect(()=>{
+    setIdNovoAcomp(2)
+  },[])
+
   const styles = useStyleSheet({
     lineContent: {
       flex: 1,
       width: "100%",
-      marginVertical: 8
+      marginVertical: 8,
     },
     heightInput: {
-      height: 40
-    }
+      height: 40,
+    },
   });
 
   return (
@@ -53,6 +112,16 @@ const DadosPessoais = ({ navigation }) => {
             icon={user}
             value={nome}
             onChangeText={setNome}
+          />
+        </View>
+      </View>
+      <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="Endereço Completo"
+            icon={user}
+            value={endereco}
+            onChangeText={setEndereco}
           />
         </View>
       </View>
@@ -70,9 +139,8 @@ const DadosPessoais = ({ navigation }) => {
       <View style={styles.lineContent}>
         <View
           style={{
-            backgroundColor: "#f7f9fc",
             marginHorizontal: 16,
-            borderRadius: 4
+            borderRadius: 4,
           }}
         >
           <RadioGroup
@@ -80,9 +148,9 @@ const DadosPessoais = ({ navigation }) => {
               {
                 flexDirection: "row",
                 justifyContent: "space-between",
-                paddingHorizontal: 16
+                paddingHorizontal: 16,
               },
-              styles.heightInput
+              styles.heightInput,
             ]}
             selectedIndex={selectedIndex}
             onChange={setSelectedIndex}
@@ -90,6 +158,16 @@ const DadosPessoais = ({ navigation }) => {
             <Radio text="Masculino" />
             <Radio text="Feminino" />
           </RadioGroup>
+        </View>
+      </View>
+      <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="CPF"
+            icon={user}
+            onChangeText={setCpf}
+            value={cpf}
+          />
         </View>
       </View>
       <View style={styles.lineContent}>

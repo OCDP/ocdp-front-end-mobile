@@ -46,7 +46,7 @@ function Pagecontainer({
   const resetNav = () => {
     navigation.dispatch(
       CommonActions.reset({
-        routes: [{ name: "Home" }]
+        routes: [{ name: "Introducao" }]
       })
     );
   };

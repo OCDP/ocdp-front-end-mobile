@@ -4,7 +4,7 @@ import React, {
   useEffect,
   Dispatch,
   SetStateAction,
-  useContext
+  useContext,
 } from "react";
 import { ThemeType } from "@ui-kitten/components";
 import ligthTheme from "../themes/LightTheme";
@@ -15,7 +15,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 
 const defaultTheme: AppTheme = {
   name: "ligth",
-  vars: ligthTheme
+  vars: ligthTheme,
 };
 
 export type ThemeName = "ligth" | "dark";
@@ -36,7 +36,7 @@ const AppContext = createContext<AppContextType>({
   theme: defaultTheme,
   switchTheme: () => {},
   dadosPacientes: [],
-  setDadosPacientes: () => {}
+  setDadosPacientes: () => {},
 });
 
 export const AppProvider = ({ children }) => {
@@ -55,15 +55,26 @@ export const AppProvider = ({ children }) => {
   }, [loadingState[0]]);
 
   function switchTheme() {
-    setTheme(old => ({
-      name: old.name === "dark" ? "ligth" : "dark",
-      vars: old.name === "dark" ? ligthTheme : darkTheme
-    }));
+    setTheme({
+      name: "dark",
+      vars: darkTheme,
+    });
+
+    // setTheme(old => ({
+    //   name: old.name === "dark" ? "ligth" : "dark",
+    //   vars: old.name === "dark" ? ligthTheme : darkTheme
+    // }));
   }
 
   return (
     <AppContext.Provider
-      value={{ theme, switchTheme, dadosPacientes, setDadosPacientes, loadingState }}
+      value={{
+        theme,
+        switchTheme,
+        dadosPacientes,
+        setDadosPacientes,
+        loadingState,
+      }}
     >
       <Spinner
         visible={loadingState[0]}

@@ -1,6 +1,6 @@
-export interface historicoInterface {
+export interface HistoricoInterface {
   dataAtendimento: string;
-  diferencaDias: string;
+  diferencaMeses: string;
   idAtendimento: string;
   localAtendimento: string;
   profissionalDeSaude: string;
