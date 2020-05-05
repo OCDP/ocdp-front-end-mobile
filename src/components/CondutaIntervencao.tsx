@@ -214,6 +214,8 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                       console.log(data)
                       setDataSugeridaAcompanhamento(data)
 
+                      return a;
+
                     }
                     }
                     icon={calendar}
@@ -246,6 +248,8 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                       let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
 
                       setDataSugeridaTratamento(data)
+
+                      return a;
 
                     }
                       

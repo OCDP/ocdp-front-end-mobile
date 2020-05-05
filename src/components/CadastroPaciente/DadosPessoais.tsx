@@ -131,7 +131,10 @@ const DadosPessoais = ({ navigation }) => {
             min={new Date("1900-12-25")}
             date={dtNasci}
             placeholder="Data de Nascimento"
-            onSelect={setDtNasci}
+            onSelect={(dtNasci)=> {
+              setDtNasci(dtNasci)
+              return setDtNasci
+            }}
             icon={calendar}
           />
         </View>

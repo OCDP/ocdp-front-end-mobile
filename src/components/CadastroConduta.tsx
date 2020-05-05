@@ -53,6 +53,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState('');
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
+  const [dataAcompState, setDataAcompState] = React.useState(new Date());
+  const [dataTratState, setDataTratState] = React.useState(new Date());
   const [dataAtual, setDataAtual] = React.useState(null);
   const onSelect = ({ title }) => {
     setValue(title);
@@ -299,15 +301,16 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                   <Datepicker
                     disabled={activeCheckedAcompanhamento ? false : true}
                     min={new Date("1900-12-25")}
-                    date={new Date("2020-12-25")}
+                    date={dataAcompState || new Date(moment().format("YYYY-MM-DD"))}
                     placeholder="Data de Nascimento"
                     onSelect={(a) =>{
                       console.log(a)
                       
                       let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
-                      
+                      setDataAcompState(a)
                       console.log(data)
                       setDataSugeridaAcompanhamento(data)
+                      return a;
 
                     }
                     }
@@ -335,12 +338,14 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                   <Datepicker
                     disabled={activeCheckedTratamento ? false : true}
                     min={new Date("1900-12-25")}
-                    date={new Date("2020-12-25")}
+                    date={dataTratState || new Date(moment().format("YYYY-MM-DD"))}
                     placeholder="Data de Nascimento"
                     onSelect={(a) => {
+                      console.log(a)
                       let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
-
+                      setDataTratState(a)
                       setDataSugeridaTratamento(data)
+                      return a;
 
                     }
                       
