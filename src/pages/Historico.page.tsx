@@ -9,6 +9,10 @@ import AtendimentoContext from "../contexts/AtendimentosContext";
 const Historico = ({ navigation }) => {
   const { atendimento, setAtendimento } = useContext(AtendimentoContext);
 
+  const data = new Array(8).fill({
+    title: "Item",
+  });
+
   const renderItem = ({ item, index }) => (
     <ListItem title={`${item.title} ${index + 1}`} />
   );
@@ -17,7 +21,10 @@ const Historico = ({ navigation }) => {
     <PageContainer title="Detalhes historico" navigation={navigation}>
       <Layout style={styles.container}>
         <View>
-          <Text>tope estamos aq no historico</Text>
+          <Text>fatores de risco</Text>
+        </View>
+        <View>
+          <List data={data} renderItem={renderItem} />
         </View>
       </Layout>
     </PageContainer>
@@ -27,7 +34,7 @@ const Historico = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    marginHorizontal: 16,
   },
 });
 
