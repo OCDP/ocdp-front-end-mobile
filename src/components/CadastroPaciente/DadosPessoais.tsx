@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { View } from "react-native";
+import React, { useContext, useState, useEffect, ContextType }from "react";
+import { View, Button } from "react-native";
 import {
   useStyleSheet,
   Radio,
@@ -7,6 +7,8 @@ import {
   Input,
   Datepicker,
 } from "@ui-kitten/components";
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+import moment from 'moment';
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
@@ -38,6 +40,8 @@ const DadosPessoais = ({ navigation }) => {
   const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
   const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
     setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
+  const [dtNascString, setDtNascString] = useState("")
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   
   useEffect(()=>{
     async function setarBotao(){
@@ -65,7 +69,7 @@ const DadosPessoais = ({ navigation }) => {
     async function setarBotao(){
       console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
       telResp, nmMae, idNovoAcomp)
-      if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+      if(nome != null && cpf != null && email != null && endereco != null && telCell != null &&
         telResp != null && nmMae != null && idNovoAcomp != undefined){
           if(auxBloqBotaoProximo == false){
             setBloqBotaoProximo(false);
@@ -81,7 +85,24 @@ const DadosPessoais = ({ navigation }) => {
     setarBotao();
   }, [nome, dtNasci, cpf, email, endereco, telCell,
     telResp, nmMae, idNovoAcomp])
+
+      async function setarDataNascimento(dt){
+        let dataState = dt;
+        console.log(dataState)
+        if(dataState.length == 2){
+          dataState = dataState + "/"
+        }
+        if(dataState.length == 5){
+          dataState = dataState + "/"
+        }
+        if(dataState.length < 10){
+          await setDtNascString(dataState);
+        }
+      }
   
+      const showDatePicker = () => {
+        setDatePickerVisibility(true);
+      };
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
@@ -92,6 +113,15 @@ const DadosPessoais = ({ navigation }) => {
     setIdNovoAcomp(2)
   },[])
 
+  const confirmarData = (dt) => {
+    hideDatePicker
+      setDtNascString(moment(dt).format("DD/MM/YYYY"))
+  }
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
   const styles = useStyleSheet({
     lineContent: {
       flex: 1,
@@ -100,6 +130,18 @@ const DadosPessoais = ({ navigation }) => {
     },
     heightInput: {
       height: 40,
+    },boxDatePicker: {
+      marginHorizontal: 8,
+      paddingVertical: 10,
+      borderRadius: 10,
+      elevation: 8,
+      shadowRadius: 8,
+      shadowColor: "#000",
+      shadowOffset: {
+        height: 1,
+        width: 0,
+      },
+      shadowOpacity: 0.1,
     },
   });
 
@@ -125,20 +167,45 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
       </View>
-      <View style={styles.lineContent}>
+      <View>
+        <Input
+            placeholder="Data nascimento"
+            icon={user}
+            value={dtNascString}
+          />
+        <Button title="Show Date Picker" onPress={showDatePicker} />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={(a)=> confirmarData(a)}
+          onCancel={()=> console.log("cancel")}
+        />
+      </View>
+      {/* <View style={styles.lineContent}>
         <View>
           <Datepicker
-            min={new Date("1900-12-25")}
-            date={dtNasci}
+            // min={new Date("1900-12-25")}
+            date={dtNasci || new Date(moment().format('YYYY-MM-DD'))}
             placeholder="Data de Nascimento"
             onSelect={(dtNasci)=> {
               setDtNasci(dtNasci)
-              return setDtNasci
             }}
             icon={calendar}
           />
         </View>
-      </View>
+      </View> */}
+      {/* <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="Data de Nascimento"
+            icon={calendar}
+            value={dtNascString}
+            onChangeText={(dtNascString)=>{
+              setarDataNascimento(dtNascString)
+            }}
+          />
+        </View>
+      </View> */}
       <View style={styles.lineContent}>
         <View
           style={{
