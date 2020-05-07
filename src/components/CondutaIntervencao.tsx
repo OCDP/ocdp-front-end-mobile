@@ -11,18 +11,21 @@ import {
   CheckBox,
 } from "@ui-kitten/components";
 
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, BackHandler, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText, calendar } from "../assets/Icons";
 import moment from 'moment';
 import LocaisContext from "../contexts/LocaisContext";
 import IntervencaoContext from "../contexts/IntervencaoContext";
+import BotaoContext from "../contexts/BotoesContext";
+import { CommonActions } from "@react-navigation/native";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
   const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
   const [checked, setChecked] = React.useState([false, false,false,false]);
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   const [obs0, setObs0] = React.useState("");    
   const [obs1, setObs1] = React.useState("");    
   const [obs2, setObs2] = React.useState("");    
@@ -44,6 +47,34 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     ch[i] = ch[i] == false ? true : false;
     setChecked(ch);
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
   
   useEffect(() => {
     function setProced(){

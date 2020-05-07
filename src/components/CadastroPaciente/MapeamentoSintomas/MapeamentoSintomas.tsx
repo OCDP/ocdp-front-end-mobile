@@ -25,6 +25,7 @@ import PacienteContext from "../../../contexts/PacienteContext";
 import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
 import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
 import BotaoContext from "../../../contexts/BotoesContext";
+import { CommonActions } from "@react-navigation/native";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -55,6 +56,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   //aqui o contexto novo braz...
   const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
   const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext)
@@ -199,11 +201,43 @@ const MapeamentoSintomas = ({ navigation }) => {
           setLoading(false);
           setVisible(visible ? false : true);
           setListRegioes(regArrList);
+          console.log("listRegioes", listRegioes)
         });
     } catch (err) {
       console.log("err", err);
     }
   }
+
+  
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+          setLoading(true);
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+          setLoading(false)
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const dismiss = () => {
     setVisible(visible ? false : true);

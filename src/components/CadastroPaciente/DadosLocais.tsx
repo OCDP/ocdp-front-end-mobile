@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useMemo } from "react";
-import { View } from "react-native";
+import { View, Alert, BackHandler } from "react-native";
 import { useStyleSheet, Select, Layout } from "@ui-kitten/components";
 import PacienteContext from "../../contexts/PacienteContext";
 import api from "../../services/api";
@@ -10,6 +10,7 @@ import { AxiosResponse } from "axios";
 import { BairrosInterface } from "../../utils/models/BairrosInterface";
 import BotaoContext from "../../contexts/BotoesContext";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
+import { CommonActions } from "@react-navigation/native";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro } = useContext(PacienteContext);
 
@@ -20,6 +21,35 @@ const DadosLocais = ({ navigation }) => {
   const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo, setAuxBloqBotaoProximo, 
   auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
   const { idNovoAcomp } = useContext(NovoAcompContext)
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   
   // useEffect(()=>{

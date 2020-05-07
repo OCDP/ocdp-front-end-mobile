@@ -14,7 +14,7 @@ import {
   Radio,
 } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert, BackHandler } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
@@ -22,6 +22,7 @@ import NovoAcompContext from "../contexts/NovoAcompContext";
 import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import BotaoContext from "../contexts/BotoesContext";
+import { CommonActions } from "@react-navigation/native";
 
 const DATA = [
   {
@@ -46,6 +47,7 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
   const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
 
   useEffect(()=>{
     async function resetarBotao(){
@@ -54,6 +56,34 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     }
     resetarBotao();
   }, [])
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(()=>{
     async function setarBotao(){

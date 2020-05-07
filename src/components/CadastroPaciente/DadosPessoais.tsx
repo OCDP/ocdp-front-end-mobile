@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, ContextType }from "react";
-import { View, Button } from "react-native";
+import { View, Button, Alert, BackHandler } from "react-native";
 import {
   useStyleSheet,
   Radio,
@@ -14,6 +14,8 @@ import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
 import BotaoContext from "../../contexts/BotoesContext";
+import { useLoading } from "../../contexts/AppContext";
+import { CommonActions } from "@react-navigation/native";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -42,7 +44,37 @@ const DadosPessoais = ({ navigation }) => {
     setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
   const [dtNascString, setDtNascString] = useState("")
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [, setLoading] = useLoading()
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   useEffect(()=>{
     async function setarBotao(){
       if(bloqBotaoProximo == true){
@@ -85,20 +117,6 @@ const DadosPessoais = ({ navigation }) => {
     setarBotao();
   }, [nome, dtNasci, cpf, email, endereco, telCell,
     telResp, nmMae, idNovoAcomp])
-
-      async function setarDataNascimento(dt){
-        let dataState = dt;
-        console.log(dataState)
-        if(dataState.length == 2){
-          dataState = dataState + "/"
-        }
-        if(dataState.length == 5){
-          dataState = dataState + "/"
-        }
-        if(dataState.length < 10){
-          await setDtNascString(dataState);
-        }
-      }
   
       const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -114,8 +132,11 @@ const DadosPessoais = ({ navigation }) => {
   },[])
 
   const confirmarData = (dt) => {
-    hideDatePicker
+    console.log("confirmardata", dt)
+    hideDatePicker()
+    console.log(isDatePickerVisible)
       setDtNascString(moment(dt).format("DD/MM/YYYY"))
+      setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   }
 
   const hideDatePicker = () => {
@@ -167,18 +188,19 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
       </View>
-      <View>
+      <View style={styles.lineContent}>
         <Input
             placeholder="Data nascimento"
             icon={user}
             value={dtNascString}
+            disabled={true} 
           />
-        <Button title="Show Date Picker" onPress={showDatePicker} />
+        <Button title="Selecionar Data Nascimento" onPress={showDatePicker} />
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={(a)=> confirmarData(a)}
-          onCancel={()=> console.log("cancel")}
+          onCancel={()=> hideDatePicker}
         />
       </View>
       {/* <View style={styles.lineContent}>

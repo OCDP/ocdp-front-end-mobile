@@ -11,9 +11,10 @@ import {
   Autocomplete,
   CheckBox,
 } from "@ui-kitten/components";
+import DateTimePickerModal from "react-native-modal-datetime-picker"
 import { Ionicons } from "@expo/vector-icons";
 import moment from 'moment';
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Button, BackHandler, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import apiFunc from "../services/api";
@@ -22,6 +23,7 @@ import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import NovoAcompContext from "../contexts/NovoAcompContext";
 import BotaoContext from "../contexts/BotoesContext";
 import PostFatoresContext from "../contexts/PostFatoresContext";
+import { CommonActions } from "@react-navigation/native";
 
 const DATA = [
   {
@@ -53,14 +55,44 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState('');
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
-  const [dataAcompState, setDataAcompState] = React.useState(new Date());
-  const [dataTratState, setDataTratState] = React.useState(new Date());
+  const [dataAcompState, setDataAcompState] = React.useState("");
+  const [dataTratState, setDataTratState] = React.useState("");
   const [dataAtual, setDataAtual] = React.useState(null);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
     // setHistorico(historico);
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
@@ -165,6 +197,27 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     }
   }
 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const confirmarDataTratamento = (dt) => {
+    hideDatePicker
+      setDataSugeridaTratamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
+      setDataTratState(moment(dt).format("DD/MM/YYYY"));
+  }
+
+  const confirmarDataAcompanhamento = (dt) => {
+    hideDatePicker
+      setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
+      setDataAcompState(moment(dt).format("DD/MM/YYYY"));
+  }
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const [dtNascString, setDtNascString] = useState("")
   
   useEffect(()=>{
     async function setarBotao(){
@@ -298,23 +351,17 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                   />
                 </View>
                 <View>
-                  <Datepicker
-                    disabled={activeCheckedAcompanhamento ? false : true}
-                    min={new Date("1900-12-25")}
-                    date={dataAcompState || new Date(moment().format("YYYY-MM-DD"))}
-                    placeholder="Data de Nascimento"
-                    onSelect={(a) =>{
-                      console.log(a)
-                      
-                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
-                      setDataAcompState(a)
-                      console.log(data)
-                      setDataSugeridaAcompanhamento(data)
-                      return a;
-
-                    }
-                    }
-                    icon={calendar}
+                  <Input
+                      placeholder="Data sugerida tratamento"
+                      icon={user}
+                      value={dataSugeridaAcompanhamento}
+                    />
+                  <Button disabled={activeCheckedAcompanhamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={(a)=> confirmarDataAcompanhamento(a)}
+                    onCancel={()=> hideDatePicker}
                   />
                 </View>
               </View>
@@ -335,22 +382,17 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                   />
                 </View>
                 <View>
-                  <Datepicker
-                    disabled={activeCheckedTratamento ? false : true}
-                    min={new Date("1900-12-25")}
-                    date={dataTratState || new Date(moment().format("YYYY-MM-DD"))}
-                    placeholder="Data de Nascimento"
-                    onSelect={(a) => {
-                      console.log(a)
-                      let data = moment(a.toString()).format('YYYY-MM-DD HH:mm:ss')
-                      setDataTratState(a)
-                      setDataSugeridaTratamento(data)
-                      return a;
-
-                    }
-                      
-                    }
-                    icon={calendar}
+                  <Input
+                      placeholder="Data sugerida tratamento"
+                      icon={user}
+                      value={dataTratState}
+                    />
+                  <Button disabled={activeCheckedTratamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={(a)=> confirmarDataTratamento(a)}
+                    onCancel={()=> hideDatePicker}
                   />
                 </View>
               </View>
