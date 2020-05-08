@@ -16,12 +16,21 @@ import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import AtendimentoContext from "../contexts/AtendimentosContext";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 import Lesoes from "./CadastroPaciente/Lesoes";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const ListHistorico = ({ navigation, themedStyle = null }) => {
   const { atendimento } = useContext(AtendimentoContext);
 
+  const styles = useStyleSheet({
+    container: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "center",
+    },
+  });
+
   return (
-    <View>
+    <View style={styles.container}>
       <Text>data atendimento: {atendimento.atendimento.dataAtendimento}</Text>
       <Text>
         local atendimento: {atendimento.atendimento.localAtendimento.nome}
@@ -42,19 +51,24 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       </View>
       <Text>REGIOES LESOES</Text>
       {atendimento.regioesLesoes.map(({ regiaoBoca, lesao }, i) => (
-        <Lesoes
-          key={i}
-          imgRegiao={regiaoBoca.siglaRegiaoBoca}
-          title={lesao.nome}
-          navigation={navigation}
-        />
+        <View key={i}>
+          <TouchableOpacity onPress={() => console.log("cliquei")}>
+            <Lesoes
+              imgRegiao={regiaoBoca.siglaRegiaoBoca.imagemBase64}
+              title={regiaoBoca.nome}
+              navigation={navigation}
+            />
+            <Text>nome da lesao: {lesao.nome}</Text>
+            <Text>tipo da lesao: {lesao.tipoLesao.nome}</Text>
+          </TouchableOpacity>
+        </View>
       ))}
       <Text>PROCEDIMENTOS</Text>
-      {atendimento.procedimentos.map(({ nome, anexo64, observacao }, i) => (
-        <View key={i}>
-          <Text>{nome}</Text>
-
-          <Image source={{ uri: `${anexo64}` }} />
+      {atendimento.procedimentos.map(({ nome, anexo64, observacao, id }) => (
+        <View key={id}>
+          <TouchableOpacity onPress={() => console.log("cliquei")}>
+            <Lesoes imgRegiao={anexo64} title={nome} navigation={navigation} />
+          </TouchableOpacity>
         </View>
       ))}
     </View>
