@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { View } from "react-native";
+import React, { useContext, useState, useEffect, ContextType }from "react";
+import { View, Button, Alert, BackHandler } from "react-native";
 import {
   useStyleSheet,
   Radio,
@@ -7,11 +7,15 @@ import {
   Input,
   Datepicker,
 } from "@ui-kitten/components";
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+import moment from 'moment';
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
 import BotaoContext from "../../contexts/BotoesContext";
+import { useLoading } from "../../contexts/AppContext";
+import { CommonActions } from "@react-navigation/native";
 
 const DadosPessoais = ({ navigation }) => {
   const {
@@ -38,7 +42,39 @@ const DadosPessoais = ({ navigation }) => {
   const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
   const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
     setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
+  const [dtNascString, setDtNascString] = useState("")
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [, setLoading] = useLoading()
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   useEffect(()=>{
     async function setarBotao(){
       if(bloqBotaoProximo == true){
@@ -65,7 +101,7 @@ const DadosPessoais = ({ navigation }) => {
     async function setarBotao(){
       console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
       telResp, nmMae, idNovoAcomp)
-      if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
+      if(nome != null && cpf != null && email != null && endereco != null && telCell != null &&
         telResp != null && nmMae != null && idNovoAcomp != undefined){
           if(auxBloqBotaoProximo == false){
             setBloqBotaoProximo(false);
@@ -82,6 +118,9 @@ const DadosPessoais = ({ navigation }) => {
   }, [nome, dtNasci, cpf, email, endereco, telCell,
     telResp, nmMae, idNovoAcomp])
   
+      const showDatePicker = () => {
+        setDatePickerVisibility(true);
+      };
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
@@ -92,6 +131,18 @@ const DadosPessoais = ({ navigation }) => {
     setIdNovoAcomp(2)
   },[])
 
+  const confirmarData = (dt) => {
+    console.log("confirmardata", dt)
+    hideDatePicker()
+    console.log(isDatePickerVisible)
+      setDtNascString(moment(dt).format("DD/MM/YYYY"))
+      setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+  }
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
   const styles = useStyleSheet({
     lineContent: {
       flex: 1,
@@ -100,6 +151,18 @@ const DadosPessoais = ({ navigation }) => {
     },
     heightInput: {
       height: 40,
+    },boxDatePicker: {
+      marginHorizontal: 8,
+      paddingVertical: 10,
+      borderRadius: 10,
+      elevation: 8,
+      shadowRadius: 8,
+      shadowColor: "#000",
+      shadowOffset: {
+        height: 1,
+        width: 0,
+      },
+      shadowOpacity: 0.1,
     },
   });
 
@@ -126,16 +189,45 @@ const DadosPessoais = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.lineContent}>
+        <Input
+            placeholder="Data nascimento"
+            icon={user}
+            value={dtNascString}
+            disabled={true} 
+          />
+        <Button title="Selecionar Data Nascimento" onPress={showDatePicker} />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={(a)=> confirmarData(a)}
+          onCancel={()=> hideDatePicker}
+        />
+      </View>
+      {/* <View style={styles.lineContent}>
         <View>
           <Datepicker
-            min={new Date("1900-12-25")}
-            date={dtNasci}
+            // min={new Date("1900-12-25")}
+            date={dtNasci || new Date(moment().format('YYYY-MM-DD'))}
             placeholder="Data de Nascimento"
-            onSelect={setDtNasci}
+            onSelect={(dtNasci)=> {
+              setDtNasci(dtNasci)
+            }}
             icon={calendar}
           />
         </View>
-      </View>
+      </View> */}
+      {/* <View style={styles.lineContent}>
+        <View>
+          <Input
+            placeholder="Data de Nascimento"
+            icon={calendar}
+            value={dtNascString}
+            onChangeText={(dtNascString)=>{
+              setarDataNascimento(dtNascString)
+            }}
+          />
+        </View>
+      </View> */}
       <View style={styles.lineContent}>
         <View
           style={{

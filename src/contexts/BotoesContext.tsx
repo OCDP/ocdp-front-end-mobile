@@ -6,8 +6,8 @@ import React, {
 } from "react";
 
 interface BotaoProps {
-  bloqBotaoAnterior: boolean
-  setBloqBotaoAnterior?: Dispatch<SetStateAction<boolean>>;
+  activeStepBtn: number
+  setActiveStepBtn?: Dispatch<SetStateAction<number>>;
   bloqBotaoProximo: boolean
   setBloqBotaoProximo?: Dispatch<SetStateAction<boolean>>;
   auxBloqBotaoProximo: boolean;
@@ -17,7 +17,7 @@ interface BotaoProps {
 }
 
 const defaultBotao = {
-  bloqBotaoAnterior: true,
+  activeStepBtn: 0,
   bloqBotaoProximo: true,
   auxBloqBotaoProximo: true,
   auxBloqBotaoProximo2: true,
@@ -28,7 +28,7 @@ const BotaoContext = createContext<BotaoProps>(
 );
 
 export function BotaoProvider({ children }) {
-  const [bloqBotaoAnterior, setBloqBotaoAnterior] = useState();
+  const [activeStepBtn, setActiveStepBtn] = useState();
   const [bloqBotaoProximo, setBloqBotaoProximo] = useState();
   const [auxBloqBotaoProximo, setAuxBloqBotaoProximo] = useState()
   const [auxBloqBotaoProximo2, setAuxBloqBotaoProximo2] = useState()
@@ -36,8 +36,8 @@ export function BotaoProvider({ children }) {
   return (
     <BotaoContext.Provider
       value={{
-        bloqBotaoAnterior,
-        setBloqBotaoAnterior,
+        activeStepBtn,
+        setActiveStepBtn,
         bloqBotaoProximo,
         setBloqBotaoProximo,
         auxBloqBotaoProximo, 

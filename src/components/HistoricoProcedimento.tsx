@@ -7,7 +7,7 @@ import {
   withStyles,
   Button,
 } from "@ui-kitten/components";
-import PacienteContext from "../contexts/PacienteContext";
+import PacienteContext, {useFlushPaciente} from "../contexts/PacienteContext";
 import { useFlushLesoesRegioes } from "../contexts/LesoesRegioesContext";
 import Timeline from "react-native-timeline-flatlist";
 import { useLoading } from "../contexts/AppContext";
@@ -18,6 +18,7 @@ import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 
 const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
   const flushLesoesRegioes = useFlushLesoesRegioes();
+  const flushPaciente = useFlushPaciente()
   const { historico } = useContext(PacienteContext);
   const { setAcomp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
@@ -60,6 +61,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
 
   async function acompActions() {
     flushLesoesRegioes();
+    flushPaciente();
     await setAcomp(true);
     navigation.navigate("CadastrarPaciente");
   }

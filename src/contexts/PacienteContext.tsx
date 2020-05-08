@@ -14,7 +14,7 @@ export interface Paciente {
   listaFatores: Array<FatoresInterface>;
   nome: string;
   cpf: string;
-  dtNasci: Date;
+  dtNasci: string;
   sexo: string;
   email: string;
   id: string;
@@ -37,8 +37,8 @@ interface PacienteContextProps {
   setNome?: Dispatch<SetStateAction<string>>;
   cpf: string;
   setCpf?: Dispatch<SetStateAction<string>>;
-  dtNasci: Date;
-  setDtNasci?: Dispatch<SetStateAction<Date>>;
+  dtNasci: string;
+  setDtNasci?: Dispatch<SetStateAction<string>>;
   id: string;
   setId?: Dispatch<SetStateAction<string>>;
   sexo: string;
@@ -95,7 +95,7 @@ export function PacienteProvider({ children }) {
   const [listaFatores, setListaFatores] = useState([]);
   const [nome, setNome] = useState<string>(null);
   const [cpf, setCpf] = useState<string>(null);
-  const [dtNasci, setDtNasci] = useState<Date>(null);
+  const [dtNasci, setDtNasci] = useState<string>(null);
   const [sexo, setSexo] = useState<string>(null);
   const [id, setId] = useState<string>(null);
   const [email, setEmail] = useState<string>(null);

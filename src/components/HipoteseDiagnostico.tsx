@@ -8,11 +8,12 @@ import {
   Radio,
 } from "@ui-kitten/components";
 
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert, BackHandler } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText } from "../assets/Icons";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
+import { CommonActions } from "@react-navigation/native";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
@@ -20,6 +21,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [selectedIndex, setSelectedIndex] = React.useState();
   const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
   const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
+  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   const { confirmaRastreamento,
     setConfirmaRastreamento, 
     observacao,
@@ -35,6 +37,34 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     }
     resetarBotao();
   }, [])
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
+        {
+          text: "Voltar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Desejo cancelar procedimento", onPress: () => {
+              navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          setActiveStepBtn(0);
+        } }
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(()=>{
     async function setarBotao(){
