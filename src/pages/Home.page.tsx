@@ -106,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
   async function cadastroActions() {
     setLoading(true);
     console.log('flush')
-    // flushPaciente();
+    flushPaciente();
     // flushLocais();
     flushLesoesRegioes();
     flushPostFatores();

@@ -315,15 +315,13 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     setAuxBloqBotaoProximo2(true);
   }
 
-  const passo1Retorno = () => {
-    if(!idNovoAcomp || !nomesLocaisAtendido){
-      alert("preencha todos os campos")
-    }else{
-      setBloqBotaoProximo(true);
-      setAuxBloqBotaoProximo(true);
-      setAuxBloqBotaoProximo2(true);
-    }
-  }
+  // const passo1Retorno = () => {
+  //   console.log("idNovoAcomp", idNovoAcomp)
+  //   console.log("nomesLocaisAtendido", nomesLocaisAtendido)
+  //     setBloqBotaoProximo(true);
+  //     setAuxBloqBotaoProximo(true);
+  //     setAuxBloqBotaoProximo2(true);
+  // }
 
   useEffect(()=>{
     async function resetarPassos(){

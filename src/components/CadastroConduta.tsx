@@ -97,6 +97,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(()=>{
     async function loadLocaisAtendido(){
       setnomesAtendidosSelect("");
+      setNomesLocaisAtendido({});
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       // console.log('loadLocaisAtendido', tipoAtendido);
       // console.log(url);
@@ -134,6 +135,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function loadLocaisAtendido(){
+      setNomesLocaisEncaminhado({});
       setNomesEncaminhadoSelect("");
       let url = `localAtendimento/byTipo/${tipoEncaminhado}`;
       // console.log('loadLocaisAtendido', tipoEncaminhado);

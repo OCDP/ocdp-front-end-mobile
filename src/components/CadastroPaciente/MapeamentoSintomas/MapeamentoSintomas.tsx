@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, BackHandler } from "react-native";
 import {
   useStyleSheet,
   CheckBox,
