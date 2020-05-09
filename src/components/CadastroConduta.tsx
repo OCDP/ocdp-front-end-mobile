@@ -357,6 +357,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                       placeholder="Data sugerida tratamento"
                       icon={user}
                       value={dataSugeridaAcompanhamento}
+                      disabled={true} 
                     />
                   <Button disabled={activeCheckedAcompanhamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
                   <DateTimePickerModal
@@ -388,6 +389,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                       placeholder="Data sugerida tratamento"
                       icon={user}
                       value={dataTratState}
+                      disabled={true} 
                     />
                   <Button disabled={activeCheckedTratamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
                   <DateTimePickerModal

@@ -334,7 +334,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   return (
     <View style={styles.lineContent}>
       <View style={{ flex: 1 }}>
-        {acomp == true ? (
           <ProgressSteps
           style={{ flex: 1 }}
           activeStepIconColor={themedStyle.primary}
@@ -355,9 +354,16 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnStyle={btnStyle}
             nextBtnDisabled={bloqBotaoProximo}
             onNext = {() => resetarBotao()}
-          >
+            >
             <View style={{ flex: 1, alignItems: "center" }}>
+            {acomp === true ? (
                 <DadosAcompanhamento navigation={navigation} />
+              ) : (
+                <>
+                  <DadosLocais navigation={navigation} />
+                  <DadosPessoais navigation={navigation} />
+                </>
+              )}
             </View>
           </ProgressStep>
           <ProgressStep
@@ -376,7 +382,10 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             }
           >
             <View style={{ alignItems: "center" }}>
-              <HipoteseDiagnostico navigation={navigation}/>
+              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
+                <MapeamentoSintomas navigation={navigation} />
+              ): (<HipoteseDiagnostico navigation={navigation}/>
+              )}
             </View>
           </ProgressStep>
           <ProgressStep
@@ -398,79 +407,14 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             }
             onSubmit={() => resetNav()}
           >
-            <CondutaIntervencao navigation={navigation}/>
+            <View style={{ alignItems: "center" }}>
+              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
+                <CadastroConduta navigation={navigation} />
+              ): (<CondutaIntervencao navigation={navigation}/>
+              )}
+            </View>
           </ProgressStep>
         </ProgressSteps>
-
-        ): (<ProgressSteps
-          style={{ flex: 1 }}
-          activeStepIconColor={themedStyle.primary}
-          completedProgressBarColor={themedStyle.primary}
-          activeStepIconBorderColor={themedStyle.primary}
-          borderWidth={2}
-          completedStepIconColor={themedStyle.primary}
-          labelColor={themedStyle.primaryDark}
-          activeLabelColor={themedStyle.primary}
-          activeStepNumColor="#fff"
-          activeStep = {activeStepBtn}
-        >
-          <ProgressStep
-            style={{ flex: 1 }}
-            label="Passo 1"
-            nextBtnText="avançar"
-            nextBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
-          >
-            <View style={{ flex: 1, alignItems: "center" }}>
-              <>
-                <DadosLocais navigation={navigation} />
-                <DadosPessoais navigation={navigation} />
-              </>
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Passo 2"
-            nextBtnText="avançar"
-            previousBtnText="voltar"
-            previousBtnStyle={btnStyle}
-            nextBtnTextStyle={buttonTextStyle}
-            previousBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
-            onPrevious = {async ()=> 
-
-              setBloqBotaoProximo(false)
-            }
-          >
-            <View style={{ alignItems: "center" }}>
-              <MapeamentoSintomas navigation={navigation} />
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Passo 3"
-            nextBtnText="avançar"
-            previousBtnText="voltar"
-            previousBtnStyle={btnStyle}
-            nextBtnTextStyle={buttonTextStyle}
-            previousBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            finishBtnText="concluir"
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
-            onPrevious = { ()=> {
-                setBloqBotaoProximo(false)
-                flushLesoesRegioes();
-                flushPostFatores();
-              }
-            }
-            onSubmit={() => resetNav()}
-          >
-            <CadastroConduta navigation={navigation} />
-          </ProgressStep>
-        </ProgressSteps>)}
       </View>
     </View>
   );

@@ -279,6 +279,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                       placeholder="Data sugerida tratamento"
                       icon={user}
                       value={dataAcompState}
+                      disabled={true} 
                     />
                   <Button disabled={activeCheckedAcompanhamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
                   <DateTimePickerModal
@@ -310,6 +311,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                       placeholder="Data sugerida tratamento"
                       icon={user}
                       value={dataTratState}
+                      disabled={true} 
                     />
                   <Button disabled={activeCheckedTratamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
                   <DateTimePickerModal
