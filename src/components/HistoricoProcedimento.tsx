@@ -14,6 +14,7 @@ import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import AtendimentoContext from "../contexts/AtendimentosContext";
+import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 
 const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
   const flushLesoesRegioes = useFlushLesoesRegioes();
@@ -47,7 +48,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
     setLoading(true);
     try {
       await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-        .get(`historico/atendimento/${data.id}`)
+        .get<AtendimentosInterface>(`historico/atendimento/${data.id}`)
         .then((resp) => {
           setAtendimento(resp.data);
           setLoading(false);

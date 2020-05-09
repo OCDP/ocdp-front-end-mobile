@@ -1,25 +1,22 @@
 import React, { useContext } from "react";
-import { Button, Layout, Text, List, ListItem } from "@ui-kitten/components";
+import { Text, Layout } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
-import { StyleSheet, View } from "react-native";
-
-import { add, user, map, fileAgend } from "../assets/Icons";
+import { View, Image, StyleSheet } from "react-native";
+import Lesoes from "../components/CadastroPaciente/Lesoes";
 import AtendimentoContext from "../contexts/AtendimentosContext";
+import ListHistorico from "../components/ListHistorico";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Historico = ({ navigation }) => {
-  const { atendimento, setAtendimento } = useContext(AtendimentoContext);
-
-  const renderItem = ({ item, index }) => (
-    <ListItem title={`${item.title} ${index + 1}`} />
-  );
-
   return (
     <PageContainer title="Detalhes historico" navigation={navigation}>
-      <Layout style={styles.container}>
-        <View>
-          <Text>tope estamos aq no historico</Text>
-        </View>
-      </Layout>
+      <ScrollView style={styles.container}>
+        <Layout style={styles.container}>
+          <View style={{ height: "90%" }}>
+            <ListHistorico navigation={navigation} />
+          </View>
+        </Layout>
+      </ScrollView>
     </PageContainer>
   );
 };
@@ -27,7 +24,7 @@ const Historico = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    height: "80%",
   },
 });
 
