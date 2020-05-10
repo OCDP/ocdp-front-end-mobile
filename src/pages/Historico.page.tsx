@@ -10,11 +10,9 @@ import { ScrollView } from "react-native-gesture-handler";
 const Historico = ({ navigation }) => {
   return (
     <PageContainer title="Detalhes historico" navigation={navigation}>
-      <ScrollView style={styles.container}>
+      <ScrollView>
         <Layout style={styles.container}>
-          <View style={{ height: "90%" }}>
-            <ListHistorico navigation={navigation} />
-          </View>
+          <ListHistorico navigation={navigation} />
         </Layout>
       </ScrollView>
     </PageContainer>
@@ -24,7 +22,7 @@ const Historico = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: "80%",
+    width: "100%",
   },
 });
 
