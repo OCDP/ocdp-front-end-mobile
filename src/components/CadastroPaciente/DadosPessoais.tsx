@@ -1,14 +1,15 @@
-import React, { useContext, useState, useEffect, ContextType }from "react";
+import React, { useContext, useState, useEffect, ContextType } from "react";
 import { View, Button, Alert, BackHandler } from "react-native";
 import {
   useStyleSheet,
   Radio,
   RadioGroup,
   Input,
+  Button as ButtonUiKitten,
   Datepicker,
 } from "@ui-kitten/components";
-import DateTimePickerModal from "react-native-modal-datetime-picker"
-import moment from 'moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
@@ -38,32 +39,45 @@ const DadosPessoais = ({ navigation }) => {
     nmMae,
     setNmMae,
   } = useContext(PacienteContext);
-  
-  const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext)
-  const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo,
-    setAuxBloqBotaoProximo, auxBloqBotaoProximo2, setAuxBloqBotaoProximo2} = useContext(BotaoContext)
-  const [dtNascString, setDtNascString] = useState("")
+
+  const { idNovoAcomp, setIdNovoAcomp } = useContext(NovoAcompContext);
+  const {
+    bloqBotaoProximo,
+    setBloqBotaoProximo,
+    auxBloqBotaoProximo,
+    setAuxBloqBotaoProximo,
+    auxBloqBotaoProximo2,
+    setAuxBloqBotaoProximo2,
+  } = useContext(BotaoContext);
+  const [dtNascString, setDtNascString] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [, setLoading] = useLoading()
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
-  
+  const [, setLoading] = useLoading();
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+
   useEffect(() => {
     const backAction = () => {
-      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
-        {
-          text: "Voltar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Desejo cancelar procedimento", onPress: () => {
+      Alert.alert(
+        "Atenção",
+        "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?",
+        [
+          {
+            text: "Voltar",
+            onPress: () => null,
+            style: "cancel",
+          },
+          {
+            text: "Desejo cancelar procedimento",
+            onPress: () => {
               navigation.dispatch(
-              CommonActions.reset({
-                routes: [{ name: "Home" }],
-              })
-            );
-          setActiveStepBtn(0);
-        } }
-      ]);
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+              setActiveStepBtn(0);
+            },
+          },
+        ]
+      );
       return true;
     };
 
@@ -75,69 +89,115 @@ const DadosPessoais = ({ navigation }) => {
     return () => backHandler.remove();
   }, []);
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(bloqBotaoProximo == true){
-        console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
-        telResp, nmMae, idNovoAcomp)
-        if(nome != null && dtNasci != null && cpf != null && email != null && endereco != null && telCell != null &&
-          telResp != null && nmMae != null && idNovoAcomp != undefined){
-            if(auxBloqBotaoProximo == false){
-              setBloqBotaoProximo(false);
-            }else{
-              setAuxBloqBotaoProximo2(false);
-            }
-          }else{
-            setAuxBloqBotaoProximo2(true);
+  useEffect(() => {
+    async function setarBotao() {
+      if (bloqBotaoProximo == true) {
+        console.log(
+          "values",
+          nome,
+          dtNasci,
+          cpf,
+          email,
+          endereco,
+          telCell,
+          telResp,
+          nmMae,
+          idNovoAcomp
+        );
+        if (
+          nome != null &&
+          dtNasci != null &&
+          cpf != null &&
+          email != null &&
+          endereco != null &&
+          telCell != null &&
+          telResp != null &&
+          nmMae != null &&
+          idNovoAcomp != undefined
+        ) {
+          if (auxBloqBotaoProximo == false) {
+            setBloqBotaoProximo(false);
+          } else {
+            setAuxBloqBotaoProximo2(false);
           }
-          console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-          console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+        } else {
+          setAuxBloqBotaoProximo2(true);
+        }
+        console.log("auxBloqBotaoProximo", auxBloqBotaoProximo);
+        console.log("auxBloqBotaoProximo2", auxBloqBotaoProximo2);
       }
     }
     setarBotao();
-  }, [])
+  }, []);
 
-  useEffect(()=>{
-    async function setarBotao(){
-      console.log("values", nome ,dtNasci, cpf, email, endereco, telCell,
-      telResp, nmMae, idNovoAcomp)
-      if(nome != null && cpf != null && email != null && endereco != null && telCell != null &&
-        telResp != null && nmMae != null && idNovoAcomp != undefined){
-          if(auxBloqBotaoProximo == false){
-            setBloqBotaoProximo(false);
-          }else{
-            setAuxBloqBotaoProximo2(false);
-          }
-        }else{
-          setAuxBloqBotaoProximo2(true);
+  useEffect(() => {
+    async function setarBotao() {
+      console.log(
+        "values",
+        nome,
+        dtNasci,
+        cpf,
+        email,
+        endereco,
+        telCell,
+        telResp,
+        nmMae,
+        idNovoAcomp
+      );
+      if (
+        nome != null &&
+        cpf != null &&
+        email != null &&
+        endereco != null &&
+        telCell != null &&
+        telResp != null &&
+        nmMae != null &&
+        idNovoAcomp != undefined
+      ) {
+        if (auxBloqBotaoProximo == false) {
+          setBloqBotaoProximo(false);
+        } else {
+          setAuxBloqBotaoProximo2(false);
         }
-        console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-        console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
+      } else {
+        setAuxBloqBotaoProximo2(true);
+      }
+      console.log("auxBloqBotaoProximo", auxBloqBotaoProximo);
+      console.log("auxBloqBotaoProximo2", auxBloqBotaoProximo2);
     }
     setarBotao();
-  }, [nome, dtNasci, cpf, email, endereco, telCell,
-    telResp, nmMae, idNovoAcomp])
-  
-      const showDatePicker = () => {
-        setDatePickerVisibility(true);
-      };
+  }, [
+    nome,
+    dtNasci,
+    cpf,
+    email,
+    endereco,
+    telCell,
+    telResp,
+    nmMae,
+    idNovoAcomp,
+  ]);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     setSexo(sexos[selectedIndex].text);
   }, [selectedIndex]);
 
-  useEffect(()=>{
-    setIdNovoAcomp(2)
-  },[])
+  useEffect(() => {
+    setIdNovoAcomp(2);
+  }, []);
 
   const confirmarData = (dt) => {
-    console.log("confirmardata", dt)
-    hideDatePicker()
-    console.log(isDatePickerVisible)
-      setDtNascString(moment(dt).format("DD/MM/YYYY"))
-      setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
-  }
+    console.log("confirmardata", dt);
+    hideDatePicker();
+    console.log(isDatePickerVisible);
+    setDtNascString(moment(dt).format("DD/MM/YYYY"));
+    setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+  };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -151,7 +211,8 @@ const DadosPessoais = ({ navigation }) => {
     },
     heightInput: {
       height: 40,
-    },boxDatePicker: {
+    },
+    boxDatePicker: {
       marginHorizontal: 8,
       paddingVertical: 10,
       borderRadius: 10,
@@ -165,6 +226,17 @@ const DadosPessoais = ({ navigation }) => {
       shadowOpacity: 0.1,
     },
   });
+
+  const validateCpf = (cpf) => {
+    let cpfMask: string = "00000000000";
+    cpfMask = cpfMask.replace(/[^\d]/g, "");
+    setCpf(cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"));
+  };
+
+  const onChangeCpf = (cpf) => {
+    console.log(">>> ", cpf);
+    validateCpf(cpf);
+  };
 
   return (
     <>
@@ -190,17 +262,17 @@ const DadosPessoais = ({ navigation }) => {
       </View>
       <View style={styles.lineContent}>
         <Input
-            placeholder="Data nascimento"
-            icon={user}
-            value={dtNascString}
-            disabled={true} 
-          />
+          placeholder="Data nascimento"
+          icon={user}
+          value={dtNascString}
+          disabled={true}
+        />
         <Button title="Selecionar Data Nascimento" onPress={showDatePicker} />
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
-          onConfirm={(a)=> confirmarData(a)}
-          onCancel={()=> hideDatePicker}
+          onConfirm={(a) => confirmarData(a)}
+          onCancel={() => hideDatePicker}
         />
       </View>
       {/* <View style={styles.lineContent}>
@@ -255,12 +327,20 @@ const DadosPessoais = ({ navigation }) => {
       <View style={styles.lineContent}>
         <View>
           <Input
+            disabled={cpf.length > 10 ? true : false}
             placeholder="CPF"
             icon={user}
-            onChangeText={setCpf}
+            onChangeText={(value) => onChangeCpf(value)}
             value={cpf}
           />
         </View>
+        <ButtonUiKitten
+          disabled={cpf.length > 10 ? false : true}
+          size="small"
+          onPress={() => setCpf("")}
+        >
+          limpar CPF
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
