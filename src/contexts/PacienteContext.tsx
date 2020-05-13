@@ -94,7 +94,7 @@ export function PacienteProvider({ children }) {
   const [historico, setHistorico] = useState([]);
   const [listaFatores, setListaFatores] = useState([]);
   const [nome, setNome] = useState<string>(null);
-  const [cpf, setCpf] = useState<string>(null);
+  const [cpf, setCpf] = useState<string>("");
   const [dtNasci, setDtNasci] = useState<string>(null);
   const [sexo, setSexo] = useState<string>(null);
   const [id, setId] = useState<string>(null);
