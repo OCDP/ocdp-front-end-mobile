@@ -50,7 +50,7 @@ const DadosPessoais = ({ navigation }) => {
     setAuxBloqBotaoProximo2,
   } = useContext(BotaoContext);
   const [dtNascString, setDtNascString] = useState("");
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [, setLoading] = useLoading();
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
 
@@ -178,10 +178,6 @@ const DadosPessoais = ({ navigation }) => {
     idNovoAcomp,
   ]);
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     setSexo(sexos[selectedIndex].text);
@@ -192,15 +188,9 @@ const DadosPessoais = ({ navigation }) => {
   }, []);
 
   const confirmarData = (dt) => {
-    console.log("confirmardata", dt);
-    hideDatePicker();
-    console.log(isDatePickerVisible);
+    setIsDatePickerVisible(false);
     setDtNascString(moment(dt).format("DD/MM/YYYY"));
     setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
   };
 
   const styles = useStyleSheet({
@@ -267,12 +257,19 @@ const DadosPessoais = ({ navigation }) => {
           value={dtNascString}
           disabled={true}
         />
-        <Button title="Selecionar Data Nascimento" onPress={showDatePicker} />
+        <Button
+          title="Selecionar Data Nascimento"
+          onPress={() => setIsDatePickerVisible(true)}
+        />
         <DateTimePickerModal
+          cancelTextIOS="cancelar"
+          confirmTextIOS="confirmar"
+          headerTextIOS="Escolha uma data"
+          locale="pt-BR"
           isVisible={isDatePickerVisible}
           mode="date"
           onConfirm={(a) => confirmarData(a)}
-          onCancel={() => hideDatePicker}
+          onCancel={() => setIsDatePickerVisible(false)}
         />
       </View>
       {/* <View style={styles.lineContent}>
