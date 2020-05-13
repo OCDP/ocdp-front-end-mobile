@@ -19,7 +19,7 @@ import { useLoading } from "../../contexts/AppContext";
 import { CommonActions } from "@react-navigation/native";
 
 const DadosPessoais = ({ navigation }) => {
-  const {
+  let {
     nome,
     setNome,
     dtNasci,
@@ -187,6 +187,11 @@ const DadosPessoais = ({ navigation }) => {
     setIdNovoAcomp(2);
   }, []);
 
+  const validateEmail = (email) => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+  };
+
   const confirmarData = (dt) => {
     setIsDatePickerVisible(false);
     setDtNascString(moment(dt).format("DD/MM/YYYY"));
@@ -330,6 +335,15 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={(value) => onChangeCpf(value)}
             value={cpf}
           />
+          {/* <TextInputMask
+            refInput={value => { this.cpf = value }}
+            onChangeText={(formatted, extracted) => {
+              console.log(formatted) // +1 (123) 456-78-90
+              console.log(extracted) // 1234567890
+              setCpf(extracted)
+            }}
+            mask={"+1 ([000]) [000] [00] [00]"}
+          /> */}
         </View>
         <ButtonUiKitten
           disabled={cpf?.length > 10 ? false : true}
@@ -346,6 +360,12 @@ const DadosPessoais = ({ navigation }) => {
             icon={emailIcon}
             onChangeText={setEmail}
             value={email}
+            onBlur={() => {
+              if(validateEmail(email) == false){
+                alert("email inválido");
+                setEmail("");
+              }
+            }}
           />
         </View>
       </View>
@@ -356,6 +376,9 @@ const DadosPessoais = ({ navigation }) => {
             icon={phone}
             value={telCell}
             onChangeText={setTelCell}
+            maxLength={11}
+            textContentType={"telephoneNumber"}
+            keyboardType={"phone-pad"}
           />
         </View>
       </View>
