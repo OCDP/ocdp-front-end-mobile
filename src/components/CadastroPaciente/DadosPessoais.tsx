@@ -327,7 +327,7 @@ const DadosPessoais = ({ navigation }) => {
       <View style={styles.lineContent}>
         <View>
           <Input
-            disabled={cpf.length > 10 ? true : false}
+            disabled={cpf?.length > 10 ? true : false}
             placeholder="CPF"
             icon={user}
             onChangeText={(value) => onChangeCpf(value)}
@@ -335,7 +335,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={cpf.length > 10 ? false : true}
+          disabled={cpf?.length > 10 ? false : true}
           size="small"
           onPress={() => setCpf("")}
         >
