@@ -192,6 +192,16 @@ const DadosPessoais = ({ navigation }) => {
       return re.test(email);
   };
 
+  const validateTelefoneCelular = (telCelular) =>{
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{5}(?:-)?[0-9]{4}$/
+      return re.test(telCelular)
+  }
+
+  const validateTelefoneResponsavel = (telResponsavel) =>{
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/
+      return re.test(telResponsavel)
+  }
+
   const confirmarData = (dt) => {
     setIsDatePickerVisible(false);
     setDtNascString(moment(dt).format("DD/MM/YYYY"));
@@ -244,6 +254,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setNome}
           />
         </View>
+        <ButtonUiKitten
+          disabled={nome.length == 0}
+          size="small"
+          onPress={() => setNome("")}
+        >
+          limpar nome paciente
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -254,6 +271,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setEndereco}
           />
         </View>
+        <ButtonUiKitten
+          disabled={endereco.length == 0}
+          size="small"
+          onPress={() => setEndereco("")}
+        >
+          limpar endereço
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <Input
@@ -334,6 +358,7 @@ const DadosPessoais = ({ navigation }) => {
             icon={user}
             onChangeText={(value) => onChangeCpf(value)}
             value={cpf}
+            maxLength={14}
           />
           {/* <TextInputMask
             refInput={value => { this.cpf = value }}
@@ -368,6 +393,13 @@ const DadosPessoais = ({ navigation }) => {
             }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateEmail(email) ? false : true)}
+          size="small"
+          onPress={() => setEmail("")}
+        >
+          limpar email
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -379,8 +411,21 @@ const DadosPessoais = ({ navigation }) => {
             maxLength={11}
             textContentType={"telephoneNumber"}
             keyboardType={"phone-pad"}
+            onBlur={() => {
+              if(validateTelefoneCelular(telCell) == false){
+                alert("celular inválido");
+                setTelCell("");
+              }
+            }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateTelefoneCelular(telCell) ? false : true)}
+          size="small"
+          onPress={() => setTelCell("")}
+        >
+          limpar telefone celular
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -388,9 +433,22 @@ const DadosPessoais = ({ navigation }) => {
             placeholder="Telefone do resposável"
             icon={phone}
             value={telResp}
-            onChangeText={setTelResp}
+            maxLength={11}
+            onChangeText={setTelResp}onBlur={() => {
+              if(validateTelefoneResponsavel(telResp) == false){
+                alert("telefone responsavel inválido");
+                setTelResp("");
+              }
+            }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateTelefoneResponsavel(telResp) ? false : true)}
+          size="small"
+          onPress={() => setTelResp("")}
+        >
+          limpar telefone responsavel
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -401,6 +459,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setNmMae}
           />
         </View>
+        <ButtonUiKitten
+          disabled={nmMae.length == 0}
+          size="small"
+          onPress={() => setNmMae("")}
+        >
+          limpar nome mãe
+        </ButtonUiKitten>
       </View>
     </>
   );
