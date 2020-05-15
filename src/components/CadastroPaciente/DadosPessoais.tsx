@@ -255,7 +255,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={nome.length == 0}
+          disabled={nome ? (nome.length == 0) : true}
           size="small"
           onPress={() => setNome("")}
         >
@@ -272,7 +272,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={endereco.length == 0}
+          disabled={endereco ? (endereco.length == 0) : true}
           size="small"
           onPress={() => setEndereco("")}
         >
@@ -371,7 +371,7 @@ const DadosPessoais = ({ navigation }) => {
           /> */}
         </View>
         <ButtonUiKitten
-          disabled={cpf?.length > 10 ? false : true}
+          disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
           size="small"
           onPress={() => setCpf("")}
         >
@@ -460,7 +460,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={nmMae.length == 0}
+          disabled={nmMae ? (nmMae.length == 0) : true}
           size="small"
           onPress={() => setNmMae("")}
         >

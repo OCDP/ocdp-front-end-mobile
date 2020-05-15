@@ -53,81 +53,98 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
           Dados do atendimento
         </Text>
         <Divider style={styles.divider} />
-        <Text appearance="hint" category="c4">
-          Data: {atendimento.atendimento.dataAtendimento.split(" ")[0]}
-        </Text>
+        {atendimento.atendimento.dataAtendimento ? (
+          <Text appearance="hint" category="c4">
+            Data: {atendimento.atendimento.dataAtendimento.split(" ")[0]}
+          </Text>
+        ): null}
         <Divider style={styles.divider} />
-        <Text appearance="hint" category="c4">
-          Local atendimento: {atendimento.atendimento.localAtendimento.nome}
-        </Text>
+        {atendimento.atendimento.localAtendimento !== null ? (
+          <Text appearance="hint" category="c4">
+            Local atendimento: {atendimento.atendimento.localAtendimento.nome}
+          </Text>
+        ): null}
         <Divider style={styles.divider} />
+        {atendimento.atendimento.localEncaminhado ? (
         <Text appearance="hint" category="c4">
           Local encaminhado: {atendimento.atendimento.localEncaminhado.nome}
         </Text>
+        ): null}
         <Divider style={styles.divider} />
-        <Text appearance="hint" category="c4">
-          Nome do paciente: {atendimento.atendimento.paciente.nome}
-        </Text>
+        {atendimento.atendimento.paciente.nome ? (
+          <Text appearance="hint" category="c4">
+            Nome do paciente: {atendimento.atendimento.paciente.nome}
+          </Text> 
+        ): null}
         <Divider style={styles.divider} />
-        <Text appearance="hint" category="c4">
-          Tipo de atendimento: {atendimento.atendimento.tipoAtendimento}
-        </Text>
+        {atendimento.atendimento.tipoAtendimento ? (
+          <Text appearance="hint" category="c4">
+            Tipo de atendimento: {atendimento.atendimento.tipoAtendimento}
+          </Text>
+        ): null}
         <Divider style={styles.divider} />
-        <Text appearance="hint" category="c4">
-          Usuario responsavel: {atendimento.atendimento.usuario.nome}
-        </Text>
+        {atendimento.atendimento.usuario.nome ? (
+          <Text appearance="hint" category="c4">
+            Usuario responsavel: {atendimento.atendimento.usuario.nome}
+          </Text>
+        ): null}
       </View>
-
-      <View style={styles.boxInfo}>
-        <Text appearance="alternative" status="primary" category="h6">
-          Fatores de risco
-        </Text>
-        {atendimento.fatoresDeRisco.map(({ nome }, i) => (
-          <>
-            <Divider style={styles.divider} />
-            <Text key={i}>{nome}</Text>
-          </>
-        ))}
-      </View>
-
-      <View style={styles.boxInfo}>
-        <Text appearance="alternative" status="primary" category="h6">
-          Regiões das lesões
-        </Text>
-        {atendimento.regioesLesoes.map(({ regiaoBoca, lesao }, i) => (
-          <View key={i}>
-            <Lesoes
-              imgRegiao={regiaoBoca.siglaRegiaoBoca.imagemBase64}
-              title={regiaoBoca.nome}
-              navigation={navigation}
-            />
-            <View style={styles.infoLesoes}>
-              <Text appearance="hint" category="c4">
-                Lesao: {lesao.nome}
-              </Text>
+      {atendimento.fatoresDeRisco ? (
+        <View style={styles.boxInfo}>
+          <Text appearance="alternative" status="primary" category="h6">
+            Fatores de risco
+          </Text>
+          {atendimento.fatoresDeRisco.map(({ nome }, i) => (
+            <>
               <Divider style={styles.divider} />
-              <Text appearance="hint" category="c4">
-                Tipo da lesao: {lesao.tipoLesao.nome}
-              </Text>
+              <Text key={i}>{nome}</Text>
+            </>
+          ))}
+        </View>
+      ): null}
+
+      {atendimento.regioesLesoes ? (
+        <View style={styles.boxInfo}>
+          <Text appearance="alternative" status="primary" category="h6">
+            Regiões das lesões
+          </Text>
+          {atendimento.regioesLesoes ? atendimento.regioesLesoes.map(({ regiaoBoca, lesao }, i) => (
+            <View key={i}>
+              <Lesoes
+                imgRegiao={regiaoBoca.siglaRegiaoBoca.imagemBase64}
+                title={regiaoBoca.nome}
+                navigation={navigation}
+              />
+              <View style={styles.infoLesoes}>
+                <Text appearance="hint" category="c4">
+                  Lesao: {lesao.nome}
+                </Text>
+                <Divider style={styles.divider} />
+                <Text appearance="hint" category="c4">
+                  Tipo da lesao: {lesao.tipoLesao.nome}
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
-      </View>
-      <View style={styles.boxInfo}>
-        <Text appearance="alternative" status="primary" category="h6">
-          Procedimentos
-        </Text>
-        {atendimento.procedimentos.map(({ nome, anexo64, observacao, id }) => (
-          <View key={id}>
-            <Lesoes imgRegiao={anexo64} title={nome} navigation={navigation} />
-            <View style={styles.infoLesoes}>
-              <Text appearance="hint" category="c4">
-                Obs: {observacao}
-              </Text>
+          )): null}
+        </View>
+      ): null}
+      {atendimento.procedimentos ? (
+        <View style={styles.boxInfo}>
+          <Text appearance="alternative" status="primary" category="h6">
+            Procedimentos
+          </Text>
+          {atendimento.procedimentos.map(({ nome, anexo64, observacao, id }) => (
+            <View key={id}>
+              <Lesoes imgRegiao={anexo64} title={nome} navigation={navigation} />
+              <View style={styles.infoLesoes}>
+                <Text appearance="hint" category="c4">
+                  Obs: {observacao}
+                </Text>
+              </View>
             </View>
-          </View>
-        ))}
-      </View>
+          ))}
+        </View>
+      ): null}
     </View>
   );
 };
