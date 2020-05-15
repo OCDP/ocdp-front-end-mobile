@@ -19,7 +19,7 @@ import { useLoading } from "../../contexts/AppContext";
 import { CommonActions } from "@react-navigation/native";
 
 const DadosPessoais = ({ navigation }) => {
-  const {
+  let {
     nome,
     setNome,
     dtNasci,
@@ -187,6 +187,21 @@ const DadosPessoais = ({ navigation }) => {
     setIdNovoAcomp(2);
   }, []);
 
+  const validateEmail = (email) => {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+  };
+
+  const validateTelefoneCelular = (telCelular) =>{
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{5}(?:-)?[0-9]{4}$/
+      return re.test(telCelular)
+  }
+
+  const validateTelefoneResponsavel = (telResponsavel) =>{
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/
+      return re.test(telResponsavel)
+  }
+
   const confirmarData = (dt) => {
     setIsDatePickerVisible(false);
     setDtNascString(moment(dt).format("DD/MM/YYYY"));
@@ -239,6 +254,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setNome}
           />
         </View>
+        <ButtonUiKitten
+          disabled={nome ? (nome.length == 0) : true}
+          size="small"
+          onPress={() => setNome("")}
+        >
+          limpar nome paciente
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -249,6 +271,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setEndereco}
           />
         </View>
+        <ButtonUiKitten
+          disabled={endereco ? (endereco.length == 0) : true}
+          size="small"
+          onPress={() => setEndereco("")}
+        >
+          limpar endereço
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <Input
@@ -329,10 +358,20 @@ const DadosPessoais = ({ navigation }) => {
             icon={user}
             onChangeText={(value) => onChangeCpf(value)}
             value={cpf}
+            maxLength={14}
           />
+          {/* <TextInputMask
+            refInput={value => { this.cpf = value }}
+            onChangeText={(formatted, extracted) => {
+              console.log(formatted) // +1 (123) 456-78-90
+              console.log(extracted) // 1234567890
+              setCpf(extracted)
+            }}
+            mask={"+1 ([000]) [000] [00] [00]"}
+          /> */}
         </View>
         <ButtonUiKitten
-          disabled={cpf?.length > 10 ? false : true}
+          disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
           size="small"
           onPress={() => setCpf("")}
         >
@@ -346,8 +385,21 @@ const DadosPessoais = ({ navigation }) => {
             icon={emailIcon}
             onChangeText={setEmail}
             value={email}
+            onBlur={() => {
+              if(validateEmail(email) == false){
+                alert("email inválido");
+                setEmail("");
+              }
+            }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateEmail(email) ? false : true)}
+          size="small"
+          onPress={() => setEmail("")}
+        >
+          limpar email
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -356,8 +408,24 @@ const DadosPessoais = ({ navigation }) => {
             icon={phone}
             value={telCell}
             onChangeText={setTelCell}
+            maxLength={11}
+            textContentType={"telephoneNumber"}
+            keyboardType={"phone-pad"}
+            onBlur={() => {
+              if(validateTelefoneCelular(telCell) == false){
+                alert("celular inválido");
+                setTelCell("");
+              }
+            }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateTelefoneCelular(telCell) ? false : true)}
+          size="small"
+          onPress={() => setTelCell("")}
+        >
+          limpar telefone celular
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -365,9 +433,22 @@ const DadosPessoais = ({ navigation }) => {
             placeholder="Telefone do resposável"
             icon={phone}
             value={telResp}
-            onChangeText={setTelResp}
+            maxLength={11}
+            onChangeText={setTelResp}onBlur={() => {
+              if(validateTelefoneResponsavel(telResp) == false){
+                alert("telefone responsavel inválido");
+                setTelResp("");
+              }
+            }}
           />
         </View>
+        <ButtonUiKitten
+          disabled={(validateTelefoneResponsavel(telResp) ? false : true)}
+          size="small"
+          onPress={() => setTelResp("")}
+        >
+          limpar telefone responsavel
+        </ButtonUiKitten>
       </View>
       <View style={styles.lineContent}>
         <View>
@@ -378,6 +459,13 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setNmMae}
           />
         </View>
+        <ButtonUiKitten
+          disabled={nmMae ? (nmMae.length == 0) : true}
+          size="small"
+          onPress={() => setNmMae("")}
+        >
+          limpar nome mãe
+        </ButtonUiKitten>
       </View>
     </>
   );
