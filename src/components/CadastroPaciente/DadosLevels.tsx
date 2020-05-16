@@ -298,7 +298,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }
 
   useEffect(() => {
-    console.log("acomp >>>>", acomp);
     setAuxBloqBotaoProximo(true);
     flush;
   }, []);

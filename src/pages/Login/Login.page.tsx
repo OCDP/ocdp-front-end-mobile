@@ -8,6 +8,7 @@ import {
 } from "./Login.page.styles";
 import { Icon } from "@ui-kitten/components";
 import api from "../../services/api";
+import LottieView from "lottie-react-native";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -36,15 +37,15 @@ export default function ({ navigation }) {
   async function loginAction() {
     try {
       setLoading(true);
-      await api(login, pswd).get(
-        `/usuario/byCpf/${login}?cpf=${login}`
-      ).then((resp)=>{
-        resp.data.senhaUsuario = pswd;
-        setUsuarioLogado(resp.data);
-        
-        setLoading(false);
-        navigation.navigate("Introducao");
-      });
+      await api(login, pswd)
+        .get(`/usuario/byCpf/${login}?cpf=${login}`)
+        .then((resp) => {
+          resp.data.senhaUsuario = pswd;
+          setUsuarioLogado(resp.data);
+
+          setLoading(false);
+          navigation.navigate("Introducao");
+        });
     } catch (err) {
       console.log(err);
       alert("Email ou senha incorreta!");
@@ -66,6 +67,13 @@ export default function ({ navigation }) {
         />
         <LoginButton onPress={() => loginAction()} />
       </LoginCard>
+      {2 > 3 && (
+        <LottieView
+          source={require("../../assets/animations/health.json")}
+          autoPlay
+          loop
+        />
+      )}
     </Container>
   );
 }
