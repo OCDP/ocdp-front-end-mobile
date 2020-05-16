@@ -87,9 +87,6 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
         >
           adicionar retorno
         </Button>
-        <Button onPress={() => console.log(atendimento)}>
-          ver dados no context
-        </Button>
         <Timeline
           onEventPress={onEventPress}
           style={{ flex: 1 }}

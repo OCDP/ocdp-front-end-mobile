@@ -3,7 +3,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
 } from "@react-navigation/drawer";
 import BemVindo from "../pages/BemVindo.page";
 import LoginPage from "../pages/Login";
@@ -22,17 +21,98 @@ import { LesoesRegiaoProvider } from "../contexts/LesoesRegioesContext";
 import { IntervencaoProvider } from "../contexts/IntervencaoContext";
 import { AtendimentoProvider } from "../contexts/AtendimentosContext";
 import { BotaoProvider } from "../contexts/BotoesContext";
+import CadastrarResultados from "../pages/CadastrarResultados";
+import { View, StyleSheet } from "react-native";
+import Logo from "../assets/vectors/Logo.jsx";
+import { Button, Text } from "@ui-kitten/components";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
+    <DrawerContentScrollView>
+      <View>
+        <View
+          style={{
+            height: 150,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Logo size={150} />
+        </View>
+        <View style={styles.containerGeralMenu}>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("Introducao");
+            }}
+          >
+            <View style={styles.containerItemMenu}>
+              <View>
+                <Text style={styles.textMenu}>Introducao</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
+          >
+            <View style={styles.containerItemMenu}>
+              <View>
+                <Text style={styles.textMenu}>Home</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("CadastrarPaciente");
+            }}
+          >
+            <View style={styles.containerItemMenu}>
+              <View>
+                <Text style={styles.textMenu}>Cadastro paciente</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.btnLogout}>
+          <Button
+            onPress={() => {
+              props.navigation.navigate("Login");
+            }}
+          >
+            sair
+          </Button>
+        </View>
+      </View>
     </DrawerContentScrollView>
   );
 }
 
-const Drawer = createDrawerNavigator();
+const styles = StyleSheet.create({
+  containerGeralMenu: { marginTop: 16 },
+  containerItemMenu: {
+    marginVertical: 4,
+    marginHorizontal: 8,
+    padding: 8,
+    backgroundColor: "#0F729A",
+    borderRadius: 8,
+    height: 45,
+    justifyContent: "center",
+  },
+  textMenu: {
+    color: "#ffffff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  btnLogout: {
+    marginHorizontal: 32,
+    marginTop: 32,
+  },
+});
 
+const Drawer = createDrawerNavigator();
 export const AppNavigator = () => (
   <NavigationContainer>
     <PacienteProvider>
@@ -48,24 +128,27 @@ export const AppNavigator = () => (
                         <SafeAreaLayout style={{ flex: 1 }} insets="top">
                           <Drawer.Navigator
                             initialRouteName="BemVindo"
-                            drawerContent={(props) =>
-                              CustomDrawerContent(props)
-                            }
+                            drawerContent={CustomDrawerContent}
                           >
-                            <Drawer.Screen
-                              name="BemVindo"
-                              component={BemVindo}
-                            />
-                            <Drawer.Screen name="Login" component={LoginPage} />
                             <Drawer.Screen
                               name="Introducao"
                               component={Introducao}
                             />
                             <Drawer.Screen name="Home" component={HomeScreen} />
                             <Drawer.Screen
+                              name="CadastrarResultados"
+                              component={CadastrarResultados}
+                            />
+                            <Drawer.Screen
                               name="CadastrarPaciente"
                               component={CadastrarPaciente}
                             />
+                            <Drawer.Screen
+                              name="BemVindo"
+                              component={BemVindo}
+                            />
+                            <Drawer.Screen name="Login" component={LoginPage} />
+
                             <Drawer.Screen
                               name="Historico"
                               component={Historico}
