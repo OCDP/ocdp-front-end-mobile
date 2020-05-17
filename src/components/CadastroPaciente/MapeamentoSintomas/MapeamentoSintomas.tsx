@@ -48,7 +48,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [listRegioes, setListRegioes] = React.useState([]);
   const [nomeFator, setNomeFator] = React.useState([]);
   const [regioesArr, setRegioesArr] = React.useState([]);
-  const [subregiao, setSubregiao] = React.useState([]);
+  const [subregiao, setSubregiao] = React.useState(null);
   const [regiaoSelect, setRegiaoSelect] = React.useState();
   const [nomeTipoLesao, setNomeTipoLesao] = React.useState(null);
   const [newNome, setNewNome] = React.useState([]);
@@ -508,9 +508,9 @@ const MapeamentoSintomas = ({ navigation }) => {
             >
               {lesao.length > 0
                 ? renderEscolhaTipo()
-                : subregiao
+                : (subregiao
                 ? rendeDetailLesao()
-                : renderModalElement()}
+                : renderModalElement())}
             </Modal>
           </>
         ))}
