@@ -6,7 +6,6 @@ import {
   RadioGroup,
   Input,
   Button as ButtonUiKitten,
-  Datepicker,
 } from "@ui-kitten/components";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";

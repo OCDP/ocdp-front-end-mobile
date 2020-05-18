@@ -47,9 +47,9 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
   const enviarResult = useMemo(() => {
     return (
       usuarioLogado.nivelAtencao === "SECUNDARIA" &&
-      atendimento.atendimento.tipoAtendimento === "RESULTADOS"
+      atendimento.atendimento.tipoAtendimento === "INTERVENCAO"
     );
-  }, []);
+  }, [atendimento]);
 
   return (
     <View style={styles.container}>

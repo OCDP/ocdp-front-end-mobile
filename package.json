@@ -29,6 +29,7 @@
     "react-dom": "~16.9.0",
     "react-native": "~0.61.4",
     "react-native-gesture-handler": "^1.6.0",
+    "react-native-image-picker": "^2.3.1",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-modal-datetime-picker": "^8.6.0",
     "react-native-progress-steps": "^1.2.8",

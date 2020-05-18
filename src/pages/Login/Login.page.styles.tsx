@@ -8,7 +8,7 @@ import {
   Input,
   withStyles,
 } from "@ui-kitten/components";
-import { buildStyledShadow } from "../../styles/buildShadow";
+import { buildStyledShadow } from "../../styles/BuildShadow";
 import { map } from "../../assets/Icons";
 
 const shadow = buildStyledShadow(16);
