@@ -9,10 +9,12 @@ import { UsuarioInterface } from "../utils/models/UsuarioInterface";
 interface UsuarioLogadoContextProps {
   usuarioLogado: UsuarioInterface;
   setUsuarioLogado?: Dispatch<SetStateAction<UsuarioInterface>>;
+  logout: () => void;
 }
 
 const defaultUsuarioLogado = {
   usuarioLogado: null,
+  logout: () => {},
 };
 
 const UsuarioLogadoContext = createContext<UsuarioLogadoContextProps>(
@@ -22,11 +24,16 @@ const UsuarioLogadoContext = createContext<UsuarioLogadoContextProps>(
 export function UsuarioLogadoProvider({ children }) {
   const [usuarioLogado, setUsuarioLogado] = useState(null);
 
+  const logout = () => {
+    setUsuarioLogado({} as UsuarioInterface);
+  };
+
   return (
     <UsuarioLogadoContext.Provider
       value={{
         usuarioLogado,
         setUsuarioLogado,
+        logout,
       }}
     >
       {children}
