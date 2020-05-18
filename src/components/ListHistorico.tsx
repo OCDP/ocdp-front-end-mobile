@@ -50,13 +50,12 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       atendimento.atendimento.tipoAtendimento === "RESULTADOS"
     );
   }, []);
-  ``;
 
   return (
     <View style={styles.container}>
       <View style={styles.boxInfo}>
         <Text appearance="alternative" status="primary" category="h6">
-          Dados do atendimento
+          Dados do atendimento | ID: {atendimento.atendimento.id}
         </Text>
         <Divider style={styles.divider} />
         {atendimento.atendimento.dataAtendimento && (
@@ -181,7 +180,11 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
 
       {enviarResult && (
         <View style={styles.btnResult}>
-          <Button onPress={navigation.navigate("CadastrarResultados")}>
+          <Button
+            onPress={() => {
+              navigation.navigate("CadastrarResultados");
+            }}
+          >
             enviar resultados
           </Button>
         </View>
