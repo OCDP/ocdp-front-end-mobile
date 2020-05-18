@@ -13,8 +13,6 @@ import AtendimentoContext from "../contexts/AtendimentosContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
-import Lesoes from "../components/CadastroPaciente/Lesoes";
-import ImagePicker from "react-native-image-picker";
 import ImagePicker from "react-native-image-picker";
 import Lesoes from "../components/CadastroPaciente/Lesoes";
 import * as Permissions from "expo-permissions";
