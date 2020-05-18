@@ -127,6 +127,7 @@ export const AppNavigator = () => (
                       <AtendimentoProvider>
                         <SafeAreaLayout style={{ flex: 1 }} insets="top">
                           <Drawer.Navigator
+                            edgeWidth={0}
                             initialRouteName="BemVindo"
                             drawerContent={CustomDrawerContent}
                           >

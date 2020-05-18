@@ -68,12 +68,9 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   useEffect(()=>{
     async function setarBotao(){
       if(procedimento.length > 0){
-        
-        console.log('setBloqBotaoProximofalse')
         setBloqBotaoProximo(false);
       }else {
         setBloqBotaoProximo(true)
-        console.log('setBloqBotaoProximotrue')
       }
     }
     setarBotao();

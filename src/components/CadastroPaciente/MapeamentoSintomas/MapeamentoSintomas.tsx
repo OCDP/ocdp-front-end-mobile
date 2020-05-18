@@ -164,8 +164,6 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('postFatores', postFatores)
-      console.log('lesoesRegioes', lesoesRegioes)
       if(lesoesRegioes.length > 0 && postFatores != undefined){
         setBloqBotaoProximo(false);
       }else setBloqBotaoProximo(true)
@@ -175,8 +173,6 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('postFatores', postFatores)
-      console.log('lesoesRegioes', lesoesRegioes)
       if(lesoesRegioes.length > 0 && postFatores != undefined){
         setBloqBotaoProximo(false);
       }else setBloqBotaoProximo(true)
@@ -247,11 +243,8 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   function subRegiaoActions(id, indice) {
     let reg = [...listRegioes];
-    //console.log('reg[indice]', reg[indice]);
     setSubregiao(reg[indice].nome);
     setRegiaoSelect(reg[indice]);
-    // function subRegiaoActions(desc) {
-    //   setSubregiao(desc);
     loadTipoLesao();
   }
 
@@ -364,7 +357,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     let st = "";
     let incluir = true;
     let indice = null;
-    console.log('lesoesRegioes', lesoesRegioes);
     if(lesoesRegioes.length > 0){
       let cont = 0;
       st += "Regiões já cadastradas: \n"

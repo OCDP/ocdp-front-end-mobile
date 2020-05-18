@@ -32,7 +32,6 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function resetarBotao(){
-      console.log('resetarBotao', bloqBotaoProximo)
       setBloqBotaoProximo(true);
     }
     resetarBotao();
@@ -68,7 +67,6 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('setarBotao', bloqBotaoProximo)
       if(confirmaRastreamento && observacao && hipoteseDiagnostico){
         setBloqBotaoProximo(false);
       }

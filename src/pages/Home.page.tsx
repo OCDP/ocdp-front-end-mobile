@@ -4,15 +4,15 @@ import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
 import { StyleSheet, View } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
-import PacienteContext, {useFlushPaciente} from "../contexts/PacienteContext";
-import {useFlushLocais} from "../contexts/LocaisContext";
-import {useFlushLesoesRegioes} from "../contexts/LesoesRegioesContext";
+import PacienteContext, { useFlushPaciente } from "../contexts/PacienteContext";
+import { useFlushLocais } from "../contexts/LocaisContext";
+import { useFlushLesoesRegioes } from "../contexts/LesoesRegioesContext";
 
 import EmptyContent from "../components/EmptyContent";
 import apiFunc from "../services/api";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import { AxiosResponse } from "axios";
-import {useFlushPostFatores} from "../contexts/PostFatoresContext"
+import { useFlushPostFatores } from "../contexts/PostFatoresContext";
 import { BuscaPacienteInterface } from "../utils/models/BuscaPacienteInterface";
 import LocaisContext from "../contexts/LocaisContext";
 import BotaoContext from "../contexts/BotoesContext";
@@ -22,11 +22,24 @@ const HomeScreen = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [nomes, setNomes] = React.useState([]);
   const [listaNomes, setListaNomes] = React.useState([]);
-  const [listaNomesAll, setListaNomesAll] = React.useState([])
+  const [listaNomesAll, setListaNomesAll] = React.useState([]);
   const { historico, setHistorico } = useContext(PacienteContext);
-  const { setId, setAcomp, setNome, setBairro, setCpf, setDtNasci, setEmail, setEndereco, setNmMae, setSexo, setTelCell, setTelResp } = useContext(PacienteContext);
+  const {
+    setId,
+    setAcomp,
+    setNome,
+    setBairro,
+    setCpf,
+    setDtNasci,
+    setEmail,
+    setEndereco,
+    setNmMae,
+    setSexo,
+    setTelCell,
+    setTelResp,
+  } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
-  const { setBloqBotaoProximo } = useContext(BotaoContext)
+  const { setBloqBotaoProximo } = useContext(BotaoContext);
   const flushPaciente = useFlushPaciente();
   const flushLocais = useFlushLocais();
   const flushLesoesRegioes = useFlushLesoesRegioes();
@@ -41,23 +54,22 @@ const HomeScreen = ({ navigation }) => {
     return historico;
   }
 
-
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
     // console.log(listaNomesAll)
-    for(let i of listaNomesAll){
-      if(i.cpf == titleSplit[2]){
-        setBairro(i.bairro)
-        setCpf(i.cpf)
-        setDtNasci(i.dataNascimento)
-        setEmail(i.cpf)
-        setEndereco(i.enderecoCompleto)
-        setId(i.id)
-        setNome(i.nome)
-        setNmMae(i.nomeDaMae)
-        setSexo(i.sexo)
-        setTelCell(i.telefoneCelular)
-        setTelResp(i.telefoneResponsavel)
+    for (let i of listaNomesAll) {
+      if (i.cpf == titleSplit[2]) {
+        setBairro(i.bairro);
+        setCpf(i.cpf);
+        setDtNasci(i.dataNascimento);
+        setEmail(i.cpf);
+        setEndereco(i.enderecoCompleto);
+        setId(i.id);
+        setNome(i.nome);
+        setNmMae(i.nomeDaMae);
+        setSexo(i.sexo);
+        setTelCell(i.telefoneCelular);
+        setTelResp(i.telefoneResponsavel);
       }
     }
     setValue(title);
@@ -72,30 +84,27 @@ const HomeScreen = ({ navigation }) => {
 
   const onChangeText = async (query) => {
     setValue(query);
-    if (query.length > 2) {
-      try {
-        const pacientes: AxiosResponse<
-          BuscaPacienteInterface[]
-        > = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).get(
-          `/historico/pacientes/${query}`
-        );
-        let arrUsers = pacientes.data;
-        const listaArr = arrUsers.map((a) => {
-          return {
-            id: a.cpf,
-            title: `${a.nome} - ${a.cpf}`,
-          };
-        });
-        setListaNomesAll(pacientes.data)
-        setListaNomes(listaArr);
-        setNomes(
-          listaNomes.filter((item) =>
-            item.title.toLowerCase().includes(query.toLowerCase())
-          )
-        );
-      } catch (err) {
-        console.log("err", err);
-      }
+    try {
+      const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).get(`/historico/pacientes/${query}`);
+      let arrUsers = pacientes.data;
+      const listaArr = arrUsers.map((a) => {
+        return {
+          id: a.cpf,
+          title: `${a.nome} - ${a.cpf}`,
+        };
+      });
+      setListaNomesAll(pacientes.data);
+      setListaNomes(listaArr);
+      setNomes(
+        listaNomes.filter((item) =>
+          item.title.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    } catch (err) {
+      console.log("err", err);
     }
   };
 
@@ -105,7 +114,7 @@ const HomeScreen = ({ navigation }) => {
 
   async function cadastroActions() {
     setLoading(true);
-    console.log('flush')
+    console.log("flush");
     flushPaciente();
     // flushLocais();
     flushLesoesRegioes();
