@@ -13,7 +13,6 @@ import AtendimentoContext from "../contexts/AtendimentosContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
-import ImagePicker from "react-native-image-picker";
 import Lesoes from "../components/CadastroPaciente/Lesoes";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
@@ -69,35 +68,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     return;
   }
 
-  const launchCamera = () => {
-    const options = {
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
-    };
-
-    ImagePicker.launchCamera(options, (response) => {
-      console.log("Response = ", response);
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else if (response.customButton) {
-        console.log("User tapped custom button: ", response.customButton);
-        alert(response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        console.log("response", JSON.stringify(response));
-        setImageURI(response.uri);
-      }
-    });
-  };
-
-  function RenderFileUri() {
-    return <Image source={{ uri: imageURI }} style={styles.images} />;
-  }
-
   return (
     <PageContainer title="Enviar resultados" navigation={navigation}>
       <ScrollView>
@@ -109,11 +79,15 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             {atendimento.procedimentos.map(
               ({ nome, anexo64, observacao, id }) => (
                 <View key={id}>
-                  {imageURI ? (
-                    <RenderFileUri />
+                  {anexo64 ? (
+                    <Lesoes
+                      title={nome}
+                      navigation={navigation}
+                      imgRegiao={anexo64}
+                    />
                   ) : (
                     <Button
-                      onPress={launchCamera}
+                      onPress={() => {}}
                     >{`Selecione a imagem de ${nome}`}</Button>
                   )}
 
@@ -143,4 +117,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   );
 };
 
-export default CadastrarResultados;
+export default withStyles(CadastrarResultados, (theme) => ({
+  primary: theme["color-primary-500"],
+  primaryDark: theme["color-primary-900"],
+  primaryLigth: theme["color-primary-400"],
+  bgColor: theme["background-basic-color-2"],
+  bgColorStrong: theme["background-basic-color-4"],
+}));
