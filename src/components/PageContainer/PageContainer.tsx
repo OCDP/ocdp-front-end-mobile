@@ -2,12 +2,12 @@ import React, { useContext, useMemo } from "react";
 import {
   BackgroundContainer,
   ForegroundContainer,
-  Fade
+  Fade,
 } from "./PageContainer.styles";
 import {
   TopNavigationAction,
   withStyles,
-  TopNavigation
+  TopNavigation,
 } from "@ui-kitten/components";
 import { arrowBack, home, menu } from "../../assets/Icons";
 import { Animated } from "react-native";
@@ -30,7 +30,7 @@ function Pagecontainer({
   navigation,
   subtitle,
   noPadding,
-  themedStyle
+  themedStyle,
 }: PageContainerProps) {
   const fadeAnim = new Animated.Value(0);
 
@@ -44,11 +44,7 @@ function Pagecontainer({
   );
 
   const resetNav = () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        routes: [{ name: "Introducao" }]
-      })
-    );
+    navigation.navigate("Home");
   };
 
   navigation = useNavigation();
@@ -61,7 +57,7 @@ function Pagecontainer({
   );
 
   const renderRightControls = () => [
-    <TopNavigationAction icon={home} onPress={() => resetNav()} />
+    <TopNavigationAction icon={home} onPress={() => resetNav()} />,
   ];
 
   return (
@@ -69,7 +65,7 @@ function Pagecontainer({
       <TopNavigation
         style={{
           backgroundColor: themedStyle.bgColor,
-          height: 65
+          height: 65,
         }}
         title={title}
         subtitle={subtitle}
@@ -83,13 +79,13 @@ function Pagecontainer({
             opacity: fadeAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 1],
-              extrapolate: "clamp"
+              extrapolate: "clamp",
             }),
             zIndex: fadeAnim.interpolate({
               inputRange: [0, 1],
               outputRange: [0, 2],
-              extrapolate: "clamp"
-            })
+              extrapolate: "clamp",
+            }),
           }}
         />
         {children}
@@ -98,6 +94,6 @@ function Pagecontainer({
   );
 }
 
-export default withStyles(Pagecontainer, theme => ({
-  bgColor: theme["background-basic-color-4"]
+export default withStyles(Pagecontainer, (theme) => ({
+  bgColor: theme["background-basic-color-4"],
 }));
