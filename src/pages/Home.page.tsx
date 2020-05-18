@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Button, Layout, Autocomplete } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
 import { search, add, clear } from "../assets/Icons";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import HistoricoProcedimento from "../components/HistoricoProcedimento";
 import PacienteContext, { useFlushPaciente } from "../contexts/PacienteContext";
 import { useFlushLocais } from "../contexts/LocaisContext";
@@ -56,7 +56,6 @@ const HomeScreen = ({ navigation }) => {
 
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
-    // console.log(listaNomesAll)
     for (let i of listaNomesAll) {
       if (i.cpf == titleSplit[2]) {
         setBairro(i.bairro);
@@ -105,6 +104,7 @@ const HomeScreen = ({ navigation }) => {
       );
     } catch (err) {
       console.log("err", err);
+      Alert.alert("erro na busca");
     }
   };
 
@@ -114,13 +114,10 @@ const HomeScreen = ({ navigation }) => {
 
   async function cadastroActions() {
     setLoading(true);
-    console.log("flush");
     flushPaciente();
-    // flushLocais();
     flushLesoesRegioes();
     flushPostFatores();
     setBloqBotaoProximo(true);
-    // flushPostFatores();
     await setAcomp(false);
     setLoading(false);
     navigation.navigate("CadastrarPaciente");
