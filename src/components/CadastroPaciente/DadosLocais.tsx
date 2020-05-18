@@ -51,18 +51,8 @@ const DadosLocais = ({ navigation }) => {
     return () => backHandler.remove();
   }, []);
 
-  
-  // useEffect(()=>{
-  //   async function resetarBotao(){
-  //     console.log('resetarBotao', bloqBotaoProximo)
-  //     setBloqBotaoProximo(true);
-  //   }
-  //   resetarBotao();
-  // }, [])
-
   useEffect(()=>{
     async function setarBotao(){
-      console.log('bairro', bairro, idNovoAcomp)
       if(bloqBotaoProximo == true){
         if(bairro.id != null && idNovoAcomp != undefined){
           if(auxBloqBotaoProximo2 == false){
@@ -75,17 +65,12 @@ const DadosLocais = ({ navigation }) => {
           setAuxBloqBotaoProximo(true);
         }
       }
-      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
     }
     setarBotao();
   }, [])
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('auxBloqBotaoProximo', auxBloqBotaoProximo)
-      console.log('auxBloqBotaoProximo2', auxBloqBotaoProximo2)
-      console.log('bairro', bairro, idNovoAcomp)
       if(bairro.id != null && idNovoAcomp != undefined){
         if(auxBloqBotaoProximo2 == false){
           

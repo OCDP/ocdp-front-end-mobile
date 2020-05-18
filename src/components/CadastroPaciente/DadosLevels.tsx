@@ -163,7 +163,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
         fatoresDeRisco: postFatores,
       };
-      console.log(arrObj);
     }else if(idNovoAcomp == 0){
       arrObj = {
         atendimento: {
@@ -209,7 +208,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function enviarPost(arrObj, id) {
-    console.log(arrObj)
     if(id == 1 || id == 2){
       try {
         setLoading(true)
@@ -218,7 +216,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           usuarioLogado.cpf,
           usuarioLogado.senhaUsuario
         ).post("/acompanhamento/salvar", postJson);
-        // console.log(resp);
         Alert.alert(
           'Enviado com sucesso',
           "Voltar para tela inicial",
@@ -308,23 +305,13 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function resetarBotao(){
-    console.log('resetarBotao', bloqBotaoProximo)
     setBloqBotaoProximo(true);
     setAuxBloqBotaoProximo(true);
     setAuxBloqBotaoProximo2(true);
   }
 
-  // const passo1Retorno = () => {
-  //   console.log("idNovoAcomp", idNovoAcomp)
-  //   console.log("nomesLocaisAtendido", nomesLocaisAtendido)
-  //     setBloqBotaoProximo(true);
-  //     setAuxBloqBotaoProximo(true);
-  //     setAuxBloqBotaoProximo2(true);
-  // }
-
   useEffect(()=>{
     async function resetarPassos(){
-      console.log("idNovoAcomp", idNovoAcomp)
       setActiveStepBtn(0)
     }
     resetarPassos();

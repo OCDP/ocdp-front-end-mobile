@@ -92,18 +92,6 @@ const DadosPessoais = ({ navigation }) => {
   useEffect(() => {
     async function setarBotao() {
       if (bloqBotaoProximo == true) {
-        console.log(
-          "values",
-          nome,
-          dtNasci,
-          cpf,
-          email,
-          endereco,
-          telCell,
-          telResp,
-          nmMae,
-          idNovoAcomp
-        );
         if (
           nome != null &&
           dtNasci != null &&
@@ -123,8 +111,6 @@ const DadosPessoais = ({ navigation }) => {
         } else {
           setAuxBloqBotaoProximo2(true);
         }
-        console.log("auxBloqBotaoProximo", auxBloqBotaoProximo);
-        console.log("auxBloqBotaoProximo2", auxBloqBotaoProximo2);
       }
     }
     setarBotao();
@@ -132,18 +118,6 @@ const DadosPessoais = ({ navigation }) => {
 
   useEffect(() => {
     async function setarBotao() {
-      console.log(
-        "values",
-        nome,
-        dtNasci,
-        cpf,
-        email,
-        endereco,
-        telCell,
-        telResp,
-        nmMae,
-        idNovoAcomp
-      );
       if (
         nome != null &&
         cpf != null &&
@@ -162,8 +136,6 @@ const DadosPessoais = ({ navigation }) => {
       } else {
         setAuxBloqBotaoProximo2(true);
       }
-      console.log("auxBloqBotaoProximo", auxBloqBotaoProximo);
-      console.log("auxBloqBotaoProximo2", auxBloqBotaoProximo2);
     }
     setarBotao();
   }, [
@@ -189,18 +161,18 @@ const DadosPessoais = ({ navigation }) => {
 
   const validateEmail = (email) => {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
+    return re.test(email);
   };
 
-  const validateTelefoneCelular = (telCelular) =>{
-    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{5}(?:-)?[0-9]{4}$/
-      return re.test(telCelular)
-  }
+  const validateTelefoneCelular = (telCelular) => {
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{5}(?:-)?[0-9]{4}$/;
+    return re.test(telCelular);
+  };
 
-  const validateTelefoneResponsavel = (telResponsavel) =>{
-    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/
-      return re.test(telResponsavel)
-  }
+  const validateTelefoneResponsavel = (telResponsavel) => {
+    var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/;
+    return re.test(telResponsavel);
+  };
 
   const confirmarData = (dt) => {
     setIsDatePickerVisible(false);
@@ -239,7 +211,6 @@ const DadosPessoais = ({ navigation }) => {
   };
 
   const onChangeCpf = (cpf) => {
-    console.log(">>> ", cpf);
     validateCpf(cpf);
   };
 
@@ -255,7 +226,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={nome ? (nome.length == 0) : true}
+          disabled={nome ? nome.length == 0 : true}
           size="small"
           onPress={() => setNome("")}
         >
@@ -272,7 +243,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={endereco ? (endereco.length == 0) : true}
+          disabled={endereco ? endereco.length == 0 : true}
           size="small"
           onPress={() => setEndereco("")}
         >
@@ -301,31 +272,6 @@ const DadosPessoais = ({ navigation }) => {
           onCancel={() => setIsDatePickerVisible(false)}
         />
       </View>
-      {/* <View style={styles.lineContent}>
-        <View>
-          <Datepicker
-            // min={new Date("1900-12-25")}
-            date={dtNasci || new Date(moment().format('YYYY-MM-DD'))}
-            placeholder="Data de Nascimento"
-            onSelect={(dtNasci)=> {
-              setDtNasci(dtNasci)
-            }}
-            icon={calendar}
-          />
-        </View>
-      </View> */}
-      {/* <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Data de Nascimento"
-            icon={calendar}
-            value={dtNascString}
-            onChangeText={(dtNascString)=>{
-              setarDataNascimento(dtNascString)
-            }}
-          />
-        </View>
-      </View> */}
       <View style={styles.lineContent}>
         <View
           style={{
@@ -360,15 +306,6 @@ const DadosPessoais = ({ navigation }) => {
             value={cpf}
             maxLength={14}
           />
-          {/* <TextInputMask
-            refInput={value => { this.cpf = value }}
-            onChangeText={(formatted, extracted) => {
-              console.log(formatted) // +1 (123) 456-78-90
-              console.log(extracted) // 1234567890
-              setCpf(extracted)
-            }}
-            mask={"+1 ([000]) [000] [00] [00]"}
-          /> */}
         </View>
         <ButtonUiKitten
           disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
@@ -386,7 +323,7 @@ const DadosPessoais = ({ navigation }) => {
             onChangeText={setEmail}
             value={email}
             onBlur={() => {
-              if(validateEmail(email) == false){
+              if (validateEmail(email) == false) {
                 alert("email inválido");
                 setEmail("");
               }
@@ -394,7 +331,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={(validateEmail(email) ? false : true)}
+          disabled={validateEmail(email) ? false : true}
           size="small"
           onPress={() => setEmail("")}
         >
@@ -412,7 +349,7 @@ const DadosPessoais = ({ navigation }) => {
             textContentType={"telephoneNumber"}
             keyboardType={"phone-pad"}
             onBlur={() => {
-              if(validateTelefoneCelular(telCell) == false){
+              if (validateTelefoneCelular(telCell) == false) {
                 alert("celular inválido");
                 setTelCell("");
               }
@@ -420,7 +357,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={(validateTelefoneCelular(telCell) ? false : true)}
+          disabled={validateTelefoneCelular(telCell) ? false : true}
           size="small"
           onPress={() => setTelCell("")}
         >
@@ -434,8 +371,9 @@ const DadosPessoais = ({ navigation }) => {
             icon={phone}
             value={telResp}
             maxLength={11}
-            onChangeText={setTelResp}onBlur={() => {
-              if(validateTelefoneResponsavel(telResp) == false){
+            onChangeText={setTelResp}
+            onBlur={() => {
+              if (validateTelefoneResponsavel(telResp) == false) {
                 alert("telefone responsavel inválido");
                 setTelResp("");
               }
@@ -443,7 +381,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={(validateTelefoneResponsavel(telResp) ? false : true)}
+          disabled={validateTelefoneResponsavel(telResp) ? false : true}
           size="small"
           onPress={() => setTelResp("")}
         >
@@ -460,7 +398,7 @@ const DadosPessoais = ({ navigation }) => {
           />
         </View>
         <ButtonUiKitten
-          disabled={nmMae ? (nmMae.length == 0) : true}
+          disabled={nmMae ? nmMae.length == 0 : true}
           size="small"
           onPress={() => setNmMae("")}
         >
