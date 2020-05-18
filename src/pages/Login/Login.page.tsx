@@ -24,7 +24,7 @@ export default function ({ navigation }) {
   const [pswd, setPswd] = useState("teste123");
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
+  const { setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
 
   const seePassowrd = () => {
@@ -42,7 +42,6 @@ export default function ({ navigation }) {
         .then((resp) => {
           resp.data.senhaUsuario = pswd;
           setUsuarioLogado(resp.data);
-
           setLoading(false);
           navigation.navigate("Introducao");
         });
