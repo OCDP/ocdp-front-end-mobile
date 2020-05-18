@@ -75,7 +75,6 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   }, [confirmaRastreamento, observacao, hipoteseDiagnostico])
 
   const onCheckedChange = (index) => {
-    console.log(index);
     setSelectedIndex(index);
     index == 0 ? setConfirmaRastreamento(true) : setConfirmaRastreamento(false);
   };
