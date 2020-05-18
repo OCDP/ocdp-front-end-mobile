@@ -12,10 +12,10 @@ import {
 } from "@ui-kitten/components";
 
 import { View, StyleSheet, BackHandler, Alert, Button } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker"
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText, calendar, user } from "../assets/Icons";
-import moment from 'moment';
+import moment from "moment";
 import LocaisContext from "../contexts/LocaisContext";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
@@ -24,82 +24,101 @@ import PacienteContext from "../contexts/PacienteContext";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
-  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
-  const [checked, setChecked] = React.useState([false, false,false,false]);
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
-  const { cpf } = React.useContext(PacienteContext)
-  const [obs0, setObs0] = React.useState("");    
-  const [obs1, setObs1] = React.useState("");    
-  const [obs2, setObs2] = React.useState("");    
-  const [obs3, setObs3] = React.useState("");    
-  const {procedimento, setProcedimento} = React.useContext(IntervencaoContext)
+  const [
+    activeCheckedAcompanhamento,
+    setActiveCheckedAcompanhamento,
+  ] = React.useState(false);
+  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(
+    false
+  );
+  const [checked, setChecked] = React.useState([false, false, false, false]);
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  const { cpf } = React.useContext(PacienteContext);
+  const [obs0, setObs0] = React.useState("");
+  const [obs1, setObs1] = React.useState("");
+  const [obs2, setObs2] = React.useState("");
+  const [obs3, setObs3] = React.useState("");
+  const { procedimento, setProcedimento } = React.useContext(
+    IntervencaoContext
+  );
   const [dataAcompState, setDataAcompState] = React.useState("");
   const [dataTratState, setDataTratState] = React.useState("");
-  const { setBloqBotaoProximo } = useContext(BotaoContext)
+  const { setBloqBotaoProximo } = useContext(BotaoContext);
   const [procedimentos, setProcedimentos] = React.useState([
-    {nome: 'Biópsia incisional', observacao: ''},
-    {nome: 'Biópsia exisional', observacao: ''},
-    {nome: 'Citologia', observacao: ''},
-    {nome: 'Outros', observacao: ''},
+    { nome: "Biópsia incisional", observacao: "" },
+    { nome: "Biópsia exisional", observacao: "" },
+    { nome: "Citologia", observacao: "" },
+    { nome: "Outros", observacao: "" },
   ]);
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = React.useContext(LocaisContext);0
+  const {
+    dataSugeridaAcompanhamento,
+    dataSugeridaTratamento,
+    setDataSugeridaAcompanhamento,
+    setDataSugeridaTratamento,
+  } = React.useContext(LocaisContext);
+  0;
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
   };
 
   const confirmarDataTratamento = (dt) => {
-    hideDatePicker()
-      setDataSugeridaTratamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
-      setDataTratState(moment(dt).format("DD/MM/YYYY"));
-  }
+    hideDatePicker();
+    setDataSugeridaTratamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+    setDataTratState(moment(dt).format("DD/MM/YYYY"));
+  };
 
   const confirmarDataAcompanhamento = (dt) => {
-    hideDatePicker()
-      setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
-      setDataAcompState(moment(dt).format("DD/MM/YYYY"));
-  }
+    hideDatePicker();
+    setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+    setDataAcompState(moment(dt).format("DD/MM/YYYY"));
+  };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(procedimento.length > 0){
+  useEffect(() => {
+    async function setarBotao() {
+      if (procedimento.length > 0) {
         setBloqBotaoProximo(false);
-      }else {
-        setBloqBotaoProximo(true)
+      } else {
+        setBloqBotaoProximo(true);
       }
     }
     setarBotao();
-  }, [procedimento])
+  }, [procedimento]);
 
   function onCheckedChangeToggle(i) {
     let ch = [...checked];
     ch[i] = ch[i] == false ? true : false;
     setChecked(ch);
-  };
+  }
 
   useEffect(() => {
     const backAction = () => {
-      console.log(cpf)
-      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
-        {
-          text: "Voltar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Desejo cancelar procedimento", onPress: () => {
+      Alert.alert(
+        "Atenção",
+        "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?",
+        [
+          {
+            text: "Voltar",
+            onPress: () => null,
+            style: "cancel",
+          },
+          {
+            text: "Desejo cancelar procedimento",
+            onPress: () => {
               navigation.dispatch(
-              CommonActions.reset({
-                routes: [{ name: "Home" }],
-              })
-            );
-          setActiveStepBtn(0);
-        } }
-      ]);
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+              setActiveStepBtn(0);
+            },
+          },
+        ]
+      );
       return true;
     };
 
@@ -110,28 +129,27 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
 
     return () => backHandler.remove();
   }, []);
-  
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
 
   useEffect(() => {
-    function setProced(){
-      let arrObs = [obs0, obs1, obs2, obs3]
-      console.log("checked", checked);
+    function setProced() {
+      let arrObs = [obs0, obs1, obs2, obs3];
       let proced = [];
-      for(let i in checked){
-        if(checked[i] == true){
+      for (let i in checked) {
+        if (checked[i] == true) {
           procedimentos[i].observacao = arrObs[i];
-          proced.push({nome: procedimentos[i].nome, observacao: procedimentos[i].observacao});
+          proced.push({
+            nome: procedimentos[i].nome,
+            observacao: procedimentos[i].observacao,
+          });
         }
       }
-      console.log(proced);
       setProcedimento(proced);
     }
     setProced();
-
   }, [checked, obs0, obs1, obs2, obs3]);
 
   return (
@@ -156,7 +174,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                     <Toggle
                       text={`Biópsia incisonal: ${checked[0]}`}
                       checked={checked[0]}
-                      onChange={()=>onCheckedChangeToggle(0)}
+                      onChange={() => onCheckedChangeToggle(0)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
@@ -175,7 +193,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                     <Toggle
                       text={`Biópsia exisional: ${checked[1]}`}
                       checked={checked[1]}
-                      onChange={()=>onCheckedChangeToggle(1)}
+                      onChange={() => onCheckedChangeToggle(1)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
@@ -202,7 +220,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                     <Toggle
                       text={`Citologia: ${checked[2]}`}
                       checked={checked[2]}
-                      onChange={()=>onCheckedChangeToggle(2)}
+                      onChange={() => onCheckedChangeToggle(2)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
@@ -229,7 +247,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                     <Toggle
                       text={`Outros: ${checked[3]}`}
                       checked={checked[3]}
-                      onChange={()=>onCheckedChangeToggle(3)}
+                      onChange={() => onCheckedChangeToggle(3)}
                     />
                   </View>
                   <View style={{ width: "100%" }}>
@@ -273,17 +291,25 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 </View>
                 <View>
                   <Input
-                      placeholder="Data sugerida tratamento"
-                      icon={user}
-                      value={dataAcompState}
-                      disabled={true} 
-                    />
-                  <Button disabled={activeCheckedAcompanhamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                    placeholder="Data sugerida tratamento"
+                    icon={user}
+                    value={dataAcompState}
+                    disabled={true}
+                  />
+                  <Button
+                    disabled={activeCheckedAcompanhamento ? false : true}
+                    title="Escolher data"
+                    onPress={showDatePicker}
+                  />
                   <DateTimePickerModal
+                    cancelTextIOS="cancelar"
+                    confirmTextIOS="confirmar"
+                    locale="pt-BR"
+                    headerTextIOS="Escolha uma data"
                     isVisible={isDatePickerVisible}
                     mode="date"
-                    onConfirm={(a)=> confirmarDataAcompanhamento(a)}
-                    onCancel={()=> hideDatePicker}
+                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                    onCancel={() => hideDatePicker}
                   />
                 </View>
               </View>
@@ -305,17 +331,25 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                 </View>
                 <View>
                   <Input
-                      placeholder="Data sugerida tratamento"
-                      icon={user}
-                      value={dataTratState}
-                      disabled={true} 
-                    />
-                  <Button disabled={activeCheckedTratamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                    placeholder="Data sugerida tratamento"
+                    icon={user}
+                    value={dataTratState}
+                    disabled={true}
+                  />
+                  <Button
+                    disabled={activeCheckedTratamento ? false : true}
+                    title="Escolher data"
+                    onPress={showDatePicker}
+                  />
                   <DateTimePickerModal
+                    cancelTextIOS="cancelar"
+                    confirmTextIOS="confirmar"
+                    locale="pt-BR"
+                    headerTextIOS="Escolha uma data"
                     isVisible={isDatePickerVisible}
                     mode="date"
-                    onConfirm={(a)=> confirmarDataTratamento(a)}
-                    onCancel={()=> hideDatePicker}
+                    onConfirm={(a) => confirmarDataTratamento(a)}
+                    onCancel={() => hideDatePicker}
                   />
                 </View>
               </View>
