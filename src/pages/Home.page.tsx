@@ -56,6 +56,7 @@ const HomeScreen = ({ navigation }) => {
 
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
+    flushPaciente();
     for (let i of listaNomesAll) {
       if (i.cpf == titleSplit[2]) {
         setBairro(i.bairro);
@@ -72,6 +73,7 @@ const HomeScreen = ({ navigation }) => {
       }
     }
     setValue(title);
+    setLoading(true);
     await loadHistorico(id).then((resp) => {
       if (resp == []) {
         setHistorico([]);
@@ -79,9 +81,12 @@ const HomeScreen = ({ navigation }) => {
         setHistorico(resp);
       }
     });
+    setLoading(false);
   };
 
   const onChangeText = async (query) => {
+    flushPaciente();
+    setHistorico([]);
     setValue(query);
     try {
       const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(

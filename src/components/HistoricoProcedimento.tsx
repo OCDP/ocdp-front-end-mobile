@@ -7,7 +7,7 @@ import {
   withStyles,
   Button,
 } from "@ui-kitten/components";
-import PacienteContext, {useFlushPaciente} from "../contexts/PacienteContext";
+import PacienteContext, { useFlushPaciente } from "../contexts/PacienteContext";
 import { useFlushLesoesRegioes } from "../contexts/LesoesRegioesContext";
 import Timeline from "react-native-timeline-flatlist";
 import { useLoading } from "../contexts/AppContext";
@@ -30,7 +30,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
       title: `${a.tipoAtendiemtento}\n(${a.diferencaMeses})`,
       description: `${a.localAtendimento}\n${a.profissionalDeSaude}\n${
         a.dataAtendimento.split(" ")[0]
-      }`,
+        }`,
     };
   });
 
@@ -61,7 +61,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
 
   async function acompActions() {
     flushLesoesRegioes();
-    flushPaciente();
+    // flushPaciente();
     await setAcomp(true);
     navigation.navigate("CadastrarPaciente");
   }
@@ -86,7 +86,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
           }}
         >
           adicionar retorno
-        </Button>
+          </Button>
         <Timeline
           onEventPress={onEventPress}
           style={{ flex: 1 }}
