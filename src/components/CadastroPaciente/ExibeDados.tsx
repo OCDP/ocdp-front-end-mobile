@@ -5,13 +5,13 @@ import PacienteContext, { usePaciente } from "../../contexts/PacienteContext";
 
 const ExibeDadosPaciente = ({ navigation }) => {
   const styles = useStyleSheet({
-    text: {
-      margin: 8
-    },
     lineContent: {
       flex: 1,
       width: "100%",
       marginVertical: 8
+    },
+    text: {
+      margin: 8
     }
   });
 

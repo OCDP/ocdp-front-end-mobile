@@ -6,6 +6,7 @@ import { AppNavigator } from "./src/routes/NavigationApp";
 import { AppProvider, AppConsumer } from "./src/contexts/AppContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
+import { UsuarioLogadoProvider } from "./src/contexts/UsuarioLogadoContext";
 
 const App = () => {
   return (
@@ -14,10 +15,12 @@ const App = () => {
       <AppConsumer>
         {({ theme }) => (
           <ApplicationProvider mapping={mapping} theme={theme.vars}>
-            <SafeAreaProvider>
-              <StatusBar barStyle="light-content" />
-              <AppNavigator />
-            </SafeAreaProvider>
+            <UsuarioLogadoProvider>
+              <SafeAreaProvider>
+                <StatusBar barStyle="light-content" />
+                <AppNavigator />
+              </SafeAreaProvider>
+            </UsuarioLogadoProvider>
           </ApplicationProvider>
         )}
       </AppConsumer>

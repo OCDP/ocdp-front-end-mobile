@@ -6,11 +6,11 @@ import DadosLevels from "../components/CadastroPaciente/DadosLevels";
 
 const CadastrarPaciente = ({ navigation }) => {
   return (
-    <PageContainer title="Adicionar Paciente" navigation={navigation}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <PageContainer title="Novo Acompanhamento" navigation={navigation}>
+      <KeyboardAvoidingView style={styles.container} behavior="height">
         <View style={styles.view}>
           <View style={styles.picker}>
-            <DadosLevels navigation={navigation} />
+            <DadosLevels navigation={navigation}/>
           </View>
         </View>
       </KeyboardAvoidingView>
