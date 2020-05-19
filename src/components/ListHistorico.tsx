@@ -145,7 +145,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
         </View>
       )}
 
-      {atendimento.procedimentos && (
+      {atendimento.procedimentos ? (
         <View style={styles.boxInfo}>
           <Text appearance="alternative" status="primary" category="h6">
             Procedimentos:
@@ -153,31 +153,31 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
           {atendimento.procedimentos.map(
             ({ nome, anexo64, observacao, id }) => (
               <View key={id}>
-                {anexo64 && (
+                {anexo64 ? (
                   <Lesoes
                     imgRegiao={anexo64}
                     title={nome}
                     navigation={navigation}
                   />
-                )}
+                ): null}
 
                 <View style={styles.infoLesoes}>
-                  {nome && (
+                  {nome ? (
                     <Text appearance="hint" category="c4">
                       Nome procedimento: {observacao}
                     </Text>
-                  )}
-                  {observacao && (
+                  ): null}
+                  {observacao ? (
                     <Text appearance="hint" category="c4">
                       Obs: {observacao}
                     </Text>
-                  )}
+                  ): null}
                 </View>
               </View>
             )
           )}
         </View>
-      )}
+      ): null}
 
       {enviarResult && (
         <View style={styles.btnResult}>
