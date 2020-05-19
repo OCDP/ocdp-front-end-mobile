@@ -69,3 +69,11 @@ export const fileAgend: (style: ImageStyle) => IconElement = (style) => (
 export const editText: (style: ImageStyle) => IconElement = (style) => (
   <Icon {...style} name="edit-2-outline" />
 );
+
+export const camera: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="camera-outline" />
+);
+
+export const close: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="close-outline" />
+);
