@@ -144,6 +144,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             ))}
         </View>
       )}
+
       {atendimento.procedimentos && (
         <View style={styles.boxInfo}>
           <Text appearance="alternative" status="primary" category="h6">
