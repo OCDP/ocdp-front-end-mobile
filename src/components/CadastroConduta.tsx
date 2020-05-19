@@ -11,9 +11,9 @@ import {
   Autocomplete,
   CheckBox,
 } from "@ui-kitten/components";
-import DateTimePickerModal from "react-native-modal-datetime-picker"
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from "@expo/vector-icons";
-import moment from 'moment';
+import moment from "moment";
 import { View, StyleSheet, Button, BackHandler, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
@@ -39,27 +39,49 @@ const DATA = [
 ];
 
 const CadastroConduta = ({ navigation, themedStyle = null }) => {
-  const [activeCheckedAcompanhamento, setActiveCheckedAcompanhamento] = React.useState(false);
-  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(false);
+  const [
+    activeCheckedAcompanhamento,
+    setActiveCheckedAcompanhamento,
+  ] = React.useState(false);
+  const [activeCheckedTratamento, setActiveCheckedTratamento] = React.useState(
+    false
+  );
   const [value, setValue] = React.useState(null);
-  const {usuarioLogado} = useContext(UsuarioLogadoContext);
-  const { idNovoAcomp } = useContext(NovoAcompContext)
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { idNovoAcomp } = useContext(NovoAcompContext);
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const [tipoEncaminhado, setTipoEncaminhado] = React.useState(null);
-  const { postFatores } = React.useContext(PostFatoresContext)
-  const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
-  const { setBloqBotaoProximo } = useContext(BotaoContext)
-  const { nomesLocaisEncaminhado, tiposLocaisEncaminhado, setNomesLocaisEncaminhado } = useContext(LocaisContext);
-  const { dataSugeridaAcompanhamento, dataSugeridaTratamento, setDataSugeridaAcompanhamento, setDataSugeridaTratamento } = useContext(LocaisContext);
-  const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
-  const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState('');
+  const { postFatores } = React.useContext(PostFatoresContext);
+  const {
+    nomesLocaisAtendido,
+    tiposLocaisAtendido,
+    setNomesLocaisAtendido,
+  } = useContext(LocaisContext);
+  const { setBloqBotaoProximo } = useContext(BotaoContext);
+  const {
+    nomesLocaisEncaminhado,
+    tiposLocaisEncaminhado,
+    setNomesLocaisEncaminhado,
+  } = useContext(LocaisContext);
+  const {
+    dataSugeridaAcompanhamento,
+    dataSugeridaTratamento,
+    setDataSugeridaAcompanhamento,
+    setDataSugeridaTratamento,
+  } = useContext(LocaisContext);
+  const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState("");
+  const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState(
+    ""
+  );
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
   const [dataAcompState, setDataAcompState] = React.useState("");
   const [dataTratState, setDataTratState] = React.useState("");
   const [dataAtual, setDataAtual] = React.useState(null);
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const [datePickerVisibleTrat, setDatePickerVisibleTrat] = useState(false);
+  const [datePickerVisibleAcomp, setDatePickerVisibleAcomp] = useState(false);
+
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
   const onSelect = ({ title }) => {
     setValue(title);
     // let historico = await loadHistorico(title);
@@ -68,21 +90,28 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     const backAction = () => {
-      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
-        {
-          text: "Voltar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Desejo cancelar procedimento", onPress: () => {
+      Alert.alert(
+        "Atenção",
+        "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?",
+        [
+          {
+            text: "Voltar",
+            onPress: () => null,
+            style: "cancel",
+          },
+          {
+            text: "Desejo cancelar procedimento",
+            onPress: () => {
               navigation.dispatch(
-              CommonActions.reset({
-                routes: [{ name: "Home" }],
-              })
-            );
-          setActiveStepBtn(0);
-        } }
-      ]);
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+              setActiveStepBtn(0);
+            },
+          },
+        ]
+      );
       return true;
     };
 
@@ -94,67 +123,47 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     return () => backHandler.remove();
   }, []);
 
-  useEffect(()=>{
-    async function loadLocaisAtendido(){
+  useEffect(() => {
+    async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
       setNomesLocaisAtendido({});
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
-      // console.log('loadLocaisAtendido', tipoAtendido);
-      // console.log(url);
-      try{
-        
+      try {
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-        .get(url).then((resp)=>{
-          for(let i of resp.data){
-            i.text = i.nome;
-          }
-          setNomesAtendidosAll(resp.data)
-          
-        })
-      }catch(err){
+          .get(url)
+          .then((resp) => {
+            for (let i of resp.data) {
+              i.text = i.nome;
+            }
+            setNomesAtendidosAll(resp.data);
+          });
+      } catch (err) {
         console.log(err);
-        
       }
     }
     loadLocaisAtendido();
-  }, [tipoAtendido])
+  }, [tipoAtendido]);
 
-  // useEffect(()=>{
-  //   function loadDataAtual(){
-  //     let mes = new Date().getMonth().toString();
-  //     if(mes.length == 1){
-  //       mes = '0' + mes;
-  //     }
-  //     let st = new Date().getFullYear() + '-' + mes + '-' + new Date().getDate()
-  //     setDataAtual(st);
-  //     console.log('dataAtual', dataAtual);
-  //   }
-  //   loadDataAtual
-    
-  // }, [])
-
-  useEffect(()=>{
-    async function loadLocaisAtendido(){
+  useEffect(() => {
+    async function loadLocaisAtendido() {
       setNomesLocaisEncaminhado({});
       setNomesEncaminhadoSelect("");
       let url = `localAtendimento/byTipo/${tipoEncaminhado}`;
-      // console.log('loadLocaisAtendido', tipoEncaminhado);
-      // console.log(url);
-      try{
-        
+      try {
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-        .get(url).then((resp)=>{
-          for(let i of resp.data){
-            i.text = i.nome;
-          }
-          setNomesEncaminhadosAll(resp.data)
-        })
-      }catch(err){
+          .get(url)
+          .then((resp) => {
+            for (let i of resp.data) {
+              i.text = i.nome;
+            }
+            setNomesEncaminhadosAll(resp.data);
+          });
+      } catch (err) {
         console.log(err);
       }
     }
     loadLocaisAtendido();
-  }, [tipoEncaminhado])
+  }, [tipoEncaminhado]);
 
   const onChangeText = async (query) => {
     setValue(query);
@@ -165,136 +174,118 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   };
 
   const tipoAtendidoActions = (text) => {
-    // console.log('tipoAtendidoActions', text);
-    setTipoAtendido('');
+    setTipoAtendido("");
     setTipoAtendido(text);
-    //console.log('tipoAtendido', tipoAtendido);
   };
 
   const nomeAtendidoActions = (text) => {
-    //console.log('nomeAtendidoActions', text)
-    //console.log('nomeAtendido', nomesLocaisAtendido);
     setnomesAtendidosSelect(text);
-    for(let i of nomesAtendidosAll){
-      if(i.text == text){
+    for (let i of nomesAtendidosAll) {
+      if (i.text == text) {
         setNomesLocaisAtendido(i);
       }
     }
-  }
-    
+  };
+
   const tipoEncaminhadoActions = (text) => {
-    setTipoEncaminhado('');
+    setTipoEncaminhado("");
     setTipoEncaminhado(text);
   };
 
   const nomeEncaminhadoActions = (text) => {
-    //console.log('nomeEncaminhadoActions', text)
-    // setNomesLocaisEncaminhado('');
-    // setNomesLocaisEncaminhado(text);
     setNomesEncaminhadoSelect(text);
-    for(let i of nomesEncaminhadosAll){
-      if(i.text == text){
+    for (let i of nomesEncaminhadosAll) {
+      if (i.text == text) {
         setNomesLocaisEncaminhado(i);
       }
     }
-  }
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
   };
 
   const confirmarDataTratamento = (dt) => {
-    hideDatePicker
-      setDataSugeridaTratamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
-      setDataTratState(moment(dt).format("DD/MM/YYYY"));
-  }
-
-  const confirmarDataAcompanhamento = (dt) => {
-    hideDatePicker
-      setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"))
-      setDataAcompState(moment(dt).format("DD/MM/YYYY"));
-  }
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
+    setDatePickerVisibleTrat(false);
+    setDataSugeridaTratamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+    setDataTratState(moment(dt).format("DD/MM/YYYY"));
   };
 
-  const [dtNascString, setDtNascString] = useState("")
-  
-  useEffect(()=>{
-    async function setarBotao(){
-      console.log("postFatores", postFatores)
-      console.log("idNovoAcomp", idNovoAcomp)
-      console.log('postFatores', nomesLocaisAtendido.length)
-      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
-      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
-      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
-        console.log('[]setBloqBotaoProximofalse')
-        setBloqBotaoProximo(false);
-      }else {
-        setBloqBotaoProximo(true); 
-        console.log('[]setBloqBotaoProximotrue')
-      }
-    }
-    setarBotao();
-  }, [])
+  const confirmarDataAcompanhamento = (dt) => {
+    setDatePickerVisibleAcomp(false);
+    setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
+    setDataAcompState(moment(dt).format("DD/MM/YYYY"));
+  };
 
-  useEffect(()=>{
-    async function setarBotao(){
-      console.log("idNovoAcomp", idNovoAcomp)
-      console.log('postFatores', nomesLocaisAtendido.length)
-      console.log('lesoesRegioes', nomesLocaisEncaminhado.length)
-      if((idNovoAcomp == 2 && nomesLocaisAtendido.length == undefined && nomesLocaisEncaminhado.length == undefined) 
-      || idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined){
-        
-        console.log('setBloqBotaoProximofalse')
+  const [dtNascString, setDtNascString] = useState("");
+
+  useEffect(() => {
+    async function setarBotao() {
+      if (
+        (idNovoAcomp == 2 &&
+          nomesLocaisAtendido.length == undefined &&
+          nomesLocaisEncaminhado.length == undefined) ||
+        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+      ) {
         setBloqBotaoProximo(false);
-      }else {
-        setBloqBotaoProximo(true)
-        console.log('setBloqBotaoProximotrue')
+      } else {
+        setBloqBotaoProximo(true);
       }
     }
     setarBotao();
-  }, [nomesLocaisAtendido, nomesLocaisEncaminhado])
+  }, []);
+
+  useEffect(() => {
+    async function setarBotao() {
+      if (
+        (idNovoAcomp == 2 &&
+          nomesLocaisAtendido.length == undefined &&
+          nomesLocaisEncaminhado.length == undefined) ||
+        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+      ) {
+        setBloqBotaoProximo(false);
+      } else {
+        setBloqBotaoProximo(true);
+      }
+    }
+    setarBotao();
+  }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
 
   return (
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
         {idNovoAcomp !== 1 ? (
-
-        <View style={styles.lineContent}>
-          <View style={styles.boxDatePicker}>
-            <View
-              style={{
-                marginHorizontal: 16,
-              }}
-            >
-              <View>
-                <Text appearance="hint">
-                  Selecione o local em que está sendo atendido
-                </Text>
-              </View>
-              <View style={{ marginVertical: 8 }}>
-                <Select
-                  data={tiposLocaisAtendido}
-                  placeholder="Selecionar um tipo"
-                  onSelect={(e) => tipoAtendidoActions(e["text"])}
-                  selectedOption={{ text: tipoAtendido }}
-                />
-              </View>
-              <View>
-                <Select
-                  disabled={tipoAtendido ? false : true}
-                  data={nomesAtendidosAll}
-                  placeholder="Local em que está sendo atendido"
-                  onSelect={(e) => nomeAtendidoActions(e["text"])}
-                  selectedOption={{ text: nomesAtendidosSelect }}
-                />
+          <View style={styles.lineContent}>
+            <View style={styles.boxDatePicker}>
+              <View
+                style={{
+                  marginHorizontal: 16,
+                }}
+              >
+                <View>
+                  <Text appearance="hint">
+                    Selecione o local em que está sendo atendido
+                  </Text>
+                </View>
+                <View style={{ marginVertical: 8 }}>
+                  <Select
+                    data={tiposLocaisAtendido}
+                    placeholder="Selecionar um tipo"
+                    onSelect={(e) => tipoAtendidoActions(e["text"])}
+                    selectedOption={{ text: tipoAtendido }}
+                  />
+                </View>
+                <View>
+                  <Select
+                    disabled={tipoAtendido ? false : true}
+                    data={nomesAtendidosAll}
+                    placeholder="Local em que está sendo atendido"
+                    onSelect={(e) => nomeAtendidoActions(e["text"])}
+                    selectedOption={{ text: nomesAtendidosSelect }}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
-        ): <></>}
+        ) : (
+          <></>
+        )}
 
         <View style={styles.lineContent}>
           <View style={styles.boxDatePicker}>
@@ -354,17 +345,25 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 </View>
                 <View>
                   <Input
-                      placeholder="Data sugerida tratamento"
-                      icon={user}
-                      value={dataSugeridaAcompanhamento}
-                      disabled={true} 
-                    />
-                  <Button disabled={activeCheckedAcompanhamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                    placeholder="Data sugerida acompanhamento"
+                    icon={user}
+                    value={dataSugeridaAcompanhamento}
+                    disabled={true}
+                  />
+                  <Button
+                    disabled={activeCheckedAcompanhamento ? false : true}
+                    title="Escolher data"
+                    onPress={() => setDatePickerVisibleAcomp(true)}
+                  />
                   <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
+                    cancelTextIOS="cancelar"
+                    confirmTextIOS="confirmar"
+                    locale="pt-BR"
+                    headerTextIOS="Escolha uma data"
+                    isVisible={datePickerVisibleAcomp}
                     mode="date"
-                    onConfirm={(a)=> confirmarDataAcompanhamento(a)}
-                    onCancel={()=> hideDatePicker}
+                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                    onCancel={() => setDatePickerVisibleAcomp(false)}
                   />
                 </View>
               </View>
@@ -386,17 +385,25 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 </View>
                 <View>
                   <Input
-                      placeholder="Data sugerida tratamento"
-                      icon={user}
-                      value={dataTratState}
-                      disabled={true} 
-                    />
-                  <Button disabled={activeCheckedTratamento ? false : true} title="Show Date Picker" onPress={showDatePicker} />
+                    placeholder="Data sugerida tratamento"
+                    icon={user}
+                    value={dataTratState}
+                    disabled={true}
+                  />
+                  <Button
+                    disabled={activeCheckedTratamento ? false : true}
+                    title="Escolher data"
+                    onPress={() => setDatePickerVisibleTrat(true)}
+                  />
                   <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
+                    cancelTextIOS="cancelar"
+                    confirmTextIOS="confirmar"
+                    locale="pt-BR"
+                    headerTextIOS="Escolha uma data"
+                    isVisible={datePickerVisibleTrat}
                     mode="date"
-                    onConfirm={(a)=> confirmarDataTratamento(a)}
-                    onCancel={()=> hideDatePicker}
+                    onConfirm={(a) => confirmarDataTratamento(a)}
+                    onCancel={() => setDatePickerVisibleTrat(false)}
                   />
                 </View>
               </View>

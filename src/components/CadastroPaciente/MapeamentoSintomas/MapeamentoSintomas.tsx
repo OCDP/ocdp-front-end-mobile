@@ -63,7 +63,6 @@ const MapeamentoSintomas = ({ navigation }) => {
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
     let fatoresReq = fatores;
-    console.log(isChecked);
     if (isChecked == false) {
       for (let j = 0; j < length; j++) {
         fator.push({
@@ -77,7 +76,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     }
     setIsChecked(true);
     fator[i].marcado = fator[i].marcado == true ? false : true;
-    console.log("fator", fator);
     setActiveChecked(fator);
     let objSetFatores = [];
     for (let f of fator) {
@@ -86,7 +84,6 @@ const MapeamentoSintomas = ({ navigation }) => {
       }
     }
     setPostFatores(objSetFatores);
-    console.log("postFatores", postFatores);
   };
 
   const styles = useStyleSheet({
@@ -164,8 +161,6 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('postFatores', postFatores)
-      console.log('lesoesRegioes', lesoesRegioes)
       if(lesoesRegioes.length > 0 && postFatores != undefined){
         setBloqBotaoProximo(false);
       }else setBloqBotaoProximo(true)
@@ -175,8 +170,6 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('postFatores', postFatores)
-      console.log('lesoesRegioes', lesoesRegioes)
       if(lesoesRegioes.length > 0 && postFatores != undefined){
         setBloqBotaoProximo(false);
       }else setBloqBotaoProximo(true)
@@ -201,7 +194,6 @@ const MapeamentoSintomas = ({ navigation }) => {
           setLoading(false);
           setVisible(visible ? false : true);
           setListRegioes(regArrList);
-          console.log("listRegioes", listRegioes)
         });
     } catch (err) {
       console.log("err", err);
@@ -247,11 +239,8 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   function subRegiaoActions(id, indice) {
     let reg = [...listRegioes];
-    //console.log('reg[indice]', reg[indice]);
     setSubregiao(reg[indice].nome);
     setRegiaoSelect(reg[indice]);
-    // function subRegiaoActions(desc) {
-    //   setSubregiao(desc);
     loadTipoLesao();
   }
 
@@ -292,7 +281,6 @@ const MapeamentoSintomas = ({ navigation }) => {
   }, []);
 
   async function loadTipoLesao() {
-    console.log("regiaoSelect", regiaoSelect);
     setLoading(true);
     try {
       let resp = await apiFunc(
@@ -364,7 +352,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     let st = "";
     let incluir = true;
     let indice = null;
-    console.log('lesoesRegioes', lesoesRegioes);
     if(lesoesRegioes.length > 0){
       let cont = 0;
       st += "Regiões já cadastradas: \n"
@@ -389,7 +376,6 @@ const MapeamentoSintomas = ({ navigation }) => {
           {text: 'Sim', onPress: () => excluirRegiaoLesao(indice)},
           {
             text: 'Não',
-            onPress: () => console.log("cancel pressed"),
             style: 'cancel',
           },
         ],
@@ -404,7 +390,6 @@ const MapeamentoSintomas = ({ navigation }) => {
         [
           {
             text: 'Cancelar',
-            onPress: () => console.log("cancel pressed"),
             style: 'cancel',
           },
           {text: 'Cadastrar', onPress: () => cadastrarRegiaoLesao()},
@@ -416,7 +401,6 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   function excluirRegiaoLesao(i){
     let rS = [...lesoesRegioes]
-    console.log(rS, i)
     rS.splice(i, 1);
     setLesoesRegioes(rS);
     alert("Lesão Excluída");

@@ -21,7 +21,6 @@
     "axios": "0.18.0",
     "expo": "~36.0.0",
     "expo-blur": "^8.0.0",
-    "expo-image-picker": "^8.1.0",
     "expo-secure-store": "^8.0.0",
     "lottie-react-native": "^3.3.2",
     "moment": "^2.25.3",

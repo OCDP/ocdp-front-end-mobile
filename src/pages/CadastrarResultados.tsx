@@ -1,28 +1,26 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   Text,
   Layout,
   withStyles,
   useStyleSheet,
   Button,
+  Input,
 } from "@ui-kitten/components";
 import PageContainer from "../components/PageContainer";
-import { View, Image, StyleSheet, Alert } from "react-native";
-import Lesoes from "../components/CadastroPaciente/Lesoes";
+import { View, Alert, Image } from "react-native";
 import AtendimentoContext from "../contexts/AtendimentosContext";
-import ListHistorico from "../components/ListHistorico";
 import { ScrollView } from "react-native-gesture-handler";
-import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
+import Lesoes from "../components/CadastroPaciente/Lesoes";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import * as ImagePicker from "expo-image-picker";
 
 const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const { atendimento } = useContext(AtendimentoContext);
   const [, setLoading] = useLoading();
-  const [image, setImage] = useState(null);
+  const [imageURI, setImageURI] = useState("");
 
   const styles = useStyleSheet({
     container: {
@@ -41,6 +39,17 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       backgroundColor: `${themedStyle.bgColorStrong}`,
       marginVertical: 4,
     },
+    infoLesoes: {
+      paddingLeft: 16,
+      paddingTop: 8,
+    },
+    images: {
+      width: 150,
+      height: 150,
+      borderColor: "black",
+      borderWidth: 1,
+      marginHorizontal: 3,
+    },
   });
 
   async function enviarPost(atendimento, password) {
@@ -48,7 +57,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     let resp = apiFunc(atendimento, password)
       .post("/doutor/", {})
       .then(() => {
-        console.log(resp);
         Alert.alert("Registros enviadas com sucesso!");
       })
       .catch(() => {
@@ -60,31 +68,48 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     return;
   }
 
-  const _pickImage = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        setImage({ image: result });
-      }
-
-      console.log(result);
-    } catch (E) {
-      console.log(E);
-    }
-  };
-
   return (
     <PageContainer title="Enviar resultados" navigation={navigation}>
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
-            <Text>Enviar imagem X:</Text>
-            <Button onPress={_pickImage}>clique para enviar</Button>
+            <Text appearance="alternative" status="primary" category="h6">
+              Envie os dados do resultado:
+            </Text>
+            {atendimento.procedimentos.map(
+              ({ nome, anexo64, observacao, id }) => (
+                <View key={id}>
+                  {anexo64 ? (
+                    <Lesoes
+                      title={nome}
+                      navigation={navigation}
+                      imgRegiao={anexo64}
+                    />
+                  ) : (
+                    <Button
+                      onPress={() => {}}
+                    >{`Selecione a imagem de ${nome}`}</Button>
+                  )}
+
+                  <View style={styles.infoLesoes}>
+                    {nome && (
+                      <Text appearance="hint" category="c4">
+                        Nome procedimento: {observacao}
+                      </Text>
+                    )}
+                    {observacao ? (
+                      <Text appearance="hint" category="c4">
+                        Obs: {observacao}
+                      </Text>
+                    ) : (
+                      <Input
+                        placeholder={`Insira a observacao sobre ${nome}`}
+                      />
+                    )}
+                  </View>
+                </View>
+              )
+            )}
           </View>
         </Layout>
       </ScrollView>

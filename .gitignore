@@ -1,3 +1,4 @@
 node_modules
 src/services/api.ts
 .expo
+ios/Pods

@@ -40,7 +40,7 @@ interface Atendimento {
   dataAtendimento?: string;
   usuario?: Usuario;
   paciente?: Paciente;
-  tipoAtendimento?: string;
+  tipoAtendimento?: "RESULTADOS" | "INTERVENCAO" | "ACOMPANHAMENTO";
   localAtendimento?: LocalAtendimento;
   localEncaminhado?: LocalAtendimento;
 }

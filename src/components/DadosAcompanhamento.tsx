@@ -51,7 +51,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function resetarBotao(){
-      console.log('resetarBotao', bloqBotaoProximo)
       setBloqBotaoProximo(true);
     }
     resetarBotao();
@@ -87,8 +86,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     async function setarBotao(){
-      console.log('setarBotao', bloqBotaoProximo)
-      console.log('nomesLocaisAtendido', nomesLocaisAtendido)
       if(nomesLocaisAtendido && !nomesLocaisAtendido.length && idNovoAcomp){
         setBloqBotaoProximo(false);
       }
@@ -101,8 +98,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
       setnomesAtendidosSelect("");
       setNomesLocaisAtendido({});
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
-      // console.log('loadLocaisAtendido', tipoAtendido);
-      // console.log(url);
       try{
         
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -123,15 +118,11 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
 
   const tipoAtendidoActions = (text) => {
-    // console.log('tipoAtendidoActions', text);
     setTipoAtendido('');
     setTipoAtendido(text);
-    //console.log('tipoAtendido', tipoAtendido);
   };
 
   const nomeAtendidoActions = (text) => {
-    //console.log('nomeAtendidoActions', text)
-    //console.log('nomeAtendido', nomesLocaisAtendido);
     setnomesAtendidosSelect(text);
     for(let i of nomesAtendidosAll){
       if(i.text == text){
@@ -156,7 +147,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
   useEffect(()=>{
     function setarNovoAcompanhamento(){
-      console.log('selectedIndex', selectedIndex)
       setIdNovoAcomp(selectedIndex);
     }
     setarNovoAcompanhamento()

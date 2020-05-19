@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
@@ -12,7 +12,9 @@ import SafeAreaLayout from "../components/SafeAreaLayout";
 import Introducao from "../pages/Introducao.page";
 import Historico from "../pages/Historico.page";
 import { PacienteProvider } from "../contexts/PacienteContext";
-import { UsuarioLogadoProvider } from "../contexts/UsuarioLogadoContext";
+import UsuarioLogadoContext, {
+  UsuarioLogadoConsumer,
+} from "../contexts/UsuarioLogadoContext";
 import { FatoresProvider } from "../contexts/FatoresRiscoContext";
 import { LocaisProvider } from "../contexts/LocaisContext";
 import { PostFatoresProvider } from "../contexts/PostFatoresContext";
@@ -77,13 +79,18 @@ function CustomDrawerContent(props) {
         </View>
 
         <View style={styles.btnLogout}>
-          <Button
-            onPress={() => {
-              props.navigation.navigate("Login");
-            }}
-          >
-            sair
-          </Button>
+          <UsuarioLogadoConsumer>
+            {({ logout }) => (
+              <Button
+                onPress={() => {
+                  logout();
+                  props.navigation.navigate("Login");
+                }}
+              >
+                sair
+              </Button>
+            )}
+          </UsuarioLogadoConsumer>
         </View>
       </View>
     </DrawerContentScrollView>
@@ -116,54 +123,50 @@ const Drawer = createDrawerNavigator();
 export const AppNavigator = () => (
   <NavigationContainer>
     <PacienteProvider>
-      <UsuarioLogadoProvider>
-        <FatoresProvider>
-          <PostFatoresProvider>
-            <LocaisProvider>
-              <NovoAcompProvider>
-                <IntervencaoProvider>
-                  <BotaoProvider>
-                    <LesoesRegiaoProvider>
-                      <AtendimentoProvider>
-                        <SafeAreaLayout style={{ flex: 1 }} insets="top">
-                          <Drawer.Navigator
-                            initialRouteName="BemVindo"
-                            drawerContent={CustomDrawerContent}
-                          >
-                            <Drawer.Screen
-                              name="Introducao"
-                              component={Introducao}
-                            />
-                            <Drawer.Screen name="Home" component={HomeScreen} />
-                            <Drawer.Screen
-                              name="CadastrarResultados"
-                              component={CadastrarResultados}
-                            />
-                            <Drawer.Screen
-                              name="CadastrarPaciente"
-                              component={CadastrarPaciente}
-                            />
-                            <Drawer.Screen
-                              name="BemVindo"
-                              component={BemVindo}
-                            />
-                            <Drawer.Screen name="Login" component={LoginPage} />
+      <FatoresProvider>
+        <PostFatoresProvider>
+          <LocaisProvider>
+            <NovoAcompProvider>
+              <IntervencaoProvider>
+                <BotaoProvider>
+                  <LesoesRegiaoProvider>
+                    <AtendimentoProvider>
+                      <SafeAreaLayout style={{ flex: 1 }} insets="top">
+                        <Drawer.Navigator
+                          edgeWidth={0}
+                          initialRouteName="BemVindo"
+                          drawerContent={CustomDrawerContent}
+                        >
+                          <Drawer.Screen
+                            name="Introducao"
+                            component={Introducao}
+                          />
+                          <Drawer.Screen name="Home" component={HomeScreen} />
+                          <Drawer.Screen
+                            name="CadastrarResultados"
+                            component={CadastrarResultados}
+                          />
+                          <Drawer.Screen
+                            name="CadastrarPaciente"
+                            component={CadastrarPaciente}
+                          />
+                          <Drawer.Screen name="BemVindo" component={BemVindo} />
+                          <Drawer.Screen name="Login" component={LoginPage} />
 
-                            <Drawer.Screen
-                              name="Historico"
-                              component={Historico}
-                            />
-                          </Drawer.Navigator>
-                        </SafeAreaLayout>
-                      </AtendimentoProvider>
-                    </LesoesRegiaoProvider>
-                  </BotaoProvider>
-                </IntervencaoProvider>
-              </NovoAcompProvider>
-            </LocaisProvider>
-          </PostFatoresProvider>
-        </FatoresProvider>
-      </UsuarioLogadoProvider>
+                          <Drawer.Screen
+                            name="Historico"
+                            component={Historico}
+                          />
+                        </Drawer.Navigator>
+                      </SafeAreaLayout>
+                    </AtendimentoProvider>
+                  </LesoesRegiaoProvider>
+                </BotaoProvider>
+              </IntervencaoProvider>
+            </NovoAcompProvider>
+          </LocaisProvider>
+        </PostFatoresProvider>
+      </FatoresProvider>
     </PacienteProvider>
   </NavigationContainer>
 );

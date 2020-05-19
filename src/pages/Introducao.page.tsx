@@ -18,7 +18,7 @@ import { add, user, map, fileAgend } from "../assets/Icons";
 
 const Introducao = ({ navigation }) => {
   const { setFatores } = useContext(FatoresContext);
-  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const { usuarioLogado, setUsuarioLogado } = useContext(UsuarioLogadoContext);
   const { switchTheme } = useContext(AppContext);
   const {
     setNomesLocaisAtendido,
@@ -105,7 +105,7 @@ const Introducao = ({ navigation }) => {
     if (usuarioLogado.nivelAtencao === "SECUNDARIA") {
       switchTheme();
     }
-  }, []);
+  }, [usuarioLogado, setUsuarioLogado]);
 
   return (
     <PageContainer title="Buscar paciente" navigation={navigation}>
@@ -156,11 +156,10 @@ const styles = StyleSheet.create({
     paddingTop: 80,
     flexDirection: "row",
     justifyContent: "space-around",
-
   },
   btnItem: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   button: {
     width: 80,
