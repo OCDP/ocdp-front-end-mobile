@@ -23,9 +23,12 @@ import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import { camera, close, user } from "../assets/Icons";
+import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 
 const CadastrarResultados = ({ navigation, themedStyle = null }) => {
-  const { atendimento } = useContext(AtendimentoContext);
+  const { atendimento, setAtendimento } = useContext(AtendimentoContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext)
   const [, setLoading] = useLoading();
   const [hasPermission, setHasPermission] = useState(null);
   const [canOpen, setCanOpen] = useState(null);
@@ -39,6 +42,9 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [pickerAcompTrat, setPickerAcompTrat] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const camRef = useRef(null);
+  const [diagnosticoFinal, setDiagnosticoFinal] = useState("");
+  const [indiceFoto, setIndiceFoto] = useState(null);
+  const [objResult, setObjResult] = useState<AtendimentosInterface>({});
 
   const styles = useStyleSheet({
     container: {
@@ -88,20 +94,53 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   };
 
-  async function enviarPost(atendimento, password) {
+  useEffect(()=>{
+    function setObjResultado(){
+      setObjResult(atendimento);
+    }
+    setObjResultado();
+  }, [])
+
+  async function enviarPost() {
     setLoading(true);
-    let resp = apiFunc(atendimento, password)
-      .post("/doutor/", {})
+    objResult.atendimento.tipoAtendimento = "RESULTADOS";
+    objResult.atendimento.localAtendimento = null;
+    objResult.atendimento.localEncaminhado = null;
+    objResult.atendimento.dataAtendimento = moment().format("YYYY-MM-DD HH:mm:ss");
+    let obj = {
+      atendimento: objResult.atendimento,
+      confirmaRastreamento: true,
+      diagnosticoFinal: diagnosticoFinal,
+      procedimentos: objResult.procedimentos
+    }
+    // console.log(obj);
+    let resp = apiFunc(objResult.atendimento.usuario.cpf, usuarioLogado.senhaUsuario)
+      .post("/resultados/salvar", obj)
       .then(() => {
         Alert.alert("Registros enviadas com sucesso!");
       })
-      .catch(() => {
-        Alert.alert("nao foi possivel enviar os registros!");
+      .catch((err) => {
+        console.log(err)
+        Alert.alert("nao foi possivel enviar os registros!", err);
       })
       .finally(() => {
         setLoading(false);
       });
     return;
+  }
+
+  const setarObservacao = (texto, indice) => {
+    let arr = objResult;
+    // console.log(arr);
+    arr.procedimentos[indice].observacao = texto;
+    setObjResult(arr)
+  }
+
+  const setarImagem = (data, indice) => {
+    let arr = objResult;
+    // console.log(arr);
+    arr.procedimentos[indice].anexo64 = data;
+    setObjResult(arr)
   }
 
   useEffect(() => {
@@ -115,7 +154,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     if (camRef) {
       const options = { quality: 1, base64: true };
       const data = await camRef.current.takePictureAsync(options);
-      console.log("data >>>", data.base64);
+      // console.log("data >>>", data.base64);
+      setCanOpen(false)
+      console.log("indiceFoto", indiceFoto)
+      setarImagem(data.base64, indiceFoto);
     }
   }
 
@@ -124,7 +166,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
-            <Text appearance="alternative" status="primary" category="h6">
+            <Text>
               Envie os dados dos resultados:
             </Text>
             {hasPermission && canOpen ? (
@@ -166,8 +208,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                             icon={camera}
                             onPress={() => takePicture()}
                           />
-                        </View>
-                        <View>
                           <Button
                             style={styles.button}
                             status="danger"
@@ -187,7 +227,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             )}
 
             {atendimento.procedimentos.map(
-              ({ nome, anexo64, observacao, id }) => (
+              ({ nome, anexo64, observacao, id }, i) => (
                 <View key={id}>
                   {anexo64 ? (
                     <Lesoes
@@ -198,21 +238,28 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   ) : (
                     <Button
                       style={{ marginHorizontal: 32 }}
-                      onPress={() => setCanOpen(true)}
+                      onPress={() => {
+                        setIndiceFoto(i);
+                        setCanOpen(true)
+                      }}
                     >{`Selecione a imagem de ${nome}`}</Button>
                   )}
                   <View style={styles.infoLesoes}>
                     {nome && (
-                      <Text appearance="hint" category="c4">
+                      <Text>
                         Nome procedimento: {observacao}
                       </Text>
                     )}
                     {observacao ? (
-                      <Text appearance="hint" category="c4">
+                      <Text>
                         Obs: {observacao}
                       </Text>
                     ) : (
                       <Input
+                        onChangeText={(a)=>{
+                          console.log(a, i)
+                          setarObservacao(a, i)
+                        }}
                         placeholder={`Insira a observacao sobre ${nome}`}
                       />
                     )}
@@ -225,13 +272,17 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
           <View style={styles.boxInfo}>
             <Text
               style={{ paddingBottom: 16 }}
-              appearance="alternative"
-              status="primary"
-              category="h6"
+              // appearance="alternative"
+              // status="primary"
+              // category="h6"
             >
               Diagnóstico final:
             </Text>
-            <Input numberOfLines={2} />
+            <Input numberOfLines={2} 
+              onChangeText={(a)=>{
+                console.log(a);
+                setDiagnosticoFinal(a)
+              }}/>
           </View>
 
           <View style={styles.boxInfo}>
@@ -245,7 +296,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   style={{
                     marginBottom: 4,
                   }}
-                  appearance="hint"
+                  // appearance="hint"
                 >
                   Retorno para:
                 </Text>
@@ -326,6 +377,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               </View>
             </View>
           </View>
+          <Button onPress={()=>enviarPost()}>Enviar resultado</Button>
         </Layout>
       </ScrollView>
     </PageContainer>
