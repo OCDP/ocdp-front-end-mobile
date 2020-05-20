@@ -118,7 +118,7 @@ const Introducao = ({ navigation }) => {
                 status="primary"
                 size="large"
                 icon={user}
-                onPress={() => navigation.navigate("Home")}
+                onPress={() => navigation.navigate("PerfilUsuario")}
               />
             </View>
             <View>
