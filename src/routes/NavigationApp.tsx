@@ -68,17 +68,6 @@ function CustomDrawerContent(props) {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation.navigate("CadastrarPaciente");
-            }}
-          >
-            <View style={styles.containerItemMenu}>
-              <View>
-                <Text style={styles.textMenu}>Cadastro paciente</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.btnLogout}>
