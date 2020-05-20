@@ -10,6 +10,7 @@ import {
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import AtendimentoContext from "../contexts/AtendimentosContext";
 import Lesoes from "./CadastroPaciente/Lesoes";
+import moment from "moment";
 
 const ListHistorico = ({ navigation, themedStyle = null }) => {
   const { atendimento } = useContext(AtendimentoContext);
@@ -61,7 +62,10 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
         {atendimento.atendimento.dataAtendimento && (
           <>
             <Text appearance="hint" category="c4">
-              Data: {atendimento.atendimento.dataAtendimento.split(" ")[0]}
+              Data:{" "}
+              {moment(
+                atendimento.atendimento.dataAtendimento.split(" ")[0]
+              ).format("DD/MM/Y")}
             </Text>
             <Divider style={styles.divider} />
           </>
@@ -159,25 +163,25 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
                     title={nome}
                     navigation={navigation}
                   />
-                ): null}
+                ) : null}
 
                 <View style={styles.infoLesoes}>
                   {nome ? (
                     <Text appearance="hint" category="c4">
-                      Nome procedimento: {observacao}
+                      Nome procedimento: {nome}
                     </Text>
-                  ): null}
+                  ) : null}
                   {observacao ? (
                     <Text appearance="hint" category="c4">
                       Obs: {observacao}
                     </Text>
-                  ): null}
+                  ) : null}
                 </View>
               </View>
             )
           )}
         </View>
-      ): null}
+      ) : null}
 
       {enviarResult && (
         <View style={styles.btnResult}>
