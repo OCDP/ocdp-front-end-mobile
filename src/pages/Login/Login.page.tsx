@@ -8,7 +8,6 @@ import {
 } from "./Login.page.styles";
 import { Icon } from "@ui-kitten/components";
 import api from "../../services/api";
-import LottieView from "lottie-react-native";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -70,13 +69,6 @@ export default function ({ navigation }) {
         />
         <LoginButton onPress={() => loginAction()} />
       </LoginCard>
-      {2 > 3 && (
-        <LottieView
-          source={require("../../assets/animations/health.json")}
-          autoPlay
-          loop
-        />
-      )}
     </Container>
   );
 }
