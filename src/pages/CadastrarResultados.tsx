@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   Text,
   Layout,
@@ -38,6 +38,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [pickerAcompVisible, setPickerAcompVisible] = useState(false);
   const [pickerAcompTrat, setPickerAcompTrat] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const camRef = useRef(null);
 
   const styles = useStyleSheet({
     container: {
@@ -110,14 +111,13 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     })();
   }, []);
 
-  const takePicture = async () => {
-    let camera;
-    if (camera) {
+  async function takePicture() {
+    if (camRef) {
       const options = { quality: 1, base64: true };
-      const data = await camera.takePictureAsync(options);
-      console.log(data);
+      const data = await camRef.current.takePictureAsync(options);
+      console.log("data >>>", data.base64);
     }
-  };
+  }
 
   return (
     <PageContainer title="Enviar resultados" navigation={navigation}>
@@ -137,11 +137,12 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
-                    width: 300,
+                    width: 400,
                     height: 500,
                     padding: 16,
                   }}
                   type={type}
+                  ref={camRef}
                 >
                   <View
                     style={{
@@ -152,7 +153,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   >
                     <View
                       style={{
-                        flex: 0.1,
+                        flex: 1,
                         alignSelf: "flex-end",
                         alignItems: "center",
                       }}
