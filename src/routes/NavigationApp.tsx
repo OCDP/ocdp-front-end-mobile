@@ -11,6 +11,7 @@ import CadastrarPaciente from "../pages/CadastrarPaciente.page";
 import SafeAreaLayout from "../components/SafeAreaLayout";
 import Introducao from "../pages/Introducao.page";
 import Historico from "../pages/Historico.page";
+import PerfilUsuarioPage from "../pages/PerfilUsuario.page";
 import { PacienteProvider } from "../contexts/PacienteContext";
 import UsuarioLogadoContext, {
   UsuarioLogadoConsumer,
@@ -28,6 +29,8 @@ import { View, StyleSheet } from "react-native";
 import Logo from "../assets/vectors/Logo.jsx";
 import { Button, Text } from "@ui-kitten/components";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { AppConsumer } from "../contexts/AppContext";
+import LightTheme from "../themes/LightTheme";
 
 function CustomDrawerContent(props) {
   return (
@@ -81,14 +84,19 @@ function CustomDrawerContent(props) {
         <View style={styles.btnLogout}>
           <UsuarioLogadoConsumer>
             {({ logout }) => (
-              <Button
-                onPress={() => {
-                  logout();
-                  props.navigation.navigate("Login");
-                }}
-              >
-                sair
-              </Button>
+              <AppConsumer>
+                {({ setTheme, defaultTheme }) => (
+                  <Button
+                    onPress={() => {
+                      logout();
+                      setTheme(defaultTheme);
+                      props.navigation.navigate("Login");
+                    }}
+                  >
+                    sair
+                  </Button>
+                )}
+              </AppConsumer>
             )}
           </UsuarioLogadoConsumer>
         </View>
@@ -152,10 +160,13 @@ export const AppNavigator = () => (
                           />
                           <Drawer.Screen name="BemVindo" component={BemVindo} />
                           <Drawer.Screen name="Login" component={LoginPage} />
-
                           <Drawer.Screen
                             name="Historico"
                             component={Historico}
+                          />
+                          <Drawer.Screen
+                            name="PerfilUsuario"
+                            component={PerfilUsuarioPage}
                           />
                         </Drawer.Navigator>
                       </SafeAreaLayout>
