@@ -15,13 +15,11 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import AppContext, { useLoading } from "../../contexts/AppContext";
 
 export default function ({ navigation }) {
-  //ATENCAO PRIMARIA
-  // const [login, setLogin] = useState("111.111.111-11");
-  // const [pswd, setPswd] = useState("p@55w0Rd");
+  // senha primaria: p@55w0Rd
+  // senha secundaria: teste123
 
-  //ATENCAO SECUNDARIA
-  const [login, setLogin] = useState("222.222.222-22");
-  const [pswd, setPswd] = useState("teste123");
+  const [login, setLogin] = useState("");
+  const [pswd, setPswd] = useState("");
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { setUsuarioLogado } = useContext(UsuarioLogadoContext);
@@ -52,11 +50,17 @@ export default function ({ navigation }) {
     }
   }
 
+  const validateCpf = (cpf) => {
+    let cpfMask: string = "00000000000";
+    cpfMask = cpfMask.replace(/[^\d]/g, "");
+    setLogin(cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"));
+  };
+
   return (
     <Container>
       <Logo size={200} />
       <LoginCard>
-        <LoginInput value={login} onChangeText={setLogin} />
+        <LoginInput value={login} onChangeText={validateCpf} />
         <PasswordInput
           value={pswd}
           onChangeText={setPswd}
