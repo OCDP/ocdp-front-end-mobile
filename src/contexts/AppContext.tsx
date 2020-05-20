@@ -26,6 +26,8 @@ export interface AppTheme {
 }
 export interface AppContextType {
   theme: AppTheme;
+  defaultTheme?: AppTheme;
+  setTheme?: Dispatch<SetStateAction<AppTheme>>;
   dadosPacientes: Paciente[];
   setDadosPacientes: Dispatch<SetStateAction<Paciente[]>>;
   loadingState?: [boolean, Dispatch<SetStateAction<boolean>>];
@@ -70,6 +72,8 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         theme,
+        defaultTheme,
+        setTheme,
         switchTheme,
         dadosPacientes,
         setDadosPacientes,
