@@ -23,9 +23,10 @@ import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import { camera, close, user } from "../assets/Icons";
+import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 
 const CadastrarResultados = ({ navigation, themedStyle = null }) => {
-  const { atendimento } = useContext(AtendimentoContext);
+  const { atendimento, setAtendimento } = useContext(AtendimentoContext);
   const [, setLoading] = useLoading();
   const [hasPermission, setHasPermission] = useState(null);
   const [canOpen, setCanOpen] = useState(null);
@@ -39,6 +40,8 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [pickerAcompTrat, setPickerAcompTrat] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const camRef = useRef(null);
+  const [diagnosticoFinal, setDiagnosticoFinal] = useState("");
+  const [objResult, setObjResult] = useState<AtendimentosInterface>({});
 
   const styles = useStyleSheet({
     container: {
@@ -88,20 +91,42 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   };
 
-  async function enviarPost(atendimento, password) {
+  useEffect(()=>{
+    function setObjResultado(){
+      setObjResult(atendimento);
+    }
+    setObjResultado();
+  })
+
+  async function enviarPost(password) {
     setLoading(true);
-    let resp = apiFunc(atendimento, password)
-      .post("/doutor/", {})
-      .then(() => {
-        Alert.alert("Registros enviadas com sucesso!");
-      })
-      .catch(() => {
-        Alert.alert("nao foi possivel enviar os registros!");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    return;
+    objResult.atendimento.tipoAtendimento = "RESULTADOS";
+    let obj = {
+      atendimento: objResult.atendimento,
+      confirmaRastreamento: true,
+      diagnosticoFinal: diagnosticoFinal,
+      procedimentos: objResult.procedimentos
+    }
+    console.log(obj);
+    // let resp = apiFunc(objResult.atendimento.usuario.cpf, password)
+    //   .post("/resultados/salvar", obj)
+    //   .then(() => {
+    //     Alert.alert("Registros enviadas com sucesso!");
+    //   })
+    //   .catch(() => {
+    //     Alert.alert("nao foi possivel enviar os registros!");
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
+    // return;
+  }
+
+  const setarObservacao = (texto, indice) => {
+    let arr = objResult;
+    console.log(arr);
+    arr.procedimentos[indice].observacao = texto;
+    setAtendimento(arr)
   }
 
   useEffect(() => {
@@ -166,8 +191,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                             icon={camera}
                             onPress={() => takePicture()}
                           />
-                        </View>
-                        <View>
                           <Button
                             style={styles.button}
                             status="danger"
@@ -187,7 +210,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             )}
 
             {atendimento.procedimentos.map(
-              ({ nome, anexo64, observacao, id }) => (
+              ({ nome, anexo64, observacao, id }, i) => (
                 <View key={id}>
                   {anexo64 ? (
                     <Lesoes
@@ -213,6 +236,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       </Text>
                     ) : (
                       <Input
+                        onChangeText={(a)=>{
+                          console.log(a, i)
+                          setarObservacao(a, i)
+                        }}
                         placeholder={`Insira a observacao sobre ${nome}`}
                       />
                     )}
@@ -231,7 +258,11 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             >
               Diagnóstico final:
             </Text>
-            <Input numberOfLines={2} />
+            <Input numberOfLines={2} 
+              onChangeText={(a)=>{
+                console.log(a);
+                setDiagnosticoFinal(a)
+              }}/>
           </View>
 
           <View style={styles.boxInfo}>
