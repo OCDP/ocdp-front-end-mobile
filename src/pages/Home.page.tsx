@@ -109,7 +109,6 @@ const HomeScreen = ({ navigation }) => {
       );
     } catch (err) {
       console.log("err", err);
-      Alert.alert("erro na busca");
     }
   };
 

@@ -7,6 +7,7 @@ import { AppProvider, AppConsumer } from "./src/contexts/AppContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { UsuarioLogadoProvider } from "./src/contexts/UsuarioLogadoContext";
+import BackDisable from "./src/HOCs/BackDisable";
 
 const App = () => {
   return (
@@ -18,7 +19,10 @@ const App = () => {
             <UsuarioLogadoProvider>
               <SafeAreaProvider>
                 <StatusBar barStyle="light-content" />
-                <AppNavigator />
+                <BackDisable
+                  children={AppNavigator}
+                  action={() => console.log("voltei")}
+                />
               </SafeAreaProvider>
             </UsuarioLogadoProvider>
           </ApplicationProvider>
