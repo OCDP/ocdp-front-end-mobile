@@ -18,6 +18,7 @@ import AtendimentoContext from "../contexts/AtendimentosContext";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
+import apiFuncImages from "../services/apiImages";
 import Lesoes from "../components/CadastroPaciente/Lesoes";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
@@ -25,10 +26,11 @@ import * as Permissions from "expo-permissions";
 import { camera, close, user } from "../assets/Icons";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import axios from "axios";
 
 const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const { atendimento, setAtendimento } = useContext(AtendimentoContext);
-  const { usuarioLogado } = useContext(UsuarioLogadoContext)
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const [, setLoading] = useLoading();
   const [hasPermission, setHasPermission] = useState(null);
   const [canOpen, setCanOpen] = useState(null);
@@ -94,33 +96,38 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   };
 
-  useEffect(()=>{
-    function setObjResultado(){
+  useEffect(() => {
+    function setObjResultado() {
       setObjResult(atendimento);
     }
     setObjResultado();
-  }, [])
+  }, []);
 
   async function enviarPost() {
     setLoading(true);
     objResult.atendimento.tipoAtendimento = "RESULTADOS";
     objResult.atendimento.localAtendimento = null;
     objResult.atendimento.localEncaminhado = null;
-    objResult.atendimento.dataAtendimento = moment().format("YYYY-MM-DD HH:mm:ss");
+    objResult.atendimento.dataAtendimento = moment().format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
     let obj = {
       atendimento: objResult.atendimento,
       confirmaRastreamento: true,
       diagnosticoFinal: diagnosticoFinal,
-      procedimentos: objResult.procedimentos
-    }
+      procedimentos: objResult.procedimentos,
+    };
     // console.log(obj);
-    let resp = apiFunc(objResult.atendimento.usuario.cpf, usuarioLogado.senhaUsuario)
+    let resp = apiFunc(
+      objResult.atendimento.usuario.cpf,
+      usuarioLogado.senhaUsuario
+    )
       .post("/resultados/salvar", obj)
       .then(() => {
         Alert.alert("Registros enviadas com sucesso!");
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         Alert.alert("nao foi possivel enviar os registros!", err);
       })
       .finally(() => {
@@ -133,15 +140,15 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     let arr = objResult;
     // console.log(arr);
     arr.procedimentos[indice].observacao = texto;
-    setObjResult(arr)
-  }
+    setObjResult(arr);
+  };
 
   const setarImagem = (data, indice) => {
     let arr = objResult;
     // console.log(arr);
     arr.procedimentos[indice].anexo64 = data;
-    setObjResult(arr)
-  }
+    setObjResult(arr);
+  };
 
   useEffect(() => {
     (async () => {
@@ -150,14 +157,41 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     })();
   }, []);
 
+  async function enviaImagem(data) {
+    let form = new FormData();
+    form.append("photo", {
+      uri: data.uri,
+      type: "image/jpeg",
+      name: data.uri.split("/").pop(),
+    });
+
+    await axios({
+      method: "post",
+      url: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/uploadFile/${objResult.atendimento.usuario.cpf}`,
+      data: form,
+      headers: { "Content-Type": "multipart/form-data" },
+      auth: {
+        username: objResult.atendimento.usuario.cpf,
+        password: usuarioLogado.senhaUsuario,
+      },
+    })
+      .then(function (response) {
+        console.log("deu bom", response);
+      })
+      .catch(function (response) {
+        console.log("deu ruim", response);
+        console.log(form);
+      });
+  }
+
   async function takePicture() {
     if (camRef) {
-      const options = { quality: 1, base64: true };
+      const options = { quality: 1, base64: true, uri: true };
       const data = await camRef.current.takePictureAsync(options);
-      // console.log("data >>>", data.base64);
-      setCanOpen(false)
-      console.log("indiceFoto", indiceFoto)
-      setarImagem(data.base64, indiceFoto);
+      setCanOpen(false);
+      // console.log("indiceFoto", indiceFoto)
+      // setarImagem(data.base64, indiceFoto);
+      enviaImagem(data);
     }
   }
 
@@ -166,9 +200,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
-            <Text>
-              Envie os dados dos resultados:
-            </Text>
+            <Text>Envie os dados dos resultados:</Text>
             {hasPermission && canOpen ? (
               <Modal
                 backdropStyle={styles.backdrop}
@@ -240,25 +272,19 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       style={{ marginHorizontal: 32 }}
                       onPress={() => {
                         setIndiceFoto(i);
-                        setCanOpen(true)
+                        setCanOpen(true);
                       }}
                     >{`Selecione a imagem de ${nome}`}</Button>
                   )}
                   <View style={styles.infoLesoes}>
-                    {nome && (
-                      <Text>
-                        Nome procedimento: {observacao}
-                      </Text>
-                    )}
+                    {nome && <Text>Nome procedimento: {observacao}</Text>}
                     {observacao ? (
-                      <Text>
-                        Obs: {observacao}
-                      </Text>
+                      <Text>Obs: {observacao}</Text>
                     ) : (
                       <Input
-                        onChangeText={(a)=>{
-                          console.log(a, i)
-                          setarObservacao(a, i)
+                        onChangeText={(a) => {
+                          console.log(a, i);
+                          setarObservacao(a, i);
                         }}
                         placeholder={`Insira a observacao sobre ${nome}`}
                       />
@@ -278,11 +304,13 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             >
               Diagnóstico final:
             </Text>
-            <Input numberOfLines={2} 
-              onChangeText={(a)=>{
+            <Input
+              numberOfLines={2}
+              onChangeText={(a) => {
                 console.log(a);
-                setDiagnosticoFinal(a)
-              }}/>
+                setDiagnosticoFinal(a);
+              }}
+            />
           </View>
 
           <View style={styles.boxInfo}>
@@ -377,7 +405,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               </View>
             </View>
           </View>
-          <Button onPress={()=>enviarPost()}>Enviar resultado</Button>
+          <Button onPress={() => enviarPost()}>Enviar resultado</Button>
         </Layout>
       </ScrollView>
     </PageContainer>
