@@ -18,10 +18,10 @@ import AtendimentoContext from "../contexts/AtendimentosContext";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useLoading } from "../contexts/AppContext";
 import apiFunc from "../services/api";
-import apiFuncImages from "../services/apiImages";
 import Lesoes from "../components/CadastroPaciente/Lesoes";
 import Constants from "expo-constants";
 import { Camera } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { camera, close, user } from "../assets/Icons";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
@@ -157,41 +157,51 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     })();
   }, []);
 
-  async function enviaImagem(data) {
-    let form = new FormData();
-    form.append("photo", {
-      uri: data.uri,
-      type: "image/jpeg",
-      name: data.uri.split("/").pop(),
-    });
-
-    await axios({
-      method: "post",
-      url: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/uploadFile/${objResult.atendimento.usuario.cpf}`,
-      data: form,
-      headers: { "Content-Type": "multipart/form-data" },
-      auth: {
-        username: objResult.atendimento.usuario.cpf,
-        password: usuarioLogado.senhaUsuario,
-      },
-    })
-      .then(function (response) {
-        console.log("deu bom", response);
+  async function enviaImagem(dataImage) {
+    const formData = new FormData();
+    formData.append("file", dataImage.uri);
+    formData.append("type", "image/jpg");
+    formData.append("name", dataImage.uri.split("/").pop());
+    apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
+      .post(`/anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`, {
+        data: formData,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
       })
-      .catch(function (response) {
-        console.log("deu ruim", response);
-        console.log(form);
+      .then((response) => {
+        console.log("resposta >>>", response);
+      })
+      .catch((response) => {
+        console.log("erro catch", response);
       });
   }
 
-  async function takePicture() {
+  async function takePictureCamera() {
     if (camRef) {
-      const options = { quality: 1, base64: true, uri: true };
+      const options = { quality: 1, uri: true };
       const data = await camRef.current.takePictureAsync(options);
       setCanOpen(false);
       // console.log("indiceFoto", indiceFoto)
       // setarImagem(data.base64, indiceFoto);
       enviaImagem(data);
+    }
+  }
+
+  async function takePictureFiles() {
+    try {
+      let data = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log(data);
+      enviaImagem(data);
+    } catch (E) {
+      console.log(E);
     }
   }
 
@@ -238,7 +248,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                             style={styles.button}
                             status="primary"
                             icon={camera}
-                            onPress={() => takePicture()}
+                            onPress={() => takePictureCamera()}
                           />
                           <Button
                             style={styles.button}
@@ -268,13 +278,24 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       imgRegiao={anexo64}
                     />
                   ) : (
-                    <Button
-                      style={{ marginHorizontal: 32 }}
-                      onPress={() => {
-                        setIndiceFoto(i);
-                        setCanOpen(true);
-                      }}
-                    >{`Selecione a imagem de ${nome}`}</Button>
+                    <>
+                      <Button
+                        style={{ marginHorizontal: 32 }}
+                        onPress={() => {
+                          setIndiceFoto(i);
+                          setCanOpen(true);
+                        }}
+                      >{`tirar foto ${nome}`}</Button>
+                      <Button
+                        style={{ marginHorizontal: 32, marginTop: 8 }}
+                        onPress={() => {
+                          takePictureFiles();
+                          setIndiceFoto(i);
+                        }}
+                      >
+                        abrir arquivos
+                      </Button>
+                    </>
                   )}
                   <View style={styles.infoLesoes}>
                     {nome && <Text>Nome procedimento: {observacao}</Text>}
