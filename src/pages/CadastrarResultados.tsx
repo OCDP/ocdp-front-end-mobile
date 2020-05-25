@@ -175,6 +175,9 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       })
       .catch((response) => {
         console.log("erro catch", response);
+      })
+      .finally(() => {
+        console.log("terminou");
       });
   }
 
@@ -198,7 +201,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
         quality: 1,
       });
 
-      console.log(data);
+      // console.log(data);
       enviaImagem(data);
     } catch (E) {
       console.log(E);
