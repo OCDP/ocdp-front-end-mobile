@@ -292,7 +292,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                             style={styles.button}
                             status="primary"
                             icon={camera}
-                            appearance="outline"
+                            appearance="ghost"
                             onPress={() => takePictureCamera()}
                           />
                         </View>
@@ -301,7 +301,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                             style={styles.button}
                             status="danger"
                             icon={close}
-                            appearance="outline"
+                            appearance="ghost"
                             onPress={() => setCanOpen(false)}
                           />
                         </View>
