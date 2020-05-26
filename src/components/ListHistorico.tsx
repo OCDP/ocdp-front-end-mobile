@@ -11,6 +11,7 @@ import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import AtendimentoContext from "../contexts/AtendimentosContext";
 import Lesoes from "./CadastroPaciente/Lesoes";
 import moment from "moment";
+import { setaCadastrar } from "../assets/Icons";
 
 const ListHistorico = ({ navigation, themedStyle = null }) => {
   const { atendimento } = useContext(AtendimentoContext);
@@ -186,11 +187,13 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       {enviarResult && (
         <View style={styles.btnResult}>
           <Button
+            style={{ flexDirection: "row-reverse" }}
             onPress={() => {
               navigation.navigate("CadastrarResultados");
             }}
+            icon={setaCadastrar}
           >
-            enviar resultados
+            Cadastrar resultados
           </Button>
         </View>
       )}

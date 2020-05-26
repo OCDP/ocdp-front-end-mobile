@@ -7,7 +7,7 @@ import {
   PasswordInput,
 } from "./Login.page.styles";
 import { Icon } from "@ui-kitten/components";
-import api from "../../services/api";
+import apiFunc from "../../services/api";
 
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
@@ -34,7 +34,7 @@ export default function ({ navigation }) {
   async function loginAction() {
     try {
       setLoading(true);
-      await api(login, pswd)
+      await apiFunc(login, pswd)
         .get(`/usuario/byCpf/${login}?cpf=${login}`)
         .then((resp) => {
           resp.data.senhaUsuario = pswd;

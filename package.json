@@ -22,7 +22,9 @@
     "expo": "~36.0.0",
     "expo-blur": "^8.0.0",
     "expo-camera": "^8.2.0",
+    "expo-image-picker": "^8.1.0",
     "expo-secure-store": "^8.0.0",
+    "form-data": "^3.0.0",
     "lottie-react-native": "^3.3.2",
     "moment": "^2.25.3",
     "react": "~16.9.0",
@@ -46,6 +48,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.6.0",
+    "@types/form-data": "^2.5.0",
     "@types/react": "~16.9.0",
     "@types/react-native": "~0.60.23",
     "babel-preset-expo": "~8.0.0",

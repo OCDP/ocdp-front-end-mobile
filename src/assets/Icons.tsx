@@ -77,3 +77,19 @@ export const camera: (style: ImageStyle) => IconElement = (style) => (
 export const close: (style: ImageStyle) => IconElement = (style) => (
   <Icon {...style} name="close-outline" />
 );
+
+export const lixeira: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="trash-outline" />
+);
+
+export const galeria: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="file-add-outline" />
+);
+
+export const upload: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="cloud-upload-outline" />
+);
+
+export const setaCadastrar: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="arrow-circle-right-outline" />
+);
