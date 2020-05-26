@@ -153,6 +153,12 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setObjResult(arr);
   };
 
+  const setarNameImage = (i) => {
+    let arrNameImage = nameImage;
+    let novoArr = arrNameImage.splice(i, 1)
+    setNameImage(novoArr)
+  }
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -323,7 +329,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                               styles.button,
                               { flexDirection: "row-reverse" },
                             ]}
-                            onPress={() => setNameImage(null)}
+                            onPress={() => setarNameImage(i)}
                             status="danger"
                             icon={lixeira}
                           >
