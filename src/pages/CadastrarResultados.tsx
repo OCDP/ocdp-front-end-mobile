@@ -49,7 +49,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [indiceFoto, setIndiceFoto] = useState(null);
   const [objResult, setObjResult] = useState<AtendimentosInterface>({});
   //nome que chega da uri e deve ser usado pra acessar a imagem
-  const [nameImage, setNameImage] = useState(null);
+  const [nameImage, setNameImage] = useState([]);
 
   const styles = useStyleSheet({
     container: {
@@ -160,7 +160,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     })();
   }, []);
 
-  async function enviaImagem(dataImage) {
+  async function enviaImagem(dataImage, i) {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", {
@@ -179,7 +179,12 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       )
       .then((response) => {
         console.log("resposta >>>", response.data.name);
-        setNameImage(response.data.name);
+        console.log("nameImage", nameImage)
+        let arrNameImage = nameImage;
+        arrNameImage[i] = response.data.name;
+        console.log("arrNameImage", arrNameImage);
+        setNameImage(arrNameImage);
+        // objResult.procedimentos[i].anexo64 = response.data.name;
         setLoading(false);
       })
       .catch((error) => {
@@ -196,11 +201,15 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       setCanOpen(false);
       // console.log("indiceFoto", indiceFoto)
       // setarImagem(data.base64, indiceFoto);
-      enviaImagem(data);
+      enviaImagem(data, indiceFoto); 
     }
   }
 
-  async function takePictureFiles() {
+  // useEffect(()=>{
+  //   console.log(nameImage);
+  // }, [nameImage])
+
+  async function takePictureFiles(i) {
     try {
       let data = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -210,7 +219,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       });
 
       // console.log(data);
-      enviaImagem(data);
+      enviaImagem(data, i);
     } catch (E) {
       console.log(E);
     }
@@ -294,7 +303,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     />
                   ) : (
                     <>
-                      {nameImage ? (
+                      {nameImage[i] != undefined ? (
                         <>
                           <View style={styles.imageContainer}>
                             <Image
@@ -303,9 +312,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                                 height: 300,
                               }}
                               source={{
-                                uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage}`,
+                                uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage[i]}`,
                               }}
                             />
+                            <Button onPress={()=>console.log("nameImage[i]", nameImage[i])}>aaa</Button>
                           </View>
 
                           <Button
@@ -338,7 +348,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                           </Button>
                           <Button
                             onPress={() => {
-                              takePictureFiles();
+                              takePictureFiles(i);
                               setIndiceFoto(i);
                             }}
                             style={[
