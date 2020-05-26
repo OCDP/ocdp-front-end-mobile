@@ -74,12 +74,9 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       paddingLeft: 16,
       paddingTop: 8,
     },
-    images: {
-      width: 150,
-      height: 150,
-      borderColor: "black",
-      borderWidth: 1,
-      marginHorizontal: 3,
+    imageContainer: {
+      justifyContent: "center",
+      alignItems: "center",
     },
     button: {
       margin: 8,
@@ -299,17 +296,17 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     <>
                       {nameImage ? (
                         <>
-                          <Image
-                            style={{
-                              width: 300,
-                              height: 300,
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                            source={{
-                              uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage}`,
-                            }}
-                          />
+                          <View style={styles.imageContainer}>
+                            <Image
+                              style={{
+                                width: 300,
+                                height: 300,
+                              }}
+                              source={{
+                                uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage}`,
+                              }}
+                            />
+                          </View>
 
                           <Button
                             style={[
