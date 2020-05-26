@@ -23,10 +23,11 @@ import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { camera, close, user } from "../assets/Icons";
+import { camera, close, user, lixeira, galeria } from "../assets/Icons";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import axios from "axios";
+import FormData from "form-data";
 
 const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const { atendimento, setAtendimento } = useContext(AtendimentoContext);
@@ -47,6 +48,8 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [diagnosticoFinal, setDiagnosticoFinal] = useState("");
   const [indiceFoto, setIndiceFoto] = useState(null);
   const [objResult, setObjResult] = useState<AtendimentosInterface>({});
+  //nome que chega da uri e deve ser usado pra acessar a imagem
+  const [nameImage, setNameImage] = useState(null);
 
   const styles = useStyleSheet({
     container: {
@@ -158,26 +161,31 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   }, []);
 
   async function enviaImagem(dataImage) {
+    setLoading(true);
     const formData = new FormData();
-    formData.append("file", dataImage.uri);
-    formData.append("type", "image/jpg");
-    formData.append("name", dataImage.uri.split("/").pop());
+    formData.append("file", {
+      type: "image/jpg",
+      uri: dataImage.uri,
+      name: "uploadImageResult",
+    });
+
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-      .post(`/anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`, {
-        data: formData,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        `anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      )
       .then((response) => {
-        console.log("resposta >>>", response);
+        console.log("resposta >>>", response.data.name);
+        setNameImage(response.data.name);
+        setLoading(false);
       })
-      .catch((response) => {
-        console.log("erro catch", response);
-      })
-      .finally(() => {
-        console.log("terminou");
+      .catch((error) => {
+        console.log("error >>>", error.response);
+        setLoading(false);
+        Alert.alert("Erro ao enviar imagem!");
       });
   }
 
@@ -245,20 +253,24 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                         alignItems: "center",
                       }}
                     >
-                      <View style={{ flexDirection: "row" }}>
-                        <View>
-                          <Button
-                            style={styles.button}
-                            status="primary"
-                            icon={camera}
-                            onPress={() => takePictureCamera()}
-                          />
-                          <Button
-                            style={styles.button}
-                            status="danger"
-                            icon={close}
-                            onPress={() => setCanOpen(false)}
-                          />
+                      <View style={{ display: "flex" }}>
+                        <View style={{ flexDirection: "row" }}>
+                          <View>
+                            <Button
+                              style={styles.button}
+                              status="primary"
+                              icon={camera}
+                              onPress={() => takePictureCamera()}
+                            />
+                          </View>
+                          <View>
+                            <Button
+                              style={styles.button}
+                              status="danger"
+                              icon={close}
+                              onPress={() => setCanOpen(false)}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -282,22 +294,64 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     />
                   ) : (
                     <>
-                      <Button
-                        style={{ marginHorizontal: 32 }}
-                        onPress={() => {
-                          setIndiceFoto(i);
-                          setCanOpen(true);
-                        }}
-                      >{`tirar foto ${nome}`}</Button>
-                      <Button
-                        style={{ marginHorizontal: 32, marginTop: 8 }}
-                        onPress={() => {
-                          takePictureFiles();
-                          setIndiceFoto(i);
-                        }}
-                      >
-                        abrir arquivos
-                      </Button>
+                      {nameImage ? (
+                        <>
+                          <Image
+                            style={{
+                              width: 300,
+                              height: 300,
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                            source={{
+                              uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage}`,
+                            }}
+                          />
+
+                          <Button
+                            style={[
+                              styles.button,
+                              { flexDirection: "row-reverse" },
+                            ]}
+                            onPress={() => setNameImage(null)}
+                            status="danger"
+                            icon={lixeira}
+                          >
+                            cancelar
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            onPress={() => {
+                              setIndiceFoto(i);
+                              setCanOpen(true);
+                            }}
+                            style={[
+                              styles.button,
+                              { flexDirection: "row-reverse" },
+                            ]}
+                            status="primary"
+                            icon={camera}
+                          >
+                            Tirar foto
+                          </Button>
+                          <Button
+                            onPress={() => {
+                              takePictureFiles();
+                              setIndiceFoto(i);
+                            }}
+                            style={[
+                              styles.button,
+                              { flexDirection: "row-reverse" },
+                            ]}
+                            status="primary"
+                            icon={galeria}
+                          >
+                            Abrir galeria
+                          </Button>
+                        </>
+                      )}
                     </>
                   )}
                   <View style={styles.infoLesoes}>
@@ -368,7 +422,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   />
                   <Button
                     disabled={!activeAcomp}
-                    title="Escolher data"
                     onPress={() => setPickerAcompVisible(true)}
                   >
                     Abrir calendário
@@ -410,7 +463,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                   />
                   <Button
                     disabled={!activeTrat}
-                    title="Escolher data"
                     onPress={() => setPickerAcompVisible(true)}
                   >
                     Abrir calendário
