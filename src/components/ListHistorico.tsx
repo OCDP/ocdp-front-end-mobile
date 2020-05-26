@@ -115,10 +115,10 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             Fatores de risco
           </Text>
           {atendimento.fatoresDeRisco.map(({ nome }, i) => (
-            <>
+            <View key={i}>
               <Divider style={styles.divider} />
-              <Text key={i}>{nome}</Text>
-            </>
+              <Text>{nome}</Text>
+            </View>
           ))}
         </View>
       )}

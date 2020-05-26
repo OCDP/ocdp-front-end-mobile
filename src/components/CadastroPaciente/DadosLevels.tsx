@@ -406,8 +406,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   );
 };
 
-//TODO usar um ou outro style, refatorar o outro pra style normal, deixar o withstyles
-
 export default withStyles(DadosLevels, (theme) => ({
   primary: theme["color-primary-500"],
   primaryDark: theme["color-primary-900"],
