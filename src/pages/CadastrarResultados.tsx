@@ -23,7 +23,7 @@ import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { camera, close, user, lixeira, galeria } from "../assets/Icons";
+import { camera, close, user, lixeira, galeria, upload } from "../assets/Icons";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import axios from "axios";
@@ -86,6 +86,9 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     },
     backdrop: {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    btnResult: {
+      marginHorizontal: 36,
     },
   });
 
@@ -481,7 +484,13 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               </View>
             </View>
           </View>
-          <Button onPress={() => enviarPost()}>Enviar resultado</Button>
+          <Button
+            style={[styles.btnResult, { flexDirection: "row-reverse" }]}
+            onPress={() => enviarPost()}
+            icon={upload}
+          >
+            Enviar dados
+          </Button>
         </Layout>
       </ScrollView>
     </PageContainer>
