@@ -441,76 +441,83 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             >
               Retorno para:
             </Text>
-            <View style={styles.miniBoxCalendar}>
-              <View style={{ marginVertical: 8 }}>
-                <CheckBox
-                  text="Acompanhamento"
-                  checked={activeAcomp}
-                  onChange={setActiveAcomp}
-                />
-                <View>
-                  <Input
-                    style={{ marginVertical: 8 }}
-                    placeholder="Data sugerida acompanhamento"
-                    icon={calendar}
-                    value={dataSugeridaAcompanhamento || "escolha uma data"}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={!activeAcomp}
-                    onPress={() => setPickerAcompVisible(true)}
-                    size="small"
-                    icon={calendar}
-                  >
-                    Abrir calendário
-                  </Button>
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={pickerAcompVisible}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
-                    onCancel={() => setPickerAcompVisible(false)}
-                  />
+            <View>
+              <View style={styles.miniBoxCalendar}>
+                <View style={{ width: "80%", marginVertical: 8 }}>
+                  <View>
+                    <CheckBox
+                      text="Acompanhamento"
+                      checked={activeAcomp}
+                      onChange={setActiveAcomp}
+                    />
+                  </View>
+                  <View>
+                    <Input
+                      style={{ marginVertical: 8 }}
+                      placeholder="Data sugerida acompanhamento"
+                      icon={calendar}
+                      value={dataSugeridaAcompanhamento || "escolha uma data"}
+                      disabled={true}
+                    />
+                    <Button
+                      disabled={!activeAcomp}
+                      onPress={() => setPickerAcompVisible(true)}
+                      size="small"
+                      icon={calendar}
+                    >
+                      Abrir calendário
+                    </Button>
+                    <DateTimePickerModal
+                      cancelTextIOS="cancelar"
+                      confirmTextIOS="confirmar"
+                      locale="pt-BR"
+                      headerTextIOS="Escolha uma data"
+                      isVisible={pickerAcompVisible}
+                      mode="date"
+                      onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                      onCancel={() => setPickerAcompVisible(false)}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-            <View style={styles.miniBoxCalendar}>
-              <View style={{ marginVertical: 8 }}>
-                <CheckBox
-                  text="Tratamento de lesão"
-                  checked={activeTrat}
-                  onChange={setActiveTrat}
-                />
-              </View>
-              <View>
-                <Input
-                  style={{ marginVertical: 8 }}
-                  placeholder="Data sugerida tratamento"
-                  icon={calendar}
-                  value={dataSugeridaTratamento || "escolha uma data"}
-                  disabled={true}
-                />
-                <Button
-                  disabled={!activeTrat}
-                  onPress={() => setPickerAcompVisible(true)}
-                  size="small"
-                  icon={calendar}
-                >
-                  Abrir calendário
-                </Button>
-                <DateTimePickerModal
-                  cancelTextIOS="cancelar"
-                  confirmTextIOS="confirmar"
-                  locale="pt-BR"
-                  headerTextIOS="Escolha uma data"
-                  isVisible={pickerAcompTrat}
-                  mode="date"
-                  onConfirm={(a) => confirmarDataTratamento(a)}
-                  onCancel={() => setPickerAcompTrat(false)}
-                />
+
+              <View style={styles.miniBoxCalendar}>
+                <View style={{ width: "80%", marginVertical: 8 }}>
+                  <View>
+                    <CheckBox
+                      text="Tratamento de lesão"
+                      checked={activeTrat}
+                      onChange={setActiveTrat}
+                    />
+                  </View>
+                  <View>
+                    <Input
+                      style={{ marginVertical: 8 }}
+                      placeholder="Data sugerida tratamento"
+                      icon={calendar}
+                      value={dataSugeridaTratamento || "escolha uma data"}
+                      disabled={true}
+                    />
+                    <Button
+                      disabled={!activeTrat}
+                      onPress={() => setPickerAcompVisible(true)}
+                      size="small"
+                      icon={calendar}
+                    >
+                      Abrir calendário
+                    </Button>
+                    <DateTimePickerModal
+                      cancelTextIOS="cancelar"
+                      confirmTextIOS="confirmar"
+                      locale="pt-BR"
+                      headerTextIOS="Escolha uma data"
+                      isVisible={pickerAcompTrat}
+                      mode="date"
+                      onConfirm={(a) => confirmarDataTratamento(a)}
+                      onCancel={() => setPickerAcompTrat(false)}
+                    />
+                  </View>
+                </View>
               </View>
             </View>
           </View>
