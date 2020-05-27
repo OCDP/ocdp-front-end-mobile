@@ -41,7 +41,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       paddingTop: 8,
     },
     btnResult: {
-      paddingVertical: 60,
+      paddingVertical: 12,
       marginHorizontal: 36,
     },
   });
@@ -187,6 +187,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       {enviarResult && (
         <View style={styles.btnResult}>
           <Button
+            appearance="outline"
             style={{ flexDirection: "row-reverse" }}
             onPress={() => {
               navigation.navigate("CadastrarResultados");
