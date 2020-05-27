@@ -135,28 +135,31 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     objResult.atendimento.dataAtendimento = moment().format(
       "YYYY-MM-DD HH:mm:ss"
     );
+
+    for(let i in nameImage){
+      objResult.procedimentos[i].nomeArquivo = nameImage[i];
+      delete objResult.procedimentos[i].anexo64
+    }
+
     let obj = {
       atendimento: objResult.atendimento,
       confirmaRastreamento: true,
       diagnosticoFinal: diagnosticoFinal,
       procedimentos: objResult.procedimentos,
     };
-    // console.log(obj);
-    let resp = apiFunc(
-      objResult.atendimento.usuario.cpf,
-      usuarioLogado.senhaUsuario
-    )
-      .post("/resultados/salvar", obj)
-      .then(() => {
-        Alert.alert("Registros enviadas com sucesso!");
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert("nao foi possivel enviar os registros!", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    console.log(obj);
+    try{
+      let resp = await apiFunc(
+        objResult.atendimento.usuario.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/resultados/salvar", obj);
+      alert("Enviado com sucesso");
+    }catch(err){
+      console.log(err)
+      alert(JSON.stringify(err));
+    }finally{
+      setLoading(false);
+    }
     return;
   }
 
@@ -198,7 +201,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
 
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
       .post(
-        `anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`,
+        `anexo/uploadFile?cpf=${objResult.atendimento.paciente.cpf}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
