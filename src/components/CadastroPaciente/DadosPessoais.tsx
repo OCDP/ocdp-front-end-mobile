@@ -54,41 +54,6 @@ const DadosPessoais = ({ navigation }) => {
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
 
   useEffect(() => {
-    const backAction = () => {
-      Alert.alert(
-        "Atenção",
-        "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?",
-        [
-          {
-            text: "Voltar",
-            onPress: () => null,
-            style: "cancel",
-          },
-          {
-            text: "Desejo cancelar procedimento",
-            onPress: () => {
-              navigation.dispatch(
-                CommonActions.reset({
-                  routes: [{ name: "Home" }],
-                })
-              );
-              setActiveStepBtn(0);
-            },
-          },
-        ]
-      );
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
-
-  useEffect(() => {
     async function setarBotao() {
       if (bloqBotaoProximo == true) {
         if (
