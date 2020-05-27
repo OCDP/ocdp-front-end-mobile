@@ -11,8 +11,9 @@ import {
 } from "@ui-kitten/components";
 import { arrowBack, home, menu } from "../../assets/Icons";
 import { Animated } from "react-native";
-import AppContext from "../../contexts/AppContext";
+import AppContext, { useLoading } from "../../contexts/AppContext";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import BotaoContext from "../../contexts/BotoesContext";
 
 export interface PageContainerProps {
   children: React.ReactNode;
@@ -35,6 +36,8 @@ function Pagecontainer({
   const fadeAnim = new Animated.Value(0);
 
   const { switchTheme, theme } = useContext(AppContext);
+  const [, setLoading] = useLoading();
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
 
   const onToggle = useMemo(
     () => () => {
@@ -57,7 +60,17 @@ function Pagecontainer({
   );
 
   const renderRightControls = () => [
-    <TopNavigationAction icon={home} onPress={() => resetNav()} />,
+    <TopNavigationAction icon={home} onPress={() => {
+      setLoading(true);
+          navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ name: "Home" }],
+          })
+        );
+      setActiveStepBtn(0);
+      setLoading(false)
+      // resetNav()
+    }} />,
   ];
 
   return (
