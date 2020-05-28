@@ -41,10 +41,12 @@ interface Atendimento {
   dataAtendimento?: string;
   usuario?: Usuario;
   paciente?: Paciente;
-  tipoAtendimento?: "RESULTADOS" | "INTERVENCAO" | "ACOMPANHAMENTO";
+  tipoAtendimento?: TipoAtendimento;
   localAtendimento?: LocalAtendimento;
   localEncaminhado?: LocalAtendimento;
 }
+
+export type TipoAtendimento = "RESULTADOS" | "INTERVENCAO" | "ACOMPANHAMENTO";
 
 interface LocalAtendimento {
   id?: string;
