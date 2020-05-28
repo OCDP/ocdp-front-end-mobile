@@ -8,6 +8,7 @@ export interface AtendimentosInterface {
 interface Procedimento {
   id?: string;
   anexo64?: string;
+  nomeArquivo?: string;
   nome?: string;
   observacao?: any; // esse ja estava com ?
 }

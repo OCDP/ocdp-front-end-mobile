@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useEffect } from "react";
 import { View } from "react-native";
 import {
   useStyleSheet,
@@ -156,11 +156,13 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             Procedimentos:
           </Text>
           {atendimento.procedimentos.map(
-            ({ nome, anexo64, observacao, id }) => (
+            ({ nome, anexo64, nomeArquivo, observacao, id }) => (
               <View key={id}>
-                {anexo64 ? (
+                {anexo64 || nomeArquivo ? (
                   <Lesoes
                     imgRegiao={anexo64}
+                    nomeArquivo={nomeArquivo}
+                    tipoAtendimento={atendimento.atendimento.tipoAtendimento}
                     title={nome}
                     navigation={navigation}
                   />

@@ -130,8 +130,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   async function enviarPost() {
     setLoading(true);
     objResult.atendimento.tipoAtendimento = "RESULTADOS";
-    objResult.atendimento.localAtendimento = null;
-    objResult.atendimento.localEncaminhado = null;
     objResult.atendimento.dataAtendimento = moment().format(
       "YYYY-MM-DD HH:mm:ss"
     );
@@ -148,6 +146,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       procedimentos: objResult.procedimentos,
     };
     console.log(obj);
+    console.log(JSON.stringify(obj))
     try {
       let resp = await apiFunc(
         objResult.atendimento.usuario.cpf,
