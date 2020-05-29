@@ -445,20 +445,30 @@ const MapeamentoSintomas = ({ navigation }) => {
         <View>
           {regioesArr.map(({ name, description }, i) => (
             <>
-              <View key={i}>
+              <View key={i} style={{ flex: 1 }}>
                 <Lesoes
                   navigation={navigation}
                   title={description}
                   imgRegiao={name}
                 />
-                <Button
-                  appearance="outline"
-                  size="small"
-                  icon={menuDetail}
-                  onPress={() => chamarListaSubregioes(description)}
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignContent: "center",
+                    paddingHorizontal: 32,
+                    paddingTop: 4,
+                  }}
                 >
-                  selecionar sub região
-                </Button>
+                  <Button
+                    style={{ flexDirection: "row-reverse" }}
+                    appearance="outline"
+                    size="small"
+                    icon={menuDetail}
+                    onPress={() => chamarListaSubregioes(description)}
+                  >
+                    Selecionar sub região
+                  </Button>
+                </View>
               </View>
               <Modal
                 backdropStyle={styles.backdrop}

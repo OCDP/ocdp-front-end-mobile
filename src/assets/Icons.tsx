@@ -93,3 +93,7 @@ export const upload: (style: ImageStyle) => IconElement = (style) => (
 export const setaCadastrar: (style: ImageStyle) => IconElement = (style) => (
   <Icon {...style} name="arrow-circle-right-outline" />
 );
+
+export const menuDetail: (style: ImageStyle) => IconElement = (style) => (
+  <Icon {...style} name="menu-2-outline" />
+);
