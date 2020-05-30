@@ -26,6 +26,7 @@ import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
 import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
 import BotaoContext from "../../../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
+import { menuDetail } from "../../../assets/Icons";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -56,10 +57,10 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
   //aqui o contexto novo braz...
   const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
-  const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext);
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
     let fatoresReq = fatores;
@@ -159,23 +160,23 @@ const MapeamentoSintomas = ({ navigation }) => {
     },
   });
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(lesoesRegioes.length > 0 && postFatores != undefined){
+  useEffect(() => {
+    async function setarBotao() {
+      if (lesoesRegioes.length > 0 && postFatores != undefined) {
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(true)
+      } else setBloqBotaoProximo(true);
     }
     setarBotao();
-  }, [])
+  }, []);
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(lesoesRegioes.length > 0 && postFatores != undefined){
+  useEffect(() => {
+    async function setarBotao() {
+      if (lesoesRegioes.length > 0 && postFatores != undefined) {
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(true)
+      } else setBloqBotaoProximo(true);
     }
     setarBotao();
-  }, [lesoesRegioes, postFatores])
+  }, [lesoesRegioes, postFatores]);
 
   async function chamarListaSubregioes(name) {
     setLoading(true);
@@ -316,81 +317,83 @@ const MapeamentoSintomas = ({ navigation }) => {
       </Button>
     </Layout>
   );
-  
-  function setarRegiaoLesao(){
+
+  function setarRegiaoLesao() {
     let st = "";
     let incluir = true;
     let indice = null;
-    if(lesoesRegioes.length > 0){
+    if (lesoesRegioes.length > 0) {
       let cont = 0;
-      st += "Regiões já cadastradas: \n"
-      for(let i of lesoesRegioes){
-        if((i.regiaoBoca.nome == regiaoSelect.nome) &&
-        (i.lesao.nome == lesaoSelecionado.nome) && (i.lesao.tipoLesao.nome == lesaoSelecionado.tipoLesao.nome)){
+      st += "Regiões já cadastradas: \n";
+      for (let i of lesoesRegioes) {
+        if (
+          i.regiaoBoca.nome == regiaoSelect.nome &&
+          i.lesao.nome == lesaoSelecionado.nome &&
+          i.lesao.tipoLesao.nome == lesaoSelecionado.tipoLesao.nome
+        ) {
           incluir = false;
           indice = cont;
           break;
-        }else{
+        } else {
           //st += `Região: ${i.regiaoBoca.nome}\nLesão: ${i.lesao.nome} - ${i.lesao.tipoLesao.nome}\n`
         }
         cont = cont + 1;
       }
     }
-    
-    if (incluir == false){
+
+    if (incluir == false) {
       Alert.alert(
-        'Atenção',
+        "Atenção",
         "Lesão já registrada: Deseja excluir?",
         [
-          {text: 'Sim', onPress: () => excluirRegiaoLesao(indice)},
+          { text: "Sim", onPress: () => excluirRegiaoLesao(indice) },
           {
-            text: 'Não',
-            style: 'cancel',
+            text: "Não",
+            style: "cancel",
           },
         ],
-        {cancelable: false},
+        { cancelable: false }
       );
-    }
-    else{
-      st += `\nNovo cadastro: \nRegião: ${regiaoSelect.nome}\nLesão: ${lesaoSelecionado.nome} - ${lesaoSelecionado.tipoLesao.nome}`
+    } else {
+      st += `\nNovo cadastro: \nRegião: ${regiaoSelect.nome}\nLesão: ${lesaoSelecionado.nome} - ${lesaoSelecionado.tipoLesao.nome}`;
       Alert.alert(
-        'Atenção',
+        "Atenção",
         st,
         [
           {
-            text: 'Cancelar',
-            style: 'cancel',
+            text: "Cancelar",
+            style: "cancel",
           },
-          {text: 'Cadastrar', onPress: () => cadastrarRegiaoLesao()},
+          { text: "Cadastrar", onPress: () => cadastrarRegiaoLesao() },
         ],
-        {cancelable: false},
+        { cancelable: false }
       );
     }
   }
 
-  function excluirRegiaoLesao(i){
-    let rS = [...lesoesRegioes]
+  function excluirRegiaoLesao(i) {
+    let rS = [...lesoesRegioes];
     rS.splice(i, 1);
     setLesoesRegioes(rS);
     alert("Lesão Excluída");
   }
 
-  function cadastrarRegiaoLesao(){
-    regiaoSelect.siglaRegiaoBoca.imagemBase64 = ""
+  function cadastrarRegiaoLesao() {
+    regiaoSelect.siglaRegiaoBoca.imagemBase64 = "";
     let objRL = {
       lesao: lesaoSelecionado,
-      regiaoBoca: regiaoSelect
-    }
+      regiaoBoca: regiaoSelect,
+    };
     let lesaoRegiaoContext = [];
-    if(lesoesRegioes == undefined || lesoesRegioes.length == 0){
+    if (lesoesRegioes == undefined || lesoesRegioes.length == 0) {
       lesaoRegiaoContext.push(objRL);
-      setLesoesRegioes(lesaoRegiaoContext)
-    }else{
+      setLesoesRegioes(lesaoRegiaoContext);
+    } else {
       lesaoRegiaoContext = [...lesoesRegioes];
       lesaoRegiaoContext.push(objRL);
-      setLesoesRegioes(lesaoRegiaoContext)
+      setLesoesRegioes(lesaoRegiaoContext);
     }
-      alert("Lesão armazenada. Para cadastrar, termine os passos");
+    alert("Lesão armazenada. Para cadastrar, termine os passos");
   }
 
   const rendeDetailLesao = () => (
@@ -439,36 +442,51 @@ const MapeamentoSintomas = ({ navigation }) => {
         </View>
       </HeaderContainer>
       {postFatores && postFatores.length > 0 ? (
-        
-      <View>
-        {regioesArr.map(({ name, description }, i) => (
-          <>
-            <View key={i}>
-              <TouchableOpacity
-                onPress={() => chamarListaSubregioes(description)}
-              >
+        <View>
+          {regioesArr.map(({ name, description }, i) => (
+            <>
+              <View key={i} style={{ flex: 1 }}>
                 <Lesoes
                   navigation={navigation}
                   title={description}
                   imgRegiao={name}
                 />
-              </TouchableOpacity>
-            </View>
-            <Modal
-              backdropStyle={styles.backdrop}
-              onBackdropPress={dismiss}
-              visible={visible}
-            >
-              {lesao.length > 0
-                ? renderEscolhaTipo()
-                : (subregiao
-                ? rendeDetailLesao()
-                : renderModalElement())}
-            </Modal>
-          </>
-        ))}
-      </View>
-      ): <></>}
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignContent: "center",
+                    paddingHorizontal: 32,
+                    paddingTop: 4,
+                  }}
+                >
+                  <Button
+                    style={{ flexDirection: "row-reverse" }}
+                    appearance="outline"
+                    size="small"
+                    icon={menuDetail}
+                    onPress={() => chamarListaSubregioes(description)}
+                  >
+                    Selecionar sub região
+                  </Button>
+                </View>
+              </View>
+              <Modal
+                backdropStyle={styles.backdrop}
+                onBackdropPress={dismiss}
+                visible={visible}
+              >
+                {lesao.length > 0
+                  ? renderEscolhaTipo()
+                  : subregiao
+                  ? rendeDetailLesao()
+                  : renderModalElement()}
+              </Modal>
+            </>
+          ))}
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
