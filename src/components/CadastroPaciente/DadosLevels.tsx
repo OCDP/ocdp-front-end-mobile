@@ -89,6 +89,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   
   const [, setLoading] = useLoading()
   const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const [isErro, setIsErro] = React.useState(true);
   
   const { bloqBotaoProximo, setBloqBotaoProximo, setAuxBloqBotaoProximo, setAuxBloqBotaoProximo2 } = useContext(BotaoContext)
 
@@ -311,29 +312,45 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }
 
   async function postPacientes(){
+    let objPaciente = {
+      bairro: {
+      id: bairro.id,
+      nome: bairro.nome,
+      },
+      cpf: cpf,
+      dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+      email: email,
+      enderecoCompleto: endereco,
+      id: "",
+      nome: nome,
+      nomeDaMae: nmMae,
+      sexo: sexo.toUpperCase(),
+      telefoneCelular: telCell,
+      telefoneResponsavel: telResp,
+    }
     try{
-      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", 
-      {
-          bairro: {
-          id: bairro.id,
-          nome: bairro.nome,
-          },
-          cpf: cpf,
-          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-          email: email,
-          enderecoCompleto: endereco,
-          id: "",
-          nome: nome,
-          nomeDaMae: nmMae,
-          sexo: sexo.toUpperCase(),
-          telefoneCelular: telCell,
-          telefoneResponsavel: telResp,
-      })
+      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
+      console.log('resp', resp)
+      alert(JSON.stringify(resp))
+      setIsErro(false);
     }catch(err){
-        alert(JSON.stringify(err.response));
-        setActiveStepBtn(0);
+      console.log('post err', err);
+          alert(JSON.stringify(err.response));
+          setIsErro(true);
+      // await putPaciente(objPaciente)
     }
   }
+
+  // async function putPaciente(objPacientePost){
+  //   try{
+
+  //   }catch(err){
+  //     console.log('put', err);
+  //     alert(JSON.stringify(err.response));
+  //     setIsErro(true);
+  //   }
+
+  // }
 
   useEffect(()=>{
     async function resetarPassos(){
@@ -363,10 +380,12 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnText="avançar"
             nextBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
-            nextBtnDisabled={bloqBotaoProximo}
+            // nextBtnDisabled={bloqBotaoProximo}
+            errors={isErro}
             onNext = {async () => {
               if(acomp === false){
-                await postPacientes();
+                let resp = await postPacientes();
+                console.log(resp)
                 resetarBotao()
               }
               else resetarBotao();
