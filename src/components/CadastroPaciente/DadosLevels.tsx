@@ -310,6 +310,31 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     setAuxBloqBotaoProximo2(true);
   }
 
+  async function postPacientes(){
+    try{
+      await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", 
+      {
+          bairro: {
+          id: bairro.id,
+          nome: bairro.nome,
+          },
+          cpf: cpf,
+          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+          email: email,
+          enderecoCompleto: endereco,
+          id: "",
+          nome: nome,
+          nomeDaMae: nmMae,
+          sexo: sexo.toUpperCase(),
+          telefoneCelular: telCell,
+          telefoneResponsavel: telResp,
+      })
+    }catch(err){
+        alert(JSON.stringify(err.response));
+        setActiveStepBtn(0);
+    }
+  }
+
   useEffect(()=>{
     async function resetarPassos(){
       setActiveStepBtn(0)
@@ -339,7 +364,13 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
             nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
+            onNext = {async () => {
+              if(acomp === false){
+                await postPacientes();
+                resetarBotao()
+              }
+              else resetarBotao();
+            }}
             >
             <View style={{ flex: 1, alignItems: "center" }}>
             {acomp === true ? (
