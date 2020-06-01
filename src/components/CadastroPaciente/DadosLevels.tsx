@@ -331,26 +331,15 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     try{
       let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
       console.log('resp', resp)
-      alert(JSON.stringify(resp))
+      alert("cadastro realizado!")
       setIsErro(false);
     }catch(err){
       console.log('post err', err);
-          alert(JSON.stringify(err.response));
+          alert("erro no cadastro!");
           setIsErro(true);
       // await putPaciente(objPaciente)
     }
   }
-
-  // async function putPaciente(objPacientePost){
-  //   try{
-
-  //   }catch(err){
-  //     console.log('put', err);
-  //     alert(JSON.stringify(err.response));
-  //     setIsErro(true);
-  //   }
-
-  // }
 
   useEffect(()=>{
     async function resetarPassos(){
