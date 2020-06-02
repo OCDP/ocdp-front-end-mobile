@@ -163,7 +163,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function enviarPost(arrObj, id) {
-    console.log(arrObj)
     if(id == 1 || id == 2){
       try {
         setLoading(true)
@@ -283,7 +282,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       telefoneCelular: telCell,
       telefoneResponsavel: telResp,
     }
-    console.log(JSON.stringify(objPaciente))
     try{
       let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
       console.log('resp', resp)

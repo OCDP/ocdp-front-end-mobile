@@ -88,7 +88,6 @@ const HomeScreen = ({ navigation }) => {
     flushPaciente();
     setHistorico([]);
     setValue(query);
-    console.log(query)
     try {
       const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(
         usuarioLogado.cpf,
