@@ -17,7 +17,7 @@ export interface Paciente {
   dtNasci: string;
   sexo: string;
   email: string;
-  id: string;
+  id: number;
   telCell: string;
   endereco: string;
   telResp: string;
@@ -39,8 +39,8 @@ interface PacienteContextProps {
   setCpf?: Dispatch<SetStateAction<string>>;
   dtNasci: string;
   setDtNasci?: Dispatch<SetStateAction<string>>;
-  id: string;
-  setId?: Dispatch<SetStateAction<string>>;
+  id: number;
+  setId?: Dispatch<SetStateAction<number>>;
   sexo: string;
   setSexo?: Dispatch<SetStateAction<string>>;
   endereco: string;
@@ -97,7 +97,7 @@ export function PacienteProvider({ children }) {
   const [cpf, setCpf] = useState<string>("");
   const [dtNasci, setDtNasci] = useState<string>(null);
   const [sexo, setSexo] = useState<string>(null);
-  const [id, setId] = useState<string>(null);
+  const [id, setId] = useState<number>(null);
   const [email, setEmail] = useState<string>(null);
   const [endereco, setEndereco] = useState<string>(null);
   const [telCell, setTelCell] = useState<string>(null);

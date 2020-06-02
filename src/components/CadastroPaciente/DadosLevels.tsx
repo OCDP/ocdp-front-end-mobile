@@ -78,6 +78,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     dtNasci,
     email,
     endereco,
+    id,
+    setId,
     historico,
     listaFatores,
     nmMae,
@@ -125,35 +127,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       atendimento: {
         dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
         id: "",
-        localAtendimento: nomesLocaisAtendido,
-        localEncaminhado: nomesLocaisEncaminhado,
-        paciente: {
-          bairro: {
-            id: bairro.id,
-            nome: bairro.nome,
-          },
-          cpf: cpf,
-          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-          email: email,
-          enderecoCompleto: endereco,
-          id: "",
-          nome: nome,
-          nomeDaMae: nmMae,
-          sexo: sexo.toUpperCase(),
-          telefoneCelular: telCell,
-          telefoneResponsavel: telResp,
-        },
+        localAtendimentoId: nomesLocaisAtendido.id,
+        localEncaminhadoId: nomesLocaisEncaminhado.id,
+        pacienteId: id,
         tipoAtendimento: "ACOMPANHAMENTO",
-        usuario:{
-          cpf: usuarioLogado.cpf,
-          email: usuarioLogado.email,
-          id: usuarioLogado.id,
-          nivelAtencao: usuarioLogado.nivelAtencao,
-          nome: usuarioLogado.nome,
-          status: usuarioLogado.status,
-          telefone: usuarioLogado.telefone,
-          tipoUsuario: usuarioLogado.tipoUsuario
-        },
+        usuarioId: usuarioLogado.id
       },
         regioesLesoes: lesoesRegioes,
         dataSugeridaAcompanhamento:
@@ -169,35 +147,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
         atendimento: {
           dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
           id: "",
-          localAtendimento: nomesLocaisAtendido,
-          localEncaminhado: null,
-          paciente: {
-            bairro: {
-              id: bairro.id,
-              nome: bairro.nome,
-            },
-            cpf: cpf,
-            dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-            email: email,
-            enderecoCompleto: endereco,
-            id: "",
-            nome: nome,
-            nomeDaMae: nmMae,
-            sexo: sexo.toUpperCase(),
-            telefoneCelular: telCell,
-            telefoneResponsavel: telResp,
-          },
-          tipoAtendimento: "INTERVENCAO",
-          usuario:{
-            cpf: usuarioLogado.cpf,
-            email: usuarioLogado.email,
-            id: usuarioLogado.id,
-            nivelAtencao: usuarioLogado.nivelAtencao,
-            nome: usuarioLogado.nome,
-            status: usuarioLogado.status,
-            telefone: usuarioLogado.telefone,
-            tipoUsuario: usuarioLogado.tipoUsuario
-          },
+          localAtendimentoId: nomesLocaisAtendido.id,
+          localEncaminhadoId: nomesLocaisEncaminhado.id,
+          pacienteId: id,
+          tipoAtendimento: "ACOMPANHAMENTO",
+          usuarioId: usuarioLogado.id
         },
         confirmaRastreamento: confirmaRastreamento,
         hipoteseDiagnostico: hipoteseDiagnostico,
@@ -209,6 +163,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function enviarPost(arrObj, id) {
+    console.log(arrObj)
     if(id == 1 || id == 2){
       try {
         setLoading(true)
@@ -328,29 +283,20 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       telefoneCelular: telCell,
       telefoneResponsavel: telResp,
     }
+    console.log(JSON.stringify(objPaciente))
     try{
       let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
       console.log('resp', resp)
-      alert(JSON.stringify(resp))
+      setId(resp.data);
+      alert("cadastro realizado!")
       setIsErro(false);
     }catch(err){
       console.log('post err', err);
-          alert(JSON.stringify(err.response));
+          alert("erro no cadastro!");
           setIsErro(true);
       // await putPaciente(objPaciente)
     }
   }
-
-  // async function putPaciente(objPacientePost){
-  //   try{
-
-  //   }catch(err){
-  //     console.log('put', err);
-  //     alert(JSON.stringify(err.response));
-  //     setIsErro(true);
-  //   }
-
-  // }
 
   useEffect(()=>{
     async function resetarPassos(){

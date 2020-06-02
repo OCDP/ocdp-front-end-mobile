@@ -88,11 +88,12 @@ const HomeScreen = ({ navigation }) => {
     flushPaciente();
     setHistorico([]);
     setValue(query);
+    console.log(query)
     try {
       const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(
         usuarioLogado.cpf,
         usuarioLogado.senhaUsuario
-      ).get(`/historico/pacientes/${query}`);
+      ).get(`/paciente/byName/${query}`);
       let arrUsers = pacientes.data;
       const listaArr = arrUsers.map((a) => {
         return {
