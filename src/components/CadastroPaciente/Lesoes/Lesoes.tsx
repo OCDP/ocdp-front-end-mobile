@@ -12,6 +12,7 @@ interface Props {
   imgRegiao?: string;
   tipoAtendimento?: TipoAtendimento;
   navigation?: any;
+  html:any;
 }
 
 const Lesoes: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const Lesoes: React.FC<Props> = ({
   nomeArquivo,
   imgRegiao,
   tipoAtendimento,
+  html,
 }) => {
   const [open, setOpen] = useState(false);
   const styles = useStyleSheet({
@@ -81,6 +83,7 @@ const Lesoes: React.FC<Props> = ({
           <View style={styles.container}>
             <TextHeader>{title}</TextHeader>
           </View>
+            {html}
           <View>{image}</View>
         </CardLesoes>
       </View>
