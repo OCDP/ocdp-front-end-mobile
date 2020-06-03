@@ -91,7 +91,9 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(() => {
     async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
-      setNomesLocaisAtendido({});
+      if(idNovoAcomp != 1){
+        setNomesLocaisAtendido({});
+      }      
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       try {
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -181,7 +183,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [dtNascString, setDtNascString] = useState("");
 
   useEffect(() => {
-    async function setarBotao() {
+    async function setarBotao() {      
       if (
         (idNovoAcomp == 2 &&
           nomesLocaisAtendido.length == undefined &&

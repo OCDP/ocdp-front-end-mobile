@@ -312,6 +312,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       <Button
         style={{ marginVertical: 8 }}
         onPressIn={() => setarRegiaoLesao()}
+        disabled={lesaoSelecionado.length == 0}
       >
         cadastrar lesão
       </Button>

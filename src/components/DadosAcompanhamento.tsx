@@ -40,7 +40,7 @@ const DATA = [
 const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const {idNovoAcomp, setIdNovoAcomp} = React.useContext(NovoAcompContext)
-  const [selectedIndex, setSelectedIndex] = React.useState();
+  const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);

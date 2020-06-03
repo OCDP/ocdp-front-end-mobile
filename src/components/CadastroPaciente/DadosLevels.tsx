@@ -251,6 +251,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     setAuxBloqBotaoProximo(true);
+    setIsErro(false)
     flush;
   }, []);
 

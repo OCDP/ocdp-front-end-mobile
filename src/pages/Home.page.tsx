@@ -84,6 +84,13 @@ const HomeScreen = ({ navigation }) => {
     setLoading(false);
   };
 
+  useEffect(()=>{
+    function resetarHistorico(){
+      setHistorico([]);
+    }
+    resetarHistorico();
+  }, [])
+
   const onChangeText = async (query) => {
     flushPaciente();
     setHistorico([]);

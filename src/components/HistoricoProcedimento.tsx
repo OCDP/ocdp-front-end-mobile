@@ -56,6 +56,9 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
         });
     } catch (err) {
       console.log("err", err);
+      alert(err)
+    }finally{
+      setLoading(false)
     }
   }
 
