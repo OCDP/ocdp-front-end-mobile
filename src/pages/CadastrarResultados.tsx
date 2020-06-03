@@ -94,6 +94,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     },
     btnResult: {
       marginHorizontal: 36,
+      marginVertical: 36,
     },
     miniBoxBtn: {
       alignItems: "center",
@@ -146,7 +147,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       procedimentos: objResult.procedimentos,
     };
     console.log(obj);
-    console.log(JSON.stringify(obj))
+    console.log(JSON.stringify(obj));
     try {
       let resp = await apiFunc(
         objResult.atendimento.usuario.cpf,
@@ -446,7 +447,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     <CheckBox
                       text="Acompanhamento"
                       checked={activeAcomp}
-                      onChange={setActiveAcomp}
+                      onChange={(e) => {
+                        setActiveAcomp(e);
+                        setActiveTrat(!e);
+                      }}
                     />
                   </View>
                   <View>
@@ -458,7 +462,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       disabled={true}
                     />
                     <Button
-                      disabled={!activeAcomp}
+                      disabled={!activeAcomp && activeTrat}
                       onPress={() => setPickerAcompVisible(true)}
                       size="small"
                       icon={calendar}
@@ -485,7 +489,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     <CheckBox
                       text="Tratamento de lesão"
                       checked={activeTrat}
-                      onChange={setActiveTrat}
+                      onChange={(e) => {
+                        setActiveTrat(e);
+                        setActiveAcomp(!e);
+                      }}
                     />
                   </View>
                   <View>
@@ -497,7 +504,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       disabled={true}
                     />
                     <Button
-                      disabled={!activeTrat}
+                      disabled={!activeTrat && activeAcomp}
                       onPress={() => setPickerAcompVisible(true)}
                       size="small"
                       icon={calendar}
