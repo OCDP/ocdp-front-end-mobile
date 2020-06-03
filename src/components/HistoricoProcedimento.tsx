@@ -18,7 +18,7 @@ import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 
 const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
   const flushLesoesRegioes = useFlushLesoesRegioes();
-  const flushPaciente = useFlushPaciente()
+  const flushPaciente = useFlushPaciente();
   const { historico } = useContext(PacienteContext);
   const { setAcomp } = useContext(PacienteContext);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
@@ -30,7 +30,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
       title: `${a.tipoAtendiemtento}\n(${a.diferencaMeses})`,
       description: `${a.localAtendimento}\n${a.profissionalDeSaude}\n${
         a.dataAtendimento.split(" ")[0]
-        }`,
+      }`,
     };
   });
 
@@ -51,14 +51,16 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
         .get<AtendimentosInterface>(`historico/atendimento/${data.id}`)
         .then((resp) => {
           setAtendimento(resp.data);
+          console.log("resp >>", resp.data);
+
           setLoading(false);
           navigation.navigate("Historico");
         });
     } catch (err) {
       console.log("err", err);
-      alert(err)
-    }finally{
-      setLoading(false)
+      alert(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -89,7 +91,7 @@ const HistoricoProcedimento = ({ navigation, themedStyle = null }) => {
           }}
         >
           adicionar retorno
-          </Button>
+        </Button>
         <Timeline
           onEventPress={onEventPress}
           style={{ flex: 1 }}

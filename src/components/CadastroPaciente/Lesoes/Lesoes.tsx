@@ -9,7 +9,7 @@ import { TipoAtendimento } from "../../../utils/models/AtendimentosInterface";
 interface Props {
   title: string;
   nomeArquivo?: string;
-  imgRegiao: string;
+  imgRegiao?: string;
   tipoAtendimento?: TipoAtendimento;
   navigation?: any;
 }

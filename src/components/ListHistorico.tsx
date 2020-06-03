@@ -160,8 +160,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
               <View key={id}>
                 {anexo64 || nomeArquivo ? (
                   <Lesoes
-                    imgRegiao={anexo64}
-                    nomeArquivo={nomeArquivo}
+                    nomeArquivo={nomeArquivo.split(" ")[0]}
                     tipoAtendimento={atendimento.atendimento.tipoAtendimento}
                     title={nome}
                     navigation={navigation}
@@ -169,11 +168,6 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
                 ) : null}
 
                 <View style={styles.infoLesoes}>
-                  {nome ? (
-                    <Text appearance="hint" category="c4">
-                      Nome procedimento: {nome}
-                    </Text>
-                  ) : null}
                   {observacao ? (
                     <Text appearance="hint" category="c4">
                       Obs: {observacao}
