@@ -87,19 +87,19 @@ const MapeamentoSintomas = ({ navigation }) => {
     setPostFatores(objSetFatores);
   };
 
-  const retornaBotao = (name, desc) => {
-    return (
-      <Button
-          style={{ flexDirection: "row-reverse", marginHorizontal:32 }}
-          appearance="outline"
-          size="small"
-          icon={menuDetail}
-          onPress={() => chamarListaSubregioes(desc)}
-        >
-          Selecionar Sub{desc}
-      </Button>
-    )
-  }
+  // const retornaBotao = (name, desc) => {
+  //   return (
+  //     <Button
+  //         style={{ flexDirection: "row-reverse", marginHorizontal:32 }}
+  //         appearance="outline"
+  //         size="small"
+  //         icon={menuDetail}
+  //         onPress={() => chamarListaSubregioes(desc)}
+  //       >
+  //         Selecionar Sub{desc}
+  //     </Button>
+  //   )
+  // }
 
   const styles = useStyleSheet({
     container: {
@@ -466,7 +466,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                   navigation={navigation}
                   title={description}
                   imgRegiao={name}
-                  html={retornaBotao(name, description)}
+                  // html={retornaBotao(name, description)}
                 />
                 <View
                   style={{
@@ -476,6 +476,16 @@ const MapeamentoSintomas = ({ navigation }) => {
                     paddingTop: 4,
                   }}
                 >
+                  
+              <Button
+                  style={{ flexDirection: "row-reverse", marginHorizontal:32 }}
+                  appearance="outline"
+                  size="small"
+                  icon={menuDetail}
+                  onPress={() => chamarListaSubregioes(description)}
+                >
+                  Selecionar Sub{description}
+              </Button>
                 </View>
               </View>
               <Modal

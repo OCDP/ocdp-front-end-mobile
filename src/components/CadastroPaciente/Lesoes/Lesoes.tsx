@@ -83,7 +83,7 @@ const Lesoes: React.FC<Props> = ({
           <View style={styles.container}>
             <TextHeader>{title}</TextHeader>
           </View>
-            {html}
+            {/* {html} */}
           <View>{image}</View>
         </CardLesoes>
       </View>
