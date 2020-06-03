@@ -160,7 +160,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
               <View key={id}>
                 {anexo64 || nomeArquivo ? (
                   <Lesoes
-                    nomeArquivo={nomeArquivo.split(" ")[0]}
+                    nomeArquivo={nomeArquivo}
                     tipoAtendimento={atendimento.atendimento.tipoAtendimento}
                     title={nome}
                     navigation={navigation}
