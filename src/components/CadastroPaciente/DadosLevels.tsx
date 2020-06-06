@@ -78,6 +78,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     dtNasci,
     email,
     endereco,
+    id,
+    setId,
     historico,
     listaFatores,
     nmMae,
@@ -89,6 +91,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   
   const [, setLoading] = useLoading()
   const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const [isErro, setIsErro] = React.useState(true);
   
   const { bloqBotaoProximo, setBloqBotaoProximo, setAuxBloqBotaoProximo, setAuxBloqBotaoProximo2 } = useContext(BotaoContext)
 
@@ -124,35 +127,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
       atendimento: {
         dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
         id: "",
-        localAtendimento: nomesLocaisAtendido,
-        localEncaminhado: nomesLocaisEncaminhado,
-        paciente: {
-          bairro: {
-            id: bairro.id,
-            nome: bairro.nome,
-          },
-          cpf: cpf,
-          dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-          email: email,
-          enderecoCompleto: endereco,
-          id: "",
-          nome: nome,
-          nomeDaMae: nmMae,
-          sexo: sexo.toUpperCase(),
-          telefoneCelular: telCell,
-          telefoneResponsavel: telResp,
-        },
+        localAtendimentoId: nomesLocaisAtendido.id,
+        localEncaminhadoId: nomesLocaisEncaminhado.id,
+        pacienteId: id,
         tipoAtendimento: "ACOMPANHAMENTO",
-        usuario:{
-          cpf: usuarioLogado.cpf,
-          email: usuarioLogado.email,
-          id: usuarioLogado.id,
-          nivelAtencao: usuarioLogado.nivelAtencao,
-          nome: usuarioLogado.nome,
-          status: usuarioLogado.status,
-          telefone: usuarioLogado.telefone,
-          tipoUsuario: usuarioLogado.tipoUsuario
-        },
+        usuarioId: usuarioLogado.id
       },
         regioesLesoes: lesoesRegioes,
         dataSugeridaAcompanhamento:
@@ -168,35 +147,11 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
         atendimento: {
           dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
           id: "",
-          localAtendimento: nomesLocaisAtendido,
-          localEncaminhado: null,
-          paciente: {
-            bairro: {
-              id: bairro.id,
-              nome: bairro.nome,
-            },
-            cpf: cpf,
-            dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
-            email: email,
-            enderecoCompleto: endereco,
-            id: "",
-            nome: nome,
-            nomeDaMae: nmMae,
-            sexo: sexo.toUpperCase(),
-            telefoneCelular: telCell,
-            telefoneResponsavel: telResp,
-          },
-          tipoAtendimento: "INTERVENCAO",
-          usuario:{
-            cpf: usuarioLogado.cpf,
-            email: usuarioLogado.email,
-            id: usuarioLogado.id,
-            nivelAtencao: usuarioLogado.nivelAtencao,
-            nome: usuarioLogado.nome,
-            status: usuarioLogado.status,
-            telefone: usuarioLogado.telefone,
-            tipoUsuario: usuarioLogado.tipoUsuario
-          },
+          localAtendimentoId: nomesLocaisAtendido.id,
+          localEncaminhadoId: nomesLocaisEncaminhado.id,
+          pacienteId: id,
+          tipoAtendimento: "ACOMPANHAMENTO",
+          usuarioId: usuarioLogado.id
         },
         confirmaRastreamento: confirmaRastreamento,
         hipoteseDiagnostico: hipoteseDiagnostico,
@@ -296,6 +251,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     setAuxBloqBotaoProximo(true);
+    setIsErro(false)
     flush;
   }, []);
 
@@ -308,6 +264,37 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     setBloqBotaoProximo(true);
     setAuxBloqBotaoProximo(true);
     setAuxBloqBotaoProximo2(true);
+  }
+
+  async function postPacientes(){
+    let objPaciente = {
+      bairro: {
+      id: bairro.id,
+      nome: bairro.nome,
+      },
+      cpf: cpf,
+      dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+      email: email,
+      enderecoCompleto: endereco,
+      id: "",
+      nome: nome,
+      nomeDaMae: nmMae,
+      sexo: sexo.toUpperCase(),
+      telefoneCelular: telCell,
+      telefoneResponsavel: telResp,
+    }
+    try{
+      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
+      console.log('resp', resp)
+      setId(resp.data);
+      alert("cadastro realizado!")
+      setIsErro(false);
+    }catch(err){
+      console.log('post err', err);
+          alert("erro no cadastro!");
+          setIsErro(true);
+      // await putPaciente(objPaciente)
+    }
   }
 
   useEffect(()=>{
@@ -338,8 +325,16 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             nextBtnText="avançar"
             nextBtnTextStyle={buttonTextStyle}
             nextBtnStyle={btnStyle}
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
+            // nextBtnDisabled={bloqBotaoProximo}
+            errors={isErro}
+            onNext = {async () => {
+              if(acomp === false){
+                let resp = await postPacientes();
+                console.log(resp)
+                resetarBotao()
+              }
+              else resetarBotao();
+            }}
             >
             <View style={{ flex: 1, alignItems: "center" }}>
             {acomp === true ? (

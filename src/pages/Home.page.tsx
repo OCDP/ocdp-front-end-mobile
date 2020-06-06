@@ -29,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
     setAcomp,
     setNome,
     setBairro,
+    cpf,
     setCpf,
     setDtNasci,
     setEmail,
@@ -84,6 +85,13 @@ const HomeScreen = ({ navigation }) => {
     setLoading(false);
   };
 
+  useEffect(()=>{
+    function resetarHistorico(){
+      setHistorico([]);
+    }
+    resetarHistorico();
+  }, [])
+
   const onChangeText = async (query) => {
     flushPaciente();
     setHistorico([]);
@@ -92,7 +100,7 @@ const HomeScreen = ({ navigation }) => {
       const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(
         usuarioLogado.cpf,
         usuarioLogado.senhaUsuario
-      ).get(`/historico/pacientes/${query}`);
+      ).get(`/paciente/byName/${query}`);
       let arrUsers = pacientes.data;
       const listaArr = arrUsers.map((a) => {
         return {
@@ -148,7 +156,8 @@ const HomeScreen = ({ navigation }) => {
           <EmptyContent
             navigation={navigation}
             title="Nenhum registro encontrado"
-            textContent="Faça uma busca ou cadastre um novo paciente!"
+            textContent="Cadastre um novo acompanhamento!"
+            showBtnNovoAcomp={cpf ? true : false} 
           />
         )}
         <Button

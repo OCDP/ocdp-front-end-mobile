@@ -94,6 +94,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     },
     btnResult: {
       marginHorizontal: 36,
+      marginVertical: 36,
     },
     miniBoxBtn: {
       alignItems: "center",
@@ -130,33 +131,34 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   async function enviarPost() {
     setLoading(true);
     objResult.atendimento.tipoAtendimento = "RESULTADOS";
-    objResult.atendimento.localAtendimento = null;
-    objResult.atendimento.localEncaminhado = null;
     objResult.atendimento.dataAtendimento = moment().format(
       "YYYY-MM-DD HH:mm:ss"
     );
+
+    for (let i in nameImage) {
+      objResult.procedimentos[i].nomeArquivo = nameImage[i];
+      delete objResult.procedimentos[i].anexo64;
+    }
+
     let obj = {
       atendimento: objResult.atendimento,
       confirmaRastreamento: true,
       diagnosticoFinal: diagnosticoFinal,
       procedimentos: objResult.procedimentos,
     };
-    // console.log(obj);
-    let resp = apiFunc(
-      objResult.atendimento.usuario.cpf,
-      usuarioLogado.senhaUsuario
-    )
-      .post("/resultados/salvar", obj)
-      .then(() => {
-        Alert.alert("Registros enviadas com sucesso!");
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert("nao foi possivel enviar os registros!", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    console.log(obj);
+    console.log(JSON.stringify(obj));
+    try {
+      let resp = await apiFunc(
+        objResult.atendimento.usuario.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/resultados/salvar", obj);
+      alert("Enviado com sucesso");
+    } catch (err) {
+      console.log("erro ao salvar resultados >>>", err.response);
+    } finally {
+      setLoading(false);
+    }
     return;
   }
 
@@ -167,17 +169,18 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setObjResult(arr);
   };
 
-  const setarImagem = (data, indice) => {
-    let arr = objResult;
-    // console.log(arr);
-    arr.procedimentos[indice].anexo64 = data;
-    setObjResult(arr);
-  };
-
-  const setarNameImage = (i) => {
+  const setarNameImage = async (i) => {
+    setLoading(true);
     let arrNameImage = nameImage;
-    let novoArr = arrNameImage.splice(i, 1);
-    setNameImage(novoArr);
+    setNameImage(arrNameImage);
+
+    await arrNameImage.map((e) => {
+      if (e === nameImage[i]) {
+        arrNameImage[i] = undefined;
+      }
+    });
+    setNameImage(arrNameImage);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -198,18 +201,15 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
 
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
       .post(
-        `anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`,
+        `anexo/uploadFile?cpf=${objResult.atendimento.paciente.cpf}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       )
       .then((response) => {
-        console.log("resposta >>>", response.data.name);
-        console.log("nameImage", nameImage);
         let arrNameImage = nameImage;
         arrNameImage[i] = response.data.name;
-        console.log("arrNameImage", arrNameImage);
         setNameImage(arrNameImage);
         setLoading(false);
       })
@@ -427,7 +427,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               style={{ marginVertical: 8 }}
               numberOfLines={2}
               onChangeText={(a) => {
-                console.log(a);
                 setDiagnosticoFinal(a);
               }}
             />
@@ -448,7 +447,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     <CheckBox
                       text="Acompanhamento"
                       checked={activeAcomp}
-                      onChange={setActiveAcomp}
+                      onChange={(e) => {
+                        setActiveAcomp(e);
+                        setActiveTrat(!e);
+                      }}
                     />
                   </View>
                   <View>
@@ -460,7 +462,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       disabled={true}
                     />
                     <Button
-                      disabled={!activeAcomp}
+                      disabled={!activeAcomp && activeTrat}
                       onPress={() => setPickerAcompVisible(true)}
                       size="small"
                       icon={calendar}
@@ -487,7 +489,10 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                     <CheckBox
                       text="Tratamento de lesão"
                       checked={activeTrat}
-                      onChange={setActiveTrat}
+                      onChange={(e) => {
+                        setActiveTrat(e);
+                        setActiveAcomp(!e);
+                      }}
                     />
                   </View>
                   <View>
@@ -499,7 +504,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       disabled={true}
                     />
                     <Button
-                      disabled={!activeTrat}
+                      disabled={!activeTrat && activeAcomp}
                       onPress={() => setPickerAcompVisible(true)}
                       size="small"
                       icon={calendar}
@@ -522,6 +527,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             </View>
           </View>
           <Button
+            appearance="outline"
             style={[styles.btnResult, { flexDirection: "row-reverse" }]}
             onPress={() => enviarPost()}
             icon={upload}

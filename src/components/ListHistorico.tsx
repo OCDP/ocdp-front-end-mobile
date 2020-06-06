@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useEffect } from "react";
 import { View } from "react-native";
 import {
   useStyleSheet,
@@ -41,7 +41,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       paddingTop: 8,
     },
     btnResult: {
-      paddingVertical: 60,
+      paddingVertical: 12,
       marginHorizontal: 36,
     },
   });
@@ -156,22 +156,18 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             Procedimentos:
           </Text>
           {atendimento.procedimentos.map(
-            ({ nome, anexo64, observacao, id }) => (
+            ({ nome, anexo64, nomeArquivo, observacao, id }) => (
               <View key={id}>
-                {anexo64 ? (
+                {anexo64 || nomeArquivo ? (
                   <Lesoes
-                    imgRegiao={anexo64}
+                    nomeArquivo={nomeArquivo}
+                    tipoAtendimento={atendimento.atendimento.tipoAtendimento}
                     title={nome}
                     navigation={navigation}
                   />
                 ) : null}
 
                 <View style={styles.infoLesoes}>
-                  {nome ? (
-                    <Text appearance="hint" category="c4">
-                      Nome procedimento: {nome}
-                    </Text>
-                  ) : null}
                   {observacao ? (
                     <Text appearance="hint" category="c4">
                       Obs: {observacao}
@@ -187,6 +183,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       {enviarResult && (
         <View style={styles.btnResult}>
           <Button
+            appearance="outline"
             style={{ flexDirection: "row-reverse" }}
             onPress={() => {
               navigation.navigate("CadastrarResultados");

@@ -40,7 +40,7 @@ const DATA = [
 const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const {idNovoAcomp, setIdNovoAcomp} = React.useContext(NovoAcompContext)
-  const [selectedIndex, setSelectedIndex] = React.useState();
+  const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { nomesLocaisAtendido, tiposLocaisAtendido, setNomesLocaisAtendido } = useContext(LocaisContext);
@@ -55,34 +55,6 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     }
     resetarBotao();
   }, [])
-
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
-        {
-          text: "Voltar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Desejo cancelar procedimento", onPress: () => {
-              navigation.dispatch(
-              CommonActions.reset({
-                routes: [{ name: "Home" }],
-              })
-            );
-          setActiveStepBtn(0);
-        } }
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
 
   useEffect(()=>{
     async function setarBotao(){
