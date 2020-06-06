@@ -91,7 +91,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(() => {
     async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
-      if(idNovoAcomp != 1){
+      if(idNovoAcomp == 2){
         setNomesLocaisAtendido({});
       }      
       let url = `localAtendimento/byTipo/${tipoAtendido}`;

@@ -29,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
     setAcomp,
     setNome,
     setBairro,
+    cpf,
     setCpf,
     setDtNasci,
     setEmail,
@@ -155,7 +156,8 @@ const HomeScreen = ({ navigation }) => {
           <EmptyContent
             navigation={navigation}
             title="Nenhum registro encontrado"
-            textContent="Faça uma busca ou cadastre um novo paciente!"
+            textContent="Cadastre um novo acompanhamento!"
+            showBtnNovoAcomp={cpf ? true : false} 
           />
         )}
         <Button

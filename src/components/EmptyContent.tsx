@@ -7,9 +7,9 @@ import {
   Icon
 } from "@ui-kitten/components";
 import Empty from "..//assets/vectors/EmptyContent.icon.jsx";
-import { View } from "react-native";
+import { View, Button } from "react-native";
 
-const ImplementFutura = ({ navigation, title, textContent }) => {
+const ImplementFutura = ({ navigation, title, textContent, showBtnNovoAcomp }) => {
   const styles = useStyleSheet({
     container: {
       flex: 1
@@ -38,6 +38,22 @@ const ImplementFutura = ({ navigation, title, textContent }) => {
         <Text style={{ textAlign: "center" }} appearance="hint">
           {textContent}
         </Text>
+        {showBtnNovoAcomp ?
+          (
+            <Button title={"Novo Acompanhamento"} 
+            onPress={() => navigation.navigate("CadastrarPaciente")}
+            > Registrar novo Acompanhamento </Button>
+          )
+        : (
+          <>
+            <Text style={styles.itemText} appearance="hint">
+              {title}
+            </Text>
+            <Text style={{ textAlign: "center" }} appearance="hint">
+              {textContent}
+            </Text>
+          </>)
+        }
       </View>
     </Layout>
   );
