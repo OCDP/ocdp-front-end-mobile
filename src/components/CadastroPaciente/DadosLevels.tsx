@@ -363,7 +363,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             }
           >
             <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
+              {idNovoAcomp == 1 || idNovoAcomp == 2 || idNovoAcomp == undefined ? (
                 <MapeamentoSintomas navigation={navigation} />
               ): (<HipoteseDiagnostico navigation={navigation}/>
               )}
@@ -389,7 +389,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
             onSubmit={() => resetNav()}
           >
             <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
+              {idNovoAcomp == 1 || idNovoAcomp == 2 || idNovoAcomp == undefined ? (
                 <CadastroConduta navigation={navigation} />
               ): (<CondutaIntervencao navigation={navigation}/>
               )}

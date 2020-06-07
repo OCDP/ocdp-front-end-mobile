@@ -176,6 +176,7 @@ const MapeamentoSintomas = ({ navigation }) => {
 
   useEffect(() => {
     async function setarBotao() {
+      setLesoesRegioes([]);
       if (lesoesRegioes.length > 0 && postFatores != undefined) {
         setBloqBotaoProximo(false);
       } else setBloqBotaoProximo(true);
