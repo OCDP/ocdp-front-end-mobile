@@ -184,35 +184,36 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     async function setarBotao() {      
-      if (
-        (idNovoAcomp == 2 &&
-          nomesLocaisAtendido.length == undefined &&
-          nomesLocaisEncaminhado.length == undefined) ||
-        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
-      ) {
-        setBloqBotaoProximo(false);
-      } else {
-        setBloqBotaoProximo(true);
-      }
+      setBloqBotaoProximo(false);
+      // if (
+      //   (idNovoAcomp == 2 &&
+      //     nomesLocaisAtendido.length == undefined &&
+      //     nomesLocaisEncaminhado.length == undefined) ||
+      //   (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+      // ) {
+      //   setBloqBotaoProximo(false);
+      // } else {
+      //   setBloqBotaoProximo(true);
+      // }
     }
     setarBotao();
   }, []);
 
-  useEffect(() => {
-    async function setarBotao() {
-      if (
-        (idNovoAcomp == 2 &&
-          nomesLocaisAtendido.length == undefined &&
-          nomesLocaisEncaminhado.length == undefined) ||
-        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
-      ) {
-        setBloqBotaoProximo(false);
-      } else {
-        setBloqBotaoProximo(true);
-      }
-    }
-    setarBotao();
-  }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
+  // useEffect(() => {
+  //   async function setarBotao() {
+  //     if (
+  //       (idNovoAcomp == 2 &&
+  //         nomesLocaisAtendido.length == undefined &&
+  //         nomesLocaisEncaminhado.length == undefined) ||
+  //       (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+  //     ) {
+  //       setBloqBotaoProximo(false);
+  //     } else {
+  //       setBloqBotaoProximo(true);
+  //     }
+  //   }
+  //   setarBotao();
+  // }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
 
   return (
     <Layout style={styles.container}>

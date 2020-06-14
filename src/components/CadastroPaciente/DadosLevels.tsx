@@ -122,6 +122,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   delete nomesLocaisAtendido.text;
   delete nomesLocaisEncaminhado.text;
   let arrObj;
+  console.log("idNovoAcomp", idNovoAcomp);
   if(idNovoAcomp == 2 || idNovoAcomp == 1){
     arrObj = {
       atendimento: {
@@ -150,7 +151,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           localAtendimentoId: nomesLocaisAtendido.id,
           localEncaminhadoId: nomesLocaisEncaminhado.id,
           pacienteId: id,
-          tipoAtendimento: "ACOMPANHAMENTO",
+          tipoAtendimento: "INTERVENCAO",
           usuarioId: usuarioLogado.id
         },
         confirmaRastreamento: confirmaRastreamento,
@@ -163,6 +164,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function enviarPost(arrObj, id) {
+    // console.log(id, arrObj)
     if(id == 1 || id == 2){
       try {
         setLoading(true)
@@ -250,6 +252,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }
 
   useEffect(() => {
+    // console.log("idNovoAcomp", idNovoAcomp)
     setAuxBloqBotaoProximo(true);
     setIsErro(false)
     flush;

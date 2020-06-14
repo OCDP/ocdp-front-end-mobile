@@ -9,9 +9,11 @@ import {
 import Empty from "..//assets/vectors/EmptyContent.icon.jsx";
 import { View, Button } from "react-native";
 import BotaoContext from "../contexts/BotoesContext";
+import NovoAcompContext from "../contexts/NovoAcompContext";
 
 const ImplementFutura = ({ navigation, title, textContent, showBtnNovoAcomp }) => {
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  const { setIdNovoAcomp } = React.useContext(NovoAcompContext)
   const styles = useStyleSheet({
     container: {
       flex: 1
@@ -45,6 +47,7 @@ const ImplementFutura = ({ navigation, title, textContent, showBtnNovoAcomp }) =
             <Button title={"Novo Acompanhamento"} 
             onPress={() => {
               setActiveStepBtn(1);
+              setIdNovoAcomp(2)
               navigation.navigate("CadastrarPaciente")
             }}
             > Registrar novo Acompanhamento </Button>
