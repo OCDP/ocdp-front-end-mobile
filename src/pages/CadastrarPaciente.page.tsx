@@ -30,13 +30,10 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: "column",
-    paddingBottom: 16,
   },
   picker: {
     flex: 1,
     width: "100%",
-    paddingBottom: 4,
-    paddingHorizontal: 16,
     justifyContent: "space-between",
   },
   button: {

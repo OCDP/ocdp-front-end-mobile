@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     marginVertical: 8,
+    paddingHorizontal: 32
   },
   lineContent: {
     width: "100%",

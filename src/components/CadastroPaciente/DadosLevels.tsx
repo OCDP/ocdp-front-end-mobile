@@ -33,7 +33,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
       flex: 1,
-      marginVertical: 8,
+      marginVertical: 0,
     },
     heightInput: {
       height: 40,
@@ -101,6 +101,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   const btnStyle = {
+    display: "flex",
+    flex: 1,
     textAlign: "center",
     //position: fixed,
     botton: 0,
@@ -323,7 +325,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           activeStep = {activeStepBtn}
         >
           <ProgressStep
-            style={{ flex: 1 }}
+            style={{ flex: 0.5 }}
             label="Passo 1"
             nextBtnText="avançar"
             nextBtnTextStyle={buttonTextStyle}
