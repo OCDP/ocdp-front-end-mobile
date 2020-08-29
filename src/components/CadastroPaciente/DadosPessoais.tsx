@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, ContextType } from "react";
-import { View, Button, Alert, BackHandler } from "react-native";
+import { View, Button, Alert, BackHandler, TextInput } from "react-native";
 import {
   useStyleSheet,
   Radio,
@@ -16,6 +16,10 @@ import NovoAcompContext from "../../contexts/NovoAcompContext";
 import BotaoContext from "../../contexts/BotoesContext";
 import { useLoading } from "../../contexts/AppContext";
 import { CommonActions } from "@react-navigation/native";
+import apiFunc from "../../services/api";
+import axios from 'axios'
+import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
+import Axios from "axios";
 
 const DadosPessoais = ({ navigation }) => {
   let {
@@ -49,6 +53,8 @@ const DadosPessoais = ({ navigation }) => {
     setAuxBloqBotaoProximo2,
   } = useContext(BotaoContext);
   const [dtNascString, setDtNascString] = useState("");
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const [cep, setCep] = useState("");
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [, setLoading] = useLoading();
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
@@ -168,6 +174,17 @@ const DadosPessoais = ({ navigation }) => {
     },
   });
 
+  async function pesquisarCEP(){
+    try{
+      console.log("pesquisacep", cep)
+      const resp = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      console.log(resp.data);
+      setEndereco(resp.data.logradouro);
+    }catch(err){
+      console.log("erro na busca do cep")
+    }
+  }
+
   const validateCpf = (cpf) => {
     let cpfMask: string = "00000000000";
     cpfMask = cpfMask.replace(/[^\d]/g, "");
@@ -199,11 +216,28 @@ const DadosPessoais = ({ navigation }) => {
       </View>
       <View style={styles.lineContent}>
         <View>
+        <Input
+            placeholder="Pesquisar CEP"
+            icon={user}
+            value={cep}
+            onChangeText={setCep}
+          />
+        </View>
+        <ButtonUiKitten
+          size="small"
+          onPress={() => pesquisarCEP()}
+        >
+          pesquisar cep
+        </ButtonUiKitten>
+      </View>
+      <View style={styles.lineContent}>
+        <View>
           <Input
             placeholder="Endereço Completo"
             icon={user}
             value={endereco}
             onChangeText={setEndereco}
+
           />
         </View>
         <ButtonUiKitten
