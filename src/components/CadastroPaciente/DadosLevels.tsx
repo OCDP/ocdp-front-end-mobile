@@ -29,6 +29,7 @@ import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
 import IntervencaoContext from "../../contexts/IntervencaoContext";
 import BotaoContext from "../../contexts/BotoesContext";
+import { ScrollView } from "react-native-gesture-handler";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -37,7 +38,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     },
     heightInput: {
       height: 40,
-    },
+    }, 
   });
 
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
@@ -310,9 +311,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }, [])
 
   return (
-    <View style={styles.lineContent}>
-      <View style={{ flex: 1 }}>
-            <View style={{ flex: 1, alignItems: "center" }}>
+    <>
             {acomp === true ? (
                 <DadosAcompanhamento navigation={navigation} />
               ) : (
@@ -320,7 +319,6 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
                   <DadosPessoais navigation={navigation} />
                 </>
               )}
-            </View>
             {/* <View style={{ alignItems: "center" }}>
               {idNovoAcomp == 1 || idNovoAcomp == 2 || idNovoAcomp == undefined ? (
                 <MapeamentoSintomas navigation={navigation} />
@@ -333,8 +331,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
               ): (<CondutaIntervencao navigation={navigation}/>
               )}
             </View> */}
-      </View>
-    </View>
+      </>
   );
 };
 

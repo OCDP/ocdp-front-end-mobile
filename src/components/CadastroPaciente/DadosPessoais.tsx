@@ -10,6 +10,7 @@ import {
 } from "@ui-kitten/components";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import DadosPessoaisClass from "../../classes/DadosPessoaisClass"
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
 import PacienteContext from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
@@ -22,6 +23,7 @@ import axios from 'axios'
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import Axios from "axios";
 import { TouchableHighlight, TouchableOpacity, ScrollView } from "react-native-gesture-handler";
+import DadosLocais from "./DadosLocais";
 
 const DadosPessoais = ({ navigation }) => {
   let {
@@ -88,48 +90,10 @@ const DadosPessoais = ({ navigation }) => {
     setarBotao();
   }, []);
 
-  useEffect(() => {
-    async function setarBotao() {
-      if (
-        nome != null &&
-        cpf != null &&
-        email != null &&
-        endereco != null &&
-        telCell != null &&
-        telResp != null &&
-        nmMae != null &&
-        idNovoAcomp != undefined
-      ) {
-        if (auxBloqBotaoProximo == false) {
-          setBloqBotaoProximo(false);
-        } else {
-          setAuxBloqBotaoProximo2(false);
-        }
-      } else {
-        setAuxBloqBotaoProximo2(true);
-      }
-    }
-    setarBotao();
-  }, [
-    nome,
-    dtNasci,
-    cpf,
-    email,
-    endereco,
-    telCell,
-    telResp,
-    nmMae,
-    idNovoAcomp,
-  ]);
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   useEffect(() => {
     setSexo(sexos[selectedIndex].text);
   }, [selectedIndex]);
-
-  useEffect(() => {
-    setIdNovoAcomp(2);
-  }, []);
 
   const validateEmail = (email) => {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -197,19 +161,29 @@ const DadosPessoais = ({ navigation }) => {
     validateCpf(cpf);
   };
 
+  
+  function verificaDadosPessoais(){
+    const resp = new DadosPessoaisClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
+    console.log("resp", resp)
+    if(resp == "sucesso"){
+      navigation.navigate("DadosLocais");
+    }
+  }
+
   return (
     <>
-    <View style={{flex:0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10}}>
-      <View style={{flex:1, backgroundColor: "#1696B8", borderWidth:1, borderColor:'black'}}>
+      <View style={{flex:0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10}}>
+        <View style={{flex:1, backgroundColor: "#1696B8", borderWidth:1, borderColor:'black'}}>
+        </View>
+        <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
+        </View>
+        <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
+        </View>
       </View>
-      <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
-      </View>
-      <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
-      </View>
-    </View>
       <View style={{flex: 1}}>
         
         <ScrollView>
+          {/* <DadosLocais navigation={navigation}></DadosLocais> */}
           <View style={{ flex: 0.88, alignItems: "center" }}>
             <View style={styles.testeInputCss}>
               <View>
@@ -228,7 +202,7 @@ const DadosPessoais = ({ navigation }) => {
                 limpar nome paciente
               </ButtonUiKitten> */}
             </View>
-            <View style={[styles.testeInputCss, {flexDirection: 'row'}]}>
+            {/* <View style={[styles.testeInputCss, {flexDirection: 'row'}]}>
               <View style={{flex:0.8}}>
                 <Input
                     placeholder="Pesquisar CEP"
@@ -242,8 +216,8 @@ const DadosPessoais = ({ navigation }) => {
                   <Icon size={26} name={"search"} color="white"/>
                 </TouchableHighlight>
               </View>
-            </View>
-            <View style={styles.testeInputCss}>
+            </View> */}
+            {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Endereço Completo"
@@ -253,14 +227,14 @@ const DadosPessoais = ({ navigation }) => {
 
                 />
               </View>
-              {/* <ButtonUiKitten
+              <ButtonUiKitten
                 disabled={endereco ? endereco.length == 0 : true}
                 size="small"
                 onPress={() => setEndereco("")}
               >
                 limpar endereço
-              </ButtonUiKitten> */}
-            </View>
+              </ButtonUiKitten>
+            </View> */}
             {/* <View style={[styles.testeInputCss, {flexDirection: 'column', paddingBottom:50}]}> */}
             <View style={styles.testeInputCss}>
               <View style={{flex:1, flexDirection: 'row'}}>
@@ -323,7 +297,7 @@ const DadosPessoais = ({ navigation }) => {
                 limpar CPF
               </ButtonUiKitten> */}
             </View>
-            <View style={styles.testeInputCss}>
+            {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="E-mail"
@@ -338,15 +312,15 @@ const DadosPessoais = ({ navigation }) => {
                   }}
                 />
               </View>
-              {/* <ButtonUiKitten
+              <ButtonUiKitten
                 disabled={validateEmail(email) ? false : true}
                 size="small"
                 onPress={() => setEmail("")}
               >
                 limpar email
-              </ButtonUiKitten> */}
-            </View>
-            <View style={styles.testeInputCss}>
+              </ButtonUiKitten>
+            </View> */}
+            {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Telefone Celular"
@@ -364,15 +338,15 @@ const DadosPessoais = ({ navigation }) => {
                   }}
                 />
               </View>
-              {/* <ButtonUiKitten
+              <ButtonUiKitten
                 disabled={validateTelefoneCelular(telCell) ? false : true}
                 size="small"
                 onPress={() => setTelCell("")}
               >
                 limpar telefone celular
-              </ButtonUiKitten> */}
-            </View>
-            <View style={styles.testeInputCss}>
+              </ButtonUiKitten>
+            </View> */}
+            {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Telefone do resposável"
@@ -388,14 +362,14 @@ const DadosPessoais = ({ navigation }) => {
                   }}
                 />
               </View>
-              {/* <ButtonUiKitten
+              <ButtonUiKitten
                 disabled={validateTelefoneResponsavel(telResp) ? false : true}
                 size="small"
                 onPress={() => setTelResp("")}
               >
                 limpar telefone responsavel
-              </ButtonUiKitten> */}
-            </View>
+              </ButtonUiKitten>
+            </View> */}
             <View style={styles.testeInputCss}>
               <View>
                 <Input
@@ -426,7 +400,7 @@ const DadosPessoais = ({ navigation }) => {
             </TouchableHighlight>
           </View>
           <View style={{flex:1, marginHorizontal: 10}}>
-            <TouchableHighlight style={{backgroundColor: "#09527C", paddingVertical: 10}}>
+            <TouchableHighlight onPress={() => verificaDadosPessoais()} style={{backgroundColor: "#09527C", paddingVertical: 10}}>
               <Text style={{fontSize:16, textAlign: 'center', color: 'white'}}>Avançar</Text>
             </TouchableHighlight>
           </View>
@@ -439,7 +413,7 @@ const styles = StyleSheet.create({
   testeInputCss: {
     flex: 1,
     width: '80%',
-    paddingVertical: 5
+    paddingVertical: 10
     // justifyContent: 'flex-start',
     // alignItems: 'flex-start'
   }
