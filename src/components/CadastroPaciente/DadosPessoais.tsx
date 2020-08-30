@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect, ContextType } from "react";
-import { View, Button, Alert, BackHandler, TextInput } from "react-native";
+import { View, Button, Alert, BackHandler, TextInput, StyleSheet } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   useStyleSheet,
   Radio,
@@ -20,6 +21,7 @@ import apiFunc from "../../services/api";
 import axios from 'axios'
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import Axios from "axios";
+import { TouchableHighlight, TouchableOpacity } from "react-native-gesture-handler";
 
 const DadosPessoais = ({ navigation }) => {
   let {
@@ -150,29 +152,29 @@ const DadosPessoais = ({ navigation }) => {
     setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   };
 
-  const styles = useStyleSheet({
-    lineContent: {
-      flex: 1,
-      width: "100%",
-      marginVertical: 8,
-    },
-    heightInput: {
-      height: 40,
-    },
-    boxDatePicker: {
-      marginHorizontal: 8,
-      paddingVertical: 10,
-      borderRadius: 10,
-      elevation: 8,
-      shadowRadius: 8,
-      shadowColor: "#000",
-      shadowOffset: {
-        height: 1,
-        width: 0,
-      },
-      shadowOpacity: 0.1,
-    },
-  });
+  // const styles = useStyleSheet({
+  //   lineContent: {
+  //     flex: 1,
+  //     width: "100%",
+  //     marginVertical: 8,
+  //   },
+  //   heightInput: {
+  //     height: 40,
+  //   },
+  //   boxDatePicker: {
+  //     marginHorizontal: 8,
+  //     paddingVertical: 10,
+  //     borderRadius: 10,
+  //     elevation: 8,
+  //     shadowRadius: 8,
+  //     shadowColor: "#000",
+  //     shadowOffset: {
+  //       height: 1,
+  //       width: 0,
+  //     },
+  //     shadowOpacity: 0.1,
+  //   },
+  // });
 
   async function pesquisarCEP(){
     try{
@@ -197,214 +199,221 @@ const DadosPessoais = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Nome do paciente"
-            icon={user}
-            value={nome}
-            onChangeText={setNome}
-          />
-        </View>
-        <ButtonUiKitten
-          disabled={nome ? nome.length == 0 : true}
-          size="small"
-          onPress={() => setNome("")}
-        >
-          limpar nome paciente
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-        <Input
-            placeholder="Pesquisar CEP"
-            icon={user}
-            value={cep}
-            onChangeText={setCep}
-          />
-        </View>
-        <ButtonUiKitten
-          size="small"
-          onPress={() => pesquisarCEP()}
-        >
-          pesquisar cep
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Endereço Completo"
-            icon={user}
-            value={endereco}
-            onChangeText={setEndereco}
-
-          />
-        </View>
-        <ButtonUiKitten
-          disabled={endereco ? endereco.length == 0 : true}
-          size="small"
-          onPress={() => setEndereco("")}
-        >
-          limpar endereço
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <Input
-          placeholder="Data nascimento"
-          icon={user}
-          value={dtNascString}
-          disabled={true}
-        />
-        <Button
-          title="Selecionar Data Nascimento"
-          onPress={() => setIsDatePickerVisible(true)}
-        />
-        <DateTimePickerModal
-          cancelTextIOS="cancelar"
-          confirmTextIOS="confirmar"
-          headerTextIOS="Escolha uma data"
-          locale="pt-BR"
-          isVisible={isDatePickerVisible}
-          mode="date"
-          onConfirm={(a) => confirmarData(a)}
-          onCancel={() => setIsDatePickerVisible(false)}
-        />
-      </View>
-      <View style={styles.lineContent}>
-        <View
-          style={{
-            marginHorizontal: 16,
-            borderRadius: 4,
-          }}
-        >
-          <RadioGroup
-            style={[
-              {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                paddingHorizontal: 16,
-              },
-              styles.heightInput,
-            ]}
-            selectedIndex={selectedIndex}
-            onChange={setSelectedIndex}
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="Nome do paciente"
+              icon={user}
+              value={nome}
+              onChangeText={setNome}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={nome ? nome.length == 0 : true}
+            size="small"
+            onPress={() => setNome("")}
           >
-            <Radio text="Masculino" />
-            <Radio text="Feminino" />
-          </RadioGroup>
+            limpar nome paciente
+          </ButtonUiKitten> */}
         </View>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            disabled={cpf?.length > 10 ? true : false}
-            placeholder="CPF"
-            icon={user}
-            onChangeText={(value) => onChangeCpf(value)}
-            value={cpf}
-            maxLength={14}
-          />
+        <View style={[styles.testeInputCss, {flexDirection: 'row'}]}>
+          <View style={{flex:0.8}}>
+            <Input
+                placeholder="Pesquisar CEP"
+                icon={user}
+                value={cep}
+                onChangeText={setCep}
+              />
+          </View>
+          <View style={{flex:0.2}}>
+            <TouchableHighlight style={{alignItems:'center', justifyContent: 'center'}} underlayColor={"black"} onPress={() => pesquisarCEP()}>
+              <Icon size={26} name={"search"} color="white"/>
+            </TouchableHighlight>
+          </View>
         </View>
-        <ButtonUiKitten
-          disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
-          size="small"
-          onPress={() => setCpf("")}
-        >
-          limpar CPF
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="E-mail"
-            icon={emailIcon}
-            onChangeText={setEmail}
-            value={email}
-            onBlur={() => {
-              if (validateEmail(email) == false) {
-                alert("email inválido");
-                setEmail("");
-              }
-            }}
-          />
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="Endereço Completo"
+              icon={user}
+              value={endereco}
+              onChangeText={setEndereco}
+
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={endereco ? endereco.length == 0 : true}
+            size="small"
+            onPress={() => setEndereco("")}
+          >
+            limpar endereço
+          </ButtonUiKitten> */}
         </View>
-        <ButtonUiKitten
-          disabled={validateEmail(email) ? false : true}
-          size="small"
-          onPress={() => setEmail("")}
-        >
-          limpar email
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Telefone Celular"
-            icon={phone}
-            value={telCell}
-            onChangeText={setTelCell}
-            maxLength={11}
-            textContentType={"telephoneNumber"}
-            keyboardType={"phone-pad"}
-            onBlur={() => {
-              if (validateTelefoneCelular(telCell) == false) {
-                alert("celular inválido");
-                setTelCell("");
-              }
-            }}
-          />
+        {/* <View style={[styles.testeInputCss, {flexDirection: 'column', paddingBottom:50}]}> */}
+        <View style={styles.testeInputCss}>
+          <View style={{flex:1, flexDirection: 'row'}}>
+            <View style={{flex:0.8}}>
+              <Input
+                placeholder="Data nascimento"
+                icon={user}
+                value={dtNascString}
+                disabled={true}
+              />
+            </View>
+            <View style={{flex:0.2}}>
+              <TouchableHighlight style={{alignItems:'center', justifyContent: 'center'}} underlayColor={"black"} onPress={() => setIsDatePickerVisible(true)}>
+                <Icon size={26} name={"search"} color="white"/>
+              </TouchableHighlight>
+            </View>
+            <DateTimePickerModal
+              cancelTextIOS="cancelar"
+              confirmTextIOS="confirmar"
+              headerTextIOS="Escolha uma data"
+              locale="pt-BR"
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={(a) => confirmarData(a)}
+              onCancel={() => setIsDatePickerVisible(false)}
+            />
+          </View>
         </View>
-        <ButtonUiKitten
-          disabled={validateTelefoneCelular(telCell) ? false : true}
-          size="small"
-          onPress={() => setTelCell("")}
-        >
-          limpar telefone celular
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Telefone do resposável"
-            icon={phone}
-            value={telResp}
-            maxLength={11}
-            onChangeText={setTelResp}
-            onBlur={() => {
-              if (validateTelefoneResponsavel(telResp) == false) {
-                alert("telefone responsavel inválido");
-                setTelResp("");
-              }
-            }}
-          />
+        <View style={styles.testeInputCss}>
+            <RadioGroup
+              style={
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  paddingHorizontal: 16,
+                }}
+              selectedIndex={selectedIndex}
+              onChange={setSelectedIndex}
+            >
+              <Radio text="Masculino" />
+              <Radio text="Feminino" />
+            </RadioGroup>
         </View>
-        <ButtonUiKitten
-          disabled={validateTelefoneResponsavel(telResp) ? false : true}
-          size="small"
-          onPress={() => setTelResp("")}
-        >
-          limpar telefone responsavel
-        </ButtonUiKitten>
-      </View>
-      <View style={styles.lineContent}>
-        <View>
-          <Input
-            placeholder="Nome da mãe"
-            icon={user}
-            value={nmMae}
-            onChangeText={setNmMae}
-          />
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              disabled={cpf?.length > 10 ? true : false}
+              placeholder="CPF"
+              icon={user}
+              onChangeText={(value) => onChangeCpf(value)}
+              value={cpf}
+              maxLength={14}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
+            size="small"
+            onPress={() => setCpf("")}
+          >
+            limpar CPF
+          </ButtonUiKitten> */}
         </View>
-        <ButtonUiKitten
-          disabled={nmMae ? nmMae.length == 0 : true}
-          size="small"
-          onPress={() => setNmMae("")}
-        >
-          limpar nome mãe
-        </ButtonUiKitten>
-      </View>
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="E-mail"
+              icon={emailIcon}
+              onChangeText={setEmail}
+              value={email}
+              onBlur={() => {
+                if (validateEmail(email) == false) {
+                  alert("email inválido");
+                  setEmail("");
+                }
+              }}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={validateEmail(email) ? false : true}
+            size="small"
+            onPress={() => setEmail("")}
+          >
+            limpar email
+          </ButtonUiKitten> */}
+        </View>
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="Telefone Celular"
+              icon={phone}
+              value={telCell}
+              onChangeText={setTelCell}
+              maxLength={11}
+              textContentType={"telephoneNumber"}
+              keyboardType={"phone-pad"}
+              onBlur={() => {
+                if (validateTelefoneCelular(telCell) == false) {
+                  alert("celular inválido");
+                  setTelCell("");
+                }
+              }}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={validateTelefoneCelular(telCell) ? false : true}
+            size="small"
+            onPress={() => setTelCell("")}
+          >
+            limpar telefone celular
+          </ButtonUiKitten> */}
+        </View>
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="Telefone do resposável"
+              icon={phone}
+              value={telResp}
+              maxLength={11}
+              onChangeText={setTelResp}
+              onBlur={() => {
+                if (validateTelefoneResponsavel(telResp) == false) {
+                  alert("telefone responsavel inválido");
+                  setTelResp("");
+                }
+              }}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={validateTelefoneResponsavel(telResp) ? false : true}
+            size="small"
+            onPress={() => setTelResp("")}
+          >
+            limpar telefone responsavel
+          </ButtonUiKitten> */}
+        </View>
+        <View style={styles.testeInputCss}>
+          <View>
+            <Input
+              placeholder="Nome da mãe"
+              icon={user}
+              value={nmMae}
+              onChangeText={setNmMae}
+            />
+          </View>
+          {/* <ButtonUiKitten
+            disabled={nmMae ? nmMae.length == 0 : true}
+            size="small"
+            onPress={() => setNmMae("")}
+          >
+            limpar nome mãe
+          </ButtonUiKitten> */}
+        </View>
+        
+        
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  testeInputCss: {
+    flex: 1,
+    width: '80%',
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start'
+  }
+})
 
 export default DadosPessoais;
