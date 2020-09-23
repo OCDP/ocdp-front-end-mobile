@@ -6,20 +6,8 @@ import DadosLevels from "../components/CadastroPaciente/DadosLevels";
 import PacienteContext from "../contexts/PacienteContext";
 
 const CadastrarPaciente = ({ navigation }) => {
-  const { acomp } = useContext(PacienteContext);
   return (
-    <PageContainer
-      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
-      navigation={navigation}
-    >
-      <KeyboardAvoidingView style={styles.container} behavior="height">
-        <View style={styles.view}>
-          <View style={styles.picker}>
-            <DadosLevels navigation={navigation} />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
-    </PageContainer>
+    <DadosLevels navigation={navigation} />
   );
 };
 

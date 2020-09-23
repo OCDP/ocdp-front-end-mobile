@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import { View, Alert, BackHandler } from "react-native";
+import { View, Alert, BackHandler, KeyboardAvoidingView } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
@@ -30,6 +30,7 @@ import CondutaIntervencao from "../CondutaIntervencao";
 import IntervencaoContext from "../../contexts/IntervencaoContext";
 import BotaoContext from "../../contexts/BotoesContext";
 import { ScrollView } from "react-native-gesture-handler";
+import PageContainer from "../PageContainer/PageContainer";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
@@ -39,6 +40,21 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     heightInput: {
       height: 40,
     }, 
+    container: {
+      flex: 1,
+    },
+    view: {
+      flex: 1,
+      flexDirection: "column",
+    },
+    picker: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "space-between",
+    },
+    button: {
+      marginHorizontal: 16,
+    },
   });
 
   const [dadosPacientes, setDadosPacientes] = useDadosPacientes();
@@ -90,7 +106,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telResp,
   } = useContext(PacienteContext);
   
-  const [, setLoading] = useLoading()
+  const [, setLoading] = useLoading();
   const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   const [isErro, setIsErro] = React.useState(true);
   
@@ -317,20 +333,9 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
               ) : (
                 <>
                   <DadosPessoais navigation={navigation} />
+                  {/* <DadosLocais navigation={navigation}></DadosLocais> */}
                 </>
               )}
-            {/* <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 || idNovoAcomp == undefined ? (
-                <MapeamentoSintomas navigation={navigation} />
-              ): (<HipoteseDiagnostico navigation={navigation}/>
-              )}
-            </View>
-            <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 || idNovoAcomp == undefined ? (
-                <CadastroConduta navigation={navigation} />
-              ): (<CondutaIntervencao navigation={navigation}/>
-              )}
-            </View> */}
       </>
   );
 };

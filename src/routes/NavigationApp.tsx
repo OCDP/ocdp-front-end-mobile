@@ -8,6 +8,8 @@ import BemVindo from "../pages/BemVindo.page";
 import LoginPage from "../pages/Login";
 import HomeScreen from "../pages/Home.page";
 import CadastrarPaciente from "../pages/CadastrarPaciente.page";
+import DadosLocais from "../components/CadastroPaciente/DadosLocais"
+import DadosPessoais from "../components/CadastroPaciente/DadosPessoais"
 import SafeAreaLayout from "../components/SafeAreaLayout";
 import Introducao from "../pages/Introducao.page";
 import Historico from "../pages/Historico.page";
@@ -146,6 +148,14 @@ export const AppNavigator = () => (
                           <Drawer.Screen
                             name="CadastrarPaciente"
                             component={CadastrarPaciente}
+                          />
+                          <Drawer.Screen
+                            name="DadosPessoais"
+                            component={DadosPessoais}
+                          />
+                          <Drawer.Screen
+                            name="DadosLocais"
+                            component={DadosLocais}
                           />
                           <Drawer.Screen name="BemVindo" component={BemVindo} />
                           <Drawer.Screen name="Login" component={LoginPage} />

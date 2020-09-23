@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, ContextType } from "react";
-import { View, Button, Text, BackHandler, TextInput, StyleSheet } from "react-native";
+import { View, Button, Text, BackHandler, TextInput, StyleSheet, KeyboardAvoidingView } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   useStyleSheet,
@@ -24,9 +24,11 @@ import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import Axios from "axios";
 import { TouchableHighlight, TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import DadosLocais from "./DadosLocais";
+import PageContainer from "../PageContainer";
 
 const DadosPessoais = ({ navigation }) => {
   let {
+    acomp,
     nome,
     setNome,
     dtNasci,
@@ -64,30 +66,7 @@ const DadosPessoais = ({ navigation }) => {
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
 
   useEffect(() => {
-    async function setarBotao() {
-      if (bloqBotaoProximo == true) {
-        if (
-          nome != null &&
-          dtNasci != null &&
-          cpf != null &&
-          email != null &&
-          endereco != null &&
-          telCell != null &&
-          telResp != null &&
-          nmMae != null &&
-          idNovoAcomp != undefined
-        ) {
-          if (auxBloqBotaoProximo == false) {
-            setBloqBotaoProximo(false);
-          } else {
-            setAuxBloqBotaoProximo2(false);
-          }
-        } else {
-          setAuxBloqBotaoProximo2(true);
-        }
-      }
-    }
-    setarBotao();
+    console.log("navigation", navigation);
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -116,37 +95,39 @@ const DadosPessoais = ({ navigation }) => {
     setDtNasci(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
   };
 
-  // const styles = useStyleSheet({
-  //   lineContent: {
-  //     flex: 1,
-  //     width: "100%",
-  //     marginVertical: 8,
-  //   },
-  //   heightInput: {
-  //     height: 40,
-  //   },
-  //   boxDatePicker: {
-  //     marginHorizontal: 8,
-  //     paddingVertical: 10,
-  //     borderRadius: 10,
-  //     elevation: 8,
-  //     shadowRadius: 8,
-  //     shadowColor: "#000",
-  //     shadowOffset: {
-  //       height: 1,
-  //       width: 0,
-  //     },
-  //     shadowOpacity: 0.1,
-  //   },
-  // });
+  const styles = useStyleSheet({
+    
+    container: {
+      flex: 1,
+    },
+    view: {
+      flex: 1,
+      flexDirection: "column",
+    },
+    picker: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "space-between",
+    },
+    button: {
+      marginHorizontal: 16,
+    },
+    testeInputCss: {
+      flex: 1,
+      width: '80%',
+      paddingVertical: 10
+      // justifyContent: 'flex-start',
+      // alignItems: 'flex-start'
+    }
+  });
 
-  async function pesquisarCEP(){
-    try{
+  async function pesquisarCEP() {
+    try {
       console.log("pesquisacep", cep)
       const resp = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
       console.log(resp.data);
       setEndereco(resp.data.logradouro);
-    }catch(err){
+    } catch (err) {
       console.log("erro na busca do cep")
     }
   }
@@ -161,48 +142,60 @@ const DadosPessoais = ({ navigation }) => {
     validateCpf(cpf);
   };
 
-  
-  function verificaDadosPessoais(){
+
+  function verificaDadosPessoais() {
     const resp = new DadosPessoaisClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
     console.log("resp", resp)
-    if(resp == "sucesso"){
-      navigation.navigate("DadosLocais");
+    if (resp == "sucesso") {
+      navigation.navigate("DadosLocais", { navigation: navigation });
     }
   }
 
   return (
     <>
-      <View style={{flex:0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10}}>
-        <View style={{flex:1, backgroundColor: "#1696B8", borderWidth:1, borderColor:'black'}}>
-        </View>
-        <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
-        </View>
-        <View style={{flex:1, backgroundColor: "white", borderWidth:1, borderColor:'black'}}>
-        </View>
-      </View>
-      <View style={{flex: 1}}>
-        
-        <ScrollView>
-          {/* <DadosLocais navigation={navigation}></DadosLocais> */}
-          <View style={{ flex: 0.88, alignItems: "center" }}>
-            <View style={styles.testeInputCss}>
-              <View>
-                <Input
-                  placeholder="Nome do paciente"
-                  icon={user}
-                  value={nome}
-                  onChangeText={setNome}
-                />
+
+      <PageContainer
+        title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+        navigation={navigation}
+      >
+        <KeyboardAvoidingView style={styles.container} behavior="height">
+          <View style={styles.view}>
+            <View style={styles.picker}>
+              <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+                <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+                </View>
+                <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+                </View>
+                <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+                </View>
+                <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+                </View>
+                <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+                </View>
               </View>
-              {/* <ButtonUiKitten
+              <View style={{ flex: 1 }}>
+
+                <ScrollView>
+                  {/* <DadosLocais navigation={navigation}></DadosLocais> */}
+                  <View style={{ flex: 0.88, alignItems: "center" }}>
+                    <View style={styles.testeInputCss}>
+                      <View>
+                        <Input
+                          placeholder="Nome do paciente"
+                          icon={user}
+                          value={nome}
+                          onChangeText={setNome}
+                        />
+                      </View>
+                      {/* <ButtonUiKitten
                 disabled={nome ? nome.length == 0 : true}
                 size="small"
                 onPress={() => setNome("")}
               >
                 limpar nome paciente
               </ButtonUiKitten> */}
-            </View>
-            {/* <View style={[styles.testeInputCss, {flexDirection: 'row'}]}>
+                    </View>
+                    {/* <View style={[styles.testeInputCss, {flexDirection: 'row'}]}>
               <View style={{flex:0.8}}>
                 <Input
                     placeholder="Pesquisar CEP"
@@ -217,7 +210,7 @@ const DadosPessoais = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
             </View> */}
-            {/* <View style={styles.testeInputCss}>
+                    {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Endereço Completo"
@@ -235,69 +228,69 @@ const DadosPessoais = ({ navigation }) => {
                 limpar endereço
               </ButtonUiKitten>
             </View> */}
-            {/* <View style={[styles.testeInputCss, {flexDirection: 'column', paddingBottom:50}]}> */}
-            <View style={styles.testeInputCss}>
-              <View style={{flex:1, flexDirection: 'row'}}>
-                <View style={{flex:0.8}}>
-                  <Input
-                    placeholder="Data nascimento"
-                    icon={user}
-                    value={dtNascString}
-                    disabled={true}
-                  />
-                </View>
-                <View style={{flex:0.2}}>
-                  <TouchableHighlight style={{alignItems:'center', justifyContent: 'center'}} underlayColor={"black"} onPress={() => setIsDatePickerVisible(true)}>
-                    <Icon size={26} name={"search"} color="white"/>
-                  </TouchableHighlight>
-                </View>
-                <DateTimePickerModal
-                  cancelTextIOS="cancelar"
-                  confirmTextIOS="confirmar"
-                  headerTextIOS="Escolha uma data"
-                  locale="pt-BR"
-                  isVisible={isDatePickerVisible}
-                  mode="date"
-                  onConfirm={(a) => confirmarData(a)}
-                  onCancel={() => setIsDatePickerVisible(false)}
-                />
-              </View>
-            </View>
-            <View style={styles.testeInputCss}>
-                <RadioGroup
-                  style={
-                    {
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      paddingHorizontal: 16,
-                    }}
-                  selectedIndex={selectedIndex}
-                  onChange={setSelectedIndex}
-                >
-                  <Radio text="Masculino" />
-                  <Radio text="Feminino" />
-                </RadioGroup>
-            </View>
-            <View style={styles.testeInputCss}>
-              <View>
-                <Input
-                  disabled={cpf?.length > 10 ? true : false}
-                  placeholder="CPF"
-                  icon={user}
-                  onChangeText={(value) => onChangeCpf(value)}
-                  value={cpf}
-                  maxLength={14}
-                />
-              </View>
-              {/* <ButtonUiKitten
+                    {/* <View style={[styles.testeInputCss, {flexDirection: 'column', paddingBottom:50}]}> */}
+                    <View style={styles.testeInputCss}>
+                      <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 0.8 }}>
+                          <Input
+                            placeholder="Data nascimento"
+                            icon={user}
+                            value={dtNascString}
+                            disabled={true}
+                          />
+                        </View>
+                        <View style={{ flex: 0.2 }}>
+                          <TouchableHighlight style={{ alignItems: 'center', justifyContent: 'center' }} underlayColor={"black"} onPress={() => setIsDatePickerVisible(true)}>
+                            <Icon size={26} name={"search"} color="white" />
+                          </TouchableHighlight>
+                        </View>
+                        <DateTimePickerModal
+                          cancelTextIOS="cancelar"
+                          confirmTextIOS="confirmar"
+                          headerTextIOS="Escolha uma data"
+                          locale="pt-BR"
+                          isVisible={isDatePickerVisible}
+                          mode="date"
+                          onConfirm={(a) => confirmarData(a)}
+                          onCancel={() => setIsDatePickerVisible(false)}
+                        />
+                      </View>
+                    </View>
+                    <View style={styles.testeInputCss}>
+                      <RadioGroup
+                        style={
+                          {
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            paddingHorizontal: 16,
+                          }}
+                        selectedIndex={selectedIndex}
+                        onChange={setSelectedIndex}
+                      >
+                        <Radio text="Masculino" />
+                        <Radio text="Feminino" />
+                      </RadioGroup>
+                    </View>
+                    <View style={styles.testeInputCss}>
+                      <View>
+                        <Input
+                          disabled={cpf?.length > 10 ? true : false}
+                          placeholder="CPF"
+                          icon={user}
+                          onChangeText={(value) => onChangeCpf(value)}
+                          value={cpf}
+                          maxLength={14}
+                        />
+                      </View>
+                      {/* <ButtonUiKitten
                 disabled={cpf ? (cpf?.length > 10 ? false : true) : true}
                 size="small"
                 onPress={() => setCpf("")}
               >
                 limpar CPF
               </ButtonUiKitten> */}
-            </View>
-            {/* <View style={styles.testeInputCss}>
+                    </View>
+                    {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="E-mail"
@@ -320,7 +313,7 @@ const DadosPessoais = ({ navigation }) => {
                 limpar email
               </ButtonUiKitten>
             </View> */}
-            {/* <View style={styles.testeInputCss}>
+                    {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Telefone Celular"
@@ -346,7 +339,7 @@ const DadosPessoais = ({ navigation }) => {
                 limpar telefone celular
               </ButtonUiKitten>
             </View> */}
-            {/* <View style={styles.testeInputCss}>
+                    {/* <View style={styles.testeInputCss}>
               <View>
                 <Input
                   placeholder="Telefone do resposável"
@@ -370,53 +363,51 @@ const DadosPessoais = ({ navigation }) => {
                 limpar telefone responsavel
               </ButtonUiKitten>
             </View> */}
-            <View style={styles.testeInputCss}>
-              <View>
-                <Input
-                  placeholder="Nome da mãe"
-                  icon={user}
-                  value={nmMae}
-                  onChangeText={setNmMae}
-                />
-              </View>
-              {/* <ButtonUiKitten
+                    <View style={styles.testeInputCss}>
+                      <View>
+                        <Input
+                          placeholder="Nome da mãe"
+                          icon={user}
+                          value={nmMae}
+                          onChangeText={setNmMae}
+                        />
+                      </View>
+                      {/* <ButtonUiKitten
                 disabled={nmMae ? nmMae.length == 0 : true}
                 size="small"
                 onPress={() => setNmMae("")}
               >
                 limpar nome mãe
               </ButtonUiKitten> */}
+                    </View>
+                  </View>
+                </ScrollView>
+              </View>
+              <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+                <View style={{ flex: 1, marginHorizontal: 10 }}>
+                  <TouchableHighlight
+                    activeOpacity={0.6}
+                    underlayColor="#DDDDDD"
+                    onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                  </TouchableHighlight>
+                </View>
+                <View style={{ flex: 1, marginHorizontal: 10 }}>
+                  <TouchableHighlight onPress={() => verificaDadosPessoais()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                    <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+
             </View>
           </View>
-        </ScrollView>
-      </View>
-      <View style={{flex:0.05, flexDirection: 'row', marginBottom: 20}}>
-          <View style={{flex:1, marginHorizontal: 10}}>
-            <TouchableHighlight
-              activeOpacity={0.6}
-              underlayColor="#DDDDDD"
-              onPress={() => console.log("alo")} style={{backgroundColor: "#1696B8", paddingVertical: 10}}>
-              <Text style={{fontSize:16, textAlign: 'center', color: 'white'}}>Voltar</Text>
-            </TouchableHighlight>
-          </View>
-          <View style={{flex:1, marginHorizontal: 10}}>
-            <TouchableHighlight onPress={() => verificaDadosPessoais()} style={{backgroundColor: "#09527C", paddingVertical: 10}}>
-              <Text style={{fontSize:16, textAlign: 'center', color: 'white'}}>Avançar</Text>
-            </TouchableHighlight>
-          </View>
-      </View>
+        </KeyboardAvoidingView>
+      </PageContainer>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  testeInputCss: {
-    flex: 1,
-    width: '80%',
-    paddingVertical: 10
-    // justifyContent: 'flex-start',
-    // alignItems: 'flex-start'
-  }
 })
 
 export default DadosPessoais;
