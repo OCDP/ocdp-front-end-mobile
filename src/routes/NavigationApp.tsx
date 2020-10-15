@@ -33,6 +33,8 @@ import { Button, Text } from "@ui-kitten/components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AppConsumer } from "../contexts/AppContext";
 import LightTheme from "../themes/LightTheme";
+import DadosContato from "../components/CadastroPaciente/DadosContato";
+import MapeamentoSintomas from "../components/CadastroPaciente/MapeamentoSintomas";
 
 function CustomDrawerContent(props) {
   return (
@@ -154,8 +156,16 @@ export const AppNavigator = () => (
                             component={DadosPessoais}
                           />
                           <Drawer.Screen
+                            name="MapeamentoSintomas"
+                            component={MapeamentoSintomas}
+                          />
+                          <Drawer.Screen
                             name="DadosLocais"
                             component={DadosLocais}
+                          />
+                          <Drawer.Screen
+                            name="DadosContato"
+                            component={DadosContato}
                           />
                           <Drawer.Screen name="BemVindo" component={BemVindo} />
                           <Drawer.Screen name="Login" component={LoginPage} />
