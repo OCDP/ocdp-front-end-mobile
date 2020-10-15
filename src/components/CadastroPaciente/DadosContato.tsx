@@ -14,6 +14,7 @@ import { CommonActions } from "@react-navigation/native";
 import { user, emailIcon, phone } from "../../assets/Icons";
 import axios from 'axios'
 import PageContainer from "../PageContainer";
+import DadosContatoClass from "../../classes/DadosContatoClass";
 const DadosContato = ({ navigation }) => {
   const { email, setEmail, telCell, setTelCell, telResp, setTelResp, nmMae, setNmMae } = useContext(PacienteContext);
 
@@ -33,6 +34,14 @@ const DadosContato = ({ navigation }) => {
     var re = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/;
     return re.test(telResponsavel);
   };
+  
+  function verificaDadosContato() {
+    const resp = new DadosContatoClass(email, telCell, telResp, nmMae).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      navigation.navigate("MapeamentoSintomas", { navigation: navigation });
+    }
+  }
 
   const styles = useStyleSheet({
     lineContent: {
@@ -194,7 +203,7 @@ const DadosContato = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <TouchableHighlight onPress={() => navigation.navigate("MapeamentoSintomas", { navigation })} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                <TouchableHighlight onPress={() => verificaDadosContato()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
                 </TouchableHighlight>
               </View>

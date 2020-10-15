@@ -14,6 +14,7 @@ import { CommonActions } from "@react-navigation/native";
 import { user, emailIcon, phone } from "../../assets/Icons";
 import axios from 'axios'
 import PageContainer from "../PageContainer";
+import DadosLocaisClass from "../../classes/DadosLocaisClass";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro, endereco, setEndereco } = useContext(PacienteContext);
 
@@ -42,6 +43,14 @@ const DadosLocais = ({ navigation }) => {
       }
     } catch (err) {
       console.log("erro na busca do cep", err)
+    }
+  }
+
+  function verificaDadosLocais() {
+    const resp = new DadosLocaisClass(cidade, bairro, endereco).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      navigation.navigate("DadosContato", { navigation: navigation });
     }
   }
 
@@ -217,7 +226,7 @@ const DadosLocais = ({ navigation }) => {
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
                 <TouchableHighlight 
-                  onPress={() => navigation.navigate("DadosContato", { navigation })}
+                  onPress={() => verificaDadosLocais()}
                   style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
                 </TouchableHighlight>

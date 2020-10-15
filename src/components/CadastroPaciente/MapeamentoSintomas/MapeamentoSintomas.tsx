@@ -231,6 +231,14 @@ const MapeamentoSintomas = ({ navigation }) => {
     loadTipoLesao();
   }
 
+  function verificaMapeamentoSintomas() {
+    const resp = new MapeamentoSintomasClass(postFatores, lesoesRegioes).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      navigation.navigate("DadosLocais", { navigation: navigation });
+    }
+  }
+
   const renderModalElement = () => (
     <Layout level="3" style={styles.modalContainer}>
       {listRegioes.map(({ id, nome }, j) => (
@@ -544,7 +552,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <TouchableHighlight onPress={() => navigation.navigate("CadastroConduta", { navigation })} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                <TouchableHighlight onPress={() => verificaMapeamentoSintomas()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
                 </TouchableHighlight>
               </View>
