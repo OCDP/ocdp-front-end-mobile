@@ -194,7 +194,7 @@ const DadosContato = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <TouchableHighlight style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                <TouchableHighlight onPress={() => navigation.navigate("MapeamentoSintomas", { navigation })} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
                 </TouchableHighlight>
               </View>

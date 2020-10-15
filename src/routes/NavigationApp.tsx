@@ -35,6 +35,10 @@ import { AppConsumer } from "../contexts/AppContext";
 import LightTheme from "../themes/LightTheme";
 import DadosContato from "../components/CadastroPaciente/DadosContato";
 import MapeamentoSintomas from "../components/CadastroPaciente/MapeamentoSintomas";
+import DadosAcompanhamento from "../components/DadosAcompanhamento";
+import HipoteseDiagnostico from "../components/HipoteseDiagnostico";
+import CondutaIntervencao from "../components/CondutaIntervencao";
+import CadastroConduta from "../components/CadastroConduta";
 
 function CustomDrawerContent(props) {
   return (
@@ -166,6 +170,22 @@ export const AppNavigator = () => (
                           <Drawer.Screen
                             name="DadosContato"
                             component={DadosContato}
+                          />
+                          <Drawer.Screen
+                            name="DadosAcompanhamento"
+                            component={DadosAcompanhamento}
+                          /> 
+                          <Drawer.Screen
+                            name="HipoteseDiagnostico"
+                            component={HipoteseDiagnostico}
+                          />
+                          <Drawer.Screen
+                            name="CondutaIntervencao"
+                            component={CondutaIntervencao}
+                          />
+                          <Drawer.Screen
+                            name="CadastroConduta"
+                            component={CadastroConduta}
                           />
                           <Drawer.Screen name="BemVindo" component={BemVindo} />
                           <Drawer.Screen name="Login" component={LoginPage} />

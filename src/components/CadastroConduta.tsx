@@ -91,9 +91,9 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   useEffect(() => {
     async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
-      if(idNovoAcomp == 2){
+      if (idNovoAcomp == 2) {
         setNomesLocaisAtendido({});
-      }      
+      }
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       try {
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -183,7 +183,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [dtNascString, setDtNascString] = useState("");
 
   useEffect(() => {
-    async function setarBotao() {      
+    async function setarBotao() {
       setBloqBotaoProximo(false);
       // if (
       //   (idNovoAcomp == 2 &&
@@ -216,170 +216,212 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   // }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
 
   return (
-    <Layout style={styles.container}>
-      <ScrollView style={styles.container}>
-        {idNovoAcomp !== 1 ? (
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View>
-                  <Text appearance="hint">
-                    Selecione o local em que está sendo atendido
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+
+              <Layout style={styles.container}>
+                <ScrollView style={styles.container}>
+                  {idNovoAcomp !== 1 ? (
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View>
+                            <Text appearance="hint">
+                              Selecione o local em que está sendo atendido
                   </Text>
-                </View>
-                <View style={{ marginVertical: 8 }}>
-                  <Select
-                    data={tiposLocaisAtendido}
-                    placeholder="Selecionar um tipo"
-                    onSelect={(e) => tipoAtendidoActions(e["text"])}
-                    selectedOption={{ text: tipoAtendido }}
-                  />
-                </View>
-                <View>
-                  <Select
-                    disabled={tipoAtendido ? false : true}
-                    data={nomesAtendidosAll}
-                    placeholder="Local em que está sendo atendido"
-                    onSelect={(e) => nomeAtendidoActions(e["text"])}
-                    selectedOption={{ text: nomesAtendidosSelect }}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <></>
-        )}
+                          </View>
+                          <View style={{ marginVertical: 8 }}>
+                            <Select
+                              data={tiposLocaisAtendido}
+                              placeholder="Selecionar um tipo"
+                              onSelect={(e) => tipoAtendidoActions(e["text"])}
+                              selectedOption={{ text: tipoAtendido }}
+                            />
+                          </View>
+                          <View>
+                            <Select
+                              disabled={tipoAtendido ? false : true}
+                              data={nomesAtendidosAll}
+                              placeholder="Local em que está sendo atendido"
+                              onSelect={(e) => nomeAtendidoActions(e["text"])}
+                              selectedOption={{ text: nomesAtendidosSelect }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  ) : (
+                      <></>
+                    )}
 
-        <View style={styles.lineContent}>
-          <View style={styles.boxDatePicker}>
-            <View
-              style={{
-                marginHorizontal: 16,
-              }}
-            >
-              <View>
-                <Text appearance="hint">
-                  Selecione o local para o qual será encaminhado
+                  <View style={styles.lineContent}>
+                    <View style={styles.boxDatePicker}>
+                      <View
+                        style={{
+                          marginHorizontal: 16,
+                        }}
+                      >
+                        <View>
+                          <Text appearance="hint">
+                            Selecione o local para o qual será encaminhado
                 </Text>
+                        </View>
+                        <View style={{ marginVertical: 8 }}>
+                          <Select
+                            data={tiposLocaisEncaminhado}
+                            placeholder="Selecionar um tipo"
+                            onSelect={(e) => tipoEncaminhadoActions(e["text"])}
+                            selectedOption={{ text: tipoEncaminhado }}
+                          />
+                        </View>
+                        <View>
+                          <Select
+                            disabled={tipoEncaminhado ? false : true}
+                            data={nomesEncaminhadosAll}
+                            placeholder="Local que será encaminhado"
+                            onSelect={(e) => nomeEncaminhadoActions(e["text"])}
+                            selectedOption={{ text: nomesEncaminhadoSelect }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              marginBottom: 4,
+                            }}
+                            appearance="hint"
+                          >
+                            Retorno para:
+                </Text>
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Acompanhamento"
+                              checked={activeCheckedAcompanhamento}
+                              onChange={setActiveCheckedAcompanhamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida acompanhamento"
+                              icon={user}
+                              value={dataSugeridaAcompanhamento}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedAcompanhamento ? false : true}
+                              title="Escolher data"
+                              onPress={() => setDatePickerVisibleAcomp(true)}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={datePickerVisibleAcomp}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                              onCancel={() => setDatePickerVisibleAcomp(false)}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Tratamento de lesão"
+                              checked={activeCheckedTratamento}
+                              onChange={setActiveCheckedTratamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida tratamento"
+                              icon={user}
+                              value={dataTratState}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedTratamento ? false : true}
+                              title="Escolher data"
+                              onPress={() => setDatePickerVisibleTrat(true)}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={datePickerVisibleTrat}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataTratamento(a)}
+                              onCancel={() => setDatePickerVisibleTrat(false)}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+              </Layout>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
               </View>
-              <View style={{ marginVertical: 8 }}>
-                <Select
-                  data={tiposLocaisEncaminhado}
-                  placeholder="Selecionar um tipo"
-                  onSelect={(e) => tipoEncaminhadoActions(e["text"])}
-                  selectedOption={{ text: tipoEncaminhado }}
-                />
-              </View>
-              <View>
-                <Select
-                  disabled={tipoEncaminhado ? false : true}
-                  data={nomesEncaminhadosAll}
-                  placeholder="Local que será encaminhado"
-                  onSelect={(e) => nomeEncaminhadoActions(e["text"])}
-                  selectedOption={{ text: nomesEncaminhadoSelect }}
-                />
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaDadosAcompanhamento()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
               </View>
             </View>
+
           </View>
         </View>
-
-        <View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <Text
-                  style={{
-                    marginBottom: 4,
-                  }}
-                  appearance="hint"
-                >
-                  Retorno para:
-                </Text>
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Acompanhamento"
-                    checked={activeCheckedAcompanhamento}
-                    onChange={setActiveCheckedAcompanhamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida acompanhamento"
-                    icon={user}
-                    value={dataSugeridaAcompanhamento}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedAcompanhamento ? false : true}
-                    title="Escolher data"
-                    onPress={() => setDatePickerVisibleAcomp(true)}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={datePickerVisibleAcomp}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
-                    onCancel={() => setDatePickerVisibleAcomp(false)}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Tratamento de lesão"
-                    checked={activeCheckedTratamento}
-                    onChange={setActiveCheckedTratamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida tratamento"
-                    icon={user}
-                    value={dataTratState}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedTratamento ? false : true}
-                    title="Escolher data"
-                    onPress={() => setDatePickerVisibleTrat(true)}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={datePickerVisibleTrat}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataTratamento(a)}
-                    onCancel={() => setDatePickerVisibleTrat(false)}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </Layout>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 

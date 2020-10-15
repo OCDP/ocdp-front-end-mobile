@@ -39,7 +39,7 @@ const DATA = [
 
 const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
-  const {idNovoAcomp, setIdNovoAcomp} = React.useContext(NovoAcompContext)
+  const { idNovoAcomp, setIdNovoAcomp } = React.useContext(NovoAcompContext)
   const [selectedIndex, setSelectedIndex] = React.useState<number>();
   const [tipoAtendido, setTipoAtendido] = React.useState(null);
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
@@ -47,42 +47,50 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
   const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
 
-  useEffect(()=>{
-    async function resetarBotao(){
+  useEffect(() => {
+    async function resetarBotao() {
       setBloqBotaoProximo(true);
     }
     resetarBotao();
   }, [])
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(nomesLocaisAtendido && !nomesLocaisAtendido.length && idNovoAcomp){
+  useEffect(() => {
+    async function setarBotao() {
+      if (nomesLocaisAtendido && !nomesLocaisAtendido.length && idNovoAcomp) {
         setBloqBotaoProximo(false);
       }
     }
     setarBotao();
   }, [nomesLocaisAtendido, idNovoAcomp])
 
-  useEffect(()=>{
-    async function loadLocaisAtendido(){
+  function verificaDadosAcompanhamento() {
+    // const resp = new DadosAcompanhamentoClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
+    // console.log("resp", resp)
+    // if (resp == "sucesso") {
+      navigation.navigate("HipoteseDiagnostico", { navigation: navigation });
+    // }
+  }
+
+  useEffect(() => {
+    async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
       setNomesLocaisAtendido({});
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
-      try{
-        
+      try {
+
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
-        .get(url).then((resp)=>{
-          for(let i of resp.data){
-            i.text = i.nome;
-          }
-          setNomesAtendidosAll(resp.data)
-          
-        })
-      }catch(err){
+          .get(url).then((resp) => {
+            for (let i of resp.data) {
+              i.text = i.nome;
+            }
+            setNomesAtendidosAll(resp.data)
+
+          })
+      } catch (err) {
         console.log(err);
-        
+
       }
     }
     loadLocaisAtendido();
@@ -96,8 +104,8 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
   const nomeAtendidoActions = (text) => {
     setnomesAtendidosSelect(text);
-    for(let i of nomesAtendidosAll){
-      if(i.text == text){
+    for (let i of nomesAtendidosAll) {
+      if (i.text == text) {
         setNomesLocaisAtendido(i);
       }
     }
@@ -117,8 +125,8 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
     setValue("");
   };
 
-  useEffect(()=>{
-    function setarNovoAcompanhamento(){
+  useEffect(() => {
+    function setarNovoAcompanhamento() {
       setIdNovoAcomp(selectedIndex);
     }
     setarNovoAcompanhamento()
@@ -126,56 +134,100 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 
 
   return (
-    <Layout style={styles.container}>
-      <View style={styles.lineContent}>
-        <RadioGroup
-          selectedIndex={selectedIndex || idNovoAcomp}
-          onChange={(index) => {
-            setSelectedIndex(index)
-          }}
-        >
-          {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
-            <Radio text="Intervenção"></Radio>
-          ) : (
-            <></>
-          )}
-          <Radio text="Acompanhamento"></Radio>
-        </RadioGroup>
-      </View>
-
-      <View style={styles.lineContent}>
-          <View>
-            <View
-              style={{
-                marginHorizontal: 16,
-              }}
-            >
-              <View>
-                <Text appearance="hint">
-                  Selecione o local em que está sendo atendido
-                </Text>
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View style={{ marginVertical: 8 }}>
-                <Select
-                  data={tiposLocaisAtendido}
-                  placeholder="Selecionar um tipo"
-                  onSelect={(e) => tipoAtendidoActions(e["text"])}
-                  selectedOption={{ text: tipoAtendido }}
-                />
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View>
-                <Select
-                  disabled={tipoAtendido ? false : true}
-                  data={nomesAtendidosAll}
-                  placeholder="Local em que está sendo atendido"
-                  onSelect={(e) => nomeAtendidoActions(e["text"])}
-                  selectedOption={{ text: nomesAtendidosSelect }}
-                />
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
               </View>
             </View>
+            <View style={{ flex: 1 }}>
+
+              <ScrollView>
+                <Layout style={styles.container}>
+                  <View style={styles.lineContent}>
+                    <RadioGroup
+                      selectedIndex={selectedIndex || idNovoAcomp}
+                      onChange={(index) => {
+                        setSelectedIndex(index)
+                      }}
+                    >
+                      {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
+                        <Radio text="Intervenção"></Radio>
+                      ) : (
+                          <></>
+                        )}
+                      <Radio text="Acompanhamento"></Radio>
+                    </RadioGroup>
+                  </View>
+
+                  <View style={styles.lineContent}>
+                    <View>
+                      <View
+                        style={{
+                          marginHorizontal: 16,
+                        }}
+                      >
+                        <View>
+                          <Text appearance="hint">
+                            Selecione o local em que está sendo atendido
+                </Text>
+                        </View>
+                        <View style={{ marginVertical: 8 }}>
+                          <Select
+                            data={tiposLocaisAtendido}
+                            placeholder="Selecionar um tipo"
+                            onSelect={(e) => tipoAtendidoActions(e["text"])}
+                            selectedOption={{ text: tipoAtendido }}
+                          />
+                        </View>
+                        <View>
+                          <Select
+                            disabled={tipoAtendido ? false : true}
+                            data={nomesAtendidosAll}
+                            placeholder="Local em que está sendo atendido"
+                            onSelect={(e) => nomeAtendidoActions(e["text"])}
+                            selectedOption={{ text: nomesAtendidosSelect }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </Layout>
+              </ScrollView>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaDadosAcompanhamento()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+
           </View>
         </View>
-    </Layout>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 

@@ -73,6 +73,14 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
     setDataAcompState(moment(dt).format("DD/MM/YYYY"));
   };
+  
+  function verificaCondutaIntervencao() {
+    // const resp = new DadosAcompanhamentoClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
+    // console.log("resp", resp)
+    // if (resp == "sucesso") {
+      navigation.navigate("CondutaIntervencao", { navigation: navigation });
+    // }
+  }
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -118,6 +126,27 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   }, [checked, obs0, obs1, obs2, obs3]);
 
   return (
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+
     <Layout style={styles.container}>
       <ScrollView style={styles.container}>
         <View>
@@ -322,7 +351,28 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
           </View>
         </View>
       </ScrollView>
-    </Layout>
+    </Layout> 
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaCondutaIntervencao()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 
