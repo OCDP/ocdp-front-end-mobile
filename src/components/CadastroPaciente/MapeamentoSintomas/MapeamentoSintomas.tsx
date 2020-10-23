@@ -459,9 +459,9 @@ const MapeamentoSintomas = ({ navigation }) => {
               </View>
               <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
               </View>
               <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
               </View>
