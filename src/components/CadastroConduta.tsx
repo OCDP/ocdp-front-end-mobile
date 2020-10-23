@@ -24,6 +24,10 @@ import NovoAcompContext from "../contexts/NovoAcompContext";
 import BotaoContext from "../contexts/BotoesContext";
 import PostFatoresContext from "../contexts/PostFatoresContext";
 import { CommonActions } from "@react-navigation/native";
+import CadastroCondutaClass from "../classes/CadastroCondutaClass";
+import LesoesRegioesContext from "../contexts/LesoesRegioesContext";
+import PacienteContext from "../contexts/PacienteContext";
+import { useLoading } from "../contexts/AppContext";
 
 const DATA = [
   {
@@ -73,6 +77,24 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState(
     ""
   );
+  const {
+    acomp,
+    bairro,
+    cpf,
+    cidade,
+    dtNasci,
+    email,
+    endereco,
+    id,
+    setId,
+    historico,
+    listaFatores,
+    nmMae,
+    nome,
+    sexo,
+    telCell,
+    telResp,
+  } = useContext(PacienteContext);
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
   const [dataAcompState, setDataAcompState] = React.useState("");
@@ -80,13 +102,88 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [dataAtual, setDataAtual] = React.useState(null);
   const [datePickerVisibleTrat, setDatePickerVisibleTrat] = useState(false);
   const [datePickerVisibleAcomp, setDatePickerVisibleAcomp] = useState(false);
+  const { lesoesRegioes } = useContext(LesoesRegioesContext);
+  const [, setLoading] = useLoading();
 
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-  const onSelect = ({ title }) => {
-    setValue(title);
-    // let historico = await loadHistorico(title);
-    // setHistorico(historico);
-  };
+  
+  function verificaCadastroConsulta(){
+    const resp = new CadastroCondutaClass(nomesLocaisAtendido, nomesLocaisEncaminhado, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      setarValores();
+    }
+  }
+
+  function setarValores(){
+  
+    let arrObj = {
+      atendimento: {
+        dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+        id: "",
+        localAtendimentoId: nomesLocaisAtendido.id,
+        localEncaminhadoId: nomesLocaisEncaminhado.id,
+        pacienteId: id,
+        tipoAtendimento: "ACOMPANHAMENTO",
+        usuarioId: usuarioLogado.id
+      },
+        regioesLesoes: lesoesRegioes,
+        dataSugeridaAcompanhamento:
+          dataSugeridaAcompanhamento == undefined
+            ? ""
+            : dataSugeridaAcompanhamento,
+        dataSugeridaTratamento:
+          dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+        fatoresDeRisco: postFatores,
+      };
+      enviarPost(arrObj);
+  }
+
+  async function enviarPost(arrObj){
+    try {
+      setLoading(true)
+      let postJson = JSON.stringify(arrObj);
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/acompanhamento/salvar", postJson);
+      Alert.alert(
+        'Enviado com sucesso',
+        "Voltar para tela inicial",
+        [
+          {text: 'Ok', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+        ],
+        {cancelable: false},
+      );
+    } catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Problema de envio',
+        "Voltar para tela inicial?",
+        [
+          {text: 'Sim', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+          {text: 'Tentar Novamente', style: 'cancel'},
+          
+        ],
+        {cancelable: false},
+      );
+    }finally{
+      setLoading(false)
+    }
+      
+  }
 
   useEffect(() => {
     async function loadLocaisAtendido() {
@@ -412,7 +509,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <TouchableHighlight onPress={() => verificaDadosAcompanhamento()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                <TouchableHighlight onPress={() => verificaCadastroConsulta()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
                 </TouchableHighlight>
               </View>

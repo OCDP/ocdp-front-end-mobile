@@ -1,19 +1,16 @@
 import React, { constructor } from 'react'
 
 
-export default class DadosPessoaisClass{
+export default class MapeamentoSintomasClass{
 
-    constructor (nomePaciente, dataNascimento, sexo, cpf, nomeMae) {
-        this.nomePaciente = nomePaciente;
-        this.dataNascimento = dataNascimento;
-        this.sexo = sexo;
-        this.cpf = cpf;
-        this.nomeMae = nomeMae;
+    constructor (postFatores, lesoesRegioes) {
+        this.postFatores = postFatores;
+        this.lesoesRegioes = lesoesRegioes;
     }
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.nomePaciente || !this.dataNascimento || !this.sexo || !this.cpf || !this.nomeMae){
+        if(!this.postFatores || !this.lesoesRegioes){
             status = "erro";
         }
         return status;

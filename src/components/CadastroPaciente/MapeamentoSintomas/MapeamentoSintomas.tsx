@@ -28,6 +28,7 @@ import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
 import BotaoContext from "../../../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import { menuDetail } from "../../../assets/Icons";
+import MapeamentoSintomasClass from "../../../classes/MapeamentoSintomasClass";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -235,7 +236,7 @@ const MapeamentoSintomas = ({ navigation }) => {
     const resp = new MapeamentoSintomasClass(postFatores, lesoesRegioes).retornaValidacao();
     console.log("resp", resp)
     if (resp == "sucesso") {
-      navigation.navigate("DadosLocais", { navigation: navigation });
+      navigation.navigate("CadastroConduta", { navigation: navigation });
     }
   }
 
