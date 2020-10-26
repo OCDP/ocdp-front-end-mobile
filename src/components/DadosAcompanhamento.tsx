@@ -23,6 +23,7 @@ import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
+import DadosAcompanhamentoClass from "../classes/DadosAcompanhamentoClass";
 
 const DATA = [
   {
@@ -66,11 +67,11 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   }, [nomesLocaisAtendido, idNovoAcomp])
 
   function verificaDadosAcompanhamento() {
-    // const resp = new DadosAcompanhamentoClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
-    // console.log("resp", resp)
-    // if (resp == "sucesso") {
+    const resp = new DadosAcompanhamentoClass(nomesLocaisAtendido, idNovoAcomp).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
       navigation.navigate("HipoteseDiagnostico", { navigation: navigation });
-    // }
+    }
   }
 
   useEffect(() => {

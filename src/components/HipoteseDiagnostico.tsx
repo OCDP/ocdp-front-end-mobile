@@ -14,6 +14,7 @@ import { editText } from "../assets/Icons";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
+import HipoteseDiagnosticoClass from "../classes/HipoteseDiagnosticoClass";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
@@ -48,11 +49,11 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
 
   
   function verificaHipoteseDiagnostico() {
-    // const resp = new DadosAcompanhamentoClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
-    // console.log("resp", resp)
-    // if (resp == "sucesso") {
+    const resp = new HipoteseDiagnosticoClass(confirmaRastreamento, observacao, hipoteseDiagnostico).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
       navigation.navigate("CondutaIntervencao", { navigation: navigation });
-    // }
+    }
   }
 
   const onCheckedChange = (index) => {

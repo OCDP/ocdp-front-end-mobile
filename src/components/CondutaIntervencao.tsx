@@ -21,6 +21,7 @@ import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import PacienteContext from "../contexts/PacienteContext";
+import CondutaIntervencaoClass from "../classes/CondutaIntervencaoClass";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -75,9 +76,9 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   };
   
   function verificaCondutaIntervencao() {
-    // const resp = new DadosAcompanhamentoClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
-    // console.log("resp", resp)
-    // if (resp == "sucesso") {
+    const resp = new CondutaIntervencaoClass(procedimento, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
       navigation.navigate("CondutaIntervencao", { navigation: navigation });
     // }
   }
