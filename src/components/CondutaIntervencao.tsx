@@ -16,12 +16,17 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText, calendar, user } from "../assets/Icons";
 import moment from "moment";
+import apiFunc from "../../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import PacienteContext from "../contexts/PacienteContext";
+import LesoesRegioesContext from "../contexts/LesoesRegioesContext"
 import CondutaIntervencaoClass from "../classes/CondutaIntervencaoClass";
+import PostFatoresContext from "../contexts/PostFatoresContext";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import PageContainer from "./PageContainer";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -33,15 +38,10 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     false
   );
   const [checked, setChecked] = React.useState([false, false, false, false]);
-  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-  const { cpf } = React.useContext(PacienteContext);
   const [obs0, setObs0] = React.useState("");
   const [obs1, setObs1] = React.useState("");
   const [obs2, setObs2] = React.useState("");
   const [obs3, setObs3] = React.useState("");
-  const { procedimento, setProcedimento } = React.useContext(
-    IntervencaoContext
-  );
   const [dataAcompState, setDataAcompState] = React.useState("");
   const [dataTratState, setDataTratState] = React.useState("");
   const { setBloqBotaoProximo } = useContext(BotaoContext);
@@ -58,7 +58,24 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento,
     setDataSugeridaTratamento,
   } = React.useContext(LocaisContext);
-  0;
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const {
+    nomesLocaisAtendido,
+  } = useContext(LocaisContext);
+  const {
+    confirmaRastreamento, 
+    hipoteseDiagnostico, 
+    observacao, 
+    procedimento,
+    setProcedimento
+  } = useContext(IntervencaoContext)
+  const {
+    nomesLocaisEncaminhado,
+  } = useContext(LocaisContext);
+  const {
+    acomp,
+    id,
+  } = useContext(PacienteContext);
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
   };
@@ -75,12 +92,70 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     setDataAcompState(moment(dt).format("DD/MM/YYYY"));
   };
   
-  function verificaCondutaIntervencao() {
+  async function verificaCondutaIntervencao() {
     const resp = new CondutaIntervencaoClass(procedimento, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
     console.log("resp", resp)
     if (resp == "sucesso") {
-      navigation.navigate("CondutaIntervencao", { navigation: navigation });
-    // }
+      let arrObj = {
+        atendimento: {
+          dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+          id: "",
+          localAtendimentoId: nomesLocaisAtendido.id,
+          localEncaminhadoId: nomesLocaisEncaminhado.id,
+          pacienteId: id,
+          tipoAtendimento: "INTERVENCAO",
+          usuarioId: usuarioLogado.id
+        },
+        confirmaRastreamento: confirmaRastreamento,
+        hipoteseDiagnostico: hipoteseDiagnostico,
+        observacao: observacao,
+        procedimentos: procedimento
+      }
+      await enviarPost(arrObj);
+    }
+  }
+
+  async function enviarPost(arrObj) {
+    // console.log(id, arrObj)if(id == 0){
+    try {
+      let postJson = JSON.stringify(arrObj);
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/intervencao/salvar", postJson);
+      Alert.alert(
+        'Enviado com sucesso',
+        "Voltar para tela inicial",
+        [
+          {text: 'Ok', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+        ],
+        {cancelable: false},
+      );
+    } catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Problema de envio',
+        "Voltar para tela inicial?",
+        [
+          {text: 'Sim', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+          {text: 'Tentar Novamente', style: 'cancel'},
+          
+        ],
+        {cancelable: false},
+      );
+    }
   }
 
   const hideDatePicker = () => {

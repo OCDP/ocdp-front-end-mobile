@@ -12,7 +12,10 @@ export default class CadastroCondutaClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.nomesLocaisAtendido || !this.nomesLocaisEncaminhado || !this.dataSugeridaAcompanhamento || !this.dataSugeridaTratamento){
+        if((idNovoAcomp == 2 ||
+            nomesLocaisAtendido.length == undefined ||
+            nomesLocaisEncaminhado.length == undefined) ||
+            (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)){
             status = "erro";
         }
         return status;

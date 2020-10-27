@@ -12,7 +12,10 @@ export default class DadosContatoClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.email || !this.telCell || !this.telResp || this.nmMae){
+        const regexTelResp = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{4,5}(?:-)?[0-9]{4}$/;
+        const regexTelCell = /(?:\()?[0-9]{2}(?:\))?\s?[0-9]{5}(?:-)?[0-9]{4}$/;
+        const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if(!this.email || regexEmail.test(this.email) || !this.telCell || regexTelCell.test(this.telCell) || !this.telResp || regexTelResp.test(this.telResp) || this.nmMae){
             status = "erro";
         }
         return status;

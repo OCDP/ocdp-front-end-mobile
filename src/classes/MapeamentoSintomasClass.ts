@@ -10,7 +10,7 @@ export default class MapeamentoSintomasClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.postFatores || !this.lesoesRegioes){
+        if(this.lesoesRegioes.length == 0 || this.postFatores == undefined){
             status = "erro";
         }
         return status;

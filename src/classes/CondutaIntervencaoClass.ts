@@ -10,7 +10,7 @@ export default class CondutaIntervencaoClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.procedimento || !this.dataSugeridaAcompanhamento ||  this.dataSugeridaTratamento){
+        if(!this.procedimento || procedimento.length == 0){
             status = "erro";
         }
         return status;
