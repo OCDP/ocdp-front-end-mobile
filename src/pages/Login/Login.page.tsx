@@ -17,8 +17,8 @@ export default function ({ navigation }) {
   // senha primaria: p@55w0Rd
   // senha secundaria: teste123
 
-  const [login, setLogin] = useState("");
-  const [pswd, setPswd] = useState("");
+  const [login, setLogin] = useState("222.222.222-22");
+  const [pswd, setPswd] = useState("teste123");
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { setUsuarioLogado } = useContext(UsuarioLogadoContext);

@@ -121,17 +121,6 @@ const DadosPessoais = ({ navigation }) => {
     }
   });
 
-  async function pesquisarCEP() {
-    try {
-      console.log("pesquisacep", cep)
-      const resp = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      console.log(resp.data);
-      setEndereco(resp.data.logradouro);
-    } catch (err) {
-      console.log("erro na busca do cep")
-    }
-  }
-
   const validateCpf = (cpf) => {
     let cpfMask: string = "00000000000";
     cpfMask = cpfMask.replace(/[^\d]/g, "");
@@ -146,9 +135,9 @@ const DadosPessoais = ({ navigation }) => {
   function verificaDadosPessoais() {
     const resp = new DadosPessoaisClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
     console.log("resp", resp)
-    if (resp == "sucesso") {
+    // if (resp == "sucesso") {
       navigation.navigate("DadosLocais", { navigation: navigation });
-    }
+    // }
   }
 
   return (

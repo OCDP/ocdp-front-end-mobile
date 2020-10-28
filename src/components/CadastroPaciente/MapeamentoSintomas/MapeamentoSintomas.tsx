@@ -29,6 +29,7 @@ import BotaoContext from "../../../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import { menuDetail } from "../../../assets/Icons";
 import MapeamentoSintomasClass from "../../../classes/MapeamentoSintomasClass";
+import PageContainer from "../../PageContainer";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -37,6 +38,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
   const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { acomp } = React.useContext(PacienteContext);
   const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
   const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
   const { fatores, setFatores } = useContext(FatoresContext);
@@ -104,16 +106,6 @@ const MapeamentoSintomas = ({ navigation }) => {
   // }
 
   const styles = useStyleSheet({
-    container: {
-      paddingLeft: 36,
-      alignItems: "flex-start",
-      justifyContent: "center",
-      marginVertical: 16,
-    },
-    lineContent: {
-      flex: 1,
-      width: "100%",
-    },
     columnsContent: {
       flex: 1,
       flexDirection: "row",
@@ -164,6 +156,36 @@ const MapeamentoSintomas = ({ navigation }) => {
     },
     radio: {
       marginVertical: 8,
+    },
+    lineContent: {
+      flex: 1,
+      width: "100%",
+      marginVertical: 8,
+    },
+    testeInputCss: {
+      flex: 1,
+      width: '80%',
+      paddingVertical: 10
+      // justifyContent: 'flex-start',
+      // alignItems: 'flex-start'
+    },
+    heightInput: {
+      maxHeight: 50,
+    }, 
+    container: {
+      flex: 1,
+    },
+    view: {
+      flex: 1,
+      flexDirection: "column",
+    },
+    picker: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "space-between",
+    },
+    button: {
+      marginHorizontal: 16,
     },
     rowCheck: {
       flexDirection: "row",

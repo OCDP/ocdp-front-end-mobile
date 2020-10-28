@@ -100,6 +100,7 @@ const DadosContato = ({ navigation }) => {
 
               <ScrollView>
                 <>
+                <View style={{ flex: 0.88, alignItems: "center" }}>
                   <View style={styles.testeInputCss}>
                     <View>
                       <Input
@@ -190,6 +191,7 @@ const DadosContato = ({ navigation }) => {
             limpar nome mãe
           </ButtonUiKitten> */}
                   </View>
+                </View>
                 </>
               </ScrollView>
             </View>
@@ -198,7 +200,7 @@ const DadosContato = ({ navigation }) => {
                 <TouchableHighlight
                   activeOpacity={0.6}
                   underlayColor="#DDDDDD"
-                  onPress={() => navigation.navigate("DadosPessoais", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  onPress={() => navigation.navigate("DadosLocais", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
                 </TouchableHighlight>
               </View>

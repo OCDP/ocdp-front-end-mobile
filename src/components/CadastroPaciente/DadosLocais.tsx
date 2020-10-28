@@ -159,6 +159,7 @@ const DadosLocais = ({ navigation }) => {
 
               <ScrollView>
                 <>
+                <View style={{ flex: 0.88, alignItems: "center" }}>
                   <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                       <View style={{ flex: 0.8 }}>
@@ -199,7 +200,8 @@ const DadosLocais = ({ navigation }) => {
                           setBairro({ id: e["id"], nome: e["text"] })
                         }}
                       />
-                    </View> </>
+                    </View> 
+                    </>
                   }
                   <View style={styles.testeInputCss}>
                     <View>
@@ -212,6 +214,7 @@ const DadosLocais = ({ navigation }) => {
                       />
                     </View>
                   </View>
+                </View>
                 </>
               </ScrollView>
             </View>

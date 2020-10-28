@@ -13,7 +13,7 @@ export default class DadosPessoaisClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.nomePaciente || !this.dataNascimento || !this.sexo || !this.cpf || this.cpf.length == 14 || !this.nomeMae){
+        if(!this.nomePaciente || !this.dataNascimento || !this.sexo || !this.cpf || this.cpf.length != 14 || !this.nomeMae){
             status = "erro";
         }
         return status;

@@ -14,7 +14,7 @@ import {
   Radio,
 } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
-import { View, StyleSheet, Alert, BackHandler } from "react-native";
+import { View, StyleSheet, Alert, BackHandler, KeyboardAvoidingView, TouchableHighlight } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
@@ -24,6 +24,8 @@ import LocaisContext from "../contexts/LocaisContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import DadosAcompanhamentoClass from "../classes/DadosAcompanhamentoClass";
+import PageContainer from "./PageContainer";
+import PacienteContext from "../contexts/PacienteContext";
 
 const DATA = [
   {
@@ -49,7 +51,10 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   const [nomesAtendidosSelect, setnomesAtendidosSelect] = React.useState('');
   const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-
+  const {
+    acomp,
+    id,
+  } = useContext(PacienteContext);
   useEffect(() => {
     async function resetarBotao() {
       setBloqBotaoProximo(true);
@@ -149,64 +154,62 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
               </View>
               <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
-              </View>
-              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
-              </View>
             </View>
             <View style={{ flex: 1 }}>
 
               <ScrollView>
-                <Layout style={styles.container}>
-                  <View style={styles.lineContent}>
-                    <RadioGroup
-                      selectedIndex={selectedIndex || idNovoAcomp}
-                      onChange={(index) => {
-                        setSelectedIndex(index)
-                      }}
-                    >
-                      {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
-                        <Radio text="Intervenção"></Radio>
-                      ) : (
-                          <></>
-                        )}
-                      <Radio text="Acompanhamento"></Radio>
-                    </RadioGroup>
-                  </View>
-
-                  <View style={styles.lineContent}>
-                    <View>
-                      <View
-                        style={{
-                          marginHorizontal: 16,
+                <View style={{ flex: 0.88, alignItems: "center" }}>
+                  <Layout style={styles.container}>
+                    <View style={styles.lineContent}>
+                      <RadioGroup
+                        selectedIndex={selectedIndex || idNovoAcomp}
+                        onChange={(index) => {
+                          setSelectedIndex(index)
                         }}
                       >
-                        <View>
-                          <Text appearance="hint">
-                            Selecione o local em que está sendo atendido
+                        {usuarioLogado.nivelAtencao === "SECUNDARIA" ? (
+                          <Radio text="Intervenção"></Radio>
+                        ) : (
+                            <></>
+                          )}
+                        <Radio text="Acompanhamento"></Radio>
+                      </RadioGroup>
+                    </View>
+
+                    <View style={styles.lineContent}>
+                      <View>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View>
+                            <Text appearance="hint">
+                              Selecione o local em que está sendo atendido
                 </Text>
-                        </View>
-                        <View style={{ marginVertical: 8 }}>
-                          <Select
-                            data={tiposLocaisAtendido}
-                            placeholder="Selecionar um tipo"
-                            onSelect={(e) => tipoAtendidoActions(e["text"])}
-                            selectedOption={{ text: tipoAtendido }}
-                          />
-                        </View>
-                        <View>
-                          <Select
-                            disabled={tipoAtendido ? false : true}
-                            data={nomesAtendidosAll}
-                            placeholder="Local em que está sendo atendido"
-                            onSelect={(e) => nomeAtendidoActions(e["text"])}
-                            selectedOption={{ text: nomesAtendidosSelect }}
-                          />
+                          </View>
+                          <View style={{ marginVertical: 8 }}>
+                            <Select
+                              data={tiposLocaisAtendido}
+                              placeholder="Selecionar um tipo"
+                              onSelect={(e) => tipoAtendidoActions(e["text"])}
+                              selectedOption={{ text: tipoAtendido }}
+                            />
+                          </View>
+                          <View>
+                            <Select
+                              disabled={tipoAtendido ? false : true}
+                              data={nomesAtendidosAll}
+                              placeholder="Local em que está sendo atendido"
+                              onSelect={(e) => nomeAtendidoActions(e["text"])}
+                              selectedOption={{ text: nomesAtendidosSelect }}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                </Layout>
+                  </Layout>
+                </View>
               </ScrollView>
             </View>
             <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
@@ -235,9 +238,9 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    marginVertical: 8,
-    paddingHorizontal: 32
+    // width: "100%",
+    // marginVertical: 8,
+    // paddingHorizontal: 32
   },
   lineContent: {
     width: "100%",
@@ -246,12 +249,25 @@ const styles = StyleSheet.create({
   heightInput: {
     height: 40,
   },
-  picker: {
-    width: "100%",
-    display: "flex",
-    paddingHorizontal: 8,
-    paddingTop: 8,
+  view: {
+    flex: 1,
+    flexDirection: "column",
   },
+  picker: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  button: {
+    marginHorizontal: 16,
+  },
+  testeInputCss: {
+    flex: 1,
+    width: '80%',
+    paddingVertical: 10
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start'
+  }
 });
 
 export default withStyles(DadosAcompanhamento, (theme) => ({

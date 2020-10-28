@@ -12,7 +12,7 @@ export default class HipoteseDiagnosticoClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        if(!this.confirmaRastreamento || !this.observacao || this.hipoteseDiagnostico){
+        if(!this.confirmaRastreamento || !this.observacao || !this.hipoteseDiagnostico){
             status = "erro";
         }
         return status;

@@ -14,7 +14,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
-import { View, StyleSheet, Button, BackHandler, Alert } from "react-native";
+import { View, StyleSheet, Button, BackHandler, Alert, KeyboardAvoidingView, TouchableHighlight } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import apiFunc from "../services/api";
@@ -28,6 +28,7 @@ import CadastroCondutaClass from "../classes/CadastroCondutaClass";
 import LesoesRegioesContext from "../contexts/LesoesRegioesContext";
 import PacienteContext from "../contexts/PacienteContext";
 import { useLoading } from "../contexts/AppContext";
+import PageContainer from "./PageContainer";
 
 const DATA = [
   {
@@ -504,13 +505,13 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
                 <TouchableHighlight
                   activeOpacity={0.6}
                   underlayColor="#DDDDDD"
-                  onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  onPress={() => navigation.navigate("MapeamentoSintomas", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
                 <TouchableHighlight onPress={() => verificaCadastroConsulta()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
-                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Enviar</Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -528,17 +529,21 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   lineContent: {
+    flex:1,
     width: "100%",
-    marginVertical: 2,
+    marginVertical: 8,
   },
   heightInput: {
     height: 40,
   },
   picker: {
+    flex: 1,
     width: "100%",
-    display: "flex",
-    paddingHorizontal: 8,
-    paddingTop: 8,
+    justifyContent: "space-between",
+  },
+  view: {
+    flex: 1,
+    flexDirection: "column",
   },
   boxDatePicker: {
     marginHorizontal: 8,
@@ -553,6 +558,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
   },
+  button: {
+    marginHorizontal: 16,
+  },
+  
 });
 
 export default withStyles(CadastroConduta, (theme) => ({
