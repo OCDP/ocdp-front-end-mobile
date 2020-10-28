@@ -377,7 +377,11 @@ const DadosPessoais = ({ navigation }) => {
                   <TouchableHighlight
                     activeOpacity={0.6}
                     underlayColor="#DDDDDD"
-                    onPress={() => console.log("alo")} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                    onPress={() => navigation.dispatch(
+                      CommonActions.reset({
+                        routes: [{ name: "Home" }],
+                      })
+                    )} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
                     <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
                   </TouchableHighlight>
                 </View>

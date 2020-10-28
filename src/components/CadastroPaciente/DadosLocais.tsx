@@ -15,20 +15,33 @@ import { user, emailIcon, phone } from "../../assets/Icons";
 import axios from 'axios'
 import PageContainer from "../PageContainer";
 import DadosLocaisClass from "../../classes/DadosLocaisClass";
+import { cos } from "react-native-reanimated";
 const DadosLocais = ({ navigation }) => {
   const { cidade, setCidade, bairro, setBairro, endereco, setEndereco } = useContext(PacienteContext);
 
   const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const [cidades, setCidades] = useState([]);
   const [bairros, setBairros] = useState([]);
+  const [bairroInput, setBairroInput] = useState("");
+  const [complementoInput, setComplementoInput] = useState("");
+  const [enderecoInput, setEnderecoInput] = useState("");
+  const [cidadeInput, setCidadeInput] = useState("");
   const [, setLoading] = useLoading();
   const [cep, setCep] = useState("");
   const { bloqBotaoProximo, setBloqBotaoProximo, auxBloqBotaoProximo, setAuxBloqBotaoProximo,
     auxBloqBotaoProximo2, setAuxBloqBotaoProximo2 } = useContext(BotaoContext)
   const { idNovoAcomp } = useContext(NovoAcompContext)
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-  const {acomp} = React.useContext(PacienteContext);
+  const { acomp } = React.useContext(PacienteContext);
   const [lembraDoCep, setLembraDoCep] = useState(true);
+
+  function limparValoresInputLembroCPF(){
+    setBairroInput("");
+    setCidadeInput("");
+    setComplementoInput("");
+    setEnderecoInput("");
+    setCep("");
+  }
 
   async function pesquisarCEP() {
     try {
@@ -37,9 +50,12 @@ const DadosLocais = ({ navigation }) => {
       if (resp.data.uf != "GO") {
         alert("Esse CEP é referente à " + resp.data.uf)
       } else {
-        setEndereco(resp.data.logradouro);
+        setCidadeInput(resp.data.cidade);
+        setEnderecoInput(resp.data.logradouro);
+        setBairroInput(resp.data.bairro);
+        setComplementoInput(resp.data.complemento);
         setCidade(resp.data.localidade);
-        setBairro(resp.data.bairro);
+        setBairros(resp.data.bairro);
       }
     } catch (err) {
       console.log("erro na busca do cep", err)
@@ -47,9 +63,27 @@ const DadosLocais = ({ navigation }) => {
   }
 
   function verificaDadosLocais() {
-    const resp = new DadosLocaisClass(cidade, bairro, endereco).retornaValidacao();
+    // let bairroIdentificado = {};
+    // let cidadeIdentificado = {};
+    // for(let i of bairros){
+    //   if(i.text == bairroInput){
+    //     bairroIdentificado = i;
+    //   }
+    // }
+    // for(let i of cidades){
+    //   if(i.text == cidadeInput){
+    //     cidadeIdentificado = i;
+    //   }
+    // }
+    // if(bairroIdentificado == {}) { return alert("bairro não identificado") } 
+    // if(cidadeIdentificado == {}) { return alert("cidade não identificada") } 
+    let verificaEnd = enderecoInput + " " + complementoInput;
+    const resp = lembraDoCep ?
+                 new DadosLocaisClass(cidadeInput, bairroInput, verificaEnd).retornaValidacao() :
+                 new DadosLocaisClass(cidade, bairro, verificaEnd).retornaValidacao()
     console.log("resp", resp)
     if (resp == "sucesso") {
+      setEndereco(enderecoInput + " " + complementoInput);
       navigation.navigate("DadosContato", { navigation: navigation });
     }
   }
@@ -159,62 +193,95 @@ const DadosLocais = ({ navigation }) => {
 
               <ScrollView>
                 <>
-                <View style={{ flex: 0.88, alignItems: "center" }}>
-                  <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <View style={{ flex: 0.8 }}>
-                        <Input
-                          placeholder="Pesquisar CEP"
-                          icon={user}
-                          value={cep}
-                          onChangeText={setCep}
+                  <View style={{ flex: 0.88, alignItems: "center" }}>
+                    <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
+                      <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 0.8 }}>
+                          <Input
+                            placeholder="Pesquisar CEP"
+                            icon={user}
+                            value={cep}
+                            onChangeText={setCep}
+                          />
+                        </View>
+                        <View style={{ flex: 0.2 }}>
+                          <TouchableHighlight style={{ alignItems: 'center', justifyContent: 'center' }} underlayColor={"black"} onPress={() => pesquisarCEP()}>
+                            <Icon size={26} name={"search"} color="white" />
+                          </TouchableHighlight>
+                        </View>
+                      </View>
+                      <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <CheckBox value={lembraDoCep} onValueChange={() => {
+                          setLembraDoCep(!lembraDoCep);
+                          limparValoresInputLembroCPF();
+                        }} />
+                        <Text>Lembra do CEP</Text>
+                      </View>
+                    </View>
+                    {lembraDoCep ? <>
+                      <View style={styles.testeInputCss}>
+                        <View>
+                          <Input
+                            placeholder="Cidade"
+                            icon={user}
+                            value={cidadeInput}
+                            onChangeText={setCidadeInput}
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.testeInputCss}>
+                        <View>
+                          <Input
+                            placeholder="Bairro"
+                            icon={user}
+                            value={bairroInput}
+                            onChangeText={setBairroInput}
+                          />
+                        </View>
+                      </View>
+                    </> : <>
+                      <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
+                        <Select
+                          data={cidades}
+                          placeholder="selecionar cidade"
+                          selectedOption={{ text: cidade }}
+                          onSelect={(e) => setCidade(e["text"])}
                         />
                       </View>
-                      <View style={{ flex: 0.2 }}>
-                        <TouchableHighlight style={{ alignItems: 'center', justifyContent: 'center' }} underlayColor={"black"} onPress={() => pesquisarCEP()}>
-                          <Icon size={26} name={"search"} color="white" />
-                        </TouchableHighlight>
+                      <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
+                        <Select
+                          data={bairros}
+                          disabled={bairros.length > 0 ? false : true}
+                          placeholder="selecionar bairro"
+                          selectedOption={{ text: bairro.nome }}
+                          onSelect={(e) => setBairro({ id: e["id"], nome: e["text"] })}
+                        />
+                      </View>
+                    </>}
+                    <View style={styles.testeInputCss}>
+                      <View>
+                        <Input
+                          placeholder="Endereço Completo"
+                          icon={user}
+                          value={enderecoInput}
+                          onChangeText={setEnderecoInput}
+
+                        />
                       </View>
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <CheckBox value={lembraDoCep} onValueChange={setLembraDoCep} />
-                      <Text>Não lembra do CEP</Text>
-                    </View>
-                  </View>
-                  {!lembraDoCep && <>
-                    <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
-                      <Select
-                        data={cidades}
-                        placeholder="selecionar cidade"
-                        selectedOption={{ text: cidade }}
-                        onSelect={(e) => setCidade(e["text"])}
-                      />
-                    </View>
-                    <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
-                      <Select
-                        data={bairros}
-                        disabled={bairros.length > 0 ? false : true}
-                        placeholder="selecionar bairro"
-                        selectedOption={{ text: bairro.nome }}
-                        onSelect={(e) => {
-                          setBairro({ id: e["id"], nome: e["text"] })
-                        }}
-                      />
-                    </View> 
-                    </>
-                  }
-                  <View style={styles.testeInputCss}>
-                    <View>
-                      <Input
-                        placeholder="Endereço Completo"
-                        icon={user}
-                        value={endereco}
-                        onChangeText={setEndereco}
+                    <View style={styles.testeInputCss}>
+                      <View>
+                        <Input
+                          placeholder="Complemento"
+                          icon={user}
+                          value={complementoInput}
+                          onChangeText={setComplementoInput}
 
-                      />
+                        />
+                      </View>
                     </View>
                   </View>
-                </View>
+
                 </>
               </ScrollView>
             </View>
@@ -228,7 +295,7 @@ const DadosLocais = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
               <View style={{ flex: 1, marginHorizontal: 10 }}>
-                <TouchableHighlight 
+                <TouchableHighlight
                   onPress={() => verificaDadosLocais()}
                   style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
