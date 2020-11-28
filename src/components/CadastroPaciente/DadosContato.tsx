@@ -132,8 +132,8 @@ const DadosContato = ({ navigation }) => {
                         value={telCell}
                         onChangeText={setTelCell}
                         maxLength={11}
-                        textContentType={"telephoneNumber"}
-                        keyboardType={"phone-pad"}
+                        // textContentType={"telephoneNumber"}
+                       // keyboardType={"phone-pad"}
                         onBlur={() => {
                           if (validateTelefoneCelular(telCell) == false) {
                             alert("celular inválido");

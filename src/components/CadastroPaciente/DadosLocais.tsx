@@ -50,8 +50,8 @@ const DadosLocais = ({ navigation }) => {
       if (resp.data.uf != "GO") {
         alert("Esse CEP é referente à " + resp.data.uf)
       } else {
-        setCidadeInput(resp.data.cidade);
-        setEnderecoInput(resp.data.logradouro);
+        // setCidadeInput(resp.data.cidade);
+        // setEnderecoInput(resp.data.logradouro);
         setBairroInput(resp.data.bairro);
         setComplementoInput(resp.data.complemento);
         setCidade(resp.data.localidade);
@@ -78,12 +78,12 @@ const DadosLocais = ({ navigation }) => {
     // if(bairroIdentificado == {}) { return alert("bairro não identificado") } 
     // if(cidadeIdentificado == {}) { return alert("cidade não identificada") } 
     let verificaEnd = enderecoInput + " " + complementoInput;
-    const resp = lembraDoCep ?
-                 new DadosLocaisClass(cidadeInput, bairroInput, verificaEnd).retornaValidacao() :
-                 new DadosLocaisClass(cidade, bairro, verificaEnd).retornaValidacao()
+    const resp = new DadosLocaisClass(cidade, bairro, verificaEnd).retornaValidacao();
+    // lembraDoCep ?
+                //  new DadosLocaisClass(cidade, bairro, verificaEnd).retornaValidacao()
     console.log("resp", resp)
     if (resp == "sucesso") {
-      setEndereco(enderecoInput + " " + complementoInput);
+      setEndereco(verificaEnd);
       navigation.navigate("DadosContato", { navigation: navigation });
     }
   }
@@ -218,7 +218,7 @@ const DadosLocais = ({ navigation }) => {
                         <Text>Lembra do CEP</Text>
                       </View>
                     </View>
-                    {lembraDoCep ? <>
+                    {/* {lembraDoCep ? <>
                       <View style={styles.testeInputCss}>
                         <View>
                           <Input
@@ -239,7 +239,7 @@ const DadosLocais = ({ navigation }) => {
                           />
                         </View>
                       </View>
-                    </> : <>
+                    </> : <> */}
                       <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
                         <Select
                           data={cidades}
@@ -257,7 +257,7 @@ const DadosLocais = ({ navigation }) => {
                           onSelect={(e) => setBairro({ id: e["id"], nome: e["text"] })}
                         />
                       </View>
-                    </>}
+                    {/* </>} */}
                     <View style={styles.testeInputCss}>
                       <View>
                         <Input

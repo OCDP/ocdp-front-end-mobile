@@ -135,9 +135,10 @@ const DadosPessoais = ({ navigation }) => {
   function verificaDadosPessoais() {
     const resp = new DadosPessoaisClass(nome, dtNasci, sexo, cpf, nmMae).retornaValidacao();
     console.log("resp", resp)
-    // if (resp == "sucesso") {
+    if (resp == "sucesso") {
+      setIdNovoAcomp(2);
       navigation.navigate("DadosLocais", { navigation: navigation });
-    // }
+    }
   }
 
   return (

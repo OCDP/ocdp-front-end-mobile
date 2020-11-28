@@ -109,7 +109,7 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
   
   function verificaCadastroConsulta(){
-    const resp = new CadastroCondutaClass(nomesLocaisAtendido, nomesLocaisEncaminhado, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
+    const resp = new CadastroCondutaClass(idNovoAcomp, nomesLocaisAtendido, nomesLocaisEncaminhado, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
     console.log("resp", resp)
     if (resp == "sucesso") {
       setarValores();
