@@ -250,7 +250,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
-            <Text>Envie os dados dos resultados:</Text>
+            <Text>Anexe aqui os dados dos resultados:</Text>
             {hasPermission && canOpen ? (
               <Modal
                 backdropStyle={styles.backdrop}

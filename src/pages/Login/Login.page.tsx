@@ -12,13 +12,14 @@ import apiFunc from "../../services/api";
 import Logo from "../../assets/vectors/Logo.jsx";
 import UsuarioLogadoContext from "../../contexts/UsuarioLogadoContext";
 import AppContext, { useLoading } from "../../contexts/AppContext";
+import LoginValues from '../../LoginValues'
 
 export default function ({ navigation }) {
   // senha primaria: p@55w0Rd
   // senha secundaria: teste123
 
-  const [login, setLogin] = useState("");
-  const [pswd, setPswd] = useState("");
+  const [login, setLogin] = useState(LoginValues().usuario);
+  const [pswd, setPswd] = useState(LoginValues().senha);
 
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const { setUsuarioLogado } = useContext(UsuarioLogadoContext);

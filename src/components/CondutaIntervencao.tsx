@@ -11,16 +11,22 @@ import {
   CheckBox,
 } from "@ui-kitten/components";
 
-import { View, StyleSheet, BackHandler, Alert, Button } from "react-native";
+import { View, StyleSheet, BackHandler, Alert, Button, KeyboardAvoidingView, TouchableHighlight } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText, calendar, user } from "../assets/Icons";
 import moment from "moment";
+import apiFunc from "../services/api";
 import LocaisContext from "../contexts/LocaisContext";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
 import PacienteContext from "../contexts/PacienteContext";
+import LesoesRegioesContext from "../contexts/LesoesRegioesContext"
+import CondutaIntervencaoClass from "../classes/CondutaIntervencaoClass";
+import PostFatoresContext from "../contexts/PostFatoresContext";
+import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
+import PageContainer from "./PageContainer";
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -32,15 +38,10 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     false
   );
   const [checked, setChecked] = React.useState([false, false, false, false]);
-  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-  const { cpf } = React.useContext(PacienteContext);
   const [obs0, setObs0] = React.useState("");
   const [obs1, setObs1] = React.useState("");
   const [obs2, setObs2] = React.useState("");
   const [obs3, setObs3] = React.useState("");
-  const { procedimento, setProcedimento } = React.useContext(
-    IntervencaoContext
-  );
   const [dataAcompState, setDataAcompState] = React.useState("");
   const [dataTratState, setDataTratState] = React.useState("");
   const { setBloqBotaoProximo } = useContext(BotaoContext);
@@ -57,7 +58,24 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento,
     setDataSugeridaTratamento,
   } = React.useContext(LocaisContext);
-  0;
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
+  const {
+    nomesLocaisAtendido,
+  } = useContext(LocaisContext);
+  const {
+    confirmaRastreamento,
+    hipoteseDiagnostico,
+    observacao,
+    procedimento,
+    setProcedimento
+  } = useContext(IntervencaoContext)
+  const {
+    nomesLocaisEncaminhado,
+  } = useContext(LocaisContext);
+  const {
+    acomp,
+    id,
+  } = useContext(PacienteContext);
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
   };
@@ -73,6 +91,76 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
     setDataSugeridaAcompanhamento(moment(dt).format("YYYY-MM-DD HH:mm:ss"));
     setDataAcompState(moment(dt).format("DD/MM/YYYY"));
   };
+
+  async function verificaCondutaIntervencao() {
+    const resp = new CondutaIntervencaoClass(procedimento, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      let arrObj = {
+        atendimento: {
+          dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+          id: "",
+          localAtendimentoId: nomesLocaisAtendido.id,
+          localEncaminhadoId: nomesLocaisEncaminhado.id,
+          pacienteId: id,
+          tipoAtendimento: "INTERVENCAO",
+          usuarioId: usuarioLogado.id
+        },
+        confirmaRastreamento: confirmaRastreamento,
+        hipoteseDiagnostico: hipoteseDiagnostico,
+        observacao: observacao,
+        procedimentos: procedimento
+      }
+      await enviarPost(arrObj);
+    }
+  }
+
+  async function enviarPost(arrObj) {
+    // console.log(id, arrObj)if(id == 0){
+    try {
+      let postJson = JSON.stringify(arrObj);
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/intervencao/salvar", postJson);
+      Alert.alert(
+        'Enviado com sucesso',
+        "Voltar para tela inicial",
+        [
+          {
+            text: 'Ok', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }
+          },
+        ],
+        { cancelable: false },
+      );
+    } catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Problema de envio',
+        "Voltar para tela inicial?",
+        [
+          {
+            text: 'Sim', onPress: () => {
+              navigation.dispatch(
+                CommonActions.reset({
+                  routes: [{ name: "Home" }],
+                })
+              );
+            }
+          },
+          { text: 'Tentar Novamente', style: 'cancel' },
+
+        ],
+        { cancelable: false },
+      );
+    }
+  }
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -118,211 +206,249 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   }, [checked, obs0, obs1, obs2, obs3]);
 
   return (
-    <Layout style={styles.container}>
-      <ScrollView style={styles.container}>
-        <View>
-          <View>
-            <View style={styles.divider}>
-              <View style={styles.contentBox}>
-                <View>
-                  <Text appearance="hint" style={{ marginBottom: 16 }}>
-                    Procedimentos
-                  </Text>
-                </View>
-                <View style={{ marginBottom: 8 }}>
-                  <Text appearance="hint" category="h6">
-                    Biópsia
-                  </Text>
-                </View>
-                <View style={styles.toggleInit}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Toggle
-                      text={`Biópsia incisonal: ${checked[0]}`}
-                      checked={checked[0]}
-                      onChange={() => onCheckedChangeToggle(0)}
-                    />
-                  </View>
-                  <View style={{ width: "100%" }}>
-                    <Input
-                      disabled={checked[0] ? false : true}
-                      icon={editText}
-                      size="large"
-                      placeholder="Observação biópsia incisonal"
-                      value={obs0}
-                      onChangeText={setObs0}
-                    />
-                  </View>
-                </View>
-                <View style={styles.toggleInit}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Toggle
-                      text={`Biópsia exisional: ${checked[1]}`}
-                      checked={checked[1]}
-                      onChange={() => onCheckedChangeToggle(1)}
-                    />
-                  </View>
-                  <View style={{ width: "100%" }}>
-                    <Input
-                      disabled={checked[1] ? false : true}
-                      icon={editText}
-                      size="large"
-                      placeholder="Observação biópsia exisional"
-                      value={obs1}
-                      onChangeText={setObs1}
-                    />
-                  </View>
-                </View>
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-
-              <View style={styles.contentBox}>
-                <View style={{ marginBottom: 8 }}>
-                  <Text appearance="hint" category="h6">
-                    Citologia
-                  </Text>
-                </View>
-                <View style={styles.toggleInit}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Toggle
-                      text={`Citologia: ${checked[2]}`}
-                      checked={checked[2]}
-                      onChange={() => onCheckedChangeToggle(2)}
-                    />
-                  </View>
-                  <View style={{ width: "100%" }}>
-                    <Input
-                      disabled={checked[2] ? false : true}
-                      icon={editText}
-                      size="large"
-                      placeholder="Observação citologia"
-                      value={obs2}
-                      onChangeText={setObs2}
-                    />
-                  </View>
-                </View>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-
-              <View style={styles.contentBox}>
-                <View style={{ marginBottom: 8 }}>
-                  <Text appearance="hint" category="h6">
-                    Outros
-                  </Text>
-                </View>
-                <View style={styles.toggleInit}>
-                  <View style={{ marginBottom: 4 }}>
-                    <Toggle
-                      text={`Outros: ${checked[3]}`}
-                      checked={checked[3]}
-                      onChange={() => onCheckedChangeToggle(3)}
-                    />
-                  </View>
-                  <View style={{ width: "100%" }}>
-                    <Input
-                      disabled={checked[3] ? false : true}
-                      icon={editText}
-                      size="large"
-                      placeholder="Observação outros"
-                      value={obs3}
-                      onChangeText={setObs3}
-                    />
-                  </View>
-                </View>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
               </View>
             </View>
-          </View>
-        </View>
+            <View style={{ flex: 1 }}>
 
-        <View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <Text
-                  style={{
-                    marginBottom: 4,
-                  }}
-                  appearance="hint"
-                >
-                  Retorno para:
+              <Layout style={styles.container}>
+                <ScrollView style={styles.container}>
+                  <View>
+                    <View>
+                      <View style={styles.divider}>
+                        <View style={styles.contentBox}>
+                          <View>
+                            <Text appearance="hint" style={{ marginBottom: 16 }}>
+                              Procedimentos
+                  </Text>
+                          </View>
+                          <View style={{ marginBottom: 8 }}>
+                            <Text appearance="hint" category="h6">
+                              Biópsia
+                  </Text>
+                          </View>
+                          <View style={styles.toggleInit}>
+                            <View style={{ marginBottom: 4 }}>
+                              <Toggle
+                                text={`Biópsia incisonal: `}
+                                checked={checked[0]}
+                                onChange={() => onCheckedChangeToggle(0)}
+                              />
+                            </View>
+                            <View style={{ width: "100%" }}>
+                              <Input
+                                disabled={checked[0] ? false : true}
+                                icon={editText}
+                                size="large"
+                                placeholder="Observação biópsia incisonal"
+                                value={obs0}
+                                onChangeText={setObs0}
+                              />
+                            </View>
+                          </View>
+                          <View style={styles.toggleInit}>
+                            <View style={{ marginBottom: 4 }}>
+                              <Toggle
+                                text={`Biópsia exisional: `}
+                                checked={checked[1]}
+                                onChange={() => onCheckedChangeToggle(1)}
+                              />
+                            </View>
+                            <View style={{ width: "100%" }}>
+                              <Input
+                                disabled={checked[1] ? false : true}
+                                icon={editText}
+                                size="large"
+                                placeholder="Observação biópsia exisional"
+                                value={obs1}
+                                onChangeText={setObs1}
+                              />
+                            </View>
+                          </View>
+                        </View>
+
+                        <View style={styles.contentBox}>
+                          <View style={{ marginBottom: 8 }}>
+                            <Text appearance="hint" category="h6">
+                              Citologia
+                  </Text>
+                          </View>
+                          <View style={styles.toggleInit}>
+                            <View style={{ marginBottom: 4 }}>
+                              <Toggle
+                                text={`Citologia: `}
+                                checked={checked[2]}
+                                onChange={() => onCheckedChangeToggle(2)}
+                              />
+                            </View>
+                            <View style={{ width: "100%" }}>
+                              <Input
+                                disabled={checked[2] ? false : true}
+                                icon={editText}
+                                size="large"
+                                placeholder="Observação citologia"
+                                value={obs2}
+                                onChangeText={setObs2}
+                              />
+                            </View>
+                          </View>
+                        </View>
+
+                        <View style={styles.contentBox}>
+                          <View style={{ marginBottom: 8 }}>
+                            <Text appearance="hint" category="h6">
+                              Outros
+                  </Text>
+                          </View>
+                          <View style={styles.toggleInit}>
+                            <View style={{ marginBottom: 4 }}>
+                              <Toggle
+                                text={`Outros: `}
+                                checked={checked[3]}
+                                onChange={() => onCheckedChangeToggle(3)}
+                              />
+                            </View>
+                            <View style={{ width: "100%" }}>
+                              <Input
+                                disabled={checked[3] ? false : true}
+                                icon={editText}
+                                size="large"
+                                placeholder="Observação outros"
+                                value={obs3}
+                                onChangeText={setObs3}
+                              />
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              marginBottom: 4,
+                            }}
+                            appearance="hint"
+                          >
+                            Retorno para:
                 </Text>
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Acompanhamento"
-                    checked={activeCheckedAcompanhamento}
-                    onChange={setActiveCheckedAcompanhamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida tratamento"
-                    icon={user}
-                    value={dataAcompState}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedAcompanhamento ? false : true}
-                    title="Escolher data"
-                    onPress={showDatePicker}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
-                    onCancel={() => hideDatePicker}
-                  />
-                </View>
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Acompanhamento"
+                              checked={activeCheckedAcompanhamento}
+                              onChange={setActiveCheckedAcompanhamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida tratamento"
+                              icon={user}
+                              value={dataAcompState}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedAcompanhamento ? false : true}
+                              title="Escolher data"
+                              onPress={showDatePicker}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={isDatePickerVisible}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                              onCancel={() => hideDatePicker}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Tratamento de lesão"
+                              checked={activeCheckedTratamento}
+                              onChange={setActiveCheckedTratamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida tratamento"
+                              icon={user}
+                              value={dataTratState}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedTratamento ? false : true}
+                              title="Escolher data"
+                              onPress={showDatePicker}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={isDatePickerVisible}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataTratamento(a)}
+                              onCancel={() => hideDatePicker}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+              </Layout>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => navigation.navigate("HipoteseDiagnostico", { navigation: navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaCondutaIntervencao()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
               </View>
             </View>
-          </View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Tratamento de lesão"
-                    checked={activeCheckedTratamento}
-                    onChange={setActiveCheckedTratamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida tratamento"
-                    icon={user}
-                    value={dataTratState}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedTratamento ? false : true}
-                    title="Escolher data"
-                    onPress={showDatePicker}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataTratamento(a)}
-                    onCancel={() => hideDatePicker}
-                  />
-                </View>
-              </View>
-            </View>
+
           </View>
         </View>
-      </ScrollView>
-    </Layout>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 
@@ -360,6 +486,25 @@ const styles = StyleSheet.create({
     alignContent: "flex-start",
     alignItems: "flex-start",
   },
+  view: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  picker: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  button: {
+    marginHorizontal: 16,
+  },
+  testeInputCss: {
+    flex: 1,
+    width: '80%',
+    paddingVertical: 10
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start'
+  }
 });
 
 export default withStyles(HipoteseDiagnostico, (theme) => ({

@@ -8,12 +8,15 @@ import {
   Radio,
 } from "@ui-kitten/components";
 
-import { View, StyleSheet, Alert, BackHandler } from "react-native";
+import { View, StyleSheet, Alert, BackHandler, KeyboardAvoidingView, TouchableHighlight } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { editText } from "../assets/Icons";
 import IntervencaoContext from "../contexts/IntervencaoContext";
 import BotaoContext from "../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
+import HipoteseDiagnosticoClass from "../classes/HipoteseDiagnosticoClass";
+import PageContainer from "./PageContainer";
+import PacienteContext from "../contexts/PacienteContext";
 
 const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [value, setValue] = React.useState(null);
@@ -21,104 +24,151 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
   const [selectedIndex, setSelectedIndex] = React.useState();
   const [confirmaSuspeita, setConfirmaSuspeita] = React.useState<boolean>()
   const { bloqBotaoProximo, setBloqBotaoProximo } = React.useContext(BotaoContext)
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  let {acomp} = React.useContext(PacienteContext);
   const { confirmaRastreamento,
-    setConfirmaRastreamento, 
+    setConfirmaRastreamento,
     observacao,
-    setObservacao, 
+    setObservacao,
     hipoteseDiagnostico,
-    setHipoteseDiagnostico 
+    setHipoteseDiagnostico
   } = React.useContext(IntervencaoContext)
 
-  useEffect(()=>{
-    async function resetarBotao(){
+  useEffect(() => {
+    async function resetarBotao() {
       setBloqBotaoProximo(true);
     }
     resetarBotao();
   }, [])
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(confirmaRastreamento && observacao && hipoteseDiagnostico){
+  useEffect(() => {
+    async function setarBotao() {
+      if (confirmaRastreamento && observacao && hipoteseDiagnostico) {
         setBloqBotaoProximo(false);
       }
     }
     setarBotao();
   }, [confirmaRastreamento, observacao, hipoteseDiagnostico])
 
+  
+  function verificaHipoteseDiagnostico() {
+    const resp = new HipoteseDiagnosticoClass(confirmaRastreamento, observacao, hipoteseDiagnostico).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      navigation.navigate("CondutaIntervencao", { navigation: navigation });
+    }
+  }
+
   const onCheckedChange = (index) => {
     setSelectedIndex(index);
     index == 0 ? setConfirmaRastreamento(true) : setConfirmaRastreamento(false);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
-    <Layout style={styles.container}>
-      <ScrollView style={styles.container}>
-        <View style={styles.lineContent}>
-          <View style={styles.boxDatePicker}>
-            <View style={styles.divider}>
-              <View>
-                <Text appearance="hint">Hipotese de diagnóstico</Text>
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View>
-                <Input
-                  icon={editText}
-                  size="large"
-                  placeholder="Texto sobre a hipótese de diagnóstico"
-                  value={value || hipoteseDiagnostico}
-                  onChangeText={(value)=>{
-                    setValue
-                    setHipoteseDiagnostico(value);
-                  }}
-                />
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
               </View>
             </View>
-            <View style={styles.divider}>
-              <View>
-                <Text appearance="hint">
-                  Confirma a suspeita do rastreamento?
+            <View style={{ flex: 1 }}>
+                <Layout style={styles.container}>
+                  <ScrollView style={styles.container}>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View style={styles.divider}>
+                          <View>
+                            <Text appearance="hint">Hipotese de diagnóstico</Text>
+                          </View>
+                          <View>
+                            <Input
+                              icon={editText}
+                              size="large"
+                              placeholder="Texto sobre a hipótese de diagnóstico"
+                              value={value || hipoteseDiagnostico}
+                              onChangeText={(value) => {
+                                setValue
+                                setHipoteseDiagnostico(value);
+                              }}
+                            />
+                          </View>
+                        </View>
+                        <View style={styles.divider}>
+                          <View>
+                            <Text appearance="hint">
+                              Confirma a suspeita do rastreamento?
                 </Text>
+                          </View>
+                          <View>
+                            <RadioGroup
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                paddingHorizontal: 16,
+                                height: 60,
+                              }}
+                              selectedIndex={selectedIndex}
+                              onChange={onCheckedChange}
+                            >
+                              <Radio text="SIM" />
+                              <Radio text="NÃO" />
+                            </RadioGroup>
+                          </View>
+                        </View>
+
+                        <View style={styles.divider}>
+                          <View>
+                            <Text appearance="hint">Observação</Text>
+                          </View>
+                          <View>
+                            <Input
+                              icon={editText}
+                              size="large"
+                              placeholder="Texto sobre a observação"
+                              value={value2 || observacao}
+                              onChangeText={(value2) => {
+                                setValue2
+                                setObservacao(value2);
+                              }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </ScrollView>
+                </Layout>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => navigation.navigate("DadosAcompanhamento", { navigation: navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
               </View>
-              <View>
-                <RadioGroup
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    paddingHorizontal: 16,
-                    height: 60,
-                  }}
-                  selectedIndex={selectedIndex}
-                  onChange={onCheckedChange}
-                >
-                  <Radio text="SIM" />
-                  <Radio text="NÃO" />
-                </RadioGroup>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaHipoteseDiagnostico()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
               </View>
             </View>
 
-            <View style={styles.divider}>
-              <View>
-                <Text appearance="hint">Observação</Text>
-              </View>
-              <View>
-                <Input
-                  icon={editText}
-                  size="large"
-                  placeholder="Texto sobre a observação"
-                  value={value2 || observacao}
-                  onChangeText={(value2)=>{
-                    setValue2
-                    setObservacao(value2);
-                  }}
-                />
-              </View>
-            </View>
           </View>
         </View>
-      </ScrollView>
-    </Layout>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 
@@ -151,6 +201,25 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
   },
+  view: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  picker: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  button: {
+    marginHorizontal: 16,
+  },
+  testeInputCss: {
+    flex: 1,
+    width: '80%',
+    paddingVertical: 10
+    // justifyContent: 'flex-start',
+    // alignItems: 'flex-start'
+  }
 });
 
 export default withStyles(HipoteseDiagnostico, (theme) => ({

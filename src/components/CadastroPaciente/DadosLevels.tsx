@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
-import { View, Alert, BackHandler } from "react-native";
+import { View, Alert, BackHandler, KeyboardAvoidingView } from "react-native";
 import { useStyleSheet, withStyles } from "@ui-kitten/components";
 import DadosLocais from "./DadosLocais";
 import DadosPessoais from "./DadosPessoais";
@@ -29,14 +29,31 @@ import HipoteseDiagnostico from "../HipoteseDiagnostico";
 import CondutaIntervencao from "../CondutaIntervencao";
 import IntervencaoContext from "../../contexts/IntervencaoContext";
 import BotaoContext from "../../contexts/BotoesContext";
+import { ScrollView } from "react-native-gesture-handler";
+import PageContainer from "../PageContainer/PageContainer";
 const DadosLevels = ({ navigation, themedStyle = null }) => {
   const styles = useStyleSheet({
     lineContent: {
       flex: 1,
-      marginVertical: 8,
+      marginVertical: 0,
     },
     heightInput: {
       height: 40,
+    }, 
+    container: {
+      flex: 1,
+    },
+    view: {
+      flex: 1,
+      flexDirection: "column",
+    },
+    picker: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "space-between",
+    },
+    button: {
+      marginHorizontal: 16,
     },
   });
 
@@ -89,7 +106,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
     telResp,
   } = useContext(PacienteContext);
   
-  const [, setLoading] = useLoading()
+  const [, setLoading] = useLoading();
   const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
   const [isErro, setIsErro] = React.useState(true);
   
@@ -101,6 +118,8 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   const btnStyle = {
+    display: "flex",
+    flex: 1,
     textAlign: "center",
     //position: fixed,
     botton: 0,
@@ -122,6 +141,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   delete nomesLocaisAtendido.text;
   delete nomesLocaisEncaminhado.text;
   let arrObj;
+  console.log("idNovoAcomp", idNovoAcomp);
   if(idNovoAcomp == 2 || idNovoAcomp == 1){
     arrObj = {
       atendimento: {
@@ -150,7 +170,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
           localAtendimentoId: nomesLocaisAtendido.id,
           localEncaminhadoId: nomesLocaisEncaminhado.id,
           pacienteId: id,
-          tipoAtendimento: "ACOMPANHAMENTO",
+          tipoAtendimento: "INTERVENCAO",
           usuarioId: usuarioLogado.id
         },
         confirmaRastreamento: confirmaRastreamento,
@@ -163,6 +183,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   };
 
   async function enviarPost(arrObj, id) {
+    // console.log(id, arrObj)
     if(id == 1 || id == 2){
       try {
         setLoading(true)
@@ -250,6 +271,7 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }
 
   useEffect(() => {
+    // console.log("idNovoAcomp", idNovoAcomp)
     setAuxBloqBotaoProximo(true);
     setIsErro(false)
     flush;
@@ -305,99 +327,16 @@ const DadosLevels = ({ navigation, themedStyle = null }) => {
   }, [])
 
   return (
-    <View style={styles.lineContent}>
-      <View style={{ flex: 1 }}>
-          <ProgressSteps
-          style={{ flex: 1 }}
-          activeStepIconColor={themedStyle.primary}
-          completedProgressBarColor={themedStyle.primary}
-          activeStepIconBorderColor={themedStyle.primary}
-          borderWidth={2}
-          completedStepIconColor={themedStyle.primary}
-          labelColor={themedStyle.primaryDark}
-          activeLabelColor={themedStyle.primary}
-          activeStepNumColor="#fff"
-          activeStep = {activeStepBtn}
-        >
-          <ProgressStep
-            style={{ flex: 1 }}
-            label="Passo 1"
-            nextBtnText="avançar"
-            nextBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            // nextBtnDisabled={bloqBotaoProximo}
-            errors={isErro}
-            onNext = {async () => {
-              if(acomp === false){
-                let resp = await postPacientes();
-                console.log(resp)
-                resetarBotao()
-              }
-              else resetarBotao();
-            }}
-            >
-            <View style={{ flex: 1, alignItems: "center" }}>
+    <>
             {acomp === true ? (
                 <DadosAcompanhamento navigation={navigation} />
               ) : (
                 <>
-                  <DadosLocais navigation={navigation} />
                   <DadosPessoais navigation={navigation} />
+                  {/* <DadosLocais navigation={navigation}></DadosLocais> */}
                 </>
               )}
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Passo 2"
-            nextBtnText="avançar"
-            previousBtnText="voltar"
-            previousBtnStyle={btnStyle}
-            nextBtnTextStyle={buttonTextStyle}
-            previousBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
-            onPrevious = {async ()=> 
-
-              setBloqBotaoProximo(false)
-            }
-          >
-            <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
-                <MapeamentoSintomas navigation={navigation} />
-              ): (<HipoteseDiagnostico navigation={navigation}/>
-              )}
-            </View>
-          </ProgressStep>
-          <ProgressStep
-            label="Passo 3"
-            nextBtnText="avançar"
-            previousBtnText="voltar"
-            previousBtnStyle={btnStyle}
-            nextBtnTextStyle={buttonTextStyle}
-            previousBtnTextStyle={buttonTextStyle}
-            nextBtnStyle={btnStyle}
-            finishBtnText="concluir"
-            nextBtnDisabled={bloqBotaoProximo}
-            onNext = {() => resetarBotao()}
-            onPrevious = { ()=> {
-                setBloqBotaoProximo(false)
-                flushLesoesRegioes();
-                flushPostFatores();
-              }
-            }
-            onSubmit={() => resetNav()}
-          >
-            <View style={{ alignItems: "center" }}>
-              {idNovoAcomp == 1 || idNovoAcomp == 2 ? (
-                <CadastroConduta navigation={navigation} />
-              ): (<CondutaIntervencao navigation={navigation}/>
-              )}
-            </View>
-          </ProgressStep>
-        </ProgressSteps>
-      </View>
-    </View>
+      </>
   );
 };
 
