@@ -13,10 +13,9 @@ export default class CadastroCondutaClass{
 
     retornaValidacao(){
         let status = "sucesso"
-        console.log(this.idNovoAcomp);
         if((this.idNovoAcomp == 2 &&
-            this.nomesLocaisAtendido.length == undefined ||
-            this.nomesLocaisEncaminhado.length == undefined) ||
+            this.nomesLocaisAtendido.length != undefined ||
+            this.nomesLocaisEncaminhado.length != undefined) ||
             (this.idNovoAcomp == 1 && this.nomesLocaisEncaminhado.length == undefined)){
             status = "erro";
         }

@@ -242,7 +242,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                           <View style={styles.toggleInit}>
                             <View style={{ marginBottom: 4 }}>
                               <Toggle
-                                text={`Biópsia incisonal: ${checked[0]}`}
+                                text={`Biópsia incisonal: `}
                                 checked={checked[0]}
                                 onChange={() => onCheckedChangeToggle(0)}
                               />
@@ -261,7 +261,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                           <View style={styles.toggleInit}>
                             <View style={{ marginBottom: 4 }}>
                               <Toggle
-                                text={`Biópsia exisional: ${checked[1]}`}
+                                text={`Biópsia exisional: `}
                                 checked={checked[1]}
                                 onChange={() => onCheckedChangeToggle(1)}
                               />
@@ -288,7 +288,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                           <View style={styles.toggleInit}>
                             <View style={{ marginBottom: 4 }}>
                               <Toggle
-                                text={`Citologia: ${checked[2]}`}
+                                text={`Citologia: `}
                                 checked={checked[2]}
                                 onChange={() => onCheckedChangeToggle(2)}
                               />
@@ -315,7 +315,7 @@ const HipoteseDiagnostico = ({ navigation, themedStyle = null }) => {
                           <View style={styles.toggleInit}>
                             <View style={{ marginBottom: 4 }}>
                               <Toggle
-                                text={`Outros: ${checked[3]}`}
+                                text={`Outros: `}
                                 checked={checked[3]}
                                 onChange={() => onCheckedChangeToggle(3)}
                               />

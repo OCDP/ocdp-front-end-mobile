@@ -264,7 +264,6 @@ const DadosPessoais = ({ navigation }) => {
                     <View style={styles.testeInputCss}>
                       <View>
                         <Input
-                          disabled={cpf?.length > 10 ? true : false}
                           placeholder="CPF"
                           icon={user}
                           onChangeText={(value) => onChangeCpf(value)}
