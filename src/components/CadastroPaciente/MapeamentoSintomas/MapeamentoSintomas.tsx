@@ -1,12 +1,11 @@
 import React, { useEffect, useContext } from "react";
-import { View, Alert, BackHandler } from "react-native";
+import { View, Alert, BackHandler, Modal } from "react-native";
 import {
   useStyleSheet,
   CheckBox,
   Text,
   Layout,
   Button,
-  Modal,
   ListItem,
   List,
   RadioGroup,
@@ -17,7 +16,7 @@ import { StyleSheet, ScrollView, TouchableHighlight,KeyboardAvoidingView } from 
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
 import FatoresContext from "../../../contexts/FatoresRiscoContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 import EmptyContent from "../../EmptyContent";
@@ -196,6 +195,17 @@ const MapeamentoSintomas = ({ navigation }) => {
       flex: 1,
       height: 36,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    txtHeader: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'blue',
+        width: 255,
+    },
   });
 
   useEffect(() => {
@@ -263,12 +273,12 @@ const MapeamentoSintomas = ({ navigation }) => {
   }
 
   const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
+    <Layout style={styles.modalContainer}>
       {listRegioes.map(({ id, nome }, j) => (
         <View key={j} style={styles.itemContainer}>
-          <TouchableOpacity onPress={() => subRegiaoActions(id, j)}>
+          <TouchableHighlight onPress={() => subRegiaoActions(id, j)}>
             <Text style={styles.textItem}>{nome}</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       ))}
     </Layout>
@@ -418,9 +428,11 @@ const MapeamentoSintomas = ({ navigation }) => {
         { cancelable: false }
       );
     }
+
   }
 
   function excluirRegiaoLesao(i) {
+    setVisible(false);
     let rS = [...lesoesRegioes];
     rS.splice(i, 1);
     setLesoesRegioes(rS);
@@ -443,6 +455,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       setLesoesRegioes(lesaoRegiaoContext);
     }
     alert("Lesão armazenada. Para cadastrar, termine os passos");
+    setVisible(false);
   }
 
   const rendeDetailLesao = () => (
@@ -456,13 +469,13 @@ const MapeamentoSintomas = ({ navigation }) => {
       </Text>
       {tipoLesaoOptions.map(({ id, nome }, i) => (
         <View key={i}>
-          <TouchableOpacity onPress={() => setarLesao(nome)}>
+          <TouchableHighlight onPress={() => setarLesao(nome)}>
             <View style={{ marginTop: 4, marginLeft: 8 }}>
               <Text style={[styles.textItemSmall, styles.lesaoContent]}>
                 {nome}
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       ))}
     </Layout>
@@ -544,17 +557,28 @@ const MapeamentoSintomas = ({ navigation }) => {
                                 </Button>
                               </View>
                             </View>
-                            <Modal
-                              backdropStyle={styles.backdrop}
-                              onBackdropPress={dismiss}
-                              visible={visible}
-                            >
-                              {lesao.length > 0
-                                ? renderEscolhaTipo()
-                                : subregiao
-                                  ? rendeDetailLesao()
-                                  : renderModalElement()}
-                            </Modal>
+                              {/* <TouchableWithoutFeedback onPress={() => console.log('teste')}> */}
+                                <Modal
+                                  visible={visible}
+                                  animationType={'none'}
+                                  transparent={true}
+                                  onRequestClose={dismiss}
+                                >
+                                  <View style={[{
+                                      flex: 1,
+                                      justifyContent: 'center',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      backgroundColor: 'rgba(0,0,0,0.1)',
+                                  }]}>
+                                    {lesao.length > 0
+                                      ? renderEscolhaTipo()
+                                      : subregiao
+                                        ? rendeDetailLesao()
+                                        : renderModalElement()}
+                                  </View>
+                                </Modal>
+                              {/* </TouchableWithoutFeedback> */}
                           </>
                         ))}
                       </View>
