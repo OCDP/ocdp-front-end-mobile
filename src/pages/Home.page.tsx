@@ -93,6 +93,11 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
   const onChangeText = async (query) => {
+    setValue(query);
+  }
+
+  const pesquisaPaciente = async (query) => {
+    setLoading(true);
     flushPaciente();
     setHistorico([]);
     setValue(query);
@@ -117,6 +122,8 @@ const HomeScreen = ({ navigation }) => {
       );
     } catch (err) {
       console.log("err", err);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -147,6 +154,9 @@ const HomeScreen = ({ navigation }) => {
           onIconPress={clearInput}
           onChangeText={onChangeText}
           onSelect={onSelect}
+          onSubmitEditing={(e) => pesquisaPaciente(e.nativeEvent.text)}
+          returnKeyType={'search'}
+          //onKeyPress={(e) => testeSubmit(e.nativeEvent.key)}
         />
         {historico && historico.length > 0 ? (
           <View style={{ height: "90%" }}>
