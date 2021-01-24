@@ -122,10 +122,10 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
     let arrObj = {
       atendimento: {
         dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
-        id: "",
+        id: 0,
         localAtendimentoId: nomesLocaisAtendido.id,
         localEncaminhadoId: nomesLocaisEncaminhado.id,
-        pacienteId: id,
+        pacienteId: id == null ? "" : id,
         tipoAtendimento: "ACOMPANHAMENTO",
         usuarioId: usuarioLogado.id
       },
@@ -138,6 +138,8 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
           dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
         fatoresDeRisco: postFatores,
       };
+
+      console.log(arrObj);
       enviarPost(arrObj);
   }
 

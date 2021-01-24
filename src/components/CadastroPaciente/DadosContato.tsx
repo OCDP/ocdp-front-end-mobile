@@ -15,10 +15,12 @@ import { user, emailIcon, phone } from "../../assets/Icons";
 import axios from 'axios'
 import PageContainer from "../PageContainer";
 import DadosContatoClass from "../../classes/DadosContatoClass";
+import moment from "moment";
 const DadosContato = ({ navigation }) => {
-  const { email, setEmail, telCell, setTelCell, telResp, setTelResp, nmMae, setNmMae } = useContext(PacienteContext);
-
+  const { bairro, cidade, cpf, endereco, nome, id, dtNasci, sexo, email, setId, setEmail, telCell, setTelCell, telResp, setTelResp, nmMae, setNmMae } = useContext(PacienteContext);
+  const { usuarioLogado } = useContext(UsuarioLogadoContext);
   const { acomp } = React.useContext(PacienteContext);
+  const [, setLoading] = useLoading();
 
   const validateEmail = (email) => {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -35,11 +37,105 @@ const DadosContato = ({ navigation }) => {
     return re.test(telResponsavel);
   };
   
-  function verificaDadosContato() {
+  async function verificaDadosContato() {
     const resp = new DadosContatoClass(email, telCell, telResp, nmMae).retornaValidacao();
     console.log("resp", resp)
     if (resp == "sucesso") {
+      //navigation.navigate("MapeamentoSintomas", { navigation: navigation });
+      await postPacientes()
+    }
+  }
+
+  // async function getPacientes(){
+  //   let objPaciente = {
+  //     bairro: {
+  //     id: bairro.id,
+  //     nome: bairro.nome,
+  //     },
+  //     cpf: cpf,
+  //     dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+  //     email: email,
+  //     enderecoCompleto: endereco,
+  //     id: "",
+  //     nome: nome,
+  //     nomeDaMae: nmMae,
+  //     sexo: sexo.toUpperCase(),
+  //     telefoneCelular: telCell,
+  //     telefoneResponsavel: telResp,
+  //   }
+  //   try{
+  //     setLoading(true);
+  //     let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente/byId/"+id, objPaciente)
+  //   }catch(err){
+  //     console.log('post err', err);
+
+  //   }finally{
+  //     setLoading(false);
+  //   }
+  // }
+
+  async function putPaciente(){
+    let objPaciente = {
+      bairro: {
+        id: bairro.id,
+        nome: bairro.nome,
+      },
+      cpf: cpf,
+      dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+      email: email,
+      enderecoCompleto: endereco,
+      id: "",
+      nome: nome,
+      nomeDaMae: nmMae,
+      sexo: sexo.toUpperCase(),
+      telefoneCelular: telCell,
+      telefoneResponsavel: telResp,
+    }
+    try{
+      setLoading(true);
+      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
+      console.log('resp', resp)
+      setId(resp.data);
+      alert("cadastro realizado!")
       navigation.navigate("MapeamentoSintomas", { navigation: navigation });
+    }catch(err){
+      console.log('post err', err);
+      alert("erro no cadastro!");
+    }finally{
+      setLoading(false);
+    }
+  }
+
+  async function postPacientes(){
+    let objPaciente = {
+      bairro: {
+        id: bairro.id,
+        nome: bairro.nome,
+      },
+      cpf: cpf,
+      dataNascimento: moment(dtNasci).format('YYYY-MM-DD HH:mm:ss'),
+      email: email,
+      enderecoCompleto: endereco,
+      id: "",
+      nome: nome,
+      nomeDaMae: nmMae,
+      sexo: sexo.toUpperCase(),
+      telefoneCelular: telCell,
+      telefoneResponsavel: telResp,
+    }
+    console.log(JSON.stringify(objPaciente))
+    try{
+      setLoading(true);
+      let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
+      console.log('resp', resp)
+      setId(resp.data);
+      alert("cadastro realizado!")
+      navigation.navigate("MapeamentoSintomas", { navigation: navigation });
+      setLoading(false);
+    }catch(err){
+      console.log('post err', err);
+      alert("erro no cadastro!");
+      await putPaciente()
     }
   }
 
