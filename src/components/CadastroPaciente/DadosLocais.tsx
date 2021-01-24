@@ -52,10 +52,8 @@ const DadosLocais = ({ navigation }) => {
       } else {
         // setCidadeInput(resp.data.cidade);
         // setEnderecoInput(resp.data.logradouro);
-        setBairroInput(resp.data.bairro);
+        setEnderecoInput(resp.data.logradouro);
         setComplementoInput(resp.data.complemento);
-        setCidade(resp.data.localidade);
-        setBairros(resp.data.bairro);
       }
     } catch (err) {
       console.log("erro na busca do cep", err)
@@ -210,13 +208,6 @@ const DadosLocais = ({ navigation }) => {
                           </TouchableHighlight>
                         </View>
                       </View>
-                      <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <CheckBox value={lembraDoCep} onValueChange={() => {
-                          setLembraDoCep(!lembraDoCep);
-                          limparValoresInputLembroCPF();
-                        }} />
-                        <Text>Lembra do CEP</Text>
-                      </View>
                     </View>
                     {/* {lembraDoCep ? <>
                       <View style={styles.testeInputCss}>
@@ -240,26 +231,30 @@ const DadosLocais = ({ navigation }) => {
                         </View>
                       </View>
                     </> : <> */}
-                      <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
-                        <Select
-                          data={cidades}
-                          placeholder="selecionar cidade"
-                          selectedOption={{ text: cidade }}
-                          onSelect={(e) => setCidade(e["text"])}
-                        />
+                      <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
+                        <View style={{width: '100%'}}>
+                          <Select
+                            data={cidades}
+                            placeholder="selecionar cidade"
+                            selectedOption={{ text: cidade }}
+                            onSelect={(e) => setCidade(e["text"])}
+                          />
+                        </View>
                       </View>
-                      <View style={[styles.testeInputCss, { flexDirection: 'row' }]}>
-                        <Select
-                          data={bairros}
-                          disabled={bairros.length > 0 ? false : true}
-                          placeholder="selecionar bairro"
-                          selectedOption={{ text: bairro.nome }}
-                          onSelect={(e) => setBairro({ id: e["id"], nome: e["text"] })}
-                        />
+                      <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
+                        <View style={{width: '100%'}}>
+                          <Select
+                            data={bairros}
+                            disabled={bairros.length > 0 ? false : true}
+                            placeholder="selecionar bairro"
+                            selectedOption={{ text: bairro.nome }}
+                            onSelect={(e) => setBairro({ id: e["id"], nome: e["text"] })}
+                          />
+                        </View>
                       </View>
                     {/* </>} */}
-                    <View style={styles.testeInputCss}>
-                      <View>
+                    <View style={[styles.testeInputCss, { flexDirection: 'column' }]}>
+                      <View style={{width: '100%'}}>
                         <Input
                           placeholder="Endereço Completo"
                           icon={user}
