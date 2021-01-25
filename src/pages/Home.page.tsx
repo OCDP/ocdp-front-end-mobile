@@ -58,12 +58,14 @@ const HomeScreen = ({ navigation }) => {
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
     flushPaciente();
+    console.log('onSelect', titleSplit[titleSplit.length - 1]);
     for (let i of listaNomesAll) {
-      if (i.cpf == titleSplit[2]) {
+      if (i.cpf == titleSplit[titleSplit.length - 1]) {
+        console.log("idOnSelect", i.id)
         setBairro(i.bairro);
         setCpf(i.cpf);
         setDtNasci(i.dataNascimento);
-        setEmail(i.cpf);
+        setEmail(i.email);
         setEndereco(i.enderecoCompleto);
         setId(i.id);
         setNome(i.nome);
@@ -113,6 +115,7 @@ const HomeScreen = ({ navigation }) => {
           title: `${a.nome} - ${a.cpf}`,
         };
       });
+      console.log("pacientes.data", pacientes.data);
       setListaNomesAll(pacientes.data);
       setListaNomes(listaArr);
       setNomes(

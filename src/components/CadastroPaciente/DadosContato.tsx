@@ -42,7 +42,11 @@ const DadosContato = ({ navigation }) => {
     console.log("resp", resp)
     if (resp == "sucesso") {
       //navigation.navigate("MapeamentoSintomas", { navigation: navigation });
-      await postPacientes()
+      if(id == null){
+        await postPacientes()
+      }else{
+        await putPaciente()
+      }
     }
   }
 
@@ -96,7 +100,7 @@ const DadosContato = ({ navigation }) => {
       let resp = await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario).post("/paciente", objPaciente)
       console.log('resp', resp)
       setId(resp.data);
-      alert("cadastro realizado!")
+      alert("cadastro atualizado!")
       navigation.navigate("MapeamentoSintomas", { navigation: navigation });
     }catch(err){
       console.log('post err', err);
@@ -131,11 +135,11 @@ const DadosContato = ({ navigation }) => {
       setId(resp.data);
       alert("cadastro realizado!")
       navigation.navigate("MapeamentoSintomas", { navigation: navigation });
-      setLoading(false);
     }catch(err){
       console.log('post err', err);
       alert("erro no cadastro!");
-      await putPaciente()
+    }finally{
+      setLoading(false);
     }
   }
 

@@ -198,7 +198,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       uri: dataImage.uri,
       name: "uploadImageResult",
     });
-
+console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
       .post(
         `anexo/uploadFile?cpf=${objResult.atendimento.paciente.cpf}`,
@@ -208,8 +208,9 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
         }
       )
       .then((response) => {
+        console.log('response.data', response.data.name);
         let arrNameImage = nameImage;
-        arrNameImage[i] = response.data.name;
+        arrNameImage[i] = response.data;
         setNameImage(arrNameImage);
         setLoading(false);
       })
