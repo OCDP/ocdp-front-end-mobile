@@ -141,7 +141,15 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     }
 
     let obj = {
-      atendimento: objResult.atendimento,
+      atendimento: {
+        dataAtendimento: objResult.atendimento.dataAtendimento,
+        id: objResult.atendimento.id,
+        localAtendimentoId: objResult.atendimento.localAtendimento ? objResult.atendimento.localAtendimento.id : null,
+        localEncaminhadoId: objResult.atendimento.localEncaminhado ? objResult.atendimento.localEncaminhado.id : null,
+        pacienteId: objResult.atendimento.paciente.id,
+        tipoAtendimento: objResult.atendimento.tipoAtendimento,
+        usuarioId: objResult.atendimento.usuario.id 
+      },
       confirmaRastreamento: true,
       diagnosticoFinal: diagnosticoFinal,
       procedimentos: objResult.procedimentos,
@@ -330,7 +338,7 @@ console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
                               height: 300,
                             }}
                             source={{
-                              uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage[i]}`,
+                              uri: `http://200.137.215.35:9090/api/anexo/downloadFile/${nameImage[i]}`,
                             }}
                           />
                         </View>
@@ -347,6 +355,7 @@ console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
                         >
                           cancelar
                         </Button>
+                        <Button onPress={() =>  console.log(nameImage[i])}>teste</Button>
                       </>
                     ) : (
                       <View

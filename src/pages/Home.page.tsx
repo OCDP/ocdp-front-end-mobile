@@ -90,7 +90,9 @@ const HomeScreen = ({ navigation }) => {
   useEffect(()=>{
     function resetarHistorico(){
       setHistorico([]);
+      flushPaciente();
     }
+
     resetarHistorico();
   }, [])
 
@@ -171,6 +173,7 @@ const HomeScreen = ({ navigation }) => {
             title={cpf ? "Paciente sem registro" : "Nenhum registro encontrado"}
             textContent={cpf ? "Cadastre um novo acompanhamento!" : "Faça uma busca ou cadastre um novo paciente"}
             showBtnNovoAcomp={cpf ? true : false} 
+            //showBtnNovoAcomp={false} 
           />
         )}
         <Button

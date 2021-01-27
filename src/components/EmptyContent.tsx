@@ -46,9 +46,7 @@ const ImplementFutura = ({ navigation, title, textContent, showBtnNovoAcomp }) =
           (
             <Button title={"Novo Acompanhamento"} 
             onPress={() => {
-              setActiveStepBtn(1);
-              setIdNovoAcomp(2)
-              navigation.navigate("CadastrarPaciente")
+              navigation.navigate("MapeamentoSintomas")
             }}
             > Registrar novo Acompanhamento </Button>
           )
