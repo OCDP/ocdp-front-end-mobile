@@ -58,6 +58,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [objResult, setObjResult] = useState<AtendimentosInterface>({});
   //nome que chega da uri e deve ser usado pra acessar a imagem
   const [nameImage, setNameImage] = useState([]);
+  const [uriImage, setUriImage] = useState([]);
 
   const styles = useStyleSheet({
     container: {
@@ -206,7 +207,6 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       uri: dataImage.uri,
       name: "uploadImageResult",
     });
-console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
       .post(
         `anexo/uploadFile?cpf=${objResult.atendimento.paciente.cpf}`,
@@ -220,6 +220,9 @@ console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
         let arrNameImage = nameImage;
         arrNameImage[i] = response.data;
         setNameImage(arrNameImage);
+        let arrUriImage = uriImage;
+        arrUriImage[i] = dataImage.uri;
+        setUriImage(arrUriImage);
         setLoading(false);
       })
       .catch((error) => {
@@ -231,10 +234,12 @@ console.log('dataImage.uri.substr(30)', dataImage.uri.substr(30));
 
   async function takePictureCamera() {
     if (camRef) {
-      const options = { quality: 1, uri: true };
+      const options = { quality: 1, uri: true, onPictureSaved: async (e) => {
+        
+        setCanOpen(false)
+        await enviaImagem(e, indiceFoto);
+      } };
       const data = await camRef.current.takePictureAsync(options);
-      setCanOpen(false);
-      enviaImagem(data, indiceFoto);
     }
   }
 

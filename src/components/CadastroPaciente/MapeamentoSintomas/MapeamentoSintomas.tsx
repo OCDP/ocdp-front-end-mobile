@@ -436,6 +436,7 @@ const MapeamentoSintomas = ({ navigation }) => {
     let rS = [...lesoesRegioes];
     rS.splice(i, 1);
     setLesoesRegioes(rS);
+    dismiss()
     alert("Lesão Excluída");
   }
 
@@ -455,6 +456,7 @@ const MapeamentoSintomas = ({ navigation }) => {
       setLesoesRegioes(lesaoRegiaoContext);
     }
     alert("Lesão armazenada. Para cadastrar, termine os passos");
+    dismiss();
     setVisible(false);
   }
 

@@ -12,7 +12,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import DadosPessoaisClass from "../../classes/DadosPessoaisClass"
 import { calendar, user, emailIcon, phone } from "../../assets/Icons";
-import PacienteContext from "../../contexts/PacienteContext";
+import PacienteContext, { useFlushPaciente } from "../../contexts/PacienteContext";
 import { sexos } from "../../utils/constants";
 import NovoAcompContext from "../../contexts/NovoAcompContext";
 import BotaoContext from "../../contexts/BotoesContext";
@@ -231,7 +231,7 @@ const DadosPessoais = ({ navigation }) => {
                         </View>
                         <View style={{ flex: 0.2 }}>
                           <TouchableHighlight style={{ alignItems: 'center', justifyContent: 'center' }} underlayColor={"black"} onPress={() => setIsDatePickerVisible(true)}>
-                            <Icon size={26} name={"search"} color="white" />
+                            <Icon size={26} name={"search"} color="#1696B8" />
                           </TouchableHighlight>
                         </View>
                         <DateTimePickerModal

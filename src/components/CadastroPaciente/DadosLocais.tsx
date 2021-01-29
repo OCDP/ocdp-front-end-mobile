@@ -204,7 +204,7 @@ const DadosLocais = ({ navigation }) => {
                         </View>
                         <View style={{ flex: 0.2 }}>
                           <TouchableHighlight style={{ alignItems: 'center', justifyContent: 'center' }} underlayColor={"black"} onPress={() => pesquisarCEP()}>
-                            <Icon size={26} name={"search"} color="white" />
+                            <Icon size={26} name={"search"} color="#1696B8" />
                           </TouchableHighlight>
                         </View>
                       </View>
