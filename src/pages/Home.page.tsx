@@ -121,7 +121,7 @@ const HomeScreen = ({ navigation }) => {
       setListaNomesAll(pacientes.data);
       setListaNomes(listaArr);
       setNomes(
-        listaNomes.filter((item) =>
+        listaArr.filter((item) =>
           item.title.toLowerCase().includes(query.toLowerCase())
         )
       );
@@ -159,7 +159,7 @@ const HomeScreen = ({ navigation }) => {
           onIconPress={clearInput}
           onChangeText={onChangeText}
           onSelect={onSelect}
-          onSubmitEditing={(e) => pesquisaPaciente(e.nativeEvent.text)}
+          onSubmitEditing={async (e) => await pesquisaPaciente(e.nativeEvent.text)}
           returnKeyType={'search'}
           //onKeyPress={(e) => testeSubmit(e.nativeEvent.key)}
         />
