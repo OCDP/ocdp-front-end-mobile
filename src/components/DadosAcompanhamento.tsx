@@ -72,10 +72,15 @@ const DadosAcompanhamento = ({ navigation, themedStyle = null }) => {
   }, [nomesLocaisAtendido, idNovoAcomp])
 
   function verificaDadosAcompanhamento() {
+    console.log('idpaciente', id);
     const resp = new DadosAcompanhamentoClass(nomesLocaisAtendido, idNovoAcomp).retornaValidacao();
     console.log("resp", resp)
     if (resp == "sucesso") {
-      navigation.navigate("HipoteseDiagnostico", { navigation: navigation });
+      if(selectedIndex == 0){
+        navigation.navigate("HipoteseDiagnostico", { navigation: navigation });
+      }else if(selectedIndex == 1){
+        navigation.navigate("MapeamentoSintomas", { navigation: navigation });
+      }
     }
   }
 
