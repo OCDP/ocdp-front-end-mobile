@@ -234,12 +234,12 @@ const DadosContato = ({ navigation }) => {
                         maxLength={11}
                         // textContentType={"telephoneNumber"}
                        // keyboardType={"phone-pad"}
-                        onBlur={() => {
-                          if (validateTelefoneCelular(telCell) == false) {
-                            alert("celular inválido");
-                            setTelCell("");
-                          }
-                        }}
+                        // onBlur={() => {
+                        //   if (validateTelefoneCelular(telCell) == false) {
+                        //     alert("celular inválido");
+                        //     setTelCell("");
+                        //   }
+                        // }}
                       />
                     </View>
                     {/* <ButtonUiKitten
@@ -253,17 +253,17 @@ const DadosContato = ({ navigation }) => {
                   <View style={styles.testeInputCss}>
                     <View>
                       <Input
-                        placeholder="Telefone do resposável"
+                        placeholder="Telefone do responsável"
                         icon={phone}
                         value={telResp}
                         maxLength={11}
                         onChangeText={setTelResp}
-                        onBlur={() => {
-                          if (validateTelefoneResponsavel(telResp) == false) {
-                            alert("telefone responsavel inválido");
-                            setTelResp("");
-                          }
-                        }}
+                        // onBlur={() => {
+                        //   if (validateTelefoneResponsavel(telResp) == false) {
+                        //     alert("telefone responsável inválido");
+                        //     setTelResp("");
+                        //   }
+                        // }}
                       />
                     </View>
                     {/* <ButtonUiKitten

@@ -223,7 +223,7 @@ const DadosPessoais = ({ navigation }) => {
                       <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.8 }}>
                           <Input
-                            placeholder="Data nascimento"
+                            placeholder="Data de Nascimento"
                             icon={user}
                             value={dtNascString}
                             disabled={true}

@@ -105,7 +105,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
         )}
         {atendimento.atendimento.usuario.nome && (
           <Text appearance="hint" category="c4">
-            Usuario responsavel: {atendimento.atendimento.usuario.nome}
+            Usuário responsável: {atendimento.atendimento.usuario.nome}
           </Text>
         )}
       </View>
@@ -138,11 +138,11 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
                 />
                 <View style={styles.infoLesoes}>
                   <Text appearance="hint" category="c4">
-                    Lesao: {lesao.nome}
+                    Lesão: {lesao.nome}
                   </Text>
                   <Divider style={styles.divider} />
                   <Text appearance="hint" category="c4">
-                    Tipo da lesao: {lesao.tipoLesao.nome}
+                    Tipo da lesão: {lesao.tipoLesao.nome}
                   </Text>
                 </View>
               </View>

@@ -170,8 +170,8 @@ const HomeScreen = ({ navigation }) => {
         ) : (
           <EmptyContent
             navigation={navigation}
-            title={cpf ? "Paciente sem registro" : "Nenhum registro encontrado"}
-            textContent={cpf ? "Cadastre um novo acompanhamento!" : "Faça uma busca ou cadastre um novo paciente"}
+            title={cpf ? "Paciente sem registro" : "Faça uma busca ou "}
+            textContent={cpf ? "Cadastre um novo acompanhamento!" : "cadastre um novo paciente"}
             showBtnNovoAcomp={cpf ? true : false} 
             //showBtnNovoAcomp={false} 
           />

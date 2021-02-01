@@ -326,7 +326,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               </Modal>
             ) : (
               <View>
-                <Text appearance="alternative">sem acesso a camera!</Text>
+                <Text appearance="alternative">sem acesso a câmera!</Text>
               </View>
             )}
 
@@ -387,7 +387,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                               status="primary"
                               icon={camera}
                             />
-                            <Text>camera</Text>
+                            <Text>câmera</Text>
                           </View>
                         </View>
                         <View>
@@ -427,7 +427,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                           console.log(a, i);
                           setarObservacao(a, i);
                         }}
-                        placeholder={`Insira a observacao sobre ${nome}`}
+                        placeholder={`Insira a observação sobre ${nome}`}
                       />
                     )}
                   </View>

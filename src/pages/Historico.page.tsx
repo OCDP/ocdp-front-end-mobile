@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const Historico = ({ navigation }) => {
   return (
-    <PageContainer title="Detalhes historico" navigation={navigation}>
+    <PageContainer title="Detalhes histórico" navigation={navigation}>
       <ScrollView>
         <Layout style={styles.container}>
           <ListHistorico navigation={navigation} />
