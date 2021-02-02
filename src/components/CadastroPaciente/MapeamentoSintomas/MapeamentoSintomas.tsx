@@ -29,6 +29,7 @@ import { CommonActions } from "@react-navigation/native";
 import { menuDetail } from "../../../assets/Icons";
 import MapeamentoSintomasClass from "../../../classes/MapeamentoSintomasClass";
 import PageContainer from "../../PageContainer";
+import NovoAcompContext from "../../../contexts/NovoAcompContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -61,6 +62,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  const {idNovoAcomp} = React.useContext(NovoAcompContext)
   //aqui o contexto novo braz...
   const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
   const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext);
@@ -494,10 +496,14 @@ const MapeamentoSintomas = ({ navigation }) => {
             <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
               <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
               </View>
-              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
-              </View>
-              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
-              </View>
+              {idNovoAcomp != 1 && (
+                <>
+                  <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+                  </View>
+                  <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+                  </View>
+                </>
+              )}
               <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
               </View>
               <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
@@ -596,7 +602,7 @@ const MapeamentoSintomas = ({ navigation }) => {
                 <TouchableHighlight
                   activeOpacity={0.6}
                   underlayColor="#DDDDDD"
-                  onPress={() => navigation.navigate("DadosContato", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  onPress={() => navigation.navigate(idNovoAcomp == 1 ? "DadosAcompanhamento" : "DadosContato", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
                   <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
                 </TouchableHighlight>
               </View>
