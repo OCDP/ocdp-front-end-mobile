@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useEffect } from "react";
 import { View } from "react-native";
 import {
   useStyleSheet,
@@ -41,7 +41,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       paddingTop: 8,
     },
     btnResult: {
-      paddingVertical: 60,
+      paddingVertical: 12,
       marginHorizontal: 36,
     },
   });
@@ -105,7 +105,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
         )}
         {atendimento.atendimento.usuario.nome && (
           <Text appearance="hint" category="c4">
-            Usuario responsavel: {atendimento.atendimento.usuario.nome}
+            Usuário responsável: {atendimento.atendimento.usuario.nome}
           </Text>
         )}
       </View>
@@ -115,10 +115,10 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             Fatores de risco
           </Text>
           {atendimento.fatoresDeRisco.map(({ nome }, i) => (
-            <>
+            <View key={i}>
               <Divider style={styles.divider} />
-              <Text key={i}>{nome}</Text>
-            </>
+              <Text>{nome}</Text>
+            </View>
           ))}
         </View>
       )}
@@ -138,11 +138,11 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
                 />
                 <View style={styles.infoLesoes}>
                   <Text appearance="hint" category="c4">
-                    Lesao: {lesao.nome}
+                    Lesão: {lesao.nome}
                   </Text>
                   <Divider style={styles.divider} />
                   <Text appearance="hint" category="c4">
-                    Tipo da lesao: {lesao.tipoLesao.nome}
+                    Tipo da lesão: {lesao.tipoLesao.nome}
                   </Text>
                 </View>
               </View>
@@ -156,22 +156,18 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
             Procedimentos:
           </Text>
           {atendimento.procedimentos.map(
-            ({ nome, anexo64, observacao, id }) => (
+            ({ nome, anexo64, nomeArquivo, observacao, id }) => (
               <View key={id}>
-                {anexo64 ? (
+                {anexo64 || nomeArquivo ? (
                   <Lesoes
-                    imgRegiao={anexo64}
+                    nomeArquivo={nomeArquivo}
+                    tipoAtendimento={atendimento.atendimento.tipoAtendimento}
                     title={nome}
                     navigation={navigation}
                   />
                 ) : null}
 
                 <View style={styles.infoLesoes}>
-                  {nome ? (
-                    <Text appearance="hint" category="c4">
-                      Nome procedimento: {nome}
-                    </Text>
-                  ) : null}
                   {observacao ? (
                     <Text appearance="hint" category="c4">
                       Obs: {observacao}
@@ -187,6 +183,7 @@ const ListHistorico = ({ navigation, themedStyle = null }) => {
       {enviarResult && (
         <View style={styles.btnResult}>
           <Button
+            appearance="outline"
             style={{ flexDirection: "row-reverse" }}
             onPress={() => {
               navigation.navigate("CadastrarResultados");

@@ -29,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
     setAcomp,
     setNome,
     setBairro,
+    cpf,
     setCpf,
     setDtNasci,
     setEmail,
@@ -57,12 +58,14 @@ const HomeScreen = ({ navigation }) => {
   const onSelect = async ({ title, id }) => {
     let titleSplit = title.split(" ");
     flushPaciente();
+    console.log('onSelect', titleSplit[titleSplit.length - 1]);
     for (let i of listaNomesAll) {
-      if (i.cpf == titleSplit[2]) {
+      if (i.cpf == titleSplit[titleSplit.length - 1]) {
+        console.log("idOnSelect", i.id)
         setBairro(i.bairro);
         setCpf(i.cpf);
         setDtNasci(i.dataNascimento);
-        setEmail(i.cpf);
+        setEmail(i.email);
         setEndereco(i.enderecoCompleto);
         setId(i.id);
         setNome(i.nome);
@@ -84,7 +87,21 @@ const HomeScreen = ({ navigation }) => {
     setLoading(false);
   };
 
+  useEffect(()=>{
+    function resetarHistorico(){
+      setHistorico([]);
+      flushPaciente();
+    }
+
+    resetarHistorico();
+  }, [])
+
   const onChangeText = async (query) => {
+    setValue(query);
+  }
+
+  const pesquisaPaciente = async (query) => {
+    setLoading(true);
     flushPaciente();
     setHistorico([]);
     setValue(query);
@@ -92,7 +109,7 @@ const HomeScreen = ({ navigation }) => {
       const pacientes: AxiosResponse<BuscaPacienteInterface[]> = await apiFunc(
         usuarioLogado.cpf,
         usuarioLogado.senhaUsuario
-      ).get(`/historico/pacientes/${query}`);
+      ).get(`/paciente/byName/${query}`);
       let arrUsers = pacientes.data;
       const listaArr = arrUsers.map((a) => {
         return {
@@ -100,15 +117,18 @@ const HomeScreen = ({ navigation }) => {
           title: `${a.nome} - ${a.cpf}`,
         };
       });
+      console.log("pacientes.data", pacientes.data);
       setListaNomesAll(pacientes.data);
       setListaNomes(listaArr);
       setNomes(
-        listaNomes.filter((item) =>
+        listaArr.filter((item) =>
           item.title.toLowerCase().includes(query.toLowerCase())
         )
       );
     } catch (err) {
       console.log("err", err);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -139,6 +159,9 @@ const HomeScreen = ({ navigation }) => {
           onIconPress={clearInput}
           onChangeText={onChangeText}
           onSelect={onSelect}
+          onSubmitEditing={async (e) => await pesquisaPaciente(e.nativeEvent.text)}
+          returnKeyType={'search'}
+          //onKeyPress={(e) => testeSubmit(e.nativeEvent.key)}
         />
         {historico && historico.length > 0 ? (
           <View style={{ height: "90%" }}>
@@ -147,8 +170,10 @@ const HomeScreen = ({ navigation }) => {
         ) : (
           <EmptyContent
             navigation={navigation}
-            title="Nenhum registro encontrado"
-            textContent="Faça uma busca ou cadastre um novo paciente!"
+            title={cpf ? "Paciente sem registro" : "Faça uma busca ou "}
+            textContent={cpf ? "Cadastre um novo acompanhamento!" : "cadastre um novo paciente"}
+            showBtnNovoAcomp={cpf ? true : false} 
+            //showBtnNovoAcomp={false} 
           />
         )}
         <Button

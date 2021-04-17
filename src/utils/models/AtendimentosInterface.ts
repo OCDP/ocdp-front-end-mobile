@@ -8,6 +8,7 @@ export interface AtendimentosInterface {
 interface Procedimento {
   id?: string;
   anexo64?: string;
+  nomeArquivo?: string;
   nome?: string;
   observacao?: any; // esse ja estava com ?
 }
@@ -40,10 +41,12 @@ interface Atendimento {
   dataAtendimento?: string;
   usuario?: Usuario;
   paciente?: Paciente;
-  tipoAtendimento?: "RESULTADOS" | "INTERVENCAO" | "ACOMPANHAMENTO";
+  tipoAtendimento?: TipoAtendimento;
   localAtendimento?: LocalAtendimento;
   localEncaminhado?: LocalAtendimento;
 }
+
+export type TipoAtendimento = "RESULTADOS" | "INTERVENCAO" | "ACOMPANHAMENTO";
 
 interface LocalAtendimento {
   id?: string;

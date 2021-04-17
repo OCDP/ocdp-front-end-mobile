@@ -8,6 +8,8 @@ import BemVindo from "../pages/BemVindo.page";
 import LoginPage from "../pages/Login";
 import HomeScreen from "../pages/Home.page";
 import CadastrarPaciente from "../pages/CadastrarPaciente.page";
+import DadosLocais from "../components/CadastroPaciente/DadosLocais"
+import DadosPessoais from "../components/CadastroPaciente/DadosPessoais"
 import SafeAreaLayout from "../components/SafeAreaLayout";
 import Introducao from "../pages/Introducao.page";
 import Historico from "../pages/Historico.page";
@@ -31,6 +33,12 @@ import { Button, Text } from "@ui-kitten/components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AppConsumer } from "../contexts/AppContext";
 import LightTheme from "../themes/LightTheme";
+import DadosContato from "../components/CadastroPaciente/DadosContato";
+import MapeamentoSintomas from "../components/CadastroPaciente/MapeamentoSintomas";
+import DadosAcompanhamento from "../components/DadosAcompanhamento";
+import HipoteseDiagnostico from "../components/HipoteseDiagnostico";
+import CondutaIntervencao from "../components/CondutaIntervencao";
+import CadastroConduta from "../components/CadastroConduta";
 
 function CustomDrawerContent(props) {
   return (
@@ -146,6 +154,38 @@ export const AppNavigator = () => (
                           <Drawer.Screen
                             name="CadastrarPaciente"
                             component={CadastrarPaciente}
+                          />
+                          <Drawer.Screen
+                            name="DadosPessoais"
+                            component={DadosPessoais}
+                          />
+                          <Drawer.Screen
+                            name="MapeamentoSintomas"
+                            component={MapeamentoSintomas}
+                          />
+                          <Drawer.Screen
+                            name="DadosLocais"
+                            component={DadosLocais}
+                          />
+                          <Drawer.Screen
+                            name="DadosContato"
+                            component={DadosContato}
+                          />
+                          <Drawer.Screen
+                            name="DadosAcompanhamento"
+                            component={DadosAcompanhamento}
+                          /> 
+                          <Drawer.Screen
+                            name="HipoteseDiagnostico"
+                            component={HipoteseDiagnostico}
+                          />
+                          <Drawer.Screen
+                            name="CondutaIntervencao"
+                            component={CondutaIntervencao}
+                          />
+                          <Drawer.Screen
+                            name="CadastroConduta"
+                            component={CadastroConduta}
                           />
                           <Drawer.Screen name="BemVindo" component={BemVindo} />
                           <Drawer.Screen name="Login" component={LoginPage} />

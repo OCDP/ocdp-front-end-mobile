@@ -14,7 +14,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
-import { View, StyleSheet, Button, BackHandler, Alert } from "react-native";
+import { View, StyleSheet, Button, BackHandler, Alert, KeyboardAvoidingView, TouchableHighlight } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { user, phone, calendar, search, add, clear } from "../assets/Icons";
 import apiFunc from "../services/api";
@@ -24,6 +24,11 @@ import NovoAcompContext from "../contexts/NovoAcompContext";
 import BotaoContext from "../contexts/BotoesContext";
 import PostFatoresContext from "../contexts/PostFatoresContext";
 import { CommonActions } from "@react-navigation/native";
+import CadastroCondutaClass from "../classes/CadastroCondutaClass";
+import LesoesRegioesContext from "../contexts/LesoesRegioesContext";
+import PacienteContext from "../contexts/PacienteContext";
+import { useLoading } from "../contexts/AppContext";
+import PageContainer from "./PageContainer";
 
 const DATA = [
   {
@@ -73,6 +78,24 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [nomesEncaminhadoSelect, setNomesEncaminhadoSelect] = React.useState(
     ""
   );
+  const {
+    acomp,
+    bairro,
+    cpf,
+    cidade,
+    dtNasci,
+    email,
+    endereco,
+    id,
+    setId,
+    historico,
+    listaFatores,
+    nmMae,
+    nome,
+    sexo,
+    telCell,
+    telResp,
+  } = useContext(PacienteContext);
   const [nomesAtendidosAll, setNomesAtendidosAll] = React.useState([]);
   const [nomesEncaminhadosAll, setNomesEncaminhadosAll] = React.useState([]);
   const [dataAcompState, setDataAcompState] = React.useState("");
@@ -80,53 +103,98 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
   const [dataAtual, setDataAtual] = React.useState(null);
   const [datePickerVisibleTrat, setDatePickerVisibleTrat] = useState(false);
   const [datePickerVisibleAcomp, setDatePickerVisibleAcomp] = useState(false);
+  const { lesoesRegioes } = useContext(LesoesRegioesContext);
+  const [, setLoading] = useLoading();
 
   const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
-  const onSelect = ({ title }) => {
-    setValue(title);
-    // let historico = await loadHistorico(title);
-    // setHistorico(historico);
-  };
+  
+  function verificaCadastroConsulta(){
+    console.log(nomesLocaisAtendido, nomesLocaisEncaminhado)
+    const resp = new CadastroCondutaClass(idNovoAcomp, nomesLocaisAtendido, nomesLocaisEncaminhado, dataSugeridaAcompanhamento, dataSugeridaTratamento).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      setarValores();
+    }
+  }
 
-  useEffect(() => {
-    const backAction = () => {
+  function setarValores(){
+  
+    let arrObj = {
+      atendimento: {
+        dataAtendimento: moment().format("YYYY-MM-DD HH:mm:ss"),
+        id: 0,
+        localAtendimentoId: nomesLocaisAtendido.id,
+        localEncaminhadoId: nomesLocaisEncaminhado.id,
+        pacienteId: id == null ? "" : id,
+        tipoAtendimento: "ACOMPANHAMENTO",
+        usuarioId: usuarioLogado.id
+      },
+        regioesLesoes: lesoesRegioes,
+        dataSugeridaAcompanhamento:
+          dataSugeridaAcompanhamento == undefined
+            ? ""
+            : dataSugeridaAcompanhamento,
+        dataSugeridaTratamento:
+          dataSugeridaTratamento == undefined ? "" : dataSugeridaTratamento,
+        fatoresDeRisco: postFatores,
+      };
+
+      console.log(arrObj);
+      enviarPost(arrObj);
+  }
+
+  async function enviarPost(arrObj){
+    try {
+      setLoading(true)
+      let postJson = JSON.stringify(arrObj);
+      let resp = await apiFunc(
+        usuarioLogado.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/acompanhamento/salvar", postJson);
       Alert.alert(
-        "Atenção",
-        "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?",
+        'Enviado com sucesso',
+        "Voltar para tela inicial",
         [
-          {
-            text: "Voltar",
-            onPress: () => null,
-            style: "cancel",
-          },
-          {
-            text: "Desejo cancelar procedimento",
-            onPress: () => {
-              navigation.dispatch(
-                CommonActions.reset({
-                  routes: [{ name: "Home" }],
-                })
-              );
-              setActiveStepBtn(0);
-            },
-          },
-        ]
+          {text: 'Ok', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+        ],
+        {cancelable: false},
       );
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
+    } catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Problema de envio',
+        "Voltar para tela inicial?",
+        [
+          {text: 'Sim', onPress: () => {
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ name: "Home" }],
+              })
+            );
+          }},
+          {text: 'Tentar Novamente', style: 'cancel'},
+          
+        ],
+        {cancelable: false},
+      );
+    }finally{
+      setLoading(false)
+    }
+      
+  }
 
   useEffect(() => {
     async function loadLocaisAtendido() {
       setnomesAtendidosSelect("");
-      setNomesLocaisAtendido({});
+      if (idNovoAcomp == 2) {
+        setNomesLocaisAtendido({});
+      }
       let url = `localAtendimento/byTipo/${tipoAtendido}`;
       try {
         await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -217,201 +285,244 @@ const CadastroConduta = ({ navigation, themedStyle = null }) => {
 
   useEffect(() => {
     async function setarBotao() {
-      if (
-        (idNovoAcomp == 2 &&
-          nomesLocaisAtendido.length == undefined &&
-          nomesLocaisEncaminhado.length == undefined) ||
-        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
-      ) {
-        setBloqBotaoProximo(false);
-      } else {
-        setBloqBotaoProximo(true);
-      }
+      setBloqBotaoProximo(false);
+      // if (
+      //   (idNovoAcomp == 2 &&
+      //     nomesLocaisAtendido.length == undefined &&
+      //     nomesLocaisEncaminhado.length == undefined) ||
+      //   (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+      // ) {
+      //   setBloqBotaoProximo(false);
+      // } else {
+      //   setBloqBotaoProximo(true);
+      // }
     }
     setarBotao();
   }, []);
 
-  useEffect(() => {
-    async function setarBotao() {
-      if (
-        (idNovoAcomp == 2 &&
-          nomesLocaisAtendido.length == undefined &&
-          nomesLocaisEncaminhado.length == undefined) ||
-        (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
-      ) {
-        setBloqBotaoProximo(false);
-      } else {
-        setBloqBotaoProximo(true);
-      }
-    }
-    setarBotao();
-  }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
+  // useEffect(() => {
+  //   async function setarBotao() {
+  //     if (
+  //       (idNovoAcomp == 2 &&
+  //         nomesLocaisAtendido.length == undefined &&
+  //         nomesLocaisEncaminhado.length == undefined) ||
+  //       (idNovoAcomp == 1 && nomesLocaisEncaminhado.length == undefined)
+  //     ) {
+  //       setBloqBotaoProximo(false);
+  //     } else {
+  //       setBloqBotaoProximo(true);
+  //     }
+  //   }
+  //   setarBotao();
+  // }, [nomesLocaisAtendido, nomesLocaisEncaminhado]);
 
   return (
-    <Layout style={styles.container}>
-      <ScrollView style={styles.container}>
-        {idNovoAcomp !== 1 ? (
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View>
-                  <Text appearance="hint">
-                    Selecione o local em que está sendo atendido
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+
+              <Layout style={styles.container}>
+                <ScrollView style={styles.container}>
+                  {idNovoAcomp !== 1 ? (
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View>
+                            <Text appearance="hint">
+                              Selecione o local em que está sendo atendido
                   </Text>
-                </View>
-                <View style={{ marginVertical: 8 }}>
-                  <Select
-                    data={tiposLocaisAtendido}
-                    placeholder="Selecionar um tipo"
-                    onSelect={(e) => tipoAtendidoActions(e["text"])}
-                    selectedOption={{ text: tipoAtendido }}
-                  />
-                </View>
-                <View>
-                  <Select
-                    disabled={tipoAtendido ? false : true}
-                    data={nomesAtendidosAll}
-                    placeholder="Local em que está sendo atendido"
-                    onSelect={(e) => nomeAtendidoActions(e["text"])}
-                    selectedOption={{ text: nomesAtendidosSelect }}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <></>
-        )}
+                          </View>
+                          <View style={{ marginVertical: 8 }}>
+                            <Select
+                              data={tiposLocaisAtendido}
+                              placeholder="Selecionar um tipo"
+                              onSelect={(e) => tipoAtendidoActions(e["text"])}
+                              selectedOption={{ text: tipoAtendido }}
+                            />
+                          </View>
+                          <View>
+                            <Select
+                              disabled={tipoAtendido ? false : true}
+                              data={nomesAtendidosAll}
+                              placeholder="Local em que está sendo atendido"
+                              onSelect={(e) => nomeAtendidoActions(e["text"])}
+                              selectedOption={{ text: nomesAtendidosSelect }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  ) : (
+                      <></>
+                    )}
 
-        <View style={styles.lineContent}>
-          <View style={styles.boxDatePicker}>
-            <View
-              style={{
-                marginHorizontal: 16,
-              }}
-            >
-              <View>
-                <Text appearance="hint">
-                  Selecione o local para o qual será encaminhado
+                  <View style={styles.lineContent}>
+                    <View style={styles.boxDatePicker}>
+                      <View
+                        style={{
+                          marginHorizontal: 16,
+                        }}
+                      >
+                        <View>
+                          <Text appearance="hint">
+                            Selecione o local para o qual será encaminhado
                 </Text>
+                        </View>
+                        <View style={{ marginVertical: 8 }}>
+                          <Select
+                            data={tiposLocaisEncaminhado}
+                            placeholder="Selecionar um tipo"
+                            onSelect={(e) => tipoEncaminhadoActions(e["text"])}
+                            selectedOption={{ text: tipoEncaminhado }}
+                          />
+                        </View>
+                        <View>
+                          <Select
+                            disabled={tipoEncaminhado ? false : true}
+                            data={nomesEncaminhadosAll}
+                            placeholder="Local que será encaminhado"
+                            onSelect={(e) => nomeEncaminhadoActions(e["text"])}
+                            selectedOption={{ text: nomesEncaminhadoSelect }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              marginBottom: 4,
+                            }}
+                            appearance="hint"
+                          >
+                            Retorno para:
+                </Text>
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Acompanhamento"
+                              checked={activeCheckedAcompanhamento}
+                              onChange={setActiveCheckedAcompanhamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida acompanhamento"
+                              icon={user}
+                              value={dataSugeridaAcompanhamento}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedAcompanhamento ? false : true}
+                              title="Escolher data"
+                              onPress={() => setDatePickerVisibleAcomp(true)}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={datePickerVisibleAcomp}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                              onCancel={() => setDatePickerVisibleAcomp(false)}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.lineContent}>
+                      <View style={styles.boxDatePicker}>
+                        <View
+                          style={{
+                            marginHorizontal: 16,
+                          }}
+                        >
+                          <View style={{ marginVertical: 8 }}>
+                            <CheckBox
+                              text="Tratamento de lesão"
+                              checked={activeCheckedTratamento}
+                              onChange={setActiveCheckedTratamento}
+                            />
+                          </View>
+                          <View>
+                            <Input
+                              placeholder="Data sugerida tratamento"
+                              icon={user}
+                              value={dataTratState}
+                              disabled={true}
+                            />
+                            <Button
+                              disabled={activeCheckedTratamento ? false : true}
+                              title="Escolher data"
+                              onPress={() => setDatePickerVisibleTrat(true)}
+                            />
+                            <DateTimePickerModal
+                              cancelTextIOS="cancelar"
+                              confirmTextIOS="confirmar"
+                              locale="pt-BR"
+                              headerTextIOS="Escolha uma data"
+                              isVisible={datePickerVisibleTrat}
+                              mode="date"
+                              onConfirm={(a) => confirmarDataTratamento(a)}
+                              onCancel={() => setDatePickerVisibleTrat(false)}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </ScrollView>
+              </Layout>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => navigation.navigate("MapeamentoSintomas", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
               </View>
-              <View style={{ marginVertical: 8 }}>
-                <Select
-                  data={tiposLocaisEncaminhado}
-                  placeholder="Selecionar um tipo"
-                  onSelect={(e) => tipoEncaminhadoActions(e["text"])}
-                  selectedOption={{ text: tipoEncaminhado }}
-                />
-              </View>
-              <View>
-                <Select
-                  disabled={tipoEncaminhado ? false : true}
-                  data={nomesEncaminhadosAll}
-                  placeholder="Local que será encaminhado"
-                  onSelect={(e) => nomeEncaminhadoActions(e["text"])}
-                  selectedOption={{ text: nomesEncaminhadoSelect }}
-                />
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaCadastroConsulta()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Enviar</Text>
+                </TouchableHighlight>
               </View>
             </View>
+
           </View>
         </View>
-
-        <View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <Text
-                  style={{
-                    marginBottom: 4,
-                  }}
-                  appearance="hint"
-                >
-                  Retorno para:
-                </Text>
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Acompanhamento"
-                    checked={activeCheckedAcompanhamento}
-                    onChange={setActiveCheckedAcompanhamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida acompanhamento"
-                    icon={user}
-                    value={dataSugeridaAcompanhamento}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedAcompanhamento ? false : true}
-                    title="Escolher data"
-                    onPress={() => setDatePickerVisibleAcomp(true)}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={datePickerVisibleAcomp}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
-                    onCancel={() => setDatePickerVisibleAcomp(false)}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.lineContent}>
-            <View style={styles.boxDatePicker}>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Tratamento de lesão"
-                    checked={activeCheckedTratamento}
-                    onChange={setActiveCheckedTratamento}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida tratamento"
-                    icon={user}
-                    value={dataTratState}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={activeCheckedTratamento ? false : true}
-                    title="Escolher data"
-                    onPress={() => setDatePickerVisibleTrat(true)}
-                  />
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={datePickerVisibleTrat}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataTratamento(a)}
-                    onCancel={() => setDatePickerVisibleTrat(false)}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </Layout>
+      </KeyboardAvoidingView>
+    </PageContainer>
   );
 };
 
@@ -421,17 +532,21 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   lineContent: {
+    flex:1,
     width: "100%",
-    marginVertical: 2,
+    marginVertical: 8,
   },
   heightInput: {
     height: 40,
   },
   picker: {
+    flex: 1,
     width: "100%",
-    display: "flex",
-    paddingHorizontal: 8,
-    paddingTop: 8,
+    justifyContent: "space-between",
+  },
+  view: {
+    flex: 1,
+    flexDirection: "column",
   },
   boxDatePicker: {
     marginHorizontal: 8,
@@ -446,6 +561,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
   },
+  button: {
+    marginHorizontal: 16,
+  },
+  
 });
 
 export default withStyles(CadastroConduta, (theme) => ({

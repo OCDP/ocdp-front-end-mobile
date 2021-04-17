@@ -7,9 +7,13 @@ import {
   Icon
 } from "@ui-kitten/components";
 import Empty from "..//assets/vectors/EmptyContent.icon.jsx";
-import { View } from "react-native";
+import { View, Button } from "react-native";
+import BotaoContext from "../contexts/BotoesContext";
+import NovoAcompContext from "../contexts/NovoAcompContext";
 
-const ImplementFutura = ({ navigation, title, textContent }) => {
+const ImplementFutura = ({ navigation, title, textContent, showBtnNovoAcomp }) => {
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  const { setIdNovoAcomp } = React.useContext(NovoAcompContext)
   const styles = useStyleSheet({
     container: {
       flex: 1
@@ -38,6 +42,17 @@ const ImplementFutura = ({ navigation, title, textContent }) => {
         <Text style={{ textAlign: "center" }} appearance="hint">
           {textContent}
         </Text>
+        {showBtnNovoAcomp ?
+          (
+            <Button title={"Novo Acompanhamento"} 
+            onPress={() => {
+              navigation.navigate("MapeamentoSintomas")
+            }}
+            > Registrar novo Acompanhamento </Button>
+          )
+        : (
+          <></>)
+        }
       </View>
     </Layout>
   );

@@ -1,22 +1,22 @@
 import React, { useEffect, useContext } from "react";
-import { View, Alert, BackHandler } from "react-native";
+import { View, Alert, BackHandler, Modal } from "react-native";
 import {
   useStyleSheet,
   CheckBox,
   Text,
   Layout,
   Button,
-  Modal,
   ListItem,
   List,
   RadioGroup,
   Radio,
   Select,
 } from "@ui-kitten/components";
+import { StyleSheet, ScrollView, TouchableHighlight,KeyboardAvoidingView } from "react-native";
 import { HeaderContainer, TextHeader } from "./MapeamentoSintonas.styles";
 import Lesoes from "../Lesoes";
 import FatoresContext from "../../../contexts/FatoresRiscoContext";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import apiFunc from "../../../services/api";
 import { useLoading } from "../../../contexts/AppContext";
 import EmptyContent from "../../EmptyContent";
@@ -26,6 +26,10 @@ import UsuarioLogadoContext from "../../../contexts/UsuarioLogadoContext";
 import LesoesRegiaoContext from "../../../contexts/LesoesRegioesContext";
 import BotaoContext from "../../../contexts/BotoesContext";
 import { CommonActions } from "@react-navigation/native";
+import { menuDetail } from "../../../assets/Icons";
+import MapeamentoSintomasClass from "../../../classes/MapeamentoSintomasClass";
+import PageContainer from "../../PageContainer";
+import NovoAcompContext from "../../../contexts/NovoAcompContext";
 
 const data = [{ text: "classificao 1" }, { text: "classificao 2" }];
 
@@ -34,6 +38,7 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [activeCheckedLesao, setActiveCheckedLesao] = React.useState(false);
   const [checkedLesao, setCheckedLesao] = React.useState(false);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const { acomp } = React.useContext(PacienteContext);
   const [selectedIndexPotencial, setSelectedIndexPotencial] = React.useState(0);
   const [selectedIndexOutros, setSelectedIndexOutros] = React.useState(0);
   const { fatores, setFatores } = useContext(FatoresContext);
@@ -56,10 +61,11 @@ const MapeamentoSintomas = ({ navigation }) => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [onCheckedChange, setOnCheckedChange] = React.useState([]);
   const [potencialmente, setPotencialmente] = React.useState(false);
-  const {activeStepBtn, setActiveStepBtn} = React.useContext(BotaoContext);
+  const { activeStepBtn, setActiveStepBtn } = React.useContext(BotaoContext);
+  const {idNovoAcomp} = React.useContext(NovoAcompContext)
   //aqui o contexto novo braz...
   const { lesoesRegioes, setLesoesRegioes } = useContext(LesoesRegiaoContext);
-  const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext)
+  const { bloqBotaoProximo, setBloqBotaoProximo } = useContext(BotaoContext);
   const onActiveChange = (length, i, nome, id) => {
     let fator = [];
     let fatoresReq = fatores;
@@ -86,17 +92,21 @@ const MapeamentoSintomas = ({ navigation }) => {
     setPostFatores(objSetFatores);
   };
 
+  // const retornaBotao = (name, desc) => {
+  //   return (
+  //     <Button
+  //         style={{ flexDirection: "row-reverse", marginHorizontal:32 }}
+  //         appearance="outline"
+  //         size="small"
+  //         icon={menuDetail}
+  //         onPress={() => chamarListaSubregioes(desc)}
+  //       >
+  //         Selecionar Sub{desc}
+  //     </Button>
+  //   )
+  // }
+
   const styles = useStyleSheet({
-    container: {
-      paddingLeft: 36,
-      alignItems: "flex-start",
-      justifyContent: "center",
-      marginVertical: 16,
-    },
-    lineContent: {
-      flex: 1,
-      width: "100%",
-    },
     columnsContent: {
       flex: 1,
       flexDirection: "row",
@@ -148,6 +158,36 @@ const MapeamentoSintomas = ({ navigation }) => {
     radio: {
       marginVertical: 8,
     },
+    lineContent: {
+      flex: 1,
+      width: "100%",
+      marginVertical: 8,
+    },
+    testeInputCss: {
+      flex: 1,
+      width: '80%',
+      paddingVertical: 10
+      // justifyContent: 'flex-start',
+      // alignItems: 'flex-start'
+    },
+    heightInput: {
+      maxHeight: 50,
+    }, 
+    container: {
+      flex: 1,
+    },
+    view: {
+      flex: 1,
+      flexDirection: "column",
+    },
+    picker: {
+      flex: 1,
+      width: "100%",
+      justifyContent: "space-between",
+    },
+    button: {
+      marginHorizontal: 16,
+    },
     rowCheck: {
       flexDirection: "row",
       justifyContent: "space-between",
@@ -157,27 +197,40 @@ const MapeamentoSintomas = ({ navigation }) => {
       flex: 1,
       height: 36,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    txtHeader: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'blue',
+        width: 255,
+    },
   });
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(lesoesRegioes.length > 0 && postFatores != undefined){
+  useEffect(() => {
+    async function setarBotao() {
+      setLesoesRegioes([]);
+      if (lesoesRegioes.length > 0 && postFatores != undefined) {
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(true)
+      } else setBloqBotaoProximo(true);
     }
     setarBotao();
-  }, [])
+  }, []);
 
-  useEffect(()=>{
-    async function setarBotao(){
-      if(lesoesRegioes.length > 0 && postFatores != undefined){
+  useEffect(() => {
+    async function setarBotao() {
+      if (lesoesRegioes.length > 0 && postFatores != undefined) {
         setBloqBotaoProximo(false);
-      }else setBloqBotaoProximo(true)
+      } else setBloqBotaoProximo(true);
     }
     setarBotao();
-  }, [lesoesRegioes, postFatores])
+  }, [lesoesRegioes, postFatores]);
 
   async function chamarListaSubregioes(name) {
+    setLesaoSelecionado([]);
     setLoading(true);
     try {
       await apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
@@ -200,37 +253,6 @@ const MapeamentoSintomas = ({ navigation }) => {
     }
   }
 
-  
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert("Atenção", "Voltar agora te fará perder as informações. Para voltar um passo, utilize o botão voltar. \n\nDeseja prosseguir e cancelar procedimento?", [
-        {
-          text: "Voltar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Desejo cancelar procedimento", onPress: () => {
-          setLoading(true);
-              navigation.dispatch(
-              CommonActions.reset({
-                routes: [{ name: "Home" }],
-              })
-            );
-          setActiveStepBtn(0);
-          setLoading(false)
-        } }
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
-
   const dismiss = () => {
     setVisible(visible ? false : true);
     setSubregiao(null);
@@ -244,13 +266,21 @@ const MapeamentoSintomas = ({ navigation }) => {
     loadTipoLesao();
   }
 
+  function verificaMapeamentoSintomas() {
+    const resp = new MapeamentoSintomasClass(postFatores, lesoesRegioes).retornaValidacao();
+    console.log("resp", resp)
+    if (resp == "sucesso") {
+      navigation.navigate("CadastroConduta", { navigation: navigation });
+    }
+  }
+
   const renderModalElement = () => (
-    <Layout level="3" style={styles.modalContainer}>
+    <Layout style={styles.modalContainer}>
       {listRegioes.map(({ id, nome }, j) => (
         <View key={j} style={styles.itemContainer}>
-          <TouchableOpacity onPress={() => subRegiaoActions(id, j)}>
+          <TouchableHighlight onPress={() => subRegiaoActions(id, j)}>
             <Text style={styles.textItem}>{nome}</Text>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       ))}
     </Layout>
@@ -342,86 +372,94 @@ const MapeamentoSintomas = ({ navigation }) => {
       <Button
         style={{ marginVertical: 8 }}
         onPressIn={() => setarRegiaoLesao()}
+        disabled={lesaoSelecionado.length == 0}
       >
         cadastrar lesão
       </Button>
     </Layout>
   );
-  
-  function setarRegiaoLesao(){
+
+  function setarRegiaoLesao() {
     let st = "";
     let incluir = true;
     let indice = null;
-    if(lesoesRegioes.length > 0){
+    if (lesoesRegioes.length > 0) {
       let cont = 0;
-      st += "Regiões já cadastradas: \n"
-      for(let i of lesoesRegioes){
-        if((i.regiaoBoca.nome == regiaoSelect.nome) &&
-        (i.lesao.nome == lesaoSelecionado.nome) && (i.lesao.tipoLesao.nome == lesaoSelecionado.tipoLesao.nome)){
+      st += "Regiões já cadastradas: \n";
+      for (let i of lesoesRegioes) {
+        if (
+          i.regiaoBoca.nome == regiaoSelect.nome &&
+          i.lesao.nome == lesaoSelecionado.nome &&
+          i.lesao.tipoLesao.nome == lesaoSelecionado.tipoLesao.nome
+        ) {
           incluir = false;
           indice = cont;
           break;
-        }else{
+        } else {
           //st += `Região: ${i.regiaoBoca.nome}\nLesão: ${i.lesao.nome} - ${i.lesao.tipoLesao.nome}\n`
         }
         cont = cont + 1;
       }
     }
-    
-    if (incluir == false){
+
+    if (incluir == false) {
       Alert.alert(
-        'Atenção',
+        "Atenção",
         "Lesão já registrada: Deseja excluir?",
         [
-          {text: 'Sim', onPress: () => excluirRegiaoLesao(indice)},
+          { text: "Sim", onPress: () => excluirRegiaoLesao(indice) },
           {
-            text: 'Não',
-            style: 'cancel',
+            text: "Não",
+            style: "cancel",
           },
         ],
-        {cancelable: false},
+        { cancelable: false }
       );
-    }
-    else{
-      st += `\nNovo cadastro: \nRegião: ${regiaoSelect.nome}\nLesão: ${lesaoSelecionado.nome} - ${lesaoSelecionado.tipoLesao.nome}`
+    } else {
+      st += `\nNovo cadastro: \nRegião: ${regiaoSelect.nome}\nLesão: ${lesaoSelecionado.nome} - ${lesaoSelecionado.tipoLesao.nome}`;
       Alert.alert(
-        'Atenção',
+        "Atenção",
         st,
         [
           {
-            text: 'Cancelar',
-            style: 'cancel',
+            text: "Cancelar",
+            style: "cancel",
           },
-          {text: 'Cadastrar', onPress: () => cadastrarRegiaoLesao()},
+          { text: "Cadastrar", onPress: () => cadastrarRegiaoLesao() },
         ],
-        {cancelable: false},
+        { cancelable: false }
       );
     }
+
   }
 
-  function excluirRegiaoLesao(i){
-    let rS = [...lesoesRegioes]
+  function excluirRegiaoLesao(i) {
+    setVisible(false);
+    let rS = [...lesoesRegioes];
     rS.splice(i, 1);
     setLesoesRegioes(rS);
+    dismiss()
     alert("Lesão Excluída");
   }
 
-  function cadastrarRegiaoLesao(){
-    regiaoSelect.siglaRegiaoBoca.imagemBase64 = ""
+  function cadastrarRegiaoLesao() {
+    regiaoSelect.siglaRegiaoBoca.imagemBase64 = "";
     let objRL = {
       lesao: lesaoSelecionado,
-      regiaoBoca: regiaoSelect
-    }
+      regiaoBoca: regiaoSelect,
+    };
     let lesaoRegiaoContext = [];
-    if(lesoesRegioes == undefined || lesoesRegioes.length == 0){
+    if (lesoesRegioes == undefined || lesoesRegioes.length == 0) {
       lesaoRegiaoContext.push(objRL);
-      setLesoesRegioes(lesaoRegiaoContext)
-    }else{
+      setLesoesRegioes(lesaoRegiaoContext);
+    } else {
       lesaoRegiaoContext = [...lesoesRegioes];
       lesaoRegiaoContext.push(objRL);
-      setLesoesRegioes(lesaoRegiaoContext)
+      setLesoesRegioes(lesaoRegiaoContext);
     }
-      alert("Lesão armazenada. Para cadastrar, termine os passos");
+    alert("Lesão armazenada. Para cadastrar, termine os passos");
+    dismiss();
+    setVisible(false);
   }
 
   const rendeDetailLesao = () => (
@@ -435,72 +473,150 @@ const MapeamentoSintomas = ({ navigation }) => {
       </Text>
       {tipoLesaoOptions.map(({ id, nome }, i) => (
         <View key={i}>
-          <TouchableOpacity onPress={() => setarLesao(nome)}>
+          <TouchableHighlight onPress={() => setarLesao(nome)}>
             <View style={{ marginTop: 4, marginLeft: 8 }}>
               <Text style={[styles.textItemSmall, styles.lesaoContent]}>
                 {nome}
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableHighlight>
         </View>
       ))}
     </Layout>
   );
 
   return (
-    <View style={styles.lineContent}>
-      <HeaderContainer>
-        <View style={styles.container}>
-          <TextHeader>Fatores de risco</TextHeader>
-          <View style={styles.columnsContent}>
-            <View style={styles.columnCheck}>
-              {fatores.map(({ id, nome }, i) => (
-                <View key={i} style={styles.checkItem}>
-                  <CheckBox
-                    text={nome}
-                    checked={
-                      activeChecked[i] ? activeChecked[i].marcado : false
-                    }
-                    onChange={() => onActiveChange(fatores.length, i, nome, id)}
-                  />
-                </View>
-              ))}
+    <PageContainer
+      title={acomp ? "Novo acompanhamento" : "Cadastro de Paciente"}
+      navigation={navigation}
+    >
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.view}>
+          <View style={styles.picker}>
+            <View style={{ flex: 0.02, flexDirection: 'row', paddingHorizontal: 20, paddingBottom: 10 }}>
+              <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              {idNovoAcomp != 1 && (
+                <>
+                  <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+                  </View>
+                  <View style={{ flex: 1, backgroundColor: "grey", borderWidth: 1, borderColor: 'black' }}>
+                  </View>
+                </>
+              )}
+              <View style={{ flex: 1, backgroundColor: "#1696B8", borderWidth: 1, borderColor: 'black' }}>
+              </View>
+              <View style={{ flex: 1, backgroundColor: "white", borderWidth: 1, borderColor: 'black' }}>
+              </View>
             </View>
+            <View style={{ flex: 1 }}>
+
+              <ScrollView>
+                <>
+                  <View style={styles.lineContent}>
+                    <HeaderContainer>
+                      <View style={styles.container}>
+                        <TextHeader>Fatores de risco</TextHeader>
+                        <View style={styles.columnsContent}>
+                          <View style={styles.columnCheck}>
+                            {fatores.map(({ id, nome }, i) => (
+                              <View key={i} style={styles.checkItem}>
+                                <CheckBox
+                                  text={nome}
+                                  checked={
+                                    activeChecked[i] ? activeChecked[i].marcado : false
+                                  }
+                                  onChange={() => onActiveChange(fatores.length, i, nome, id)}
+                                />
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      </View>
+                    </HeaderContainer>
+                    {postFatores && postFatores.length > 0 ? (
+                      <View>
+                        {regioesArr.map(({ name, description }, i) => (
+                          <>
+                            <View key={i} style={{ flex: 1 }}>
+                              <Lesoes
+                                navigation={navigation}
+                                title={description}
+                                imgRegiao={name}
+                              // html={retornaBotao(name, description)}
+                              />
+                              <View
+                                style={{
+                                  justifyContent: "center",
+                                  alignContent: "center",
+                                  paddingHorizontal: 32,
+                                  paddingTop: 4,
+                                }}
+                              >
+
+                                <Button
+                                  style={{ flexDirection: "row-reverse", marginHorizontal: 32 }}
+                                  appearance="outline"
+                                  size="small"
+                                  icon={menuDetail}
+                                  onPress={() => chamarListaSubregioes(description)}
+                                >
+                                  Selecionar Sub{description}
+                                </Button>
+                              </View>
+                            </View>
+                              {/* <TouchableWithoutFeedback onPress={() => console.log('teste')}> */}
+                                <Modal
+                                  visible={visible}
+                                  animationType={'none'}
+                                  transparent={true}
+                                  onRequestClose={dismiss}
+                                >
+                                  <View style={[{
+                                      flex: 1,
+                                      justifyContent: 'center',
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                      backgroundColor: 'rgba(0,0,0,0.1)',
+                                  }]}>
+                                    {lesao.length > 0
+                                      ? renderEscolhaTipo()
+                                      : subregiao
+                                        ? rendeDetailLesao()
+                                        : renderModalElement()}
+                                  </View>
+                                </Modal>
+                              {/* </TouchableWithoutFeedback> */}
+                          </>
+                        ))}
+                      </View>
+                    ) : (
+                        <></>
+                      )}
+                  </View>
+                </>
+              </ScrollView>
+            </View>
+            <View style={{ flex: 0.05, flexDirection: 'row', marginBottom: 20 }}>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight
+                  activeOpacity={0.6}
+                  underlayColor="#DDDDDD"
+                  onPress={() => navigation.navigate(idNovoAcomp == 1 ? "DadosAcompanhamento" : "DadosContato", { navigation })} style={{ backgroundColor: "#1696B8", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Voltar</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={{ flex: 1, marginHorizontal: 10 }}>
+                <TouchableHighlight onPress={() => verificaMapeamentoSintomas()} style={{ backgroundColor: "#09527C", paddingVertical: 10 }}>
+                  <Text style={{ fontSize: 16, textAlign: 'center', color: 'white' }}>Avançar</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+
           </View>
         </View>
-      </HeaderContainer>
-      {postFatores && postFatores.length > 0 ? (
-        
-      <View>
-        {regioesArr.map(({ name, description }, i) => (
-          <>
-            <View key={i}>
-              <TouchableOpacity
-                onPress={() => chamarListaSubregioes(description)}
-              >
-                <Lesoes
-                  navigation={navigation}
-                  title={description}
-                  imgRegiao={name}
-                />
-              </TouchableOpacity>
-            </View>
-            <Modal
-              backdropStyle={styles.backdrop}
-              onBackdropPress={dismiss}
-              visible={visible}
-            >
-              {lesao.length > 0
-                ? renderEscolhaTipo()
-                : (subregiao
-                ? rendeDetailLesao()
-                : renderModalElement())}
-            </Modal>
-          </>
-        ))}
-      </View>
-      ): <></>}
-    </View>
+      </KeyboardAvoidingView>
+    </PageContainer >
   );
 };
 

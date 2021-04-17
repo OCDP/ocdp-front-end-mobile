@@ -23,7 +23,15 @@ import Constants from "expo-constants";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { camera, close, user, lixeira, galeria, upload } from "../assets/Icons";
+import {
+  camera,
+  close,
+  user,
+  lixeira,
+  galeria,
+  upload,
+  calendar,
+} from "../assets/Icons";
 import { AtendimentosInterface } from "../utils/models/AtendimentosInterface";
 import UsuarioLogadoContext from "../contexts/UsuarioLogadoContext";
 import axios from "axios";
@@ -49,7 +57,8 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   const [indiceFoto, setIndiceFoto] = useState(null);
   const [objResult, setObjResult] = useState<AtendimentosInterface>({});
   //nome que chega da uri e deve ser usado pra acessar a imagem
-  const [nameImage, setNameImage] = useState(null);
+  const [nameImage, setNameImage] = useState([]);
+  const [uriImage, setUriImage] = useState([]);
 
   const styles = useStyleSheet({
     container: {
@@ -86,6 +95,20 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     },
     btnResult: {
       marginHorizontal: 36,
+      marginVertical: 36,
+    },
+    miniBoxBtn: {
+      alignItems: "center",
+      backgroundColor: `${themedStyle.bgColorStrong}`,
+      padding: 8,
+      borderRadius: 8,
+    },
+    miniBoxCalendar: {
+      alignItems: "center",
+      backgroundColor: `${themedStyle.bgColorStrong}`,
+      marginVertical: 8,
+      paddingVertical: 8,
+      borderRadius: 8,
     },
   });
 
@@ -109,33 +132,42 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
   async function enviarPost() {
     setLoading(true);
     objResult.atendimento.tipoAtendimento = "RESULTADOS";
-    objResult.atendimento.localAtendimento = null;
-    objResult.atendimento.localEncaminhado = null;
     objResult.atendimento.dataAtendimento = moment().format(
       "YYYY-MM-DD HH:mm:ss"
     );
+
+    for (let i in nameImage) {
+      objResult.procedimentos[i].nomeArquivo = nameImage[i];
+      delete objResult.procedimentos[i].anexo64;
+    }
+
     let obj = {
-      atendimento: objResult.atendimento,
+      atendimento: {
+        dataAtendimento: objResult.atendimento.dataAtendimento,
+        id: objResult.atendimento.id,
+        localAtendimentoId: objResult.atendimento.localAtendimento ? objResult.atendimento.localAtendimento.id : null,
+        localEncaminhadoId: objResult.atendimento.localEncaminhado ? objResult.atendimento.localEncaminhado.id : null,
+        pacienteId: objResult.atendimento.paciente.id,
+        tipoAtendimento: objResult.atendimento.tipoAtendimento,
+        usuarioId: objResult.atendimento.usuario.id 
+      },
       confirmaRastreamento: true,
       diagnosticoFinal: diagnosticoFinal,
       procedimentos: objResult.procedimentos,
     };
-    // console.log(obj);
-    let resp = apiFunc(
-      objResult.atendimento.usuario.cpf,
-      usuarioLogado.senhaUsuario
-    )
-      .post("/resultados/salvar", obj)
-      .then(() => {
-        Alert.alert("Registros enviadas com sucesso!");
-      })
-      .catch((err) => {
-        console.log(err);
-        Alert.alert("nao foi possivel enviar os registros!", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    console.log(obj);
+    console.log(JSON.stringify(obj));
+    try {
+      let resp = await apiFunc(
+        objResult.atendimento.usuario.cpf,
+        usuarioLogado.senhaUsuario
+      ).post("/resultados/salvar", obj);
+      alert("Enviado com sucesso");
+    } catch (err) {
+      console.log("erro ao salvar resultados >>>", err.response);
+    } finally {
+      setLoading(false);
+    }
     return;
   }
 
@@ -146,11 +178,18 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     setObjResult(arr);
   };
 
-  const setarImagem = (data, indice) => {
-    let arr = objResult;
-    // console.log(arr);
-    arr.procedimentos[indice].anexo64 = data;
-    setObjResult(arr);
+  const setarNameImage = async (i) => {
+    setLoading(true);
+    let arrNameImage = nameImage;
+    setNameImage(arrNameImage);
+
+    await arrNameImage.map((e) => {
+      if (e === nameImage[i]) {
+        arrNameImage[i] = undefined;
+      }
+    });
+    setNameImage(arrNameImage);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -160,7 +199,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
     })();
   }, []);
 
-  async function enviaImagem(dataImage) {
+  async function enviaImagem(dataImage, i) {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", {
@@ -168,18 +207,22 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       uri: dataImage.uri,
       name: "uploadImageResult",
     });
-
     apiFunc(usuarioLogado.cpf, usuarioLogado.senhaUsuario)
       .post(
-        `anexo/uploadFile?cpf=${objResult.atendimento.usuario.cpf}`,
+        `anexo/uploadFile?cpf=${objResult.atendimento.paciente.cpf}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       )
       .then((response) => {
-        console.log("resposta >>>", response.data.name);
-        setNameImage(response.data.name);
+        console.log('response.data', response.data.name);
+        let arrNameImage = nameImage;
+        arrNameImage[i] = response.data;
+        setNameImage(arrNameImage);
+        let arrUriImage = uriImage;
+        arrUriImage[i] = dataImage.uri;
+        setUriImage(arrUriImage);
         setLoading(false);
       })
       .catch((error) => {
@@ -191,16 +234,16 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
 
   async function takePictureCamera() {
     if (camRef) {
-      const options = { quality: 1, uri: true };
+      const options = { quality: 1, uri: true, onPictureSaved: async (e) => {
+        
+        setCanOpen(false)
+        await enviaImagem(e, indiceFoto);
+      } };
       const data = await camRef.current.takePictureAsync(options);
-      setCanOpen(false);
-      // console.log("indiceFoto", indiceFoto)
-      // setarImagem(data.base64, indiceFoto);
-      enviaImagem(data);
     }
   }
 
-  async function takePictureFiles() {
+  async function takePictureFiles(i) {
     try {
       let data = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -210,7 +253,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       });
 
       // console.log(data);
-      enviaImagem(data);
+      enviaImagem(data, i);
     } catch (E) {
       console.log(E);
     }
@@ -221,7 +264,7 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
-            <Text>Envie os dados dos resultados:</Text>
+            <Text>Anexe aqui os dados dos resultados:</Text>
             {hasPermission && canOpen ? (
               <Modal
                 backdropStyle={styles.backdrop}
@@ -250,27 +293,31 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
                       style={{
                         flex: 1,
                         alignSelf: "flex-end",
-                        alignItems: "center",
                       }}
                     >
-                      <View style={{ display: "flex" }}>
-                        <View style={{ flexDirection: "row" }}>
-                          <View>
-                            <Button
-                              style={styles.button}
-                              status="primary"
-                              icon={camera}
-                              onPress={() => takePictureCamera()}
-                            />
-                          </View>
-                          <View>
-                            <Button
-                              style={styles.button}
-                              status="danger"
-                              icon={close}
-                              onPress={() => setCanOpen(false)}
-                            />
-                          </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                        }}
+                      >
+                        <View>
+                          <Button
+                            style={styles.button}
+                            status="primary"
+                            icon={camera}
+                            appearance="ghost"
+                            onPress={() => takePictureCamera()}
+                          />
+                        </View>
+                        <View>
+                          <Button
+                            style={styles.button}
+                            status="danger"
+                            icon={close}
+                            appearance="ghost"
+                            onPress={() => setCanOpen(false)}
+                          />
                         </View>
                       </View>
                     </View>
@@ -279,92 +326,108 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
               </Modal>
             ) : (
               <View>
-                <Text appearance="alternative">sem acesso a camera!</Text>
+                <Text appearance="alternative">sem acesso a câmera!</Text>
               </View>
             )}
 
             {atendimento.procedimentos.map(
               ({ nome, anexo64, observacao, id }, i) => (
                 <View key={id}>
-                  {anexo64 ? (
-                    <Lesoes
-                      title={nome}
-                      navigation={navigation}
-                      imgRegiao={anexo64}
-                    />
-                  ) : (
-                    <>
-                      {nameImage ? (
-                        <>
-                          <View style={styles.imageContainer}>
-                            <Image
-                              style={{
-                                width: 300,
-                                height: 300,
-                              }}
-                              source={{
-                                uri: `http://api-ocdp.us-east-2.elasticbeanstalk.com:8080/api/anexo/downloadFile/${nameImage}`,
-                              }}
-                            />
-                          </View>
+                  <>
+                    {nameImage[i] != undefined ? (
+                      <>
+                        <View style={styles.imageContainer}>
+                          <Image
+                            style={{
+                              width: 300,
+                              height: 300,
+                            }}
+                            source={{
+                              uri: `http://200.137.215.35:9090/api/anexo/downloadFile/${nameImage[i]}`,
+                            }}
+                          />
+                        </View>
 
-                          <Button
-                            style={[
-                              styles.button,
-                              { flexDirection: "row-reverse" },
-                            ]}
-                            onPress={() => setNameImage(null)}
-                            status="danger"
-                            icon={lixeira}
-                          >
-                            cancelar
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            onPress={() => {
-                              setIndiceFoto(i);
-                              setCanOpen(true);
-                            }}
-                            style={[
-                              styles.button,
-                              { flexDirection: "row-reverse" },
-                            ]}
-                            status="primary"
-                            icon={camera}
-                          >
-                            Tirar foto
-                          </Button>
-                          <Button
-                            onPress={() => {
-                              takePictureFiles();
-                              setIndiceFoto(i);
-                            }}
-                            style={[
-                              styles.button,
-                              { flexDirection: "row-reverse" },
-                            ]}
-                            status="primary"
-                            icon={galeria}
-                          >
-                            Abrir galeria
-                          </Button>
-                        </>
-                      )}
-                    </>
-                  )}
+                        <Button
+                          style={[
+                            styles.button,
+                            { flexDirection: "row-reverse" },
+                          ]}
+                          onPress={() => setarNameImage(i)}
+                          status="danger"
+                          icon={lixeira}
+                          size="small"
+                        >
+                          cancelar
+                        </Button>
+                        <Button onPress={() =>  console.log(nameImage[i])}>teste</Button>
+                      </>
+                    ) : (
+                      <View
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                          marginVertical: 10,
+                        }}
+                      >
+                        <View>
+                          <View style={styles.miniBoxBtn}>
+                            <Button
+                              appearance="outline"
+                              onPress={() => {
+                                setIndiceFoto(i);
+                                setCanOpen(true);
+                              }}
+                              style={[
+                                styles.button,
+                                { flexDirection: "row-reverse" },
+                              ]}
+                              status="primary"
+                              icon={camera}
+                            />
+                            <Text>câmera</Text>
+                          </View>
+                        </View>
+                        <View>
+                          <View style={styles.miniBoxBtn}>
+                            <Button
+                              appearance="outline"
+                              onPress={() => {
+                                takePictureFiles(i);
+                                setIndiceFoto(i);
+                              }}
+                              style={[
+                                styles.button,
+                                { flexDirection: "row-reverse" },
+                              ]}
+                              status="primary"
+                              icon={galeria}
+                            />
+                            <Text>galeria</Text>
+                          </View>
+                        </View>
+                      </View>
+                    )}
+                  </>
                   <View style={styles.infoLesoes}>
-                    {nome && <Text>Nome procedimento: {observacao}</Text>}
+                    {nome && (
+                      <Text category="p2" appearance="hint">
+                        Procedimento: {observacao}
+                      </Text>
+                    )}
                     {observacao ? (
-                      <Text>Obs: {observacao}</Text>
+                      <Text category="p2" appearance="hint">
+                        Obs: {observacao}
+                      </Text>
                     ) : (
                       <Input
                         onChangeText={(a) => {
                           console.log(a, i);
                           setarObservacao(a, i);
                         }}
-                        placeholder={`Insira a observacao sobre ${nome}`}
+                        placeholder={`Insira a observação sobre ${nome}`}
                       />
                     )}
                   </View>
@@ -374,114 +437,112 @@ const CadastrarResultados = ({ navigation, themedStyle = null }) => {
             )}
           </View>
           <View style={styles.boxInfo}>
-            <Text
-              style={{ paddingBottom: 16 }}
-              // appearance="alternative"
-              // status="primary"
-              // category="h6"
-            >
-              Diagnóstico final:
-            </Text>
+            <Text>Diagnóstico final:</Text>
             <Input
+              style={{ marginVertical: 8 }}
               numberOfLines={2}
               onChangeText={(a) => {
-                console.log(a);
                 setDiagnosticoFinal(a);
               }}
             />
           </View>
 
           <View style={styles.boxInfo}>
+            <Text
+              style={{
+                marginBottom: 4,
+              }}
+            >
+              Retorno para:
+            </Text>
             <View>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <Text
-                  style={{
-                    marginBottom: 4,
-                  }}
-                  // appearance="hint"
-                >
-                  Retorno para:
-                </Text>
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Acompanhamento"
-                    checked={activeAcomp}
-                    onChange={setActiveAcomp}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida acompanhamento"
-                    icon={user}
-                    value={dataSugeridaAcompanhamento || "escolha uma data"}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={!activeAcomp}
-                    onPress={() => setPickerAcompVisible(true)}
-                  >
-                    Abrir calendário
-                  </Button>
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={pickerAcompVisible}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataAcompanhamento(a)}
-                    onCancel={() => setPickerAcompVisible(false)}
-                  />
+              <View style={styles.miniBoxCalendar}>
+                <View style={{ width: "80%", marginVertical: 8 }}>
+                  <View>
+                    <CheckBox
+                      text="Acompanhamento"
+                      checked={activeAcomp}
+                      onChange={(e) => {
+                        setActiveAcomp(e);
+                        setActiveTrat(!e);
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Input
+                      style={{ marginVertical: 8 }}
+                      placeholder="Data sugerida acompanhamento"
+                      icon={calendar}
+                      value={dataSugeridaAcompanhamento || "escolha uma data"}
+                      disabled={true}
+                    />
+                    <Button
+                      disabled={!activeAcomp && activeTrat}
+                      onPress={() => setPickerAcompVisible(true)}
+                      size="small"
+                      icon={calendar}
+                    >
+                      Abrir calendário
+                    </Button>
+                    <DateTimePickerModal
+                      cancelTextIOS="cancelar"
+                      confirmTextIOS="confirmar"
+                      locale="pt-BR"
+                      headerTextIOS="Escolha uma data"
+                      isVisible={pickerAcompVisible}
+                      mode="date"
+                      onConfirm={(a) => confirmarDataAcompanhamento(a)}
+                      onCancel={() => setPickerAcompVisible(false)}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          </View>
-          <View style={styles.boxInfo}>
-            <View>
-              <View
-                style={{
-                  marginHorizontal: 16,
-                }}
-              >
-                <View style={{ marginVertical: 8 }}>
-                  <CheckBox
-                    text="Tratamento de lesão"
-                    checked={activeTrat}
-                    onChange={setActiveTrat}
-                  />
-                </View>
-                <View>
-                  <Input
-                    placeholder="Data sugerida tratamento"
-                    icon={user}
-                    value={dataSugeridaTratamento || "escolha uma data"}
-                    disabled={true}
-                  />
-                  <Button
-                    disabled={!activeTrat}
-                    onPress={() => setPickerAcompVisible(true)}
-                  >
-                    Abrir calendário
-                  </Button>
-                  <DateTimePickerModal
-                    cancelTextIOS="cancelar"
-                    confirmTextIOS="confirmar"
-                    locale="pt-BR"
-                    headerTextIOS="Escolha uma data"
-                    isVisible={pickerAcompTrat}
-                    mode="date"
-                    onConfirm={(a) => confirmarDataTratamento(a)}
-                    onCancel={() => setPickerAcompTrat(false)}
-                  />
+
+              <View style={styles.miniBoxCalendar}>
+                <View style={{ width: "80%", marginVertical: 8 }}>
+                  <View>
+                    <CheckBox
+                      text="Tratamento de lesão"
+                      checked={activeTrat}
+                      onChange={(e) => {
+                        setActiveTrat(e);
+                        setActiveAcomp(!e);
+                      }}
+                    />
+                  </View>
+                  <View>
+                    <Input
+                      style={{ marginVertical: 8 }}
+                      placeholder="Data sugerida tratamento"
+                      icon={calendar}
+                      value={dataSugeridaTratamento || "escolha uma data"}
+                      disabled={true}
+                    />
+                    <Button
+                      disabled={!activeTrat && activeAcomp}
+                      onPress={() => setPickerAcompVisible(true)}
+                      size="small"
+                      icon={calendar}
+                    >
+                      Abrir calendário
+                    </Button>
+                    <DateTimePickerModal
+                      cancelTextIOS="cancelar"
+                      confirmTextIOS="confirmar"
+                      locale="pt-BR"
+                      headerTextIOS="Escolha uma data"
+                      isVisible={pickerAcompTrat}
+                      mode="date"
+                      onConfirm={(a) => confirmarDataTratamento(a)}
+                      onCancel={() => setPickerAcompTrat(false)}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
           </View>
           <Button
+            appearance="outline"
             style={[styles.btnResult, { flexDirection: "row-reverse" }]}
             onPress={() => enviarPost()}
             icon={upload}

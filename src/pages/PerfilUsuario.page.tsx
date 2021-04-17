@@ -28,7 +28,7 @@ const PerfilUsuario = ({ navigation, themedStyle = null }) => {
   });
 
   return (
-    <PageContainer title="Detalhes historico" navigation={navigation}>
+    <PageContainer title="Detalhes histórico" navigation={navigation}>
       <ScrollView>
         <Layout style={styles.container}>
           <View style={styles.boxInfo}>
@@ -58,7 +58,7 @@ const PerfilUsuario = ({ navigation, themedStyle = null }) => {
             {usuarioLogado.nivelAtencao && (
               <>
                 <Text category="h6">
-                  Nivel de atenção: {usuarioLogado.nivelAtencao}
+                  Nível de atenção: {usuarioLogado.nivelAtencao}
                 </Text>
                 <Divider style={styles.divider} />
               </>

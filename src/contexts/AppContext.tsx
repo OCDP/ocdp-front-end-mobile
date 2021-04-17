@@ -48,13 +48,6 @@ export const AppProvider = ({ children }) => {
     []
   );
   const loadingState = useState(false);
-  const loadingMessage = useState("");
-
-  useEffect(() => {
-    if (!loadingState[0]) {
-      loadingMessage[1]("");
-    }
-  }, [loadingState[0]]);
 
   function switchTheme() {
     setTheme({
@@ -83,7 +76,6 @@ export const AppProvider = ({ children }) => {
       <Spinner
         visible={loadingState[0]}
         animation="fade"
-        textContent={loadingMessage[0]}
         color={theme.vars["color-primary-500"]}
         overlayColor="#fff9"
       />
@@ -95,11 +87,6 @@ export const AppProvider = ({ children }) => {
 export const useLoading = () => {
   const { loadingState } = useContext(AppContext);
   return loadingState;
-};
-
-export const useLoadingMessage = () => {
-  const { loadingMessage } = useContext(AppContext);
-  return loadingMessage;
 };
 
 export function useDadosPacientes(): [
