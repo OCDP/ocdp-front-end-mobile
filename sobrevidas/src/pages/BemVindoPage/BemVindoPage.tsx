@@ -2,8 +2,20 @@ import React from 'react';
 import Logo from '../../assets/img/Logo';
 import {View, StyleSheet, Text} from 'react-native';
 import PageContainer from '../../components/PageContainer/PageContainer';
+import {Card, Image} from 'react-native-elements';
 
 const BemVindoPage = ({navigation}: any) => {
+  const users = [
+    {
+      name: 'braz',
+      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
+    },
+    {
+      name: 'wev',
+      avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
+    },
+  ];
+
   return (
     <PageContainer>
       <View style={styles.container}>
@@ -12,11 +24,18 @@ const BemVindoPage = ({navigation}: any) => {
         </View>
         <View style={styles.containerLogo}>
           <Logo size={200} />
-          <View style={styles.textHeader}>
-            <Text>
-              Rastreamento e Monitoramento do Grupo de Risco ao Câncer de Boca
-            </Text>
-          </View>
+          <Card>
+            <Card.Title>CARD WITH DIVIDER</Card.Title>
+            <Card.Divider />
+            {users.map((u, i) => {
+              return (
+                <View key={i}>
+                  <Image resizeMode="cover" source={{uri: u.avatar}} />
+                  <Text>{u.name}</Text>
+                </View>
+              );
+            })}
+          </Card>
         </View>
         <View style={styles.containerFooter}>
           <View>
