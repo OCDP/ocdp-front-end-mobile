@@ -16,6 +16,7 @@
     "@types/react-native-loading-spinner-overlay": "^0.5.2",
     "@types/react-navigation": "^3.4.0",
     "react": "17.0.1",
+    "react-hook-form": "^7.1.1",
     "react-native": "0.64.0",
     "react-native-elements": "^3.3.2",
     "react-native-gesture-handler": "^1.10.3",

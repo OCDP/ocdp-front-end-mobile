@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import PageContainer from '../../components/PageContainer/PageContainer';
+import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 
 const LoginPage = () => {
+  const {userTest} = useContext(UsuarioLogadoContext);
   return (
     <PageContainer>
       <View style={styles.container}>
-        <Text>SOU A LOGIN PAGE</Text>
+        <Text>email: {userTest.email}</Text>
+        <Text>password: {userTest.password}</Text>
       </View>
     </PageContainer>
   );
