@@ -7,6 +7,7 @@ import {useForm} from 'react-hook-form';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import Logo from '../../assets/img/Logo';
 import {Container, FormContainer, LogoContainer, FormItem} from './Styles';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
@@ -33,17 +34,23 @@ const LoginPage = ({navigation}: any) => {
             <Logo size={180} />
           </LogoContainer>
           <FormItem>
-            <Text>Email</Text>
-            <TextInput
+            <Input
+              inputContainerStyle={{}}
+              errorMessage="E-mail nao informado."
+              label="E-mail"
+              leftIcon={<Icon name="email" size={20} />}
+              placeholder="Inserir e-mail"
               onChangeText={text => setValue('email', text)}
-              placeholder="Inserir email"
             />
           </FormItem>
           <FormItem>
-            <Text>Senha</Text>
             <Input
+              inputContainerStyle={{}}
+              errorMessage="Senha nao informada."
+              label="Senha"
+              secureTextEntry
+              leftIcon={<Icon name="account-outline" size={20} />}
               placeholder="Inserir senha"
-              secureTextEntry={true}
               onChangeText={text => setValue('password', text)}
             />
           </FormItem>

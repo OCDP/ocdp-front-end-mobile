@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {Button} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Logo from '../../assets/img/Logo';
 import {BemVindoContainer, TextContainer, ButtonContainer} from './Styles';
 import {version} from '../../utils/constants';
@@ -16,13 +16,18 @@ const BemVindoPage = ({navigation}: any) => {
         </TextContainer>
         <ButtonContainer>
           <Button
-            icon={<Icon name="instagram" size={45} />}
+            iconRight
+            icon={
+              <Icon
+                style={{marginLeft: 10}}
+                color="#fff"
+                name="login-variant"
+                size={20}
+              />
+            }
             onPress={() => navigation.navigate('LoginPage')}
             title="Continuar"
           />
-          <Icon.Button name="facebook" onPress={() => {}}>
-            Login with Facebook
-          </Icon.Button>
         </ButtonContainer>
         <TextContainer>v{version}</TextContainer>
       </BemVindoContainer>

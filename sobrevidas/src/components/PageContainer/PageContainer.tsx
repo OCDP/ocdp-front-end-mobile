@@ -1,14 +1,8 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {Container} from './Styles';
 
 const PageContainer = ({children}: any) => {
-  return <View style={styles.container}>{children}</View>;
+  return <Container>{children}</Container>;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default PageContainer;
