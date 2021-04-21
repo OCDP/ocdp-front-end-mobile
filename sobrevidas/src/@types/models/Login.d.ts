@@ -1,6 +1,6 @@
 declare namespace Models {
   interface Login {
-    email: string;
+    cpf: string;
     password: string;
   }
 }

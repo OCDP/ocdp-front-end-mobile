@@ -5,32 +5,36 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppRouter from './src/routes/AppRouter';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {
-  CustomThemeProvider,
-  CustomThemeConsumer,
-} from './src/contexts/CustomThemeContext';
+import customColors from './src/themes/customColors.json';
+import mapping from './src/themes/mapping.json';
+
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
+import {CustomThemeContext} from './src/contexts/CustomThemeContext';
 
 const App = () => {
+  const [theme, setTheme] = React.useState('light');
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+  };
+
   return (
-    <CustomThemeProvider>
-      <IconRegistry icons={EvaIconsPack} />
-      <CustomThemeConsumer>
-        {({theme}) => (
-          <ApplicationProvider mapping={eva.mapping} theme={theme.vars}>
-            <SafeAreaProvider>
-              <ApplicationProvider {...eva} theme={eva.dark}>
-                <AppProvider>
-                  <UsuarioLogadoProvider>
-                    <AppRouter />
-                  </UsuarioLogadoProvider>
-                </AppProvider>
-              </ApplicationProvider>
-            </SafeAreaProvider>
-          </ApplicationProvider>
-        )}
-      </CustomThemeConsumer>
-    </CustomThemeProvider>
+    <CustomThemeContext.Provider value={{theme, toggleTheme}}>
+      <ApplicationProvider
+        customMapping={{...mapping}}
+        {...eva}
+        theme={{...eva[theme], ...customColors}}>
+        <IconRegistry icons={EvaIconsPack} />
+        <SafeAreaProvider>
+          <AppProvider>
+            <UsuarioLogadoProvider>
+              <AppRouter />
+            </UsuarioLogadoProvider>
+          </AppProvider>
+        </SafeAreaProvider>
+      </ApplicationProvider>
+    </CustomThemeContext.Provider>
   );
 };
 

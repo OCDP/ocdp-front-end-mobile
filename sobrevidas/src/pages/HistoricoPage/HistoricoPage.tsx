@@ -1,14 +1,14 @@
 import React from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './HomePage.styles';
+import {HomeText} from './HistoricoPage.styles';
 
 interface Props {}
-const HomePage: React.FC<Props> = ({navigation}: any) => {
+const HistoricoPage: React.FC<Props> = ({navigation}: any) => {
   return (
     <PageContainer withFooter navigation={navigation}>
-      <HomeText>home page</HomeText>
+      <HomeText>historico page</HomeText>
     </PageContainer>
   );
 };
 
-export default HomePage;
+export default HistoricoPage;

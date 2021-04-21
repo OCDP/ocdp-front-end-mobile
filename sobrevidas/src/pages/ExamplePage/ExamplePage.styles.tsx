@@ -1,4 +1,7 @@
 import styled from 'styled-components/native';
+import {buildStyledShadow} from '../../styles/buildShadow';
+
+const shadow = buildStyledShadow(30);
 
 export const Container = styled.View`
   flex: 1;
@@ -7,10 +10,10 @@ export const Container = styled.View`
 `;
 
 export const FormContainer = styled.View`
-  padding: 8px 16px;
+  ${shadow}
+  padding: 16px 16px;
   flex-direction: column;
   justify-content: space-around;
-  background-color: #ccc;
   border-radius: 10px;
   width: 300px;
 `;
@@ -21,5 +24,5 @@ export const LogoContainer = styled.View`
 `;
 
 export const FormItem = styled.View`
-  flex-direction: column;
+  margin: 8px 0px;
 `;

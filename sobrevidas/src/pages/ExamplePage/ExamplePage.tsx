@@ -7,14 +7,15 @@ import {
   FormContainer,
   LogoContainer,
   FormItem,
-} from './LoginPage.styles';
-import {Input, Button, Icon} from '@ui-kitten/components';
+} from './ExamplePage.styles';
+import {Input, Button, Icon, withStyles} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {person} from '../../components/icons';
 
-const LoginPage = ({navigation}: any) => {
+const ExamplePage = ({navigation, ...props}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const {eva, style} = props as any;
 
   useEffect(() => {
     register('cpf');
@@ -37,24 +38,23 @@ const LoginPage = ({navigation}: any) => {
   );
 
   return (
-    <PageContainer>
+    <PageContainer withFooter>
       <Container>
-        <FormContainer level="2">
+        <FormContainer style={[eva.style.container, style]}>
           <LogoContainer>
             <Logo size={180} />
           </LogoContainer>
           <FormItem>
             <Input
-              label="CPF"
               appearance="default"
               accessoryRight={person}
-              placeholder="Digitar CPF"
+              label="CPF"
+              placeholder="Digitar email"
               onChangeText={text => setValue('cpf', text)}
             />
           </FormItem>
           <FormItem>
             <Input
-              label="Senha"
               appearance="default"
               accessoryRight={renderIcon}
               secureTextEntry={secureTextEntry}
@@ -71,4 +71,8 @@ const LoginPage = ({navigation}: any) => {
   );
 };
 
-export default LoginPage;
+export default withStyles(ExamplePage, theme => ({
+  container: {
+    backgroundColor: theme['color-primary-100'],
+  },
+}));
