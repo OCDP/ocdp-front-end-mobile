@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {useForm} from 'react-hook-form';
 import Logo from '../../assets/img/Logo';
@@ -11,22 +11,32 @@ import {
 import {Input, Button, Icon} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {person} from '../../components/icons';
+import {useLoginUsuario} from '../../hooks/networking/usuario';
+import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const loginUsuario = useLoginUsuario();
+  const {setUsuarioLogado} = useContext(UsuarioLogadoContext);
 
   useEffect(() => {
     register('cpf');
     register('password');
   }, [register]);
 
-  const onSubmit = useCallback(
-    (values: Models.Login) => {
-      console.log(values);
-      navigation.navigate('HomePage');
+  const login = useCallback(
+    async (values: Models.Login) => {
+      try {
+        const {data} = await loginUsuario(values.cpf, values.password);
+        console.log(data);
+        setUsuarioLogado({...data, senhaUsuario: values.password});
+        navigation.navigate('PerfilUsuarioPage');
+      } catch (e) {
+        console.log(JSON.stringify(e));
+      }
     },
-    [navigation],
+    [loginUsuario, navigation, setUsuarioLogado],
   );
 
   const renderIcon = (propsIcon: any) => (
@@ -63,7 +73,7 @@ const LoginPage = ({navigation}: any) => {
             />
           </FormItem>
           <FormItem>
-            <Button onPress={handleSubmit(onSubmit)}>Continuar</Button>
+            <Button onPress={handleSubmit(login)}>Continuar</Button>
           </FormItem>
         </FormContainer>
       </Container>

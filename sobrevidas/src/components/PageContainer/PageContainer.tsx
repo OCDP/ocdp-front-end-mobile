@@ -33,7 +33,7 @@ export const PageContainer: React.FC<Props> = ({
     },
     {
       name: 'CadastrarPacientePage',
-      label: 'Paciente',
+      label: 'Pacientes',
       icon: addPerson,
     },
     {

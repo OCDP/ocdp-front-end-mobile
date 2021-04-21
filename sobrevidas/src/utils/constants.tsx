@@ -1,7 +1,7 @@
 // @ts-ignore
 export {version} from '../../package.json';
 
-export const baseUrl = 'www.google.com.br/';
+export const baseURL = 'http://200.137.215.35:8080/api/';
 
 export const cidades = [
   {
