@@ -1,8 +1,35 @@
+import {withStyles} from '@ui-kitten/components';
 import React from 'react';
-import {Container} from './Styles';
+import {View} from 'react-native';
+import {Container, TextFooter} from './Styles';
 
-const PageContainer = ({children}: any) => {
-  return <Container>{children}</Container>;
+interface Props {
+  withFooter?: boolean;
+}
+
+export const PageContainer: React.FC<Props> = ({
+  children,
+  withFooter = false,
+  ...props
+}) => {
+  const {eva, style} = props as any;
+
+  return (
+    <Container>
+      {children}
+      {withFooter && (
+        <>
+          <View style={[eva.style.awesome, style]}>
+            <TextFooter>souu um footeeer</TextFooter>
+          </View>
+        </>
+      )}
+    </Container>
+  );
 };
 
-export default PageContainer;
+export default withStyles(PageContainer, theme => ({
+  awesome: {
+    backgroundColor: theme['color-primary-500'],
+  },
+}));

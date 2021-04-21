@@ -1,13 +1,10 @@
 import React, {useCallback, useContext, useEffect} from 'react';
-import {Text} from 'react-native';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {Button, Input} from 'react-native-elements';
-import {TextInput} from 'react-native-gesture-handler';
 import {useForm} from 'react-hook-form';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import Logo from '../../assets/img/Logo';
 import {Container, FormContainer, LogoContainer, FormItem} from './Styles';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Input, Button} from '@ui-kitten/components';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
@@ -21,7 +18,7 @@ const LoginPage = ({navigation}: any) => {
   const onSubmit = useCallback(
     (values: Models.Login) => {
       setUserTest(values);
-      navigation.navigate('LoginPage');
+      navigation.navigate('HomePage');
     },
     [navigation, setUserTest],
   );
@@ -35,27 +32,19 @@ const LoginPage = ({navigation}: any) => {
           </LogoContainer>
           <FormItem>
             <Input
-              inputContainerStyle={{}}
-              errorMessage="E-mail nao informado."
-              label="E-mail"
-              leftIcon={<Icon name="email" size={20} />}
-              placeholder="Inserir e-mail"
+              placeholder="Digitar email"
               onChangeText={text => setValue('email', text)}
             />
           </FormItem>
           <FormItem>
             <Input
-              inputContainerStyle={{}}
-              errorMessage="Senha nao informada."
-              label="Senha"
               secureTextEntry
-              leftIcon={<Icon name="account-outline" size={20} />}
-              placeholder="Inserir senha"
+              placeholder="Inserir senhaaa"
               onChangeText={text => setValue('password', text)}
             />
           </FormItem>
 
-          <Button onPress={handleSubmit(onSubmit)} title="Continuar" />
+          <Button onPress={handleSubmit(onSubmit)}>Continuar</Button>
         </FormContainer>
       </Container>
     </PageContainer>

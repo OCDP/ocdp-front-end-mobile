@@ -17,7 +17,7 @@ export const FormContainer = styled.View`
 
 export const LogoContainer = styled.View`
   align-items: center;
-  margin-bottom: 16;
+  margin-bottom: 16px;
 `;
 
 export const FormItem = styled.View`

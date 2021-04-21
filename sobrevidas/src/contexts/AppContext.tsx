@@ -26,12 +26,7 @@ export const AppProvider: React.FC = ({children}) => {
         loading,
         setLoading,
       }}>
-      <Spinner
-        visible={loading}
-        animation="fade"
-        // color={theme.vars["color-primary-500"]}
-        overlayColor="#fff9"
-      />
+      <Spinner visible={loading} animation="fade" overlayColor="#fff9" />
       {children}
     </AppContext.Provider>
   );
