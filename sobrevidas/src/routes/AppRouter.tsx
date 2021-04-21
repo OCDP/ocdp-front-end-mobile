@@ -5,12 +5,29 @@ import {routes} from './routes';
 
 const Stack = createStackNavigator();
 
+const config = {
+  animation: 'timing',
+  config: {
+    duration: 0,
+  },
+} as any;
+
 const AppRouter = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none" initialRouteName="BemVindoPage">
         {routes.map((page, i) => (
-          <Stack.Screen key={i} name={page.name} component={page.component} />
+          <Stack.Screen
+            options={{
+              transitionSpec: {
+                open: config,
+                close: config,
+              },
+            }}
+            key={i}
+            name={page.name}
+            component={page.component}
+          />
         ))}
       </Stack.Navigator>
     </NavigationContainer>

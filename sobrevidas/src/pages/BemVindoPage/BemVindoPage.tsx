@@ -1,9 +1,14 @@
 import React from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import Logo from '../../assets/img/Logo';
-import {BemVindoContainer, TextContainer, ButtonContainer} from './Styles';
+import {
+  BemVindoContainer,
+  TextContainer,
+  ButtonContainer,
+} from './BemVindoPage.styles';
 import {version} from '../../utils/constants';
 import {Button} from '@ui-kitten/components';
+import {enter} from '../../components/icons';
 
 const BemVindoPage = ({navigation}: any) => {
   return (
@@ -15,11 +20,11 @@ const BemVindoPage = ({navigation}: any) => {
         </TextContainer>
         <ButtonContainer>
           <Button
+            accessoryRight={enter}
             onPress={() => {
-              console.log('to vivo');
               navigation.navigate('LoginPage');
             }}>
-            brazzzz
+            login
           </Button>
         </ButtonContainer>
         <TextContainer>v{version}</TextContainer>

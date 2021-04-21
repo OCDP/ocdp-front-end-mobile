@@ -7,8 +7,6 @@ export const UsuarioLogadoProvider: React.FC = ({children}) => {
     {} as Models.Usuario,
   );
 
-  const [userTest, setUserTest] = useState<Models.Login>({} as Models.Login);
-
   const logout = useCallback(() => {
     setUsuarioLogado({} as Models.Usuario);
   }, []);
@@ -19,8 +17,6 @@ export const UsuarioLogadoProvider: React.FC = ({children}) => {
         usuarioLogado,
         setUsuarioLogado,
         logout,
-        userTest,
-        setUserTest,
       }}>
       {children}
     </UsuarioLogadoContext.Provider>
