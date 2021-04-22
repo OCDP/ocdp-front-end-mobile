@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 const config = {
   animation: 'timing',
   config: {
-    duration: 0,
+    duration: 200,
   },
 } as any;
 
