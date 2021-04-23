@@ -20,9 +20,7 @@ const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const loginUsuario = useLoginUsuario();
-  const {setUsuarioLogado, setThemeColors, themeColors} = useContext(
-    UsuarioLogadoContext,
-  );
+  const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
 
   useEffect(() => {
     register('cpf');
@@ -84,9 +82,6 @@ const LoginPage = ({navigation}: any) => {
           <FormItem>
             <Button onPress={handleSubmit(login)}>Continuar</Button>
           </FormItem>
-          <Button onPress={() => console.log(themeColors)}>
-            qual o tema agora
-          </Button>
         </FormContainer>
       </Container>
     </PageContainer>
