@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {AppProvider} from './src/contexts/AppContext';
-import UsuarioLogadoContext, {
+import {
   UsuarioLogadoConsumer,
   UsuarioLogadoProvider,
 } from './src/contexts/UsuarioLogadoContext';
@@ -15,7 +15,7 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {CustomThemeContext} from './src/contexts/CustomThemeContext';
 
 const App = () => {
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -25,12 +25,15 @@ const App = () => {
   return (
     <UsuarioLogadoProvider>
       <UsuarioLogadoConsumer>
-        {({themeColors}) => (
+        {({themeColors, usuarioLogado}) => (
           <CustomThemeContext.Provider value={{theme, toggleTheme}}>
             <ApplicationProvider
-              customMapping={{...mapping}}
+              customMapping={{...mapping} as any}
               {...eva}
-              theme={{...eva[theme], ...themeColors}}>
+              theme={{
+                ...eva[usuarioLogado.id ? theme : 'light'],
+                ...themeColors,
+              }}>
               <IconRegistry icons={EvaIconsPack} />
               <SafeAreaProvider>
                 <AppProvider>
