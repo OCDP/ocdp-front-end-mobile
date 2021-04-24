@@ -11,7 +11,7 @@ interface Props {}
 
 const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   const customThemeContext = useContext(CustomThemeContext);
-  const {usuarioLogado} = useContext(UsuarioLogadoContext);
+  const {usuarioLogado, logout} = useContext(UsuarioLogadoContext);
   const authHeaders = useHeaders();
 
   return (
@@ -24,6 +24,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
         <Button onPress={() => navigation.navigate('BemVindoPage')}>
           bem vindo
         </Button>
+        <Button onPress={() => logout(navigation)}>logout</Button>
       </ButtonContainer>
       <ButtonContainer>
         <Button onPress={() => console.log(authHeaders)}>

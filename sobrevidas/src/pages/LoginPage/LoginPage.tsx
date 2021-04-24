@@ -13,12 +13,14 @@ import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {person} from '../../components/icons';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import primariaColors from '../../themes/primariaColors.json';
+import secundariaColors from '../../themes/secundariaColors.json';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const loginUsuario = useLoginUsuario();
-  const {setUsuarioLogado} = useContext(UsuarioLogadoContext);
+  const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
 
   useEffect(() => {
     register('cpf');
@@ -31,12 +33,17 @@ const LoginPage = ({navigation}: any) => {
         const {data} = await loginUsuario(values.cpf, values.password);
         console.log(data);
         setUsuarioLogado({...data, senhaUsuario: values.password});
+        if (data.nivelAtencao === 'PRIMARIA') {
+          setThemeColors(primariaColors);
+        } else {
+          setThemeColors(secundariaColors);
+        }
         navigation.navigate('PerfilUsuarioPage');
       } catch (e) {
         console.log(JSON.stringify(e));
       }
     },
-    [loginUsuario, navigation, setUsuarioLogado],
+    [loginUsuario, navigation, setThemeColors, setUsuarioLogado],
   );
 
   const renderIcon = (propsIcon: any) => (
