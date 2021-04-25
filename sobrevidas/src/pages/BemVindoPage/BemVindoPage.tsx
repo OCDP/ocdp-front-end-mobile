@@ -1,36 +1,43 @@
 import React from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import Logo from '../../assets/img/Logo';
 import {
   BemVindoContainer,
-  TextContainer,
   ButtonContainer,
+  ButtonGoLogin,
+  WaveContainer,
 } from './BemVindoPage.styles';
-import {version} from '../../utils/constants';
-import {Button} from '@ui-kitten/components';
-import {enter} from '../../components/icons';
 
-const BemVindoPage = ({navigation}: any) => {
+import {withStyles} from '@ui-kitten/components';
+import SliderIntro from '../../components/SliderIntro/SliderIntro';
+
+interface Props {
+  navigation?: any;
+}
+
+export const BemVindoPage: React.FC<Props> = ({navigation, ...props}) => {
+  const {eva, style} = props as any;
+
   return (
     <PageContainer>
       <BemVindoContainer>
-        <Logo size={200} />
-        <TextContainer>
-          Rastreamento e Monitoramento do Grupo de Risco ao Câncer de Boca
-        </TextContainer>
+        <WaveContainer level="3" />
+        <SliderIntro />
         <ButtonContainer>
-          <Button
-            accessoryRight={enter}
+          <ButtonGoLogin
+            style={[eva.style.buttonLoginGradient, style]}
             onPress={() => {
               navigation.navigate('LoginPage');
             }}>
-            login
-          </Button>
+            Continuar
+          </ButtonGoLogin>
         </ButtonContainer>
-        <TextContainer>v{version}</TextContainer>
       </BemVindoContainer>
     </PageContainer>
   );
 };
 
-export default BemVindoPage;
+export default withStyles(BemVindoPage, theme => ({
+  buttonLoginGradient: {
+    backgroundColor: theme['color-primary-500'],
+  },
+}));
