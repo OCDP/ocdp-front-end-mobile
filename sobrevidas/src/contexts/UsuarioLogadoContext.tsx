@@ -11,7 +11,7 @@ export const UsuarioLogadoProvider: React.FC = ({children}: any) => {
 
   const logout = useCallback((navigation: any) => {
     setUsuarioLogado({} as Models.Usuario);
-    navigation.navigate('BemVindoPage');
+    navigation.push('BemVindoPage');
     setThemeColors(primariaColors);
   }, []);
 
