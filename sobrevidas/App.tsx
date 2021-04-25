@@ -8,8 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppRouter from './src/routes/AppRouter';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-
-import mapping from './src/themes/mapping.json';
+import {default as mapping} from './src/themes/mapping.json';
 
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {CustomThemeContext} from './src/contexts/CustomThemeContext';

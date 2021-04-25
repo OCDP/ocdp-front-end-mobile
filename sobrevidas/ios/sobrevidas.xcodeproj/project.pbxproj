@@ -28,6 +28,12 @@
 		DA933652A7BC42339AEC853B /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3B1B66DF5154227BF1632B1 /* Octicons.ttf */; };
 		8D3C0CBB294C42CD846EEF40 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EAFA00F948644FF912725E8 /* SimpleLineIcons.ttf */; };
 		4F6527D52D1F4F069FA39F58 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A03B564E92649B0B6439AC4 /* Zocial.ttf */; };
+		4180749A4CDA4A7FB942D91E /* chromosome.png in Resources */ = {isa = PBXBuildFile; fileRef = 963564EFC5994765A17F218C /* chromosome.png */; };
+		83B059F6B0CE411D8509587D /* pills.png in Resources */ = {isa = PBXBuildFile; fileRef = D7ED78BB2CD24C8BB0566B58 /* pills.png */; };
+		E074B003B4884D488D8DF1CE /* report.png in Resources */ = {isa = PBXBuildFile; fileRef = F7C2C0ABC8554AC7A580AB19 /* report.png */; };
+		E1B5D04CF1194A85A030CDEB /* RalewayLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD289D6C6282454B9A9204FF /* RalewayLight.ttf */; };
+		BEB48CF1E49A4ECEA61CB094 /* RalewayRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00B1832742E7409AB972A737 /* RalewayRegular.ttf */; };
+		9C3F464A5BFD47F895870D6C /* RalewaySemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBAD8299917C4B899C785E15 /* RalewaySemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +74,12 @@
 		D3B1B66DF5154227BF1632B1 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9EAFA00F948644FF912725E8 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		4A03B564E92649B0B6439AC4 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		963564EFC5994765A17F218C /* chromosome.png */ = {isa = PBXFileReference; name = "chromosome.png"; path = "../src/assets/img/banners/chromosome.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D7ED78BB2CD24C8BB0566B58 /* pills.png */ = {isa = PBXFileReference; name = "pills.png"; path = "../src/assets/img/banners/pills.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F7C2C0ABC8554AC7A580AB19 /* report.png */ = {isa = PBXFileReference; name = "report.png"; path = "../src/assets/img/banners/report.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DD289D6C6282454B9A9204FF /* RalewayLight.ttf */ = {isa = PBXFileReference; name = "RalewayLight.ttf"; path = "../src/assets/RalewayLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		00B1832742E7409AB972A737 /* RalewayRegular.ttf */ = {isa = PBXFileReference; name = "RalewayRegular.ttf"; path = "../src/assets/RalewayRegular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BBAD8299917C4B899C785E15 /* RalewaySemiBold.ttf */ = {isa = PBXFileReference; name = "RalewaySemiBold.ttf"; path = "../src/assets/RalewaySemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +188,12 @@
 				D3B1B66DF5154227BF1632B1 /* Octicons.ttf */,
 				9EAFA00F948644FF912725E8 /* SimpleLineIcons.ttf */,
 				4A03B564E92649B0B6439AC4 /* Zocial.ttf */,
+				963564EFC5994765A17F218C /* chromosome.png */,
+				D7ED78BB2CD24C8BB0566B58 /* pills.png */,
+				F7C2C0ABC8554AC7A580AB19 /* report.png */,
+				DD289D6C6282454B9A9204FF /* RalewayLight.ttf */,
+				00B1832742E7409AB972A737 /* RalewayRegular.ttf */,
+				BBAD8299917C4B899C785E15 /* RalewaySemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -287,6 +305,12 @@
 				DA933652A7BC42339AEC853B /* Octicons.ttf in Resources */,
 				8D3C0CBB294C42CD846EEF40 /* SimpleLineIcons.ttf in Resources */,
 				4F6527D52D1F4F069FA39F58 /* Zocial.ttf in Resources */,
+				4180749A4CDA4A7FB942D91E /* chromosome.png in Resources */,
+				83B059F6B0CE411D8509587D /* pills.png in Resources */,
+				E074B003B4884D488D8DF1CE /* report.png in Resources */,
+				E1B5D04CF1194A85A030CDEB /* RalewayLight.ttf in Resources */,
+				BEB48CF1E49A4ECEA61CB094 /* RalewayRegular.ttf in Resources */,
+				9C3F464A5BFD47F895870D6C /* RalewaySemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
