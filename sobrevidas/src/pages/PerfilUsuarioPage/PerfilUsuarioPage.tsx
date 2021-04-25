@@ -4,6 +4,7 @@ import PageContainer from '../../components/PageContainer/PageContainer';
 import {CustomThemeContext} from '../../contexts/CustomThemeContext';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import useHeaders from '../../hooks/networking/useHeaders';
+import useMountEffect from '../../hooks/utils/useMountEffect';
 import {ButtonContainer} from '../BemVindoPage/BemVindoPage.styles';
 import {HomeText} from './PerfilUsuarioPage.styles';
 
@@ -13,6 +14,8 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   const customThemeContext = useContext(CustomThemeContext);
   const {usuarioLogado, logout} = useContext(UsuarioLogadoContext);
   const authHeaders = useHeaders();
+
+  useMountEffect(() => console.log('cheguei'));
 
   return (
     <PageContainer withFooter navigation={navigation}>
