@@ -7,18 +7,24 @@ import {
   FormContainer,
   LogoContainer,
   FormItem,
+  VersionText,
+  ButtonLogin,
+  FooterLogin,
 } from './LoginPage.styles';
-import {Input, Button, Icon} from '@ui-kitten/components';
+import {Input, Icon} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {person} from '../../components/icons';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import primariaColors from '../../themes/primariaColors.json';
+import secundariaColors from '../../themes/secundariaColors.json';
+import {version} from '../../utils/constants';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const loginUsuario = useLoginUsuario();
-  const {setUsuarioLogado} = useContext(UsuarioLogadoContext);
+  const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
 
   useEffect(() => {
     register('cpf');
@@ -31,12 +37,17 @@ const LoginPage = ({navigation}: any) => {
         const {data} = await loginUsuario(values.cpf, values.password);
         console.log(data);
         setUsuarioLogado({...data, senhaUsuario: values.password});
+        if (data.nivelAtencao === 'PRIMARIA') {
+          setThemeColors(primariaColors);
+        } else {
+          setThemeColors(secundariaColors);
+        }
         navigation.navigate('PerfilUsuarioPage');
       } catch (e) {
         console.log(JSON.stringify(e));
       }
     },
-    [loginUsuario, navigation, setUsuarioLogado],
+    [loginUsuario, navigation, setThemeColors, setUsuarioLogado],
   );
 
   const renderIcon = (propsIcon: any) => (
@@ -72,9 +83,12 @@ const LoginPage = ({navigation}: any) => {
               onChangeText={text => setValue('password', text)}
             />
           </FormItem>
-          <FormItem>
-            <Button onPress={handleSubmit(login)}>Continuar</Button>
-          </FormItem>
+          <FooterLogin>
+            <FormItem>
+              <ButtonLogin onPress={handleSubmit(login)}>Login</ButtonLogin>
+            </FormItem>
+            <VersionText category="c1">v{version}</VersionText>
+          </FooterLogin>
         </FormContainer>
       </Container>
     </PageContainer>

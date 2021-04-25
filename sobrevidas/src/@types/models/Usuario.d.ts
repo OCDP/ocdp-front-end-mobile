@@ -6,8 +6,9 @@ declare namespace Models {
     status: string;
     email: string;
     telefone: string;
-    nivelAtencao: string;
+    nivelAtencao: NivelAtencao;
     tipoUsuario: string;
     senhaUsuario?: string;
   }
+  type NivelAtencao = 'PRIMARIA' | 'SECUNDARIA';
 }
