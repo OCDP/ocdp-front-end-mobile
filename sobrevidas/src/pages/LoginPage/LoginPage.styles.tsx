@@ -1,4 +1,4 @@
-import {Layout} from '@ui-kitten/components';
+import {Layout, Text, Button} from '@ui-kitten/components';
 import styled from 'styled-components/native';
 import {buildStyledShadow} from '../../styles/buildShadow';
 
@@ -16,7 +16,7 @@ export const FormContainer = styled(Layout)`
   flex-direction: column;
   justify-content: space-around;
   border-radius: 10px;
-  width: 300px;
+  width: 350px;
 `;
 
 export const LogoContainer = styled.View`
@@ -26,4 +26,18 @@ export const LogoContainer = styled.View`
 
 export const FormItem = styled.View`
   margin: 8px 0px;
+  justify-content: center;
+`;
+
+export const FooterLogin = styled.View`
+  align-items: center;
+`;
+
+export const ButtonLogin = styled(Button)`
+  border-radius: 30px;
+  width: 130px;
+`;
+
+export const VersionText = styled(Text)`
+  font-size: 10px;
 `;
