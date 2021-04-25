@@ -20,6 +20,7 @@ import secundariaColors from '../../themes/secundariaColors.json';
 import {version} from '../../utils/constants';
 import {StyleSheet, View} from 'react-native';
 import {person} from '../../components/icons';
+import AppContext from '../../contexts/AppContext';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
@@ -27,6 +28,7 @@ const LoginPage = ({navigation}: any) => {
   const loginUsuario = useLoginUsuario();
   const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
   const [loading, setLoading] = useState(false);
+  const {setModal} = useContext(AppContext);
 
   useEffect(() => {
     register('cpf');
@@ -48,11 +50,17 @@ const LoginPage = ({navigation}: any) => {
         setLoading(false);
         navigation.navigate('HomePage');
       } catch (e) {
+        setModal({
+          visible: true,
+          title: 'Erro no login',
+          type: 'error',
+          content:
+            'Alguma coisa deu errado no login, verifique seus dados e tente novamente',
+        });
         setLoading(false);
-        console.log(JSON.stringify(e));
       }
     },
-    [loginUsuario, navigation, setThemeColors, setUsuarioLogado],
+    [loginUsuario, navigation, setModal, setThemeColors, setUsuarioLogado],
   );
 
   const renderIcon = (propsIcon: any) => (
@@ -107,7 +115,7 @@ const LoginPage = ({navigation}: any) => {
                 appearance="outline"
                 accessoryRight={loading ? LoadingIndicator : undefined}
                 onPress={handleSubmit(login)}>
-                Login
+                {loading ? '' : 'Login'}
               </ButtonLogin>
             </FormItem>
             <VersionText category="c1">v{version}</VersionText>

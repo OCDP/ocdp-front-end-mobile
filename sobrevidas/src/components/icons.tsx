@@ -97,3 +97,7 @@ export const map = (style?: ImageStyle) => (
 export const activity = (style?: ImageStyle) => (
   <Icon {...style} name="activity-outline" />
 );
+
+export const warning = (style?: ImageStyle) => (
+  <Icon {...style} name="alert-triangle-outline" />
+);
