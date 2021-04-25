@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "apk": "cd android && ./gradlew assembleRelease && cd ..",
+    "aab": "cd android && ./gradlew bundleRelease && cd .."
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.0",
