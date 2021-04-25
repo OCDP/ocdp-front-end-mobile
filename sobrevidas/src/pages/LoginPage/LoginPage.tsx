@@ -11,20 +11,22 @@ import {
   ButtonLogin,
   FooterLogin,
 } from './LoginPage.styles';
-import {Input, Icon} from '@ui-kitten/components';
+import {Input, Icon, Spinner} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {person} from '../../components/icons';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import primariaColors from '../../themes/primariaColors.json';
 import secundariaColors from '../../themes/secundariaColors.json';
 import {version} from '../../utils/constants';
+import {StyleSheet, View} from 'react-native';
+import {person} from '../../components/icons';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const loginUsuario = useLoginUsuario();
   const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     register('cpf');
@@ -34,6 +36,7 @@ const LoginPage = ({navigation}: any) => {
   const login = useCallback(
     async (values: Models.Login) => {
       try {
+        setLoading(true);
         const {data} = await loginUsuario(values.cpf, values.password);
         console.log(data);
         setUsuarioLogado({...data, senhaUsuario: values.password});
@@ -42,8 +45,10 @@ const LoginPage = ({navigation}: any) => {
         } else {
           setThemeColors(secundariaColors);
         }
-        navigation.navigate('PerfilUsuarioPage');
+        setLoading(false);
+        navigation.navigate('HomePage');
       } catch (e) {
+        setLoading(false);
         console.log(JSON.stringify(e));
       }
     },
@@ -56,6 +61,19 @@ const LoginPage = ({navigation}: any) => {
       <Icon {...propsIcon} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
+
+  const LoadingIndicator = (props: any) => (
+    <View style={[props.style, styles.indicator]}>
+      <Spinner size="small" />
+    </View>
+  );
+
+  const styles = StyleSheet.create({
+    indicator: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
 
   return (
     <PageContainer>
@@ -85,7 +103,12 @@ const LoginPage = ({navigation}: any) => {
           </FormItem>
           <FooterLogin>
             <FormItem>
-              <ButtonLogin onPress={handleSubmit(login)}>Login</ButtonLogin>
+              <ButtonLogin
+                appearance="outline"
+                accessoryRight={loading ? LoadingIndicator : undefined}
+                onPress={handleSubmit(login)}>
+                Login
+              </ButtonLogin>
             </FormItem>
             <VersionText category="c1">v{version}</VersionText>
           </FooterLogin>
