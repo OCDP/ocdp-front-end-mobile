@@ -107,7 +107,7 @@ const LoginPage = ({navigation}: any) => {
                 appearance="outline"
                 accessoryRight={loading ? LoadingIndicator : undefined}
                 onPress={handleSubmit(login)}>
-                Login
+                {loading ? '' : 'Login'}
               </ButtonLogin>
             </FormItem>
             <VersionText category="c1">v{version}</VersionText>
