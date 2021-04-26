@@ -24,6 +24,7 @@ export const WaveContainer = styled(Layout)`
 export const ButtonContainer = styled(Layout)`
   width: 130px;
   justify-content: center;
+  margin-bottom: 8px;
 `;
 
 export const ButtonGoLogin = styled(Button)`
