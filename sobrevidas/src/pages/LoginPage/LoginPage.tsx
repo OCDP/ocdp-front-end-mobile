@@ -10,6 +10,7 @@ import {
   VersionText,
   ButtonLogin,
   FooterLogin,
+  WaveContainer,
 } from './LoginPage.styles';
 import {Input, Icon, Spinner} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
@@ -86,7 +87,8 @@ const LoginPage = ({navigation}: any) => {
   return (
     <PageContainer>
       <Container>
-        <FormContainer level="2">
+        <WaveContainer level="2" />
+        <FormContainer>
           <LogoContainer>
             <Logo size={180} />
           </LogoContainer>
