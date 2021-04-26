@@ -1,8 +1,5 @@
 import {Layout, Text, Button} from '@ui-kitten/components';
 import styled from 'styled-components/native';
-import {buildStyledShadow} from '../../styles/buildShadow';
-
-const shadow = buildStyledShadow(30);
 
 export const Container = styled.View`
   flex: 1;
@@ -10,13 +7,24 @@ export const Container = styled.View`
   justify-content: center;
 `;
 
+export const WaveContainer = styled(Layout)`
+  position: absolute;
+  top: 0;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 200px;
+  border-top-right-radius: 200px;
+  border-bottom-right-radius: 0px;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+`;
+
 export const FormContainer = styled(Layout)`
-  ${shadow}
-  padding: 16px 16px;
+  padding: 0px 32px;
   flex-direction: column;
   justify-content: space-around;
-  border-radius: 10px;
-  width: 350px;
+  width: 100%;
+  background-color: transparent;
 `;
 
 export const LogoContainer = styled.View`
