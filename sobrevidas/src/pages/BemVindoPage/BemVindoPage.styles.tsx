@@ -17,7 +17,7 @@ export const WaveContainer = styled(Layout)`
   border-top-right-radius: 0px;
   border-bottom-right-radius: 200px;
   width: 100%;
-  height: 88%;
+  height: 100%;
   top: 0px;
 `;
 
