@@ -5,17 +5,26 @@ import {
   ContainerItem,
   ItemMenuText,
   LineCurrentRoute,
+  HeaderContainer,
+  ChildContain,
+  TextPageTitle,
 } from './PageContainer.styles';
 import {Button, withStyles} from '@ui-kitten/components';
-import {home, results, addPerson, personOutline, calendar} from '../icons';
+import {personOutline, calendar, minimalBack, settings} from '../icons';
 import {useRoute} from '@react-navigation/native';
 
 interface Props {
   withFooter?: boolean;
+  withHeader?: boolean;
+  canGoBack?: boolean;
+  pageTitle?: string;
   navigation?: any;
 }
 
 export const PageContainer: React.FC<Props> = ({
+  withHeader = false,
+  canGoBack = false,
+  pageTitle,
   children,
   withFooter = false,
   navigation,
@@ -27,35 +36,47 @@ export const PageContainer: React.FC<Props> = ({
 
   const menuFooter = [
     {
-      name: 'HomePage',
-      label: 'Home',
-      icon: home,
-    },
-    {
-      name: 'CadastrarPacientePage',
-      label: 'Pacientes',
-      icon: addPerson,
-    },
-    {
-      name: 'CadastrarResultadosPage',
-      label: 'Resultado',
-      icon: results,
+      name: 'DadosPacientePage',
+      label: 'Paciente',
+      icon: personOutline,
     },
     {
       name: 'HistoricoPage',
       label: 'Historico',
       icon: calendar,
     },
-    {
-      name: 'PerfilUsuarioPage',
-      label: 'Perfil',
-      icon: personOutline,
-    },
   ];
 
   return (
     <Container>
-      {children}
+      {withHeader && (
+        <HeaderContainer level="4">
+          {canGoBack ? (
+            <Button
+              appearance="ghost"
+              size="medium"
+              accessoryRight={minimalBack}
+              onPress={() => navigation.goBack()}
+            />
+          ) : (
+            <></>
+          )}
+          <TextPageTitle category="h6">{pageTitle}</TextPageTitle>
+          <Button
+            appearance="outline"
+            size="medium"
+            accessoryRight={personOutline}
+            onPress={() => navigation.navigate('CadastrarPacientePage')}
+          />
+          <Button
+            onPress={() => navigation.navigate('PerfilUsuarioPage')}
+            appearance="ghost"
+            size="medium"
+            accessoryRight={settings}
+          />
+        </HeaderContainer>
+      )}
+      <ChildContain>{children}</ChildContain>
       {withFooter && (
         <>
           <ContainerFooter>
