@@ -18,7 +18,11 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   useMountEffect(() => console.log('cheguei'));
 
   return (
-    <PageContainer withFooter navigation={navigation}>
+    <PageContainer
+      withHeader
+      canGoBack
+      pageTitle="Perfil do usuário"
+      navigation={navigation}>
       <HomeText>
         {usuarioLogado.nome} - {usuarioLogado.email}
       </HomeText>
