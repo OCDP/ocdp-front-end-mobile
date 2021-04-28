@@ -5,7 +5,7 @@ import {HomeText} from './CadastrarResultadosPage.styles';
 interface Props {}
 const CadastrarResultadosPage: React.FC<Props> = ({navigation}: any) => {
   return (
-    <PageContainer withFooter navigation={navigation}>
+    <PageContainer navigation={navigation}>
       <HomeText>cadastrar resultados page</HomeText>
     </PageContainer>
   );
