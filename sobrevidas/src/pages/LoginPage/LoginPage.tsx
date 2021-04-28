@@ -87,7 +87,7 @@ const LoginPage = ({navigation}: any) => {
   return (
     <PageContainer>
       <Container>
-        <WaveContainer level="2" />
+        <WaveContainer level="3" />
         <FormContainer>
           <LogoContainer>
             <Logo size={180} />
