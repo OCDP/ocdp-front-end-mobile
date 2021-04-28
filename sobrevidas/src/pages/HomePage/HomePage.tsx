@@ -5,7 +5,7 @@ import {HomeText} from './HomePage.styles';
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
   return (
-    <PageContainer withFooter navigation={navigation}>
+    <PageContainer withHeader pageTitle="Home page" navigation={navigation}>
       <HomeText>home page</HomeText>
     </PageContainer>
   );
