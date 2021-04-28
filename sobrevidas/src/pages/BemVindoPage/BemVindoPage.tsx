@@ -20,7 +20,7 @@ export const BemVindoPage: React.FC<Props> = ({navigation, ...props}) => {
   return (
     <PageContainer>
       <BemVindoContainer>
-        <WaveContainer level="2" />
+        <WaveContainer level="3" />
         <SliderIntro />
         <ButtonContainer>
           <ButtonGoLogin
