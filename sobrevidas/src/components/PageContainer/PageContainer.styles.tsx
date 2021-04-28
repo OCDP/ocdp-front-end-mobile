@@ -8,6 +8,21 @@ export const Container = styled(Layout)`
   flex: 1;
 `;
 
+export const HeaderContainer = styled(Layout)`
+  height: 50px;
+  top: 0px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const TextPageTitle = styled(Text)``;
+
+export const ChildContain = styled(Layout)`
+  flex: 1;
+`;
+
 export const ContainerFooter = styled(Layout)`
   ${shadow}
   flex: 1;
