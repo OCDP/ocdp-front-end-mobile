@@ -101,3 +101,7 @@ export const activity = (style?: ImageStyle) => (
 export const warning = (style?: ImageStyle) => (
   <Icon {...style} name="alert-triangle-outline" />
 );
+
+export const minimalBack = (style?: ImageStyle) => (
+  <Icon {...style} name="arrow-ios-back-outline" />
+);
