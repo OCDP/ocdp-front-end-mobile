@@ -25,6 +25,7 @@ export const ButtonContainer = styled(Layout)`
   width: 130px;
   justify-content: center;
   margin-bottom: 8px;
+  background-color: transparent;
 `;
 
 export const ButtonGoLogin = styled(Button)`
