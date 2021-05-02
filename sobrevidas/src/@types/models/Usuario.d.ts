@@ -8,7 +8,7 @@ declare namespace Models {
     telefone: string;
     nivelAtencao: NivelAtencao;
     tipoUsuario: string;
-    senhaUsuario?: string;
+    senhaUsuario: string;
   }
   type NivelAtencao = 'PRIMARIA' | 'SECUNDARIA';
 }

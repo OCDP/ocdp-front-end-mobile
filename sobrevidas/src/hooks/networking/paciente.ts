@@ -3,18 +3,15 @@ import api from '../../utils/api';
 import useHeaders from './useHeaders';
 
 export function useGetPacientes() {
-  const authHeaders = useHeaders();
+  const {auth} = useHeaders();
   return useCallback(
-    async <O extends Object>(
-      nome: string,
-      params?: O,
-      headers: any = authHeaders,
-    ) => {
-      return await api.get<any>(`/paciente/byName/${nome}/1/15`, {
+    async <O extends Object>(nome: string, params?: O, headers?: O) => {
+      return await api.get<any>(`/paciente/byName/${nome}/0/10`, {
         params,
         headers,
+        auth,
       });
     },
-    [authHeaders],
+    [auth],
   );
 }
