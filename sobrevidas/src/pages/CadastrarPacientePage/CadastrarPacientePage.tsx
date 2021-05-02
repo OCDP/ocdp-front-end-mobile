@@ -24,10 +24,10 @@ const CadastrarPacientePage: React.FC<Props> = ({ navigation }: any) => {
 
   return (
     <PageContainer withHeader pageTitle="Cadastrar Paciente" navigation={navigation}>
-      <ProgressSteps size={3} step={1}></ProgressSteps>
+      <ProgressSteps size={3} step={3} flexInfo={0.05}></ProgressSteps>
       <ScrollView style={{ flex: 1, paddingHorizontal: 12, paddingVertical: 12 }}>
         <View style={{ paddingBottom: 12 }}>
-          <Input onChangeText={(newText => setValue('nome', newText))}label={"Nome"}></Input>
+          <Input onChangeText={(newText => setValue('nome', newText))} label={"Nome"}></Input>
         </View>
         <View style={{ paddingBottom: 12 }}>
           <Text>
