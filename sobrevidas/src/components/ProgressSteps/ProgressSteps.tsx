@@ -1,13 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
-  Container,
-  ContainerFooter,
-  ContainerItem,
-  ItemMenuText,
-  LineCurrentRoute,
-  HeaderContainer,
-  ChildContain,
-  TextPageTitle,
+  Container, Bar, SubContainer
 } from './ProgressSteps.styles';
 import { Button, withStyles } from '@ui-kitten/components';
 import { personOutline, calendar, minimalBack, settings } from '../icons';
@@ -32,12 +25,14 @@ export const ProgressSteps: React.FC<Props> = ({
   const currentRoute = useRoute();
 
   return (
-    <View style={{ flex: flexInfo, flexDirection: 'row' }}>
-      {arrSize.map((v, i) => (
-        <View style={{ flex: 1, backgroundColor: (i < step - 1) ? themeColors["color-primary-500"] : ((i == step - 1) ? themeColors["color-primary-transparent-600"] : "white"), borderWidth: 0.5, borderColor: 'black' }}>
-        </View>
-      ))}
-    </View>
+    <Container flexInfo={flexInfo}>
+      <SubContainer>
+        {arrSize.map((v, i) => (
+          <Bar indice={i} step={step} colorVar={themeColors["color-primary-500"]}>
+          </Bar>
+        ))}
+      </SubContainer>
+    </Container>
 
   );
 };
