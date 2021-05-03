@@ -1,6 +1,6 @@
 import React, {useCallback, useContext} from 'react';
-import {SearchPaciente} from './HomePage.styles';
-import {search} from '../../components/icons';
+import {ButtonAddPaciente, SearchPaciente} from './HomePage.styles';
+import {addButton, search} from '../../components/icons';
 import {debounce} from 'lodash';
 
 import PageContainer from '../../components/PageContainer/PageContainer';
@@ -42,6 +42,10 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         placeholder="Buscar pacientes"
         accessoryRight={search}
         onChangeText={(value: string) => onFilterThrottle(value)}
+      />
+      <ButtonAddPaciente
+        onPress={() => navigation.navigate('CadastrarPacientePage')}
+        accessoryLeft={addButton}
       />
     </PageContainer>
   );
