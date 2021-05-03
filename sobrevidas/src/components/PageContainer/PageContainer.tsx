@@ -62,7 +62,7 @@ export const PageContainer: React.FC<Props> = ({
               />
             </HeaderItem>
           ) : (
-            <HeaderItem></HeaderItem>
+            <HeaderItem />
           )}
           <HeaderItem>
             <TextPageTitle category="h6">{pageTitle}</TextPageTitle>
