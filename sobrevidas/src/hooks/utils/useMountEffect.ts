@@ -4,5 +4,6 @@ export default function (effect: () => void | Promise<void>) {
   const mountEffect = useCallback(() => {
     effect();
   }, [effect]);
-  useEffect(mountEffect, [mountEffect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(mountEffect, []);
 }
