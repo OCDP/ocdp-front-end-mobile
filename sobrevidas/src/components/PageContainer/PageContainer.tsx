@@ -8,6 +8,7 @@ import {
   HeaderContainer,
   ChildContain,
   TextPageTitle,
+  HeaderItem,
 } from './PageContainer.styles';
 import {Button, withStyles} from '@ui-kitten/components';
 import {personOutline, calendar, minimalBack, settings} from '../icons';
@@ -52,28 +53,28 @@ export const PageContainer: React.FC<Props> = ({
       {withHeader && (
         <HeaderContainer level="4">
           {canGoBack ? (
+            <HeaderItem>
+              <Button
+                appearance="ghost"
+                size="medium"
+                accessoryRight={minimalBack}
+                onPress={() => navigation.goBack()}
+              />
+            </HeaderItem>
+          ) : (
+            <HeaderItem></HeaderItem>
+          )}
+          <HeaderItem>
+            <TextPageTitle category="h6">{pageTitle}</TextPageTitle>
+          </HeaderItem>
+          <HeaderItem>
             <Button
+              onPress={() => navigation.navigate('PerfilUsuarioPage')}
               appearance="ghost"
               size="medium"
-              accessoryRight={minimalBack}
-              onPress={() => navigation.goBack()}
+              accessoryRight={settings}
             />
-          ) : (
-            <></>
-          )}
-          <TextPageTitle category="h6">{pageTitle}</TextPageTitle>
-          <Button
-            appearance="outline"
-            size="medium"
-            accessoryRight={personOutline}
-            onPress={() => navigation.navigate('CadastrarPacientePage')}
-          />
-          <Button
-            onPress={() => navigation.navigate('PerfilUsuarioPage')}
-            appearance="ghost"
-            size="medium"
-            accessoryRight={settings}
-          />
+          </HeaderItem>
         </HeaderContainer>
       )}
       <ChildContain>{children}</ChildContain>
