@@ -1,7 +1,6 @@
 declare namespace Models {
-  interface Bairro {
+  interface Cidade {
     id: number;
     nome: string;
-    idCidade: number;
   }
 }

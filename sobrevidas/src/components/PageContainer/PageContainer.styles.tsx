@@ -9,7 +9,7 @@ export const Container = styled(Layout)`
 `;
 
 export const HeaderContainer = styled(Layout)`
-  height: 50px;
+  height: 60px;
   top: 0px;
   width: 100%;
   flex-direction: row;
@@ -17,7 +17,15 @@ export const HeaderContainer = styled(Layout)`
   align-items: center;
 `;
 
-export const TextPageTitle = styled(Text)``;
+export const HeaderItem = styled(Layout)`
+  background-color: transparent;
+  align-items: center;
+  flex: 1;
+`;
+
+export const TextPageTitle = styled(Text)`
+  text-align: center;
+`;
 
 export const ChildContain = styled(Layout)`
   flex: 1;
