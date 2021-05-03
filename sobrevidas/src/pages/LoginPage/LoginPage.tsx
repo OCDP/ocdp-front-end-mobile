@@ -12,16 +12,16 @@ import {
   FooterLogin,
   WaveContainer,
 } from './LoginPage.styles';
-import {Input, Icon, Spinner} from '@ui-kitten/components';
+import {Input, Icon} from '@ui-kitten/components';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import primariaColors from '../../themes/primariaColors.json';
 import secundariaColors from '../../themes/secundariaColors.json';
 import {version} from '../../utils/constants';
-import {StyleSheet, View} from 'react-native';
 import {person} from '../../components/icons';
 import AppContext from '../../contexts/AppContext';
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
@@ -70,19 +70,6 @@ const LoginPage = ({navigation}: any) => {
       <Icon {...propsIcon} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
-
-  const LoadingIndicator = (props: any) => (
-    <View style={[props.style, styles.indicator]}>
-      <Spinner size="small" />
-    </View>
-  );
-
-  const styles = StyleSheet.create({
-    indicator: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
 
   return (
     <PageContainer>
