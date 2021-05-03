@@ -11,6 +11,7 @@ interface Props {}
 
 const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
   const {register, setValue, handleSubmit, getValues} = useForm();
+  const formValues = {register, setValue, getValues};
 
   return (
     <PageContainer
@@ -25,21 +26,9 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
           'Dados de contato',
           'Dados de endereço',
         ]}>
-        <FieldSetDadosPessoais
-          getValues={getValues}
-          register={register}
-          setValue={setValue}
-        />
-        <FieldSetDadosContato
-          getValues={getValues}
-          register={register}
-          setValue={setValue}
-        />
-        <FieldSetDadosEndereco
-          getValues={getValues}
-          register={register}
-          setValue={setValue}
-        />
+        <FieldSetDadosPessoais {...formValues} />
+        <FieldSetDadosContato {...formValues} />
+        <FieldSetDadosEndereco {...formValues} />
       </Steps>
     </PageContainer>
   );
