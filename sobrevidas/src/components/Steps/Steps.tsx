@@ -42,7 +42,7 @@ const Steps: React.FC<Props> = ({description, children, onComplete}) => {
 
   return (
     <StepsContainer>
-      <StepsProgress size={children.length} step={index} flexInfo={0.09} />
+      <StepsProgress size={children.length} step={index + 1} flexInfo={0.09} />
       {index && (
         <>
           <StepDescription category="h5">{currentDescription}</StepDescription>
