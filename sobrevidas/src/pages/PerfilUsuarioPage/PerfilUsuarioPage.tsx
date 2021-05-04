@@ -1,18 +1,35 @@
-import {Button, Toggle} from '@ui-kitten/components';
-import React, {useContext} from 'react';
+import { Divider, List, ListItem, Toggle } from '@ui-kitten/components';
+import React, { useContext, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {CustomThemeContext} from '../../contexts/CustomThemeContext';
+import { CustomThemeContext } from '../../contexts/CustomThemeContext';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
-import useHeaders from '../../hooks/networking/useHeaders';
-import {ButtonContainer} from '../BemVindoPage/BemVindoPage.styles';
-import {HomeText} from './PerfilUsuarioPage.styles';
 
-interface Props {}
+interface Props { }
 
-const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
+const PerfilUsuarioPage: React.FC<Props> = ({ navigation }: any) => {
   const customThemeContext = useContext(CustomThemeContext);
-  const {usuarioLogado, logout} = useContext(UsuarioLogadoContext);
-  const authHeaders = useHeaders();
+  const { usuarioLogado, logout } = useContext(UsuarioLogadoContext);
+  const [infoUsuario] = useState([{
+    title: "Nome", description: usuarioLogado.nome
+  }, {
+    title: "CPF", description: usuarioLogado.cpf
+  }, {
+    title: "Telefone", description: usuarioLogado.telefone
+  }, {
+    title: "Email", description: usuarioLogado.email
+  }, {
+    title: "Nivel Atenção", description: usuarioLogado.nivelAtencao
+  }, {
+    title: "Tipo Usuário", description: usuarioLogado.tipoUsuario
+  }]);
+
+  const renderItem = ({ item, index }) => (
+    <ListItem
+      title={`${item.title}`}
+      description={`${item.description}`}
+    />
+  );
 
   return (
     <PageContainer
@@ -20,21 +37,13 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       canGoBack
       pageTitle="Perfil do usuário"
       navigation={navigation}>
-      <HomeText>
-        {usuarioLogado.nome} - {usuarioLogado.email}
-      </HomeText>
-      <HomeText>tema do momento: {customThemeContext.theme}</HomeText>
-      <ButtonContainer>
-        <Button onPress={() => navigation.navigate('BemVindoPage')}>
-          bem vindo
-        </Button>
-        <Button onPress={() => logout(navigation)}>logout</Button>
-      </ButtonContainer>
-      <ButtonContainer>
-        <Button onPress={() => console.log(authHeaders)}>
-          o que tem nos headers???
-        </Button>
-      </ButtonContainer>
+      <List
+        style={styles.container}
+        data={infoUsuario}
+        ItemSeparatorComponent={Divider}
+        renderItem={renderItem}
+        persistentScrollbar={true}
+      />
       <Toggle
         checked={customThemeContext.theme === 'dark'}
         onChange={customThemeContext.toggleTheme}>
@@ -43,5 +52,11 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
     </PageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    maxHeight: '50%'
+  },
+});
 
 export default PerfilUsuarioPage;
