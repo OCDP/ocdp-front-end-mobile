@@ -1,6 +1,6 @@
-import { Divider, List, ListItem, Toggle } from '@ui-kitten/components';
+import { Button, Divider, List, ListItem, Text, Toggle } from '@ui-kitten/components';
 import React, { useContext, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import { CustomThemeContext } from '../../contexts/CustomThemeContext';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
@@ -25,10 +25,13 @@ const PerfilUsuarioPage: React.FC<Props> = ({ navigation }: any) => {
   }]);
 
   const renderItem = ({ item, index }) => (
-    <ListItem
-      title={`${item.title}`}
-      description={`${item.description}`}
-    />
+    <View style={{
+      padding: 10,
+      flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'
+    }}>
+      <Text style={{ textAlignVertical: 'center', fontSize: 20 }}>{item.title}</Text>
+      <Text style={{ fontStyle: 'italic', textAlignVertical: 'center', fontSize: 16 }}>{item.description}</Text>
+    </View>
   );
 
   return (
@@ -37,6 +40,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({ navigation }: any) => {
       canGoBack
       pageTitle="Perfil do usuário"
       navigation={navigation}>
+
       <List
         style={styles.container}
         data={infoUsuario}
@@ -44,18 +48,26 @@ const PerfilUsuarioPage: React.FC<Props> = ({ navigation }: any) => {
         renderItem={renderItem}
         persistentScrollbar={true}
       />
-      <Toggle
-        checked={customThemeContext.theme === 'dark'}
-        onChange={customThemeContext.toggleTheme}>
-        {customThemeContext.theme}
-      </Toggle>
+      <View style={{
+        padding: 20,
+        flexDirection: 'column', justifyContent: 'space-between'
+      }}>
+        <Toggle
+        style={{paddingBottom: 20}}
+          checked={customThemeContext.theme === 'dark'}
+          onChange={customThemeContext.toggleTheme}>
+          Trocar para {customThemeContext.theme == 'dark' ? 'tema claro' : 'tema escuro'}
+        </Toggle>
+        <Button> Sair da Conta </Button>
+      </View>
     </PageContainer>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    maxHeight: '50%'
+    flex: 1,
+    // height: '100%'
   },
 });
 
