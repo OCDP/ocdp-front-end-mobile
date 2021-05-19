@@ -1,4 +1,4 @@
-import {Layout, Button} from '@ui-kitten/components';
+import {Layout, Button, Autocomplete} from '@ui-kitten/components';
 import styled from 'styled-components/native';
 
 export const DisplayEndereco = styled(Layout)`
@@ -33,7 +33,11 @@ export const TextEnderecoContainer = styled(Layout)`
 
 export const ButtonModalContainer = styled(Button)`
   border-radius: 30px;
-  width: 130px;
+  width: 150px;
   align-items: center;
   margin: 16px 0px;
+`;
+
+export const AutocompleteCidade = styled(Autocomplete)`
+  margin-bottom: 16px;
 `;

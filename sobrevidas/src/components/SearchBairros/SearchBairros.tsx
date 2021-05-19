@@ -13,6 +13,7 @@ import {
   LogoPinContainer,
   TextEnderecoContainer,
   ButtonModalContainer,
+  AutocompleteCidade,
 } from './SearchBairros.styles';
 
 interface Props {
@@ -80,7 +81,7 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
   return (
     <>
       {currentEndereco ? (
-        <DisplayEndereco level="3">
+        <DisplayEndereco level="2">
           <EnderecoCard>
             <LogoPinContainer>
               <PinBairro size={60} />
@@ -93,13 +94,13 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
           <ButtonModalContainer
             onPress={() => setCurrentEndereco(undefined)}
             accessoryRight={edit}
-            size="tiny">
-            trocar bairro
+            size="small">
+            Trocar bairro
           </ButtonModalContainer>
         </DisplayEndereco>
       ) : (
         <>
-          <Autocomplete
+          <AutocompleteCidade
             accessoryRight={loading ? LoadingIndicator : undefined}
             label="Selecionar cidade"
             placeholder="Selecionar cidade"
@@ -114,7 +115,7 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
             {cidades.map(({nome}, index) => (
               <AutocompleteItem key={index} title={nome} accessoryLeft={pin} />
             ))}
-          </Autocomplete>
+          </AutocompleteCidade>
           <Autocomplete
             disabled={bairros.length === 0}
             accessoryRight={loadingBairros ? LoadingIndicator : undefined}
