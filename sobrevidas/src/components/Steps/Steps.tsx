@@ -1,25 +1,25 @@
 import React, {useMemo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {minimalBack, minimalAvance, check} from '../icons';
+import {ProgressSteps} from '../ProgressSteps/ProgressSteps';
 import {
   CurrentStep,
   StepDescription,
   StepsContainer,
-  StepsProgress,
   FooterButtonsContainer,
   FooterButton,
 } from './Steps.styles';
 
 interface Props {
-  description: string[];
+  descriptions: string[];
   children: React.ReactNode[];
   onComplete: (values: any) => void;
 }
-const Steps: React.FC<Props> = ({description, children, onComplete}) => {
+const Steps: React.FC<Props> = ({descriptions, children, onComplete}) => {
   const [index, setIndex] = useState(1);
   const currentStep = useMemo(() => children[index - 1], [children, index]);
-  const currentDescription = useMemo(() => description[index - 1], [
-    description,
+  const currentDescription = useMemo(() => descriptions[index - 1], [
+    descriptions,
     index,
   ]);
   const isFirst = useMemo(() => index === 1, [index]);
@@ -42,10 +42,10 @@ const Steps: React.FC<Props> = ({description, children, onComplete}) => {
 
   return (
     <StepsContainer>
-      <StepsProgress size={children.length} step={index + 1} flexInfo={0.09} />
+      <ProgressSteps size={children.length} step={index} />
       {index && (
         <>
-          <StepDescription category="h5">{currentDescription}</StepDescription>
+          <StepDescription category="c4">{currentDescription}</StepDescription>
           <ScrollView>
             <CurrentStep>{currentStep}</CurrentStep>
           </ScrollView>
@@ -54,14 +54,14 @@ const Steps: React.FC<Props> = ({description, children, onComplete}) => {
       <FooterButtonsContainer>
         <FooterButton
           appearance="outline"
-          size="medium"
+          size="tiny"
           accessoryRight={minimalBack}
           onPress={togglePrev}
           disabled={isFirst}
         />
         <FooterButton
           appearance={isLast ? 'filled' : 'outline'}
-          size="medium"
+          size="tiny"
           accessoryRight={isLast ? check : minimalAvance}
           onPress={submit}
         />

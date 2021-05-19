@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {HomeText} from './HistoricoPage.styles';
 
@@ -11,4 +11,4 @@ const HistoricoPage: React.FC<Props> = ({navigation}: any) => {
   );
 };
 
-export default HistoricoPage;
+export default memo(HistoricoPage);

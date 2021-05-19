@@ -1,39 +1,28 @@
-import React, { useContext, useState } from 'react';
-import {
-  Container, Bar, SubContainer
-} from './ProgressSteps.styles';
-import { Button, withStyles } from '@ui-kitten/components';
-import { personOutline, calendar, minimalBack, settings } from '../icons';
-import { useRoute } from '@react-navigation/native';
-import { Alert, Text, View } from 'react-native';
+import React, {useContext, useMemo} from 'react';
+import {withStyles} from '@ui-kitten/components';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import {ProgressBar} from '@react-native-community/progress-bar-android';
 
 interface Props {
-  size: number,
-  step: number,
-  flexInfo: number
+  size: number;
+  step: number;
 }
 
-export const ProgressSteps: React.FC<Props> = ({
-  size, step, flexInfo,
-  ...props
-}) => {
-  const { eva, style } = props as any;
-  // const [arrSize] = useState(Array<any>(size))
-  const [arrSize] = useState(Array<any>(size).fill(""))
-  const { themeColors } = useContext(UsuarioLogadoContext);
-  const currentRoute = useRoute();
+export const ProgressSteps: React.FC<Props> = ({size, step}) => {
+  const {themeColors} = useContext(UsuarioLogadoContext);
+
+  const percent = useMemo(() => (((step / size) * 100) / 100).toFixed(2), [
+    size,
+    step,
+  ]);
 
   return (
-    <Container flexInfo={flexInfo}>
-      <SubContainer>
-        {arrSize.map((v, i) => (
-          <Bar indice={i} step={step} colorVar={themeColors["color-primary-500"]}>
-          </Bar>
-        ))}
-      </SubContainer>
-    </Container>
-
+    <ProgressBar
+      styleAttr="Horizontal"
+      progress={+percent}
+      indeterminate={false}
+      color={themeColors['color-primary-500']}
+    />
   );
 };
 

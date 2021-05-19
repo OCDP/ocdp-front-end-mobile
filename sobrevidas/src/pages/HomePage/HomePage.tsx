@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {memo, useCallback} from 'react';
 import {ButtonAddPaciente, SearchPaciente} from './HomePage.styles';
 import {addButton, search} from '../../components/icons';
 import {debounce} from 'lodash';
@@ -14,7 +14,7 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
   const _getPacientes = useCallback(
     async (nome: string) => {
       try {
-        const {data} = await getPacientes(nome);
+        const {data} = await getPacientes(nome.length > 0 ? nome : 'a');
         console.log('pacientes >', data);
       } catch (e) {
         console.error('erro >> ', e);
@@ -46,4 +46,4 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
   );
 };
 
-export default HomePage;
+export default memo(HomePage);

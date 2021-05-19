@@ -1,22 +1,14 @@
 declare namespace Models {
   interface Paciente {
-    historico: Models.Historico[];
-    listaFatores: Models.Fatores[];
-    nome: string;
+    dataNascimento: string;
     cpf: string;
-    dtNasci: string;
+    nome: string;
+    nomeDaMae: string;
     sexo: string;
+    telefoneCelular: string;
+    telefoneResponsavel: string;
     email: string;
-    id: number;
-    telCell: string;
-    endereco: string;
-    telResp: string;
-    nmMae: string;
-    cidade: string;
-    bairro: Models.Bairro[];
-    acomp: boolean;
-    classifLesoes: Models.ClassificLesoes;
+    idBairro: number;
+    enderecoCompleto: string;
   }
-
-  type DrawerSize = 'sm' | 'md' | 'lg';
 }

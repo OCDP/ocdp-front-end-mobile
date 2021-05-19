@@ -1,17 +1,43 @@
-import React from 'react';
-import {useForm} from 'react-hook-form';
+import moment from 'moment';
+import React, {memo, useCallback} from 'react';
+import {Alert} from 'react-native';
 import FieldSetDadosContato from '../../components/FieldSetDadosContato/FieldSetDadosContato';
 import FieldSetDadosEndereco from '../../components/FieldSetDadosEndereco/FieldSetDadosEndereco';
 import FieldSetDadosPessoais from '../../components/FieldSetDadosPessoais/FieldSetDadosPessoais';
 
 import PageContainer from '../../components/PageContainer/PageContainer';
 import Steps from '../../components/Steps/Steps';
+import {
+  CadastroPacienteConsumer,
+  CadastroPacienteProvider,
+} from '../../contexts/CadastroPacienteContext';
+import {usePostPaciente} from '../../hooks/networking/paciente';
 
 interface Props {}
 
 const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
-  const {register, setValue, handleSubmit, getValues} = useForm();
-  const formValues = {register, setValue, getValues};
+  const postPaciente = usePostPaciente();
+
+  const _postPaciente = useCallback(
+    async (values: Models.Paciente) => {
+      try {
+        console.log(values.dataNascimento);
+        const dataNascimento = moment(
+          values.dataNascimento,
+          'DD-MM-YYYY HH:mm:ss',
+        ).format('Y-MM-DD HH:mm:ss');
+        await postPaciente({...values, dataNascimento});
+      } catch (e) {
+        console.error('erro >> ', e);
+        Alert.alert(
+          'Erro no cadastro',
+          'Algo deu errado no momento do cadastro',
+          [{text: 'Voltar'}],
+        );
+      }
+    },
+    [postPaciente],
+  );
 
   return (
     <PageContainer
@@ -19,19 +45,25 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
       canGoBack
       pageTitle="Cadastrar Paciente"
       navigation={navigation}>
-      <Steps
-        onComplete={handleSubmit(console.log)}
-        description={[
-          'Dados pessoais',
-          'Dados de contato',
-          'Dados de endereço',
-        ]}>
-        <FieldSetDadosPessoais {...formValues} />
-        <FieldSetDadosContato {...formValues} />
-        <FieldSetDadosEndereco {...formValues} />
-      </Steps>
+      <CadastroPacienteProvider>
+        <CadastroPacienteConsumer>
+          {({newPaciente}) => (
+            <Steps
+              onComplete={() => _postPaciente(newPaciente)}
+              descriptions={[
+                'Dados pessoais',
+                'Dados de contato',
+                'Dados de endereço',
+              ]}>
+              <FieldSetDadosPessoais />
+              <FieldSetDadosContato />
+              <FieldSetDadosEndereco />
+            </Steps>
+          )}
+        </CadastroPacienteConsumer>
+      </CadastroPacienteProvider>
     </PageContainer>
   );
 };
 
-export default CadastrarPacientePage;
+export default memo(CadastrarPacientePage);

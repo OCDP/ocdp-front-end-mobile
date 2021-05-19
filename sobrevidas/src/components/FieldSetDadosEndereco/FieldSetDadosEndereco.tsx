@@ -1,60 +1,36 @@
 import {Input} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
-import {
-  FieldValues,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from 'react-hook-form';
+import React, {memo, useContext} from 'react';
+import CadastroPacienteContext from '../../contexts/CadastroPacienteContext';
 import {FieldSetItem} from '../../pages/CadastrarPacientePage/CadastrarPacientePage.styles';
 import SearchBairros from '../SearchBairros/SearchBairros';
-import SearchCidades from '../SearchCidades/SearchCidades';
 
-interface Props {
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
-}
-const FieldSetDadosEndereco: React.FC<Props> = ({
-  register,
-  setValue,
-  getValues,
-}) => {
-  const [idCidade, setIdCidade] = useState<number>();
-
-  useEffect(() => {
-    register('idBairro');
-    register('enderecoCompleto');
-  }, [register]);
+interface Props {}
+const FieldSetDadosEndereco: React.FC<Props> = ({}) => {
+  const {newPaciente, setNewPaciente, setCurrentEndereco} = useContext(
+    CadastroPacienteContext,
+  );
 
   return (
     <>
       <FieldSetItem>
-        <SearchCidades
-          onSelect={cidade => {
-            setIdCidade(undefined);
-            setTimeout(() => {
-              setIdCidade(cidade.id);
+        <SearchBairros
+          onSelect={(bairro, cidade) => {
+            setNewPaciente(old => ({...old, idBairro: bairro.id}));
+            setCurrentEndereco({
+              bairro: bairro,
+              cidade: cidade,
             });
           }}
         />
       </FieldSetItem>
 
-      {idCidade ? (
-        <FieldSetItem>
-          <SearchBairros
-            cidadeId={idCidade}
-            onSelect={bairro => setValue('idBairro', bairro.id)}
-          />
-        </FieldSetItem>
-      ) : (
-        <></>
-      )}
-
       <FieldSetItem>
         <Input
-          onChangeText={value => setValue('enderecoCompleto', value)}
-          value={getValues('enderecoCompleto')}
+          value={newPaciente.enderecoCompleto}
+          placeholder="Informe o endereço completo"
+          onChangeText={enderecoCompleto =>
+            setNewPaciente(old => ({...old, enderecoCompleto}))
+          }
           label={'Endereço completo'}
         />
       </FieldSetItem>
@@ -62,4 +38,4 @@ const FieldSetDadosEndereco: React.FC<Props> = ({
   );
 };
 
-export default FieldSetDadosEndereco;
+export default memo(FieldSetDadosEndereco);

@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {memo, useCallback, useContext, useEffect, useState} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {useForm} from 'react-hook-form';
 import Logo from '../../assets/img/Logo';
@@ -28,7 +28,6 @@ const LoginPage = ({navigation}: any) => {
   const loginUsuario = useLoginUsuario();
   const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
   const [loading, setLoading] = useState(false);
-  const [cpf, setCpf] = useState('');
 
   useEffect(() => {
     register('cpf');
@@ -75,10 +74,8 @@ const LoginPage = ({navigation}: any) => {
                 maxLength={14}
                 placeholder="Digitar CPF"
                 label={'CPF'}
-                value={cpf}
                 mask="cpf"
                 inputMaskChange={value => {
-                  setCpf(value);
                   if (value.length < 15) {
                     setValue('cpf', value);
                   }
@@ -116,4 +113,4 @@ const LoginPage = ({navigation}: any) => {
   );
 };
 
-export default LoginPage;
+export default memo(LoginPage);

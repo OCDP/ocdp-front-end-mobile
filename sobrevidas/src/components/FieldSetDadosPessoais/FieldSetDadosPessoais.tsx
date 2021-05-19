@@ -1,82 +1,97 @@
 import {Input, Radio, RadioGroup} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
-import {
-  FieldValues,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from 'react-hook-form';
+import React, {memo, useContext, useMemo} from 'react';
+import CadastroPacienteContext from '../../contexts/CadastroPacienteContext';
 import {FieldSetItem} from '../../pages/CadastrarPacientePage/CadastrarPacientePage.styles';
+import MaskedInput from '../MaskedInput/MaskedInput';
 
-interface Props {
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
-}
-const FieldSetDadosPessoais: React.FC<Props> = ({
-  register,
-  setValue,
-  getValues,
-}) => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const sexoArr = {0: 'M', 1: 'F'} as Dict<string>;
-
-  useEffect(() => {
-    register('nome');
-    register('nomeDaMae');
-    register('dataNascimento');
-    register('sexo');
-    register('cpf');
-  }, [register]);
+interface Props {}
+const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
+  const sexoArr = {0: 'MASCULINO', 1: 'FEMININO'} as Dict<string>;
+  const {newPaciente, setNewPaciente} = useContext(CadastroPacienteContext);
+  const selectedIndex = useMemo(
+    () => (newPaciente.sexo === 'MASCULINO' ? 0 : 1),
+    [newPaciente.sexo],
+  );
 
   return (
     <>
       <FieldSetItem>
         <Input
-          onChangeText={value => setValue('nome', value)}
-          value={getValues('nome')}
+          value={newPaciente.nome}
+          placeholder="Informe o nome do paciente"
+          onChangeText={nome => {
+            setNewPaciente(old => ({
+              ...old,
+              nome,
+            }));
+          }}
           label={'Nome'}
         />
       </FieldSetItem>
 
       <FieldSetItem>
         <Input
-          onChangeText={value => setValue('nomeDaMae', value)}
-          value={getValues('nomeDaMae')}
+          value={newPaciente.nomeDaMae}
+          placeholder="Informe o nome da mãe"
+          onChangeText={nomeDaMae => {
+            setNewPaciente(old => ({
+              ...old,
+              nomeDaMae,
+            }));
+          }}
           label={'Nome da Mãe'}
         />
       </FieldSetItem>
 
       <FieldSetItem>
-        <Input
-          onChangeText={value => setValue('dataNascimento', value)}
-          value={getValues('dataNascimento')}
+        <MaskedInput
+          valueParam={newPaciente.dataNascimento}
+          keyboardType="number-pad"
+          maxLength={10}
+          placeholder="Digite a data"
           label={'Data de nascimento'}
+          mask="data"
+          inputMaskChange={dataNascimento => {
+            setNewPaciente(old => ({
+              ...old,
+              dataNascimento,
+            }));
+          }}
+        />
+      </FieldSetItem>
+
+      <FieldSetItem>
+        <MaskedInput
+          valueParam={newPaciente.cpf}
+          keyboardType="number-pad"
+          maxLength={14}
+          placeholder="Digitar CPF"
+          label={'CPF'}
+          mask="cpf"
+          inputMaskChange={cpf => {
+            setNewPaciente(old => ({
+              ...old,
+              cpf,
+            }));
+          }}
         />
       </FieldSetItem>
 
       <FieldSetItem>
         <RadioGroup
           onChange={value => {
-            setSelectedIndex(value);
-            setValue('sexo', sexoArr[value]);
+            setNewPaciente(old => ({
+              ...old,
+              sexo: sexoArr[value],
+            }));
           }}
           selectedIndex={selectedIndex}>
           <Radio>Masculino</Radio>
           <Radio>Feminino</Radio>
         </RadioGroup>
       </FieldSetItem>
-
-      <FieldSetItem>
-        <Input
-          onChangeText={value => setValue('cpf', value)}
-          value={getValues('cpf')}
-          label={'CPF'}
-        />
-      </FieldSetItem>
     </>
   );
 };
 
-export default FieldSetDadosPessoais;
+export default memo(FieldSetDadosPessoais);

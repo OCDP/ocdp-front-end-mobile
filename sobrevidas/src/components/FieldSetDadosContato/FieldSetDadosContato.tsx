@@ -1,56 +1,55 @@
 import {Input} from '@ui-kitten/components';
-import React, {useEffect} from 'react';
-import {
-  FieldValues,
-  UseFormGetValues,
-  UseFormRegister,
-  UseFormSetValue,
-} from 'react-hook-form';
+import React, {memo, useContext} from 'react';
+import CadastroPacienteContext from '../../contexts/CadastroPacienteContext';
 import {FieldSetItem} from '../../pages/CadastrarPacientePage/CadastrarPacientePage.styles';
+import MaskedInput from '../MaskedInput/MaskedInput';
 
-interface Props {
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-  getValues: UseFormGetValues<FieldValues>;
-}
-const FieldSetDadosContato: React.FC<Props> = ({
-  register,
-  setValue,
-  getValues,
-}) => {
-  useEffect(() => {
-    register('email');
-    register('telefoneCelular');
-    register('telefoneResponsavel');
-  }, [register]);
+interface Props {}
+const FieldSetDadosContato: React.FC<Props> = ({}) => {
+  const {newPaciente, setNewPaciente} = useContext(CadastroPacienteContext);
 
   return (
     <>
       <FieldSetItem>
         <Input
-          onChangeText={value => setValue('email', value)}
-          value={getValues('email')}
+          value={newPaciente.email}
+          onChangeText={email => {
+            setNewPaciente(old => ({...old, email: email}));
+          }}
           label={'E-mail'}
+          placeholder="Inserir e-mail"
         />
       </FieldSetItem>
 
       <FieldSetItem>
-        <Input
-          onChangeText={value => setValue('telefoneCelular', value)}
-          value={getValues('telefoneCelular')}
-          label={'Telefone'}
+        <MaskedInput
+          valueParam={newPaciente.telefoneCelular}
+          keyboardType="number-pad"
+          maxLength={15}
+          placeholder="Digite o telefone"
+          label={'Tel. (DDD + número)'}
+          mask="phone"
+          inputMaskChange={telefoneCelular => {
+            setNewPaciente(old => ({...old, telefoneCelular}));
+          }}
         />
       </FieldSetItem>
 
       <FieldSetItem>
-        <Input
-          onChangeText={value => setValue('telefoneResponsavel', value)}
-          value={getValues('telefoneResponsavel')}
-          label={'Telefone responsável'}
+        <MaskedInput
+          valueParam={newPaciente.telefoneResponsavel}
+          keyboardType="number-pad"
+          maxLength={15}
+          placeholder="Digite o telefone do responsável"
+          label={'Tel. responsável (DDD + número)'}
+          mask="phone"
+          inputMaskChange={telefoneResponsavel => {
+            setNewPaciente(old => ({...old, telefoneResponsavel}));
+          }}
         />
       </FieldSetItem>
     </>
   );
 };
 
-export default FieldSetDadosContato;
+export default memo(FieldSetDadosContato);

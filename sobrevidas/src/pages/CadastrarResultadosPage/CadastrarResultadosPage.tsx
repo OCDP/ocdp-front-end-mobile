@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {HomeText} from './CadastrarResultadosPage.styles';
 
@@ -11,4 +11,4 @@ const CadastrarResultadosPage: React.FC<Props> = ({navigation}: any) => {
   );
 };
 
-export default CadastrarResultadosPage;
+export default memo(CadastrarResultadosPage);

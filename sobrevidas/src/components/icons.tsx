@@ -129,3 +129,7 @@ export const minimalBack = (style?: ImageStyle) => (
 export const minimalAvance = (style?: ImageStyle) => (
   <Icon {...style} name="arrow-ios-forward-outline" />
 );
+
+export const edit = (style?: ImageStyle) => (
+  <Icon {...style} name="edit-2-outline" />
+);

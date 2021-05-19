@@ -15,3 +15,17 @@ export function useGetPacientes() {
     [auth],
   );
 }
+
+export function usePostPaciente() {
+  const {auth} = useHeaders();
+  return useCallback(
+    async <O extends Object>(body?: O, params?: O, headers?: O) => {
+      await api.post<Models.Paciente>('/paciente/', body, {
+        params,
+        headers,
+        auth,
+      });
+    },
+    [auth],
+  );
+}

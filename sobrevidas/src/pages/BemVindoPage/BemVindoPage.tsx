@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {
   BemVindoContainer,
@@ -36,7 +36,7 @@ export const BemVindoPage: React.FC<Props> = ({navigation, ...props}) => {
   );
 };
 
-export default withStyles(BemVindoPage, theme => ({
+export default withStyles(memo(BemVindoPage), theme => ({
   buttonLoginGradient: {
     backgroundColor: theme['color-primary-500'],
   },
