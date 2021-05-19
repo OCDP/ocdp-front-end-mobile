@@ -1,16 +1,14 @@
-import React, {useCallback, useContext} from 'react';
+import React, {useCallback} from 'react';
 import {ButtonAddPaciente, SearchPaciente} from './HomePage.styles';
 import {addButton, search} from '../../components/icons';
 import {debounce} from 'lodash';
 
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {useGetPacientes} from '../../hooks/networking/paciente';
-import AppContext from '../../contexts/AppContext';
+import {Alert} from 'react-native';
 
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
-  const {setModal} = useContext(AppContext);
-
   const getPacientes = useGetPacientes();
 
   const _getPacientes = useCallback(
@@ -20,15 +18,12 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         console.log('pacientes >', data);
       } catch (e) {
         console.error('erro >> ', e);
-        setModal({
-          visible: true,
-          title: 'Erro ao buscar pacientes',
-          type: 'error',
-          content: 'Alguma coisa deu errado ao buscar pacientes',
-        });
+        Alert.alert('Erro na busca', 'Erro ao buscar pacientes', [
+          {text: 'Voltar'},
+        ]);
       }
     },
-    [getPacientes, setModal],
+    [getPacientes],
   );
 
   const onFilterThrottle = debounce(

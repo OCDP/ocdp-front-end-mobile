@@ -3,9 +3,7 @@ import React, {
   Dispatch,
   SetStateAction,
   useContext,
-  useState,
 } from 'react';
-import ModalFeedback from '../components/ModalFeeback/ModalFeedback';
 import useSecStorage from '../utils/useSecStorage';
 
 const AppContext = createContext({} as Contexts.AppContext);
@@ -15,24 +13,13 @@ export const AppProvider: React.FC = ({children}) => {
     'pacientes',
     [],
   );
-  const [modal, setModal] = useState<Models.Modal>({
-    visible: false,
-    type: 'success',
-    title: 'sou um modal',
-    content: 'conteudo modal',
-  });
 
   return (
     <AppContext.Provider
       value={{
         dadosPacientes,
         setDadosPacientes,
-        setModal,
       }}>
-      <ModalFeedback
-        {...modal}
-        onClose={() => setModal({...modal, visible: false})}
-      />
       {children}
     </AppContext.Provider>
   );

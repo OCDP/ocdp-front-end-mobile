@@ -2,16 +2,18 @@ import {Layout, Text} from '@ui-kitten/components';
 import styled from 'styled-components/native';
 
 export const SliderContent = styled(Layout)`
-  height: 670px;
+  height: 550px;
   background-color: transparent;
 `;
 
 export const ItemSliderContainer = styled(Layout)`
-  height: 580px;
-  justify-content: space-around;
-  align-items: center;
   background-color: transparent;
+  align-items: center;
   text-align: left;
+`;
+
+export const ImageContainer = styled(Layout)`
+  background-color: transparent;
 `;
 
 export const TextContainer = styled(Layout)`

@@ -13,23 +13,22 @@ import {
   WaveContainer,
 } from './LoginPage.styles';
 import {Input, Icon} from '@ui-kitten/components';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import primariaColors from '../../themes/primariaColors.json';
 import secundariaColors from '../../themes/secundariaColors.json';
 import {version} from '../../utils/constants';
 import {person} from '../../components/icons';
-import AppContext from '../../contexts/AppContext';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
+import MaskedInput from '../../components/MaskedInput/MaskedInput';
+import {Alert, KeyboardAvoidingView} from 'react-native';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const loginUsuario = useLoginUsuario();
   const {setUsuarioLogado, setThemeColors} = useContext(UsuarioLogadoContext);
   const [loading, setLoading] = useState(false);
-  const {setModal} = useContext(AppContext);
+  const [cpf, setCpf] = useState('');
 
   useEffect(() => {
     register('cpf');
@@ -51,24 +50,14 @@ const LoginPage = ({navigation}: any) => {
         setLoading(false);
         navigation.navigate('HomePage');
       } catch (e) {
-        setModal({
-          visible: true,
-          title: 'Erro no login',
-          type: 'error',
-          content:
-            'Alguma coisa deu errado no login, verifique seus dados e tente novamente',
-        });
+        console.error('erro >> ', e);
+        Alert.alert('Erro no login', 'Algo deu errado no momento do login', [
+          {text: 'Voltar'},
+        ]);
         setLoading(false);
       }
     },
-    [loginUsuario, navigation, setModal, setThemeColors, setUsuarioLogado],
-  );
-
-  const renderIcon = (propsIcon: any) => (
-    <TouchableWithoutFeedback
-      onPress={() => setSecureTextEntry(!secureTextEntry)}>
-      <Icon {...propsIcon} name={secureTextEntry ? 'eye-off' : 'eye'} />
-    </TouchableWithoutFeedback>
+    [loginUsuario, navigation, setThemeColors, setUsuarioLogado],
   );
 
   return (
@@ -77,38 +66,50 @@ const LoginPage = ({navigation}: any) => {
         <WaveContainer level="3" />
         <FormContainer>
           <LogoContainer>
-            <Logo size={180} />
+            <Logo size={100} />
           </LogoContainer>
-          <FormItem>
-            <Input
-              label="CPF"
-              appearance="default"
-              accessoryRight={person}
-              placeholder="Digitar CPF"
-              onChangeText={text => setValue('cpf', text)}
-            />
-          </FormItem>
-          <FormItem>
-            <Input
-              label="Senha"
-              appearance="default"
-              accessoryRight={renderIcon}
-              secureTextEntry={secureTextEntry}
-              placeholder="Inserir senha"
-              onChangeText={text => setValue('password', text)}
-            />
-          </FormItem>
-          <FooterLogin>
+          <KeyboardAvoidingView>
             <FormItem>
-              <ButtonLogin
-                appearance="outline"
-                accessoryRight={loading ? LoadingIndicator : undefined}
-                onPress={handleSubmit(login)}>
-                {loading ? '' : 'Login'}
-              </ButtonLogin>
+              <MaskedInput
+                accessoryRight={person}
+                maxLength={14}
+                placeholder="Digitar CPF"
+                label={'CPF'}
+                value={cpf}
+                mask="cpf"
+                inputMaskChange={value => {
+                  setCpf(value);
+                  if (value.length < 15) {
+                    setValue('cpf', value);
+                  }
+                }}
+              />
             </FormItem>
-            <VersionText category="c1">v{version}</VersionText>
-          </FooterLogin>
+            <FormItem>
+              <Input
+                label="Senha"
+                appearance="default"
+                accessoryRight={(propsIcon: any) => (
+                  <Icon {...propsIcon} name="eye-off" />
+                )}
+                secureTextEntry
+                placeholder="Inserir senha"
+                onChangeText={text => setValue('password', text)}
+              />
+            </FormItem>
+
+            <FooterLogin>
+              <FormItem>
+                <ButtonLogin
+                  appearance="outline"
+                  accessoryRight={loading ? LoadingIndicator : undefined}
+                  onPress={handleSubmit(login)}>
+                  {loading ? '' : 'Login'}
+                </ButtonLogin>
+              </FormItem>
+              <VersionText category="c1">v{version}</VersionText>
+            </FooterLogin>
+          </KeyboardAvoidingView>
         </FormContainer>
       </Container>
     </PageContainer>

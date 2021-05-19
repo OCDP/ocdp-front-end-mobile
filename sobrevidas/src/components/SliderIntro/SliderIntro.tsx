@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   SliderContent,
   ItemSliderContainer,
+  ImageContainer,
   TitleSliderContainer,
   SubtitleSliderContainer,
   TextContainer,
@@ -28,26 +29,26 @@ const SliderIntro: React.FC<Props> = () => {
       title: 'Acompanhe de qualquer lugar',
       subtitle:
         'Lorem impsum et amer at  doro et male impsum et amer at doro et male impsum et amer at doro et male ',
-      content: <HomeCare size={450} />,
+      content: <HomeCare size={350} />,
     },
     {
       title: 'Tratamento preventivo a todos',
       subtitle:
         'Lorem impsum et amer at  doro et male impsum et amer at doro et male impsum et amer at doro et male ',
-      content: <CareOld size={450} />,
+      content: <CareOld size={350} />,
     },
     {
       title: 'Solicite exames e tratamentos',
       subtitle:
         'Lorem impsum et amer at  doro et male impsum et amer at doro et male impsum et amer at doro et male ',
-      content: <MedicineSolution size={450} />,
+      content: <MedicineSolution size={350} />,
     },
   ] as ItemProps[];
 
   const RenderItem: ListRenderItem<ItemProps> = ({index, item}) => {
     return (
       <ItemSliderContainer key={index}>
-        {item.content}
+        <ImageContainer>{item.content}</ImageContainer>
         <TextContainer>
           <TitleSliderContainer category="h1">
             {item.title}
