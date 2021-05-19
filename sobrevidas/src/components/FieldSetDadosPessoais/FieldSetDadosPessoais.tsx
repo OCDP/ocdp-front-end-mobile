@@ -15,7 +15,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <Input
           value={newPaciente.nome}
           placeholder="Informe o nome do paciente"
@@ -29,7 +29,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <Input
           value={newPaciente.nomeDaMae}
           placeholder="Informe o nome da mãe"
@@ -43,7 +43,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <MaskedInput
           valueParam={newPaciente.dataNascimento}
           keyboardType="number-pad"
@@ -60,7 +60,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <MaskedInput
           valueParam={newPaciente.cpf}
           keyboardType="number-pad"
@@ -77,7 +77,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <RadioGroup
           onChange={value => {
             setNewPaciente(old => ({

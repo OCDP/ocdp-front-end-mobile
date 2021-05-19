@@ -10,7 +10,7 @@ const FieldSetDadosContato: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <Input
           value={newPaciente.email}
           onChangeText={email => {
@@ -21,7 +21,7 @@ const FieldSetDadosContato: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <MaskedInput
           valueParam={newPaciente.telefoneCelular}
           keyboardType="number-pad"
@@ -35,7 +35,7 @@ const FieldSetDadosContato: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <MaskedInput
           valueParam={newPaciente.telefoneResponsavel}
           keyboardType="number-pad"

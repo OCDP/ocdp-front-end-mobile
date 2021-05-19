@@ -12,7 +12,7 @@ const FieldSetDadosEndereco: React.FC<Props> = ({}) => {
 
   return (
     <>
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <SearchBairros
           onSelect={(bairro, cidade) => {
             setNewPaciente(old => ({...old, idBairro: bairro.id}));
@@ -24,7 +24,7 @@ const FieldSetDadosEndereco: React.FC<Props> = ({}) => {
         />
       </FieldSetItem>
 
-      <FieldSetItem>
+      <FieldSetItem level="2">
         <Input
           value={newPaciente.enderecoCompleto}
           placeholder="Informe o endereço completo"
