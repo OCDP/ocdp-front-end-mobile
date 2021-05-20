@@ -58,7 +58,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
           {false ? (
             <MaleDoctor size={60} color={themeColors['color-primary-500']} />
           ) : (
-            <FemaleDoctor size=60} color={themeColors['color-primary-500']} />
+            <FemaleDoctor size={60} color={themeColors['color-primary-500']} />
           )}
           <InfosHeader>
             <Text category="h6">{usuarioLogado.nome}</Text>
