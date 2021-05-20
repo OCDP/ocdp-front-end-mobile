@@ -1,7 +1,7 @@
 import {Layout, Text} from '@ui-kitten/components';
 import styled from 'styled-components';
 import {buildStyledShadow} from '../../styles/buildShadow';
-const shadow = buildStyledShadow(8);
+const shadow = buildStyledShadow(6);
 
 export const ItemListPaciente = styled(Layout)`
   ${shadow}
