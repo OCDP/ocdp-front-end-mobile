@@ -82,7 +82,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
         <FooterItens>
           <Toggle
             children={`Ativar ${
-              customThemeContext.theme === 'dark' ? 'modo claro' : 'modo escuro'
+              customThemeContext.theme === 'dark' ? 'tema claro' : 'tema escuro'
             }`}
             checked={customThemeContext.theme === 'dark'}
             onChange={customThemeContext.toggleTheme}
