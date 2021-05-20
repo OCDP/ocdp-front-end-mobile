@@ -1,7 +1,7 @@
 import React from 'react';
 import Svg, {Path} from 'react-native-svg';
 
-const Logo = ({size = 24}) => {
+const PinBairro = ({size = 24}) => {
   return (
     <Svg x="0" y="0" width={size} height={size} viewBox="0 0 512 512">
       <Path
@@ -16,4 +16,4 @@ const Logo = ({size = 24}) => {
   );
 };
 
-export default Logo;
+export default PinBairro;

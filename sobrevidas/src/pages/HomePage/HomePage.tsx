@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {ButtonAddPaciente, SearchPaciente} from './HomePage.styles';
 import {addButton, search} from '../../components/icons';
 import {debounce} from 'lodash';
@@ -6,19 +6,25 @@ import {debounce} from 'lodash';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {useGetPacientes} from '../../hooks/networking/paciente';
 import {Alert} from 'react-native';
-import {WaveContainer} from '../../styles/index.styles';
+import ListPacientes from '../../components/ListPacientes/ListPacientes';
+import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
+import useMountEffect from '../../hooks/utils/useMountEffect';
 
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
   const getPacientes = useGetPacientes();
+  const [loading, setLoading] = useState(false);
+  const [pacientes, setPacientes] = useState<Models.Paciente[]>([]);
 
   const _getPacientes = useCallback(
     async (nome: string) => {
       try {
+        setLoading(true);
         const {data} = await getPacientes(nome.length > 0 ? nome : 'a');
-        console.log('pacientes >', data);
+        setPacientes(data);
+        setLoading(false);
       } catch (e) {
-        console.error('erro >> ', e);
+        setLoading(false);
         Alert.alert('Erro na busca', 'Erro ao buscar pacientes', [
           {text: 'Voltar'},
         ]);
@@ -27,6 +33,8 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
     [getPacientes],
   );
 
+  useMountEffect(() => _getPacientes('a'));
+
   const onFilterThrottle = debounce(
     (value: string) => _getPacientes(value),
     300,
@@ -34,12 +42,12 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
 
   return (
     <PageContainer withHeader pageTitle="Pacientes" navigation={navigation}>
-      <WaveContainer level="2" />
       <SearchPaciente
         placeholder="Buscar pacientes"
-        accessoryRight={search}
+        accessoryRight={loading ? LoadingIndicator : search}
         onChangeText={(value: string) => onFilterThrottle(value)}
       />
+      <ListPacientes pacientes={pacientes} />
       <ButtonAddPaciente
         onPress={() => navigation.navigate('CadastrarPacientePage')}
         accessoryLeft={addButton}

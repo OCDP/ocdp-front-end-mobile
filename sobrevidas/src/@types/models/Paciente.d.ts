@@ -1,5 +1,6 @@
 declare namespace Models {
   interface Paciente {
+    id?: string;
     dataNascimento: string;
     cpf: string;
     nome: string;

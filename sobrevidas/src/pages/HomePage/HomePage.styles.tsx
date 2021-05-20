@@ -12,8 +12,8 @@ export const SearchPaciente = styled(Input)`
 
 export const ButtonAddPaciente = styled(Button)`
   ${shadow}
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50px;
   position: absolute;
   bottom: 16px;

@@ -82,10 +82,6 @@ export const moreDetails = (style?: ImageStyle) => (
   <Icon {...style} name="menu-2-outline" />
 );
 
-export const person = (style?: ImageStyle) => (
-  <Icon {...style} name="person-outline" />
-);
-
 export const addPerson = (style?: ImageStyle) => (
   <Icon {...style} name="person-add-outline" />
 );

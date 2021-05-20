@@ -17,7 +17,7 @@ import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import primariaColors from '../../themes/primariaColors.json';
 import secundariaColors from '../../themes/secundariaColors.json';
 import {version} from '../../utils/constants';
-import {person} from '../../components/icons';
+import {personOutline} from '../../components/icons';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import MaskedInput from '../../components/MaskedInput/MaskedInput';
 import {Alert, KeyboardAvoidingView} from 'react-native';
@@ -70,8 +70,9 @@ const LoginPage = ({navigation}: any) => {
           <KeyboardAvoidingView>
             <FormItem>
               <MaskedInput
-                accessoryRight={person}
+                accessoryRight={personOutline}
                 maxLength={14}
+                keyboardType="number-pad"
                 placeholder="Digitar CPF"
                 label={'CPF'}
                 mask="cpf"
