@@ -55,7 +55,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       <PerfilContainer>
         <WaveContainer level="2" />
         <HeaderContainer>
-          {2 > 1 ? (
+          {false ? (
             <MaleDoctor size={60} color={themeColors['color-primary-500']} />
           ) : (
             <FemaleDoctor size={60} color={themeColors['color-primary-500']} />
