@@ -10,7 +10,6 @@ import {
   VersionText,
   ButtonLogin,
   FooterLogin,
-  WaveContainer,
 } from './LoginPage.styles';
 import {Input, Icon} from '@ui-kitten/components';
 import {useLoginUsuario} from '../../hooks/networking/usuario';
@@ -22,6 +21,7 @@ import {person} from '../../components/icons';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import MaskedInput from '../../components/MaskedInput/MaskedInput';
 import {Alert, KeyboardAvoidingView} from 'react-native';
+import {WaveContainer} from '../../styles/index.styles';
 
 const LoginPage = ({navigation}: any) => {
   const {register, setValue, handleSubmit} = useForm();

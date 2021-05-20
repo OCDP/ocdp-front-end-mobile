@@ -1,14 +1,18 @@
 import {Layout, Text, Button} from '@ui-kitten/components';
 import styled from 'styled-components/native';
 
+export const ProgressStepsContainer = styled(Layout)`
+  padding: 8px 16px 0px 16px;
+`;
+
 export const StepsContainer = styled(Layout)`
   flex: 1;
   justify-content: center;
-  margin: 8px 8px;
+  margin: 0px 0px;
 `;
 
 export const StepDescription = styled(Text)`
-  margin-top: 8px;
+  margin: 0px 16px 8px 16px;
   text-align: center;
 `;
 
@@ -25,7 +29,7 @@ export const FooterButtonsContainer = styled(Layout)`
 `;
 
 export const FooterButton = styled(Button)`
-  border-radius: 10px;
+  border-radius: 20px;
   height: 20px;
   width: 60px;
 `;

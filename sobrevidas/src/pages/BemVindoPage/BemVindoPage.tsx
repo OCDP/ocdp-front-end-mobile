@@ -4,11 +4,11 @@ import {
   BemVindoContainer,
   ButtonContainer,
   ButtonGoLogin,
-  WaveContainer,
 } from './BemVindoPage.styles';
 
 import {withStyles} from '@ui-kitten/components';
 import SliderIntro from '../../components/SliderIntro/SliderIntro';
+import {WaveContainer} from '../../styles/index.styles';
 
 interface Props {
   navigation?: any;

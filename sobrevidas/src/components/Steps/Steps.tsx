@@ -8,6 +8,7 @@ import {
   StepsContainer,
   FooterButtonsContainer,
   FooterButton,
+  ProgressStepsContainer,
 } from './Steps.styles';
 
 interface Props {
@@ -42,7 +43,9 @@ const Steps: React.FC<Props> = ({descriptions, children, onComplete}) => {
 
   return (
     <StepsContainer>
-      <ProgressSteps size={children.length} step={index} />
+      <ProgressStepsContainer>
+        <ProgressSteps size={children.length} step={index} />
+      </ProgressStepsContainer>
       {index && (
         <>
           <StepDescription category="c4">{currentDescription}</StepDescription>
@@ -54,14 +57,14 @@ const Steps: React.FC<Props> = ({descriptions, children, onComplete}) => {
       <FooterButtonsContainer>
         <FooterButton
           appearance="outline"
-          size="tiny"
+          size="small"
           accessoryRight={minimalBack}
           onPress={togglePrev}
           disabled={isFirst}
         />
         <FooterButton
           appearance={isLast ? 'filled' : 'outline'}
-          size="tiny"
+          size="small"
           accessoryRight={isLast ? check : minimalAvance}
           onPress={submit}
         />

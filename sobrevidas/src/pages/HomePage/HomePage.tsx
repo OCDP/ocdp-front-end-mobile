@@ -6,6 +6,7 @@ import {debounce} from 'lodash';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {useGetPacientes} from '../../hooks/networking/paciente';
 import {Alert} from 'react-native';
+import {WaveContainer} from '../../styles/index.styles';
 
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
@@ -33,6 +34,7 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
 
   return (
     <PageContainer withHeader pageTitle="Pacientes" navigation={navigation}>
+      <WaveContainer level="2" />
       <SearchPaciente
         placeholder="Buscar pacientes"
         accessoryRight={search}

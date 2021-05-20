@@ -7,18 +7,6 @@ export const Container = styled.View`
   justify-content: center;
 `;
 
-export const WaveContainer = styled(Layout)`
-  position: absolute;
-  top: 0;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 200px;
-  border-top-right-radius: 200px;
-  border-bottom-right-radius: 0px;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-`;
-
 export const FormContainer = styled(Layout)`
   padding: 0px 32px;
   flex-direction: column;
