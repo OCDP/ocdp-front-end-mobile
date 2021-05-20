@@ -15,13 +15,6 @@ export const ItemListPaciente = styled(Layout)`
   padding: 16px 8px;
 `;
 
-export const DetailItemPaciente = styled(Layout)`
-  height: 60px;
-  width: 5px;
-  margin: 0px 12px 0px 2px;
-  border-radius: 16px;
-`;
-
 export const PacienteInfos = styled(Layout)`
   background-color: transparent;
   flex: 1;

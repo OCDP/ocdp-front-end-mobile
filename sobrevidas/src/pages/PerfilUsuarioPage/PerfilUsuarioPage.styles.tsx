@@ -7,41 +7,37 @@ export const PerfilContainer = styled(Layout)`
   justify-content: space-between;
 `;
 
-export const UserLogoContainer = styled(Layout)`
-  padding-top: 32px;
-  justify-content: center;
+export const HeaderContainer = styled(Layout)`
+  margin-top: 64px;
+  flex-direction: column;
+  justify-content: space-evenly;
   background-color: transparent;
   align-items: center;
 `;
 
-export const CurveContainer = styled(Layout)`
-  position: absolute;
-  bottom: 0;
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 0px;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 0px;
-  width: 100%;
-  height: 400px;
+export const InfosHeader = styled(Layout)`
+  background-color: transparent;
+  flex-direction: column;
 `;
 
 export const InfoListPerfil = styled(Layout)`
   background-color: transparent;
-  width: 100%;
+  margin-left: 16px;
+  margin-right: 16px;
 `;
 
 export const InfoItemPerfil = styled(Layout)`
-  margin: 4px 16px;
+  margin: 8px 16px;
   background-color: transparent;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  /* justify-content: space-between; */
 `;
 
 export const FooterItens = styled(Layout)`
   background-color: transparent;
   justify-content: space-around;
   align-items: center;
-  height: 400px;
+  height: 130px;
 `;
 
 export const LogoutButton = styled(Button)`

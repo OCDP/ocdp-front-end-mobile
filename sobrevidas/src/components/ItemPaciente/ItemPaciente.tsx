@@ -2,8 +2,8 @@ import moment from 'moment';
 import React, {useContext} from 'react';
 import User from '../../assets/img/User';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import {DetailDivider} from '../../styles/index.styles';
 import {
-  DetailItemPaciente,
   ItemListPaciente,
   PacienteDetails,
   PacienteInfos,
@@ -17,7 +17,7 @@ const ItemPaciente: React.FC<Props> = ({paciente}) => {
   const {themeColors} = useContext(UsuarioLogadoContext);
   return (
     <ItemListPaciente level="2">
-      <DetailItemPaciente level="4" />
+      <DetailDivider level="4" />
       <User color={themeColors['color-primary-500']} />
       <PacienteInfos>
         <PacienteNome category="c2">{paciente.nome}</PacienteNome>
