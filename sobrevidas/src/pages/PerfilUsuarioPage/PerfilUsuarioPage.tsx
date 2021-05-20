@@ -1,15 +1,29 @@
-import {Button, Divider, List, Text, Toggle} from '@ui-kitten/components';
+import {Divider, Text, Toggle} from '@ui-kitten/components';
 import React, {memo, useContext, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
+import User from '../../assets/img/User';
+import {logout} from '../../components/icons';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {CustomThemeContext} from '../../contexts/CustomThemeContext';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import {
+  PerfilContainer,
+  LogoutButton,
+  UserLogoContainer,
+  FooterItens,
+  CurveContainer,
+  InfoListPerfil,
+  InfoItemPerfil,
+} from './PerfilUsuarioPage.styles';
 
 interface Props {}
 
 const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   const customThemeContext = useContext(CustomThemeContext);
-  const {usuarioLogado, logout} = useContext(UsuarioLogadoContext);
+  const {themeColors} = useContext(UsuarioLogadoContext);
+  const {usuarioLogado, logout: logoutSystem} = useContext(
+    UsuarioLogadoContext,
+  );
   const [infoUsuario] = useState([
     {
       title: 'Nome',
@@ -37,64 +51,47 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
     },
   ]);
 
-  const renderItem = ({item, index}) => (
-    <View
-      style={{
-        padding: 10,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-      }}>
-      <Text style={{textAlignVertical: 'center', fontSize: 20}}>
-        {item.title}
-      </Text>
-      <Text
-        style={{
-          fontStyle: 'italic',
-          textAlignVertical: 'center',
-          fontSize: 16,
-        }}>
-        {item.description}
-      </Text>
-    </View>
-  );
-
   return (
     <PageContainer
       withHeader
       canGoBack
       pageTitle="Perfil do usuário"
       navigation={navigation}>
-      <List
-        style={styles.container}
-        data={infoUsuario}
-        ItemSeparatorComponent={Divider}
-        renderItem={renderItem}
-        persistentScrollbar={true}
-      />
-      <View
-        style={{
-          padding: 20,
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}>
-        <Toggle
-          style={{paddingBottom: 20}}
-          checked={customThemeContext.theme === 'dark'}
-          onChange={customThemeContext.toggleTheme}>
-          Trocar para{' '}
-          {customThemeContext.theme === 'dark' ? 'tema claro' : 'tema escuro'}
-        </Toggle>
-        <Button onPress={() => logout(navigation)}>Sair da Conta</Button>
-      </View>
+      <PerfilContainer>
+        <CurveContainer level="3" />
+        <UserLogoContainer>
+          <User size={100} color={themeColors['color-primary-500']} />
+        </UserLogoContainer>
+
+        <FooterItens>
+          <InfoListPerfil>
+            {infoUsuario.map(({title, description}, i) => (
+              <View key={i}>
+                <InfoItemPerfil>
+                  <Text category="s1">{title}</Text>
+                  <Text category="s1">{description}</Text>
+                </InfoItemPerfil>
+                <Divider />
+              </View>
+            ))}
+          </InfoListPerfil>
+          <Toggle
+            children={`Ativar ${
+              customThemeContext.theme === 'dark' ? 'tema claro' : 'tema escuro'
+            }`}
+            checked={customThemeContext.theme === 'dark'}
+            onChange={customThemeContext.toggleTheme}
+          />
+          <LogoutButton
+            size="small"
+            accessoryRight={logout}
+            onPress={() => logoutSystem(navigation)}>
+            Sair da Conta
+          </LogoutButton>
+        </FooterItens>
+      </PerfilContainer>
     </PageContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default memo(PerfilUsuarioPage);
