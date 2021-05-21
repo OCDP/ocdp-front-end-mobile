@@ -55,7 +55,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       pageTitle="Perfil do usuário"
       navigation={navigation}>
       <PerfilContainer>
-        <HeaderLine color={themeColors['color-primary-500']} />
+        <HeaderLine color={themeColors['color-primary-300']} />
         <HeaderContainer>
           <LogoContainer>
             {false ? (
@@ -63,7 +63,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
             ) : (
               <FemaleDoctor
                 size={90}
-                color={themeColors['color-primary-500']}
+                color={themeColors['color-primary-400']}
               />
             )}
           </LogoContainer>
