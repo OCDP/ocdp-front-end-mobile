@@ -28,7 +28,6 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
         ).format('Y-MM-DD HH:mm:ss');
         await postPaciente({...values, dataNascimento});
       } catch (e) {
-        console.error('erro >> ', e);
         Alert.alert(
           'Erro no cadastro',
           'Algo deu errado no momento do cadastro',

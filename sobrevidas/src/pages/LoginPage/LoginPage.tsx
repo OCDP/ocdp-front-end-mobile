@@ -73,7 +73,7 @@ const LoginPage = ({navigation}: any) => {
                 accessoryRight={personOutline}
                 maxLength={14}
                 keyboardType="number-pad"
-                placeholder="Digitar CPF"
+                placeholder="Digitar seu CPF"
                 label={'CPF'}
                 mask="cpf"
                 inputMaskChange={value => {
@@ -91,7 +91,7 @@ const LoginPage = ({navigation}: any) => {
                   <Icon {...propsIcon} name="eye-off" />
                 )}
                 secureTextEntry
-                placeholder="Inserir senha"
+                placeholder="Digite sua senha"
                 onChangeText={text => setValue('password', text)}
               />
             </FormItem>
