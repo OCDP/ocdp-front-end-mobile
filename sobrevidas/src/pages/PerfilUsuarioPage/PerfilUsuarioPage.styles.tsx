@@ -7,6 +7,14 @@ export const PerfilContainer = styled(Layout)`
   justify-content: space-between;
 `;
 
+export const HeaderLine = styled(Layout)`
+  height: 100px;
+  width: 1000%;
+  position: absolute;
+  top: 0px;
+  background-color: red;
+`;
+
 export const HeaderContainer = styled(Layout)`
   margin-top: 64px;
   flex-direction: column;

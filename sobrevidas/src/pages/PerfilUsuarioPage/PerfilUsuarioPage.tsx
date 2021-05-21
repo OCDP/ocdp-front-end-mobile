@@ -15,9 +15,9 @@ import {
   InfoListPerfil,
   InfoItemPerfil,
   InfosHeader,
+  HeaderLine,
 } from './PerfilUsuarioPage.styles';
 import atencaoLabels from '../../utils/atencaoLabels';
-import {WaveContainer} from '../../styles/index.styles';
 
 interface Props {}
 
@@ -53,7 +53,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       pageTitle="Perfil do usuário"
       navigation={navigation}>
       <PerfilContainer>
-        <WaveContainer level="2" />
+        <HeaderLine />
         <HeaderContainer>
           {false ? (
             <MaleDoctor size={60} color={themeColors['color-primary-500']} />
