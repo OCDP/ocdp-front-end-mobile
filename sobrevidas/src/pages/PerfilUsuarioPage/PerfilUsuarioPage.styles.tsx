@@ -1,4 +1,5 @@
 import {Button, Layout} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 
 export const PerfilContainer = styled(Layout)`
@@ -7,12 +8,27 @@ export const PerfilContainer = styled(Layout)`
   justify-content: space-between;
 `;
 
-export const HeaderLine = styled(Layout)`
+export const LogoContainer = styled(Layout)`
   height: 100px;
-  width: 1000%;
+  width: 100px;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const HeaderLine = styled(Layout)<{color: string}>`
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 50px;
+  height: 120px;
+  width: 100%;
   position: absolute;
   top: 0px;
-  background-color: red;
+  ${props =>
+    `
+    background-color: ${props.color};
+    `}
 `;
 
 export const HeaderContainer = styled(Layout)`
@@ -26,6 +42,8 @@ export const HeaderContainer = styled(Layout)`
 export const InfosHeader = styled(Layout)`
   background-color: transparent;
   flex-direction: column;
+  margin: 0px 32px;
+  align-items: center;
 `;
 
 export const InfoListPerfil = styled(Layout)`
@@ -45,10 +63,17 @@ export const FooterItens = styled(Layout)`
   background-color: transparent;
   justify-content: space-around;
   align-items: center;
-  height: 130px;
+  height: 100px;
+  margin-bottom: 16px;
+`;
+
+export const FooterContent = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  align-items: center;
 `;
 
 export const LogoutButton = styled(Button)`
-  width: 160px;
   border-radius: 30px;
 `;

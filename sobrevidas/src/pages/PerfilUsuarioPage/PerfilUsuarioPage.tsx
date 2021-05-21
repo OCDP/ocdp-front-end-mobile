@@ -1,6 +1,6 @@
-import {Text, Toggle} from '@ui-kitten/components';
+import {Divider, Text, Toggle} from '@ui-kitten/components';
 import React, {memo, useContext, useState} from 'react';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import MaleDoctor from '../../assets/img/MaleDoctor';
 import FemaleDoctor from '../../assets/img/FemaleDoctor';
 import {logout} from '../../components/icons';
@@ -16,6 +16,8 @@ import {
   InfoItemPerfil,
   InfosHeader,
   HeaderLine,
+  LogoContainer,
+  FooterContent,
 } from './PerfilUsuarioPage.styles';
 import atencaoLabels from '../../utils/atencaoLabels';
 
@@ -53,21 +55,27 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       pageTitle="Perfil do usuário"
       navigation={navigation}>
       <PerfilContainer>
-        <HeaderLine />
+        <HeaderLine color={themeColors['color-primary-500']} />
         <HeaderContainer>
-          {false ? (
-            <MaleDoctor size={60} color={themeColors['color-primary-500']} />
-          ) : (
-            <FemaleDoctor size={60} color={themeColors['color-primary-500']} />
-          )}
+          <LogoContainer>
+            {false ? (
+              <MaleDoctor size={90} color={themeColors['color-primary-500']} />
+            ) : (
+              <FemaleDoctor
+                size={90}
+                color={themeColors['color-primary-500']}
+              />
+            )}
+          </LogoContainer>
+
           <InfosHeader>
-            <Text category="h6">{usuarioLogado.nome}</Text>
+            <Text category="h3">{usuarioLogado.nome}</Text>
             <Text category="s1">
               Atenção {atencaoLabels[usuarioLogado.nivelAtencao]}
             </Text>
           </InfosHeader>
         </HeaderContainer>
-
+        <Divider />
         <InfoListPerfil>
           {infoUsuario.map(({title, description}, i) => (
             <View key={i}>
@@ -78,21 +86,31 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
             </View>
           ))}
         </InfoListPerfil>
-
+        <Divider />
         <FooterItens>
-          <Toggle
-            children={`Ativar ${
-              customThemeContext.theme === 'dark' ? 'tema claro' : 'tema escuro'
-            }`}
-            checked={customThemeContext.theme === 'dark'}
-            onChange={customThemeContext.toggleTheme}
-          />
-          <LogoutButton
-            size="small"
-            accessoryRight={logout}
-            onPress={() => logoutSystem(navigation)}>
-            Sair da Conta
-          </LogoutButton>
+          <FooterContent>
+            <Text category="s1">Tema escuro</Text>
+            <Toggle
+              checked={customThemeContext.theme === 'dark'}
+              onChange={customThemeContext.toggleTheme}
+            />
+          </FooterContent>
+          <FooterContent>
+            <Text category="s1">Encerrar sessão</Text>
+            <LogoutButton
+              size="small"
+              accessoryRight={logout}
+              onPress={() =>
+                Alert.alert('Fazer logout', 'Deseja sair da aplicação?', [
+                  {text: 'Voltar'},
+                  {
+                    text: 'Confirmar',
+                    onPress: () => logoutSystem(navigation),
+                  },
+                ])
+              }
+            />
+          </FooterContent>
         </FooterItens>
       </PerfilContainer>
     </PageContainer>

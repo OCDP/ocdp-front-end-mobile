@@ -5,7 +5,6 @@ const shadow = buildStyledShadow(6);
 
 export const ItemListPaciente = styled(Layout)`
   ${shadow}
-  display: flex;
   align-items: center;
   flex-direction: row;
   border-radius: 10px;
