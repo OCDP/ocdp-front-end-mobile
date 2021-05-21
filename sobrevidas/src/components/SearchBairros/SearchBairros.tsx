@@ -5,7 +5,7 @@ import CadastroPacienteContext from '../../contexts/CadastroPacienteContext';
 import {useGetBairrosByCity} from '../../hooks/networking/bairro';
 import {useGetCidades} from '../../hooks/networking/cidade';
 import useMountEffect from '../../hooks/utils/useMountEffect';
-import {pin, edit} from '../icons';
+import {pin, edit, warning} from '../icons';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import {
   DisplayEndereco,
@@ -87,8 +87,8 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
               <PinBairro size={60} />
             </LogoPinContainer>
             <TextEnderecoContainer>
-              <Text category="s2">Cidade: {currentEndereco.cidade}</Text>
-              <Text category="s1">Bairro: {currentEndereco.bairro?.nome}</Text>
+              <Text category="s2">{`Cidade: ${currentEndereco.cidade}`}</Text>
+              <Text category="s1">{`Bairro: ${currentEndereco.bairro?.nome}`}</Text>
             </TextEnderecoContainer>
           </EnderecoCard>
           <ButtonModalContainer
@@ -117,7 +117,6 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
             ))}
           </AutocompleteCidade>
           <Autocomplete
-            disabled={bairros.length === 0}
             accessoryRight={loadingBairros ? LoadingIndicator : undefined}
             label="Selecionar bairro"
             placeholder={
@@ -131,14 +130,21 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
               onSelect(bairros[value], cidadeSeleionada?.nome);
               setValueSearchBairros(bairros[value].nome);
             }}>
-            {bairros &&
+            {bairros && bairros.length > 0 ? (
               bairros.map(({nome}, index) => (
                 <AutocompleteItem
                   key={index}
                   title={nome}
                   accessoryLeft={pin}
                 />
-              ))}
+              ))
+            ) : (
+              <AutocompleteItem
+                disabled
+                title="Nenhum bairro encontrado"
+                accessoryLeft={warning}
+              />
+            )}
           </Autocomplete>
         </>
       )}
