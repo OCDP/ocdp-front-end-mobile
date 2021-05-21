@@ -59,10 +59,10 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
         <HeaderContainer>
           <LogoContainer>
             {false ? (
-              <MaleDoctor size={90} color={themeColors['color-primary-500']} />
+              <MaleDoctor size={80} color={themeColors['color-primary-500']} />
             ) : (
               <FemaleDoctor
-                size={90}
+                size={80}
                 color={themeColors['color-primary-400']}
               />
             )}
@@ -80,7 +80,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
           {infoUsuario.map(({title, description}, i) => (
             <View key={i}>
               <InfoItemPerfil>
-                <Text category="h6">{title}</Text>
+                <Text category="c1">{title}</Text>
                 <Text category="s1">{description}</Text>
               </InfoItemPerfil>
             </View>

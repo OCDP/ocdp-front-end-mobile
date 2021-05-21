@@ -9,8 +9,8 @@ export const PerfilContainer = styled(Layout)`
 `;
 
 export const LogoContainer = styled(Layout)`
-  height: 100px;
-  width: 100px;
+  height: 90px;
+  width: 90px;
   border-radius: 50px;
   justify-content: center;
   align-items: center;
@@ -21,7 +21,7 @@ export const HeaderLine = styled(Layout)<{color: string}>`
   border-bottom-left-radius: 50px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 50px;
-  height: 120px;
+  height: 100px;
   width: 100%;
   position: absolute;
   top: 0px;
@@ -32,7 +32,7 @@ export const HeaderLine = styled(Layout)<{color: string}>`
 `;
 
 export const HeaderContainer = styled(Layout)`
-  margin-top: 64px;
+  margin-top: 32px;
   flex-direction: column;
   justify-content: space-evenly;
   background-color: transparent;
