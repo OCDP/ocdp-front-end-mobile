@@ -21,11 +21,10 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
   const _postPaciente = useCallback(
     async (values: Models.Paciente) => {
       try {
-        console.log(values.dataNascimento);
         const dataNascimento = moment(
           values.dataNascimento,
           'DD-MM-YYYY HH:mm:ss',
-        ).format('Y-MM-DD HH:mm:ss');
+        ).format('DD-MM-YYYY');
         await postPaciente({...values, dataNascimento});
       } catch (e) {
         Alert.alert(
