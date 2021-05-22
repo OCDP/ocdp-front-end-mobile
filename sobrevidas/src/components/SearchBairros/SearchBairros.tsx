@@ -36,7 +36,7 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
   const [bairros, setBairros] = useState<Models.Bairro[]>(resultBairros);
   const [cidades, setCidades] = useState<Models.Cidade[]>(resultCidades);
   const [valueSearchCidades, setValueSearchCidades] = useState('');
-  const [valueSearchBairros, setValueSearchBairros] = useState('');
+  const [valueSearchBairros, setValueSearchBairros] = useState<string>();
 
   const _getCidades = useCallback(async () => {
     try {
@@ -61,6 +61,7 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
           setDisableInput(false);
         } else {
           setDisableInput(true);
+          setValueSearchBairros(undefined);
         }
         setLoadingBairros(false);
       } catch (e) {
