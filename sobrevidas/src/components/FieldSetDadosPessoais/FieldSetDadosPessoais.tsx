@@ -7,6 +7,7 @@ import MaskedInput from '../MaskedInput/MaskedInput';
 interface Props {}
 const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
   const sexoArr = {0: 'MASCULINO', 1: 'FEMININO'} as Dict<string>;
+
   const {newPaciente, setNewPaciente} = useContext(CadastroPacienteContext);
   const selectedIndex = useMemo(
     () => (newPaciente.sexo === 'MASCULINO' ? 0 : 1),
