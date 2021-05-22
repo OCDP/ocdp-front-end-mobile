@@ -12,6 +12,7 @@ import {
   CadastroPacienteProvider,
 } from '../../contexts/CadastroPacienteContext';
 import {usePostPaciente} from '../../hooks/networking/paciente';
+import { ValidaCadastrarPaciente } from './ValidaCadastrarPaciente';
 
 interface Props {}
 
@@ -20,18 +21,20 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
 
   const _postPaciente = useCallback(
     async (values: Models.Paciente) => {
-      try {
-        const dataNascimento = moment(
-          values.dataNascimento,
-          'DD-MM-YYYY HH:mm:ss',
-        ).format('DD-MM-YYYY');
-        await postPaciente({...values, dataNascimento});
-      } catch (e) {
-        Alert.alert(
-          'Erro no cadastro',
-          'Algo deu errado no momento do cadastro',
-          [{text: 'Voltar'}],
-        );
+      if(ValidaCadastrarPaciente(values)){
+        try {
+          const dataNascimento = moment(
+            values.dataNascimento,
+            'DD-MM-YYYY HH:mm:ss',
+          ).format('DD-MM-YYYY');
+          await postPaciente({...values, dataNascimento});
+        } catch (e) {
+          Alert.alert(
+            'Erro no cadastro',
+            'Algo deu errado no momento do cadastro',
+            [{text: 'Voltar'}],
+          );
+        }
       }
     },
     [postPaciente],
@@ -47,7 +50,7 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
         <CadastroPacienteConsumer>
           {({newPaciente}) => (
             <Steps
-              onComplete={() => _postPaciente(newPaciente)}
+              onComplete={() => _postPaciente(newPaciente) }
               descriptions={[
                 'Dados pessoais',
                 'Dados de contato',
