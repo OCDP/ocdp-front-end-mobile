@@ -1,6 +1,6 @@
 import moment from 'moment';
-import React, {memo, useCallback} from 'react';
-import {Alert} from 'react-native';
+import React, { memo, useCallback, useEffect } from 'react';
+import { Alert, BackHandler } from 'react-native';
 import FieldSetDadosContato from '../../components/FieldSetDadosContato/FieldSetDadosContato';
 import FieldSetDadosEndereco from '../../components/FieldSetDadosEndereco/FieldSetDadosEndereco';
 import FieldSetDadosPessoais from '../../components/FieldSetDadosPessoais/FieldSetDadosPessoais';
@@ -11,11 +11,11 @@ import {
   CadastroPacienteConsumer,
   CadastroPacienteProvider,
 } from '../../contexts/CadastroPacienteContext';
-import {usePostPaciente} from '../../hooks/networking/paciente';
+import { usePostPaciente } from '../../hooks/networking/paciente';
 
-interface Props {}
+interface Props { }
 
-const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
+const CadastrarPacientePage: React.FC<Props> = ({ navigation }: any) => {
   const postPaciente = usePostPaciente();
 
   const _postPaciente = useCallback(
@@ -25,17 +25,36 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
           values.dataNascimento,
           'DD-MM-YYYY HH:mm:ss',
         ).format('DD-MM-YYYY');
-        await postPaciente({...values, dataNascimento});
+        await postPaciente({ ...values, dataNascimento });
       } catch (e) {
         Alert.alert(
           'Erro no cadastro',
           'Algo deu errado no momento do cadastro',
-          [{text: 'Voltar'}],
+          [{ text: 'Voltar' }],
         );
       }
     },
     [postPaciente],
   );
+  
+  const backAction = () => {
+    Alert.alert("Deseja realmente sair?", "Sair agora te farão perder os dados atuais", [
+      {
+        text: "Não",
+        onPress: () => null,
+        style: "cancel"
+      },
+      { text: "Sim", onPress: () => navigation.goBack() }
+    ]);
+    return true;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", backAction);
+  }, []);
 
   return (
     <PageContainer
@@ -45,7 +64,7 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
       navigation={navigation}>
       <CadastroPacienteProvider>
         <CadastroPacienteConsumer>
-          {({newPaciente}) => (
+          {({ newPaciente }) => (
             <Steps
               onComplete={() => _postPaciente(newPaciente)}
               descriptions={[
