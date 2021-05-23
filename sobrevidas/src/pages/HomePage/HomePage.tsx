@@ -47,7 +47,7 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         accessoryRight={loading ? LoadingIndicator : search}
         onChangeText={(value: string) => onFilterThrottle(value)}
       />
-      <ListPacientes pacientes={pacientes} loading={loading} />
+      <ListPacientes pacientes={pacientes} loading={loading} navigation={navigation}/>
       <ButtonAddPaciente
         onPress={() => navigation.navigate('CadastrarPacientePage')}
         accessoryLeft={addButton}

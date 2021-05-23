@@ -6,12 +6,14 @@ import { Text } from '@ui-kitten/components/ui/text/text.component';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import { View } from 'react-native';
 import { Container } from './ListPacientes.styles';
+import { CadastroPacienteProvider } from '../../contexts/CadastroPacienteContext';
 
 interface Props {
   pacientes: Models.Paciente[];
   loading: boolean;
+  navigation: any;
 }
-const ListPacientes: React.FC<Props> = ({ pacientes, loading }) => {
+const ListPacientes: React.FC<Props> = ({ pacientes, loading, navigation }) => {
   if (loading) {
     return (
       <Container>
@@ -24,7 +26,9 @@ const ListPacientes: React.FC<Props> = ({ pacientes, loading }) => {
         {pacientes.length > 0 ? (
           <ScrollView>
             {pacientes.map((paciente, i) => (
-              <ItemPaciente key={i} paciente={paciente} />
+              <CadastroPacienteProvider>
+                <ItemPaciente key={i} paciente={paciente} navigation={navigation} />
+              </CadastroPacienteProvider>
             ))}
           </ScrollView>
         ) : (
