@@ -13,20 +13,14 @@ const DadosPacientePage: React.FC<Props> = ({ navigation, route }: any) => {
   // }, [])
 
   return (
-    <CadastroPacienteProvider>
 
-      <CadastroPacienteConsumer>
-        {({ newPaciente, setNewPaciente }) => {
-          setNewPaciente(paciente);
-          return (
-            <PageContainer withFooter navigation={navigation}>
-              <HomeText>{newPaciente.email}</HomeText>
-            </PageContainer>
-          )
-        }}
-      </CadastroPacienteConsumer>
-
-    </CadastroPacienteProvider>
+    <PageContainer withHeader
+      pageTitle={"Dados do Paciente"}
+      withFooter
+      navigation={navigation}
+      paciente={paciente}>
+      <HomeText>{paciente.email}</HomeText>
+    </PageContainer>
   );
 };
 

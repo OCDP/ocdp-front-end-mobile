@@ -20,6 +20,7 @@ interface Props {
   canGoBack?: boolean;
   pageTitle?: string;
   navigation?: any;
+  paciente?: Models.Paciente;
 }
 
 export const PageContainer: React.FC<Props> = ({
@@ -29,6 +30,7 @@ export const PageContainer: React.FC<Props> = ({
   children,
   withFooter = false,
   navigation,
+  paciente,
   ...props
 }) => {
   const {eva, style} = props as any;
@@ -89,7 +91,7 @@ export const PageContainer: React.FC<Props> = ({
                   accessoryRight={page.icon}
                   onPress={() =>
                     page.name !== currentRoute.name
-                      ? navigation.navigate(page.name)
+                      ? navigation.navigate(page.name, paciente ? {paciente : paciente} : null)
                       : undefined
                   }
                 />
