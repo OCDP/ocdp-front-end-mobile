@@ -8,7 +8,7 @@ import PageContainer from '../../components/PageContainer/PageContainer';
 import { CadastroPacienteProvider, CadastroPacienteConsumer } from '../../contexts/CadastroPacienteContext';
 import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import { useGetHistoricoPaciente } from '../../hooks/networking/historico';
-import { HistoricoInfos, HistoricoDetails, ItemListHistorico, PaddingContent, HistoricoListContainer, TimeLine, HistoricoContainer } from './HistoricoPage.styles';
+import { HistoricoInfos, HistoricoDetails, ItemListHistorico, PaddingContent, HistoricoListContainer, TimeLine, HistoricoContainer, BotaoContainer, BotaoNovaAcao } from './HistoricoPage.styles';
 
 interface Props { }
 const HistoricoPage: React.FC<Props> = ({ navigation, route }: any) => {
@@ -38,17 +38,17 @@ const HistoricoPage: React.FC<Props> = ({ navigation, route }: any) => {
   return (
     <PageContainer withHeader pageTitle={`Histórico ${pacienteState.nome}`} withFooter navigation={navigation} paciente={pacienteState}>
       <HistoricoContainer>
-        <View style={{flex:1, flexDirection: "row", alignSelf: "center", paddingBottom: 10}}>
-          <Button> Novo Atendimento </Button>
+        <BotaoContainer style={{}}>
+          <BotaoNovaAcao onPress={() => navigation.navigate()}> Novo Atendimento </BotaoNovaAcao>
           {usuarioLogado.nivelAtencao == "SECUNDARIA" && (
-            <Button> Nova Intervenção </Button>
+            <BotaoNovaAcao> Nova Intervenção </BotaoNovaAcao>
           )}
-        </View>
+        </BotaoContainer>
         {historico.map((h, i) => (
           <>
 
             <HistoricoListContainer>
-              <TimeLine indice={i} i0color={themeColors["color-primary-300"]} i1color={themeColors["color-primary-200"]}></TimeLine>
+              <TimeLine indice={i} indice_mais_recente={themeColors["color-primary-300"]} indices_anteriores={themeColors["color-primary-200"]}></TimeLine>
               <ItemListHistorico>
                 <HistoricoInfos>
                   <HistoricoDetails>Data de Atendimento: {h.dataAtendimento}</HistoricoDetails>

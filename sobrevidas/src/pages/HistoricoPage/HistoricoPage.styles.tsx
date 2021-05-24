@@ -1,4 +1,4 @@
-import { Layout, Text } from '@ui-kitten/components';
+import { Button, Layout, Text } from '@ui-kitten/components';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
@@ -39,12 +39,24 @@ export const HistoricoListContainer = styled(View)`
     padding-bottom: 1px;
 `
 
+export const BotaoContainer = styled(View)`
+  flex:1; 
+  flex-direction: row; 
+  align-self: center; 
+  padding-bottom: 10px;
+`
+
 export const HistoricoContainer = styled(ScrollView)`
   padding-top: 40px;
 `
 
-export const TimeLine = styled(View)<{indice:number, i0color:string, i1color:string}>`
-    ${props => `background-color: ${props.indice == 0 ? props.i0color : props.i1color}; `}
+export const BotaoNovaAcao = styled(Button)`
+  margin-right: 1px;
+  margin-left: 1px;
+`
+
+export const TimeLine = styled(View) <{ indice: number, indice_mais_recente: string, indices_anteriores: string }>`
+    ${props => `background-color: ${props.indice == 0 ? props.indice_mais_recente : props.indices_anteriores}; `}
     width: 20px;
 `
 
