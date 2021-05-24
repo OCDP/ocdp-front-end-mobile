@@ -21,18 +21,12 @@ const ItemPaciente: React.FC<Props> = ({ paciente, navigation }) => {
   const { themeColors } = useContext(UsuarioLogadoContext);
   const { setNewPaciente } = useContext(CadastroPacienteContext)
 
-  function setarPaciente() {
-    // console.log(paciente);
-    setNewPaciente(paciente);
-    navigation.navigate("DadosPacientePage")
-  }
-
   return (
 
     <ItemListPaciente level="2">
       <DetailDivider level="4" />
       <User color={themeColors['color-primary-500']} />
-      <PacienteInfos onTouchEnd={() => setarPaciente()}>
+      <PacienteInfos onTouchEnd={() => navigation.navigate("DadosPacientePage", { paciente: paciente })}>
         <PacienteNome category="c2">{paciente.nome}</PacienteNome>
         <PacienteDetails category="c2">
           Nascimento: {moment(paciente.dataNascimento).format('DD/MM/YYYY')} |

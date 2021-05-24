@@ -1,13 +1,17 @@
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './HistoricoPage.styles';
+import { CadastroPacienteProvider, CadastroPacienteConsumer } from '../../contexts/CadastroPacienteContext';
+import { HomeText } from './HistoricoPage.styles';
 
-interface Props {}
-const HistoricoPage: React.FC<Props> = ({navigation}: any) => {
+interface Props { }
+const HistoricoPage: React.FC<Props> = ({ navigation, newPaciente }: any) => {
   return (
-    <PageContainer withFooter navigation={navigation}>
-      <HomeText>historico page</HomeText>
-    </PageContainer>
+
+    <CadastroPacienteProvider>
+      <PageContainer withFooter navigation={navigation}>
+        <HomeText>{newPaciente.email}</HomeText>
+      </PageContainer>
+    </CadastroPacienteProvider>
   );
 };
 
