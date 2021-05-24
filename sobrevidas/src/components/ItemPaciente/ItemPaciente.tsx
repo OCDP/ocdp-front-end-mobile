@@ -19,7 +19,6 @@ interface Props {
 }
 const ItemPaciente: React.FC<Props> = ({ paciente, navigation }) => {
   const { themeColors } = useContext(UsuarioLogadoContext);
-  const { setNewPaciente } = useContext(CadastroPacienteContext)
 
   return (
 

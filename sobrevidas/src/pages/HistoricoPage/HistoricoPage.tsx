@@ -1,3 +1,4 @@
+import { Button } from '@ui-kitten/components';
 import { Divider } from '@ui-kitten/components/ui/divider/divider.component';
 import { Text } from '@ui-kitten/components/ui/text/text.component';
 import React, { memo, useCallback, useContext, useEffect, useState } from 'react';
@@ -14,14 +15,15 @@ const HistoricoPage: React.FC<Props> = ({ navigation, route }: any) => {
 
   const getHistoricoPaciente = useGetHistoricoPaciente();
 
-  const { paciente } = route.params;
+  
+  const [pacienteState, setPacienteState] = useState<Models.Paciente>(route.params.paciente)
   const [historico, setHistorico] = useState<Models.Historico[]>([]);
-  const { themeColors } = useContext(UsuarioLogadoContext);
+  const { usuarioLogado, themeColors } = useContext(UsuarioLogadoContext);
 
   const historicos = useCallback(async () => {
     try {
-      console.log(paciente.cpf)
-      const { data } = await getHistoricoPaciente(paciente.cpf);
+      console.log(pacienteState.cpf)
+      const { data } = await getHistoricoPaciente(pacienteState.cpf);
       console.log(data);
       setHistorico(data);
     } catch (err) {
@@ -34,10 +36,17 @@ const HistoricoPage: React.FC<Props> = ({ navigation, route }: any) => {
   }, [])
 
   return (
-    <PageContainer withHeader pageTitle={"Histórico Paciente"} withFooter navigation={navigation} paciente={paciente}>
+    <PageContainer withHeader pageTitle={`Histórico ${pacienteState.nome}`} withFooter navigation={navigation} paciente={pacienteState}>
       <HistoricoContainer>
+        <View style={{flex:1, flexDirection: "row", alignSelf: "center", paddingBottom: 10}}>
+          <Button> Novo Atendimento </Button>
+          {usuarioLogado.nivelAtencao == "SECUNDARIA" && (
+            <Button> Nova Intervenção </Button>
+          )}
+        </View>
         {historico.map((h, i) => (
           <>
+
             <HistoricoListContainer>
               <TimeLine indice={i} i0color={themeColors["color-primary-300"]} i1color={themeColors["color-primary-200"]}></TimeLine>
               <ItemListHistorico>
