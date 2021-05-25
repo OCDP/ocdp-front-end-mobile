@@ -48,15 +48,21 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
           {({newPaciente}) => (
             <Steps
               onComplete={() => _postPaciente(newPaciente)}
-              descriptions={[
-                'Dados pessoais',
-                'Dados de contato',
-                'Dados de endereço',
-              ]}>
-              <FieldSetDadosPessoais />
-              <FieldSetDadosContato />
-              <FieldSetDadosEndereco />
-            </Steps>
+              childrens={[
+                {
+                  children: <FieldSetDadosPessoais />,
+                  label: 'Dados pessoais',
+                },
+                {
+                  children: <FieldSetDadosContato />,
+                  label: 'Dados de contato',
+                },
+                {
+                  children: <FieldSetDadosEndereco />,
+                  label: 'Dados de endereço',
+                },
+              ]}
+            />
           )}
         </CadastroPacienteConsumer>
       </CadastroPacienteProvider>

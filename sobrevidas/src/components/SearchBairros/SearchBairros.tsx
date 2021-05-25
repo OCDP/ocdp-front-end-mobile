@@ -31,11 +31,12 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
   const [loading, setLoading] = useState(false);
   const [loadingBairros, setLoadingBairros] = useState(false);
   const [cidadeSeleionada, setCidadeSeleionada] = useState<Models.Cidade>();
+  const [disableInput, setDisableInput] = useState(false);
 
   const [bairros, setBairros] = useState<Models.Bairro[]>(resultBairros);
   const [cidades, setCidades] = useState<Models.Cidade[]>(resultCidades);
   const [valueSearchCidades, setValueSearchCidades] = useState('');
-  const [valueSearchBairros, setValueSearchBairros] = useState('');
+  const [valueSearchBairros, setValueSearchBairros] = useState<string>();
 
   const _getCidades = useCallback(async () => {
     try {
@@ -54,8 +55,14 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
       try {
         setLoadingBairros(true);
         const {data} = await getBairrosByCity(cidadeId);
-        setResultBairros(data);
-        setBairros(data);
+        if (data.length > 0) {
+          setResultBairros(data);
+          setBairros(data);
+          setDisableInput(false);
+        } else {
+          setDisableInput(true);
+          setValueSearchBairros(undefined);
+        }
         setLoadingBairros(false);
       } catch (e) {
         console.error(e);
@@ -117,6 +124,7 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
             ))}
           </AutocompleteCidade>
           <Autocomplete
+            disabled={disableInput}
             accessoryRight={loadingBairros ? LoadingIndicator : undefined}
             label="Selecionar bairro"
             placeholder={
