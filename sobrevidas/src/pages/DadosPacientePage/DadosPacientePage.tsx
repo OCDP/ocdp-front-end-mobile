@@ -1,12 +1,25 @@
-import React, {memo} from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './DadosPacientePage.styles';
+import CadastroPacienteContext, { CadastroPacienteConsumer, CadastroPacienteProvider } from '../../contexts/CadastroPacienteContext';
+import { HomeText } from './DadosPacientePage.styles';
 
-interface Props {}
-const DadosPacientePage: React.FC<Props> = ({navigation}: any) => {
+interface Props { }
+const DadosPacientePage: React.FC<Props> = ({ navigation, route }: any) => {
+
+  const { paciente } = route.params;
+  // const { newPaciente, setNewPaciente } = useContext(CadastroPacienteContext);
+  // useEffect(() => {
+  //   setNewPaciente(paciente);
+  // }, [])
+
   return (
-    <PageContainer withFooter navigation={navigation}>
-      <HomeText>dados paciente page</HomeText>
+
+    <PageContainer withHeader
+      pageTitle={"Dados do Paciente"}
+      withFooter
+      navigation={navigation}
+      paciente={paciente}>
+      <HomeText>{paciente.email}</HomeText>
     </PageContainer>
   );
 };

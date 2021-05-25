@@ -1,12 +1,68 @@
-import React, {memo} from 'react';
+import { Button } from '@ui-kitten/components';
+import { Divider } from '@ui-kitten/components/ui/divider/divider.component';
+import { Text } from '@ui-kitten/components/ui/text/text.component';
+import React, { memo, useCallback, useContext, useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { ItemListPaciente } from '../../components/ItemPaciente/ItemPaciente.styles';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './HistoricoPage.styles';
+import { CadastroPacienteProvider, CadastroPacienteConsumer } from '../../contexts/CadastroPacienteContext';
+import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
+import { useGetHistoricoPaciente } from '../../hooks/networking/historico';
+import { HistoricoInfos, HistoricoDetails, ItemListHistorico, PaddingContent, HistoricoListContainer, TimeLine, HistoricoContainer, BotaoContainer, BotaoNovaAcao } from './HistoricoPage.styles';
 
-interface Props {}
-const HistoricoPage: React.FC<Props> = ({navigation}: any) => {
+interface Props { }
+const HistoricoPage: React.FC<Props> = ({ navigation, route }: any) => {
+
+  const getHistoricoPaciente = useGetHistoricoPaciente();
+
+  
+  const [pacienteState, setPacienteState] = useState<Models.Paciente>(route.params.paciente)
+  const [historico, setHistorico] = useState<Models.Historico[]>([]);
+  const { usuarioLogado, themeColors } = useContext(UsuarioLogadoContext);
+
+  const historicos = useCallback(async () => {
+    try {
+      console.log(pacienteState.cpf)
+      const { data } = await getHistoricoPaciente(pacienteState.cpf);
+      console.log(data);
+      setHistorico(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [getHistoricoPaciente])
+
+  useEffect(() => {
+    historicos();
+  }, [])
+
   return (
-    <PageContainer withFooter navigation={navigation}>
-      <HomeText>historico page</HomeText>
+    <PageContainer withHeader pageTitle={`Histórico ${pacienteState.nome}`} withFooter navigation={navigation} paciente={pacienteState}>
+      <HistoricoContainer>
+        <BotaoContainer style={{}}>
+          <BotaoNovaAcao onPress={() => navigation.navigate()}> Novo Atendimento </BotaoNovaAcao>
+          {usuarioLogado.nivelAtencao == "SECUNDARIA" && (
+            <BotaoNovaAcao> Nova Intervenção </BotaoNovaAcao>
+          )}
+        </BotaoContainer>
+        {historico.map((h, i) => (
+          <>
+
+            <HistoricoListContainer>
+              <TimeLine indice={i} indice_mais_recente={themeColors["color-primary-300"]} indices_anteriores={themeColors["color-primary-200"]}></TimeLine>
+              <ItemListHistorico>
+                <HistoricoInfos>
+                  <HistoricoDetails>Data de Atendimento: {h.dataAtendimento}</HistoricoDetails>
+                  <HistoricoDetails>{h.diferenca} atrás</HistoricoDetails>
+                  <HistoricoDetails>{h.localAtendimento}</HistoricoDetails>
+                  <HistoricoDetails>Profissional: {h.profissionalDeSaude}</HistoricoDetails>
+                  <HistoricoDetails>Atendimento {h.tipoAtendiemtento}</HistoricoDetails>
+                </HistoricoInfos>
+              </ItemListHistorico>
+            </HistoricoListContainer>
+          </>
+        ))}
+      </HistoricoContainer>
+
     </PageContainer>
   );
 };
