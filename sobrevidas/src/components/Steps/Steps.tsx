@@ -11,21 +11,28 @@ import {
   ProgressStepsContainer,
 } from './Steps.styles';
 
+type ChildrenProp = {
+  children: React.ReactNode;
+  label: string;
+};
+
 interface Props {
-  descriptions: string[];
-  children: React.ReactNode[];
+  childrens: ChildrenProp[];
   onComplete: (values: any) => void;
 }
-const Steps: React.FC<Props> = ({descriptions, children, onComplete}) => {
+const Steps: React.FC<Props> = ({childrens, onComplete}) => {
   const [index, setIndex] = useState(1);
-  const currentStep = useMemo(() => children[index - 1], [children, index]);
-  const currentDescription = useMemo(() => descriptions[index - 1], [
-    descriptions,
+  const currentStep = useMemo(() => childrens[index - 1].children, [
+    childrens,
+    index,
+  ]);
+  const currentDescription = useMemo(() => childrens[index - 1].label, [
+    childrens,
     index,
   ]);
   const isFirst = useMemo(() => index === 1, [index]);
-  const isLast = useMemo(() => index === children.length, [
-    children.length,
+  const isLast = useMemo(() => index === childrens.length, [
+    childrens.length,
     index,
   ]);
 
@@ -44,7 +51,7 @@ const Steps: React.FC<Props> = ({descriptions, children, onComplete}) => {
   return (
     <StepsContainer>
       <ProgressStepsContainer>
-        <ProgressSteps size={children.length} step={index} />
+        <ProgressSteps size={childrens.length} step={index} />
       </ProgressStepsContainer>
       {index && (
         <>
