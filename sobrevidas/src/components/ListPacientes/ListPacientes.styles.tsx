@@ -1,9 +1,6 @@
-import {Input} from '@ui-kitten/components';
-import {View} from 'react-native';
-import styled from 'styled-components/native';
+import styled from 'styled-components';
+import {ScrollView} from 'react-native-gesture-handler';
 
-export const Container = styled(View)`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+export const ScrollViewList = styled(ScrollView)`
+  margin-bottom: 16px;
 `;
