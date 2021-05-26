@@ -5,6 +5,6 @@ declare namespace Models {
     idAtendimento: string;
     localAtendimento: string;
     profissionalDeSaude: string;
-    tipoAtendiemtento: string;
+    tipoAtendiemtento: 'ACOMPANHAMENTO' | 'INTERVENCAO' | 'RESULTADOS';
   }
 }
