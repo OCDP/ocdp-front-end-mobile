@@ -1,22 +1,9 @@
 import {Button, Layout} from '@ui-kitten/components';
-import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
 export const PerfilContainer = styled(ScrollView)`
   flex: 1;
-  flex-direction: column;
-  /* justify-content: space-between; */
-`;
-
-export const InfoListPerfil = styled(Layout)`
-  background-color: transparent;
-  margin: 16px 4px;
-`;
-
-export const InfoItemPerfil = styled(Layout)`
-  margin: 8px 16px;
-  background-color: transparent;
   flex-direction: column;
   /* justify-content: space-between; */
 `;
@@ -28,7 +15,7 @@ export const FooterItens = styled(Layout)`
   height: 100px;
 `;
 
-export const FooterContent = styled(View)`
+export const FooterContent = styled(Layout)`
   flex-direction: row;
   justify-content: space-between;
   width: 90%;

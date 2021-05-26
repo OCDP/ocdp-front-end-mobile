@@ -1,7 +1,9 @@
-import React, {memo, useCallback, useState} from 'react';
+import moment from 'moment';
+import React, {memo, useCallback, useMemo, useState} from 'react';
 import {Alert} from 'react-native';
 import FadeLoading from '../../components/FadeLoading/FadeLoading';
 import {calendar} from '../../components/icons';
+import InfoListPerfil from '../../components/InfoListPerfil/InfoListPerfil';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import PerfilHeader from '../../components/PerfilHeader/PerfilHeader';
 import {useGetPaciente} from '../../hooks/networking/paciente';
@@ -38,6 +40,45 @@ const DadosPacientePage: React.FC<Props> = ({navigation, route}: any) => {
 
   useMountEffect(_usePaciente);
 
+  const contentList = useMemo(
+    () =>
+      [
+        {
+          title: 'CPF',
+          description: paciente?.cpf,
+        },
+        {
+          title: 'Nome da mãe',
+          description: paciente?.nomeDaMae,
+        },
+        {
+          title: 'Data de nascimento',
+          description: moment(paciente?.dataNascimento).format('DD/MM/Y'),
+        },
+        {
+          title: 'Endereço',
+          description: paciente?.enderecoCompleto,
+        },
+        {
+          title: 'Sexo',
+          description: paciente?.sexo,
+        },
+        {
+          title: 'Email',
+          description: paciente?.email,
+        },
+        {
+          title: 'Telefone',
+          description: paciente?.telefoneCelular,
+        },
+        {
+          title: 'Telefone responsável',
+          description: paciente?.telefoneResponsavel,
+        },
+      ] as ListInfoPerfil[],
+    [paciente],
+  );
+
   return (
     <PageContainer
       withHeader
@@ -57,6 +98,7 @@ const DadosPacientePage: React.FC<Props> = ({navigation, route}: any) => {
                 title={paciente.nome}
                 subtitle={paciente.email}
               />
+              <InfoListPerfil contentList={contentList} />
             </DadosContainer>
 
             <ButtonFooterContainer>

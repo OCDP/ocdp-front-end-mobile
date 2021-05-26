@@ -1,6 +1,6 @@
 import {Divider, Text, Toggle} from '@ui-kitten/components';
-import React, {memo, useContext, useState} from 'react';
-import {Alert, View} from 'react-native';
+import React, {memo, useContext, useMemo} from 'react';
+import {Alert} from 'react-native';
 import {logout} from '../../components/icons';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {CustomThemeContext} from '../../contexts/CustomThemeContext';
@@ -9,12 +9,11 @@ import {
   PerfilContainer,
   LogoutButton,
   FooterItens,
-  InfoListPerfil,
-  InfoItemPerfil,
   FooterContent,
 } from './PerfilUsuarioPage.styles';
 import atencaoLabels from '../../utils/atencaoLabels';
 import PerfilHeader from '../../components/PerfilHeader/PerfilHeader';
+import InfoListPerfil from '../../components/InfoListPerfil/InfoListPerfil';
 
 interface Props {}
 
@@ -23,24 +22,33 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   const {usuarioLogado, logout: logoutSystem} = useContext(
     UsuarioLogadoContext,
   );
-  const [infoUsuario] = useState([
-    {
-      title: 'CPF',
-      description: usuarioLogado.cpf,
-    },
-    {
-      title: 'Telefone',
-      description: usuarioLogado.telefone,
-    },
-    {
-      title: 'Email',
-      description: usuarioLogado.email,
-    },
-    {
-      title: 'Tipo Usuário',
-      description: usuarioLogado.tipoUsuario,
-    },
-  ]);
+
+  const contentList = useMemo(
+    () =>
+      [
+        {
+          title: 'CPF',
+          description: usuarioLogado.cpf,
+        },
+        {
+          title: 'Telefone',
+          description: usuarioLogado.telefone,
+        },
+        {
+          title: 'Email',
+          description: usuarioLogado.email,
+        },
+        {
+          title: 'Tipo Usuário',
+          description: usuarioLogado.tipoUsuario,
+        },
+        {
+          title: 'Sexo',
+          description: usuarioLogado.sexo,
+        },
+      ] as ListInfoPerfil[],
+    [usuarioLogado],
+  );
 
   return (
     <PageContainer
@@ -55,17 +63,7 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
           title={usuarioLogado.nome}
           subtitle={atencaoLabels[usuarioLogado.nivelAtencao]}
         />
-
-        <InfoListPerfil>
-          {infoUsuario.map(({title, description}, i) => (
-            <View key={i}>
-              <InfoItemPerfil>
-                <Text category="c1">{title}</Text>
-                <Text category="s1">{description}</Text>
-              </InfoItemPerfil>
-            </View>
-          ))}
-        </InfoListPerfil>
+        <InfoListPerfil contentList={contentList} />
         <Divider />
         <FooterItens>
           <FooterContent>
