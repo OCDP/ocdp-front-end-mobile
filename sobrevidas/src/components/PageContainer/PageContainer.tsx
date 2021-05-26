@@ -1,26 +1,19 @@
 import React from 'react';
 import {
   Container,
-  ContainerFooter,
-  ContainerItem,
-  ItemMenuText,
-  LineCurrentRoute,
   HeaderContainer,
   ChildContain,
   TextPageTitle,
   HeaderItem,
 } from './PageContainer.styles';
-import {Button, withStyles} from '@ui-kitten/components';
-import {personOutline, calendar, minimalBack, settings} from '../icons';
-import {useRoute} from '@react-navigation/native';
+import {Button} from '@ui-kitten/components';
+import {minimalBack, settings} from '../icons';
 
 interface Props {
-  withFooter?: boolean;
   withHeader?: boolean;
   canGoBack?: boolean;
   pageTitle?: string;
   navigation?: any;
-  paciente?: Models.Paciente;
 }
 
 export const PageContainer: React.FC<Props> = ({
@@ -28,28 +21,8 @@ export const PageContainer: React.FC<Props> = ({
   canGoBack = false,
   pageTitle,
   children,
-  withFooter = false,
   navigation,
-  paciente,
-  ...props
 }) => {
-  const {eva, style} = props as any;
-
-  const currentRoute = useRoute();
-
-  const menuFooter = [
-    {
-      name: 'DadosPacientePage',
-      label: 'Paciente',
-      icon: personOutline,
-    },
-    {
-      name: 'HistoricoPage',
-      label: 'Historico',
-      icon: calendar,
-    },
-  ];
-
   return (
     <Container>
       {withHeader && (
@@ -80,39 +53,8 @@ export const PageContainer: React.FC<Props> = ({
         </HeaderContainer>
       )}
       <ChildContain>{children}</ChildContain>
-      {withFooter && (
-        <>
-          <ContainerFooter>
-            {menuFooter.map((page, i) => (
-              <ContainerItem key={i}>
-                <Button
-                  appearance="ghost"
-                  size="large"
-                  accessoryRight={page.icon}
-                  onPress={() =>
-                    page.name !== currentRoute.name
-                      ? navigation.navigate(page.name, paciente ? {paciente : paciente} : null)
-                      : undefined
-                  }
-                />
-                {page.name !== currentRoute.name ? (
-                  <ItemMenuText appearance="hint" category="c1">
-                    {page.label}
-                  </ItemMenuText>
-                ) : (
-                  <LineCurrentRoute style={[eva.style.lineContainer, style]} />
-                )}
-              </ContainerItem>
-            ))}
-          </ContainerFooter>
-        </>
-      )}
     </Container>
   );
 };
 
-export default withStyles(PageContainer, theme => ({
-  lineContainer: {
-    backgroundColor: theme['color-primary-500'],
-  },
-}));
+export default PageContainer;
