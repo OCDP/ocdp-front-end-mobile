@@ -6,7 +6,24 @@ export function useGetPacientes() {
   const {auth} = useHeaders();
   return useCallback(
     async <O extends Object>(nome: string, params?: O, headers?: O) => {
-      return await api.get<Models.Paciente[]>(`/paciente/byName/${nome}/0/10`, {
+      return await api.get<Models.Paciente[]>(
+        `/paciente/byName/${nome}/0/10/`,
+        {
+          params,
+          headers,
+          auth,
+        },
+      );
+    },
+    [auth],
+  );
+}
+
+export function useGetPaciente() {
+  const {auth} = useHeaders();
+  return useCallback(
+    async <O extends Object>(id: string, params?: O, headers?: O) => {
+      return await api.get<Models.Paciente>(`/paciente/byId/${id}/`, {
         params,
         headers,
         auth,

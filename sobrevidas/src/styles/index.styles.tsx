@@ -1,5 +1,7 @@
-import {Layout} from '@ui-kitten/components';
+import {Button, Layout} from '@ui-kitten/components';
 import styled from 'styled-components';
+import {buildStyledShadow} from './buildShadow';
+const shadow = buildStyledShadow(8);
 
 export const WaveContainer = styled(Layout)`
   position: absolute;
@@ -18,4 +20,15 @@ export const DetailDivider = styled(Layout)`
   width: 5px;
   margin: 0px 12px 0px 2px;
   border-radius: 16px;
+`;
+
+export const ButtonFooterContainer = styled(Layout)`
+  display: flex;
+  align-items: center;
+  bottom: 8px;
+`;
+
+export const ButtonFooterBig = styled(Button)`
+  ${shadow}
+  border-radius: 30px;
 `;

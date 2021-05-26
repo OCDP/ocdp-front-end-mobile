@@ -5,7 +5,7 @@ declare namespace Models {
     cpf: string;
     nome: string;
     nomeDaMae: string;
-    sexo: string;
+    sexo: Models.Sexo;
     telefoneCelular: string;
     telefoneResponsavel: string;
     email: string;

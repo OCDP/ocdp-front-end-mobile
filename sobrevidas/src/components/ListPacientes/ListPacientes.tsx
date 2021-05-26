@@ -1,20 +1,28 @@
 import React from 'react';
 import ItemPaciente from '../ItemPaciente/ItemPaciente';
-import {ScrollView} from 'react-native-gesture-handler';
 import EmptyContent from '../EmptyContent/EmptyContent';
+import {CadastroPacienteProvider} from '../../contexts/CadastroPacienteContext';
+import {ScrollViewList} from './ListPacientes.styles';
 
 interface Props {
   pacientes: Models.Paciente[];
+  navigation: any;
 }
-const ListPacientes: React.FC<Props> = ({pacientes}) => {
+const ListPacientes: React.FC<Props> = ({pacientes, navigation}) => {
   return (
     <>
       {pacientes.length > 0 ? (
-        <ScrollView>
+        <ScrollViewList>
           {pacientes.map((paciente, i) => (
-            <ItemPaciente key={i} paciente={paciente} />
+            <CadastroPacienteProvider>
+              <ItemPaciente
+                key={i}
+                paciente={paciente}
+                navigation={navigation}
+              />
+            </CadastroPacienteProvider>
           ))}
-        </ScrollView>
+        </ScrollViewList>
       ) : (
         <EmptyContent emptyMessage="Nenhum paciente para listar!" />
       )}

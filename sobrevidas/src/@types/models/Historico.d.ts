@@ -1,10 +1,10 @@
 declare namespace Models {
   interface Historico {
     dataAtendimento: string;
-    diferencaMeses: string;
+    diferenca: string;
     idAtendimento: string;
     localAtendimento: string;
     profissionalDeSaude: string;
-    tipoAtendiemtento: string;
+    tipoAtendiemtento: 'ACOMPANHAMENTO' | 'INTERVENCAO' | 'RESULTADOS';
   }
 }

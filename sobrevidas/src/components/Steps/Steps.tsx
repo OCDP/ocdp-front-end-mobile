@@ -22,14 +22,7 @@ interface Props {
 }
 const Steps: React.FC<Props> = ({childrens, onComplete}) => {
   const [index, setIndex] = useState(1);
-  const currentStep = useMemo(() => childrens[index - 1].children, [
-    childrens,
-    index,
-  ]);
-  const currentDescription = useMemo(() => childrens[index - 1].label, [
-    childrens,
-    index,
-  ]);
+  const currentStep = useMemo(() => childrens[index - 1], [childrens, index]);
   const isFirst = useMemo(() => index === 1, [index]);
   const isLast = useMemo(() => index === childrens.length, [
     childrens.length,
@@ -53,14 +46,12 @@ const Steps: React.FC<Props> = ({childrens, onComplete}) => {
       <ProgressStepsContainer>
         <ProgressSteps size={childrens.length} step={index} />
       </ProgressStepsContainer>
-      {index && (
-        <>
-          <StepDescription category="c4">{currentDescription}</StepDescription>
-          <ScrollView>
-            <CurrentStep>{currentStep}</CurrentStep>
-          </ScrollView>
-        </>
-      )}
+      <>
+        <StepDescription category="c4">{currentStep.label}</StepDescription>
+        <ScrollView>
+          <CurrentStep>{currentStep.children}</CurrentStep>
+        </ScrollView>
+      </>
       <FooterButtonsContainer>
         <FooterButton
           appearance="outline"

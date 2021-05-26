@@ -1,4 +1,4 @@
-import {Layout, Text} from '@ui-kitten/components';
+import {Layout, Text, Button} from '@ui-kitten/components';
 import styled from 'styled-components';
 import {buildStyledShadow} from '../../styles/buildShadow';
 const shadow = buildStyledShadow(6);
@@ -27,4 +27,10 @@ export const PacienteNome = styled(Text)`
 
 export const PacienteDetails = styled(Text)`
   font-size: 10px;
+`;
+
+export const ButtonDetail = styled(Button)`
+  border-radius: 20px;
+  height: 20px;
+  width: 20px;
 `;

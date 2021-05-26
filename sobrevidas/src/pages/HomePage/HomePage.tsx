@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useState} from 'react';
-import {ButtonAddPaciente, SearchPaciente} from './HomePage.styles';
+import {SearchPaciente} from './HomePage.styles';
 import {addButton, search} from '../../components/icons';
 import {debounce} from 'lodash';
 
@@ -9,6 +9,10 @@ import {Alert} from 'react-native';
 import ListPacientes from '../../components/ListPacientes/ListPacientes';
 import LoadingIndicator from '../../components/LoadingIndicator/LoadingIndicator';
 import useMountEffect from '../../hooks/utils/useMountEffect';
+import {
+  ButtonFooterContainer,
+  ButtonFooterBig,
+} from '../../styles/index.styles';
 
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
@@ -37,7 +41,7 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
 
   const onFilterThrottle = debounce(
     (value: string) => _getPacientes(value),
-    300,
+    600,
   );
 
   return (
@@ -47,11 +51,15 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         accessoryRight={loading ? LoadingIndicator : search}
         onChangeText={(value: string) => onFilterThrottle(value)}
       />
-      <ListPacientes pacientes={pacientes} />
-      <ButtonAddPaciente
-        onPress={() => navigation.navigate('CadastrarPacientePage')}
-        accessoryLeft={addButton}
-      />
+      <ListPacientes pacientes={pacientes} navigation={navigation} />
+
+      <ButtonFooterContainer>
+        <ButtonFooterBig
+          onPress={() => navigation.navigate('CadastrarPacientePage')}
+          accessoryRight={addButton}>
+          Adicionar Paciente
+        </ButtonFooterBig>
+      </ButtonFooterContainer>
     </PageContainer>
   );
 };
