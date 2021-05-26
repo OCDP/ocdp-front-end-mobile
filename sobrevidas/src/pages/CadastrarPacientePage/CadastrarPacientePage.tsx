@@ -1,6 +1,6 @@
 import moment from 'moment';
-import React, { memo, useCallback, useEffect } from 'react';
-import { Alert, BackHandler } from 'react-native';
+import React, {memo, useCallback, useEffect} from 'react';
+import {Alert, BackHandler} from 'react-native';
 import FieldSetDadosContato from '../../components/FieldSetDadosContato/FieldSetDadosContato';
 import FieldSetDadosEndereco from '../../components/FieldSetDadosEndereco/FieldSetDadosEndereco';
 import FieldSetDadosPessoais from '../../components/FieldSetDadosPessoais/FieldSetDadosPessoais';
@@ -12,16 +12,16 @@ import {
   CadastroPacienteProvider,
 } from '../../contexts/CadastroPacienteContext';
 import {usePostPaciente} from '../../hooks/networking/paciente';
-import { ValidaCadastrarPaciente } from './ValidaCadastrarPaciente';
+import {ValidaCadastrarPaciente} from './ValidaCadastrarPaciente';
 
-interface Props { }
+interface Props {}
 
-const CadastrarPacientePage: React.FC<Props> = ({ navigation }: any) => {
+const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
   const postPaciente = usePostPaciente();
 
   const _postPaciente = useCallback(
     async (values: Models.Paciente) => {
-      if(ValidaCadastrarPaciente(values)){
+      if (ValidaCadastrarPaciente(values)) {
         try {
           const dataNascimento = moment(
             values.dataNascimento,
@@ -39,24 +39,28 @@ const CadastrarPacientePage: React.FC<Props> = ({ navigation }: any) => {
     },
     [postPaciente],
   );
-  
+
   const backAction = () => {
-    Alert.alert("Deseja realmente sair?", "Sair agora te farão perder os dados atuais", [
-      {
-        text: "Não",
-        onPress: () => null,
-        style: "cancel"
-      },
-      { text: "Sim", onPress: () => navigation.goBack() }
-    ]);
+    Alert.alert(
+      'Deseja realmente sair?',
+      'Sair agora te fará perder os dados atuais',
+      [
+        {
+          text: 'Não',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: 'Sim', onPress: () => navigation.goBack()},
+      ],
+    );
     return true;
   };
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", backAction);
-
+    BackHandler.addEventListener('hardwareBackPress', backAction);
     return () =>
-      BackHandler.removeEventListener("hardwareBackPress", backAction);
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -67,18 +71,24 @@ const CadastrarPacientePage: React.FC<Props> = ({ navigation }: any) => {
       navigation={navigation}>
       <CadastroPacienteProvider>
         <CadastroPacienteConsumer>
-          {({ newPaciente }) => (
+          {({newPaciente}) => (
             <Steps
-              onComplete={() => _postPaciente(newPaciente) }
-              descriptions={[
-                'Dados pessoais',
-                'Dados de contato',
-                'Dados de endereço',
-              ]}>
-              <FieldSetDadosPessoais />
-              <FieldSetDadosContato />
-              <FieldSetDadosEndereco />
-            </Steps>
+              onComplete={() => _postPaciente(newPaciente)}
+              childrens={[
+                {
+                  children: <FieldSetDadosPessoais />,
+                  label: 'Dados pessoais',
+                },
+                {
+                  children: <FieldSetDadosContato />,
+                  label: 'Dados de contato',
+                },
+                {
+                  children: <FieldSetDadosEndereco />,
+                  label: 'Dados de endereço',
+                },
+              ]}
+            />
           )}
         </CadastroPacienteConsumer>
       </CadastroPacienteProvider>
