@@ -19,11 +19,7 @@ const CadastroFeedback: React.FC<Props> = ({navigation, route}: any) => {
   const {themeColors} = useContext(UsuarioLogadoContext);
 
   return (
-    <PageContainer
-      withHeader
-      canGoBack
-      pageTitle="Sucesso!"
-      navigation={navigation}>
+    <PageContainer withHeader pageTitle="Sucesso!" navigation={navigation}>
       <FeedbackContainer>
         <HeaderFeedback>
           <CheckedFeedback
