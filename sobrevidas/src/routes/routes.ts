@@ -6,6 +6,8 @@ import CadastrarResultadosPage from '../pages/CadastrarResultadosPage/CadastrarR
 import PerfilUsuarioPage from '../pages/PerfilUsuarioPage/PerfilUsuarioPage';
 import HistoricoPage from '../pages/HistoricoPage/HistoricoPage';
 import DadosPacientePage from '../pages/DadosPacientePage/DadosPacientePage';
+import CadastroFeedback from '../pages/CadastroFeedback/CadastroFeedback';
+import RegistrarAcompanhamento from '../pages/RegistrarAcompanhamento/RegistrarAcompanhamento';
 
 export const routes = [
   {
@@ -39,5 +41,13 @@ export const routes = [
   {
     name: 'DadosPacientePage',
     component: DadosPacientePage,
+  },
+  {
+    name: 'CadastroFeedback',
+    component: CadastroFeedback,
+  },
+  {
+    name: 'RegistrarAcompanhamento',
+    component: RegistrarAcompanhamento,
   },
 ];
