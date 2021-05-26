@@ -1,6 +1,7 @@
 import moment from 'moment';
-import React, {memo, useCallback, useEffect} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {Alert, BackHandler} from 'react-native';
+import FadeLoading from '../../components/FadeLoading/FadeLoading';
 import FieldSetDadosContato from '../../components/FieldSetDadosContato/FieldSetDadosContato';
 import FieldSetDadosEndereco from '../../components/FieldSetDadosEndereco/FieldSetDadosEndereco';
 import FieldSetDadosPessoais from '../../components/FieldSetDadosPessoais/FieldSetDadosPessoais';
@@ -18,17 +19,22 @@ interface Props {}
 
 const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
   const postPaciente = usePostPaciente();
+  const [loading, setLoading] = useState(false);
 
   const _postPaciente = useCallback(
     async (values: Models.Paciente) => {
       if (ValidaCadastrarPaciente(values)) {
         try {
+          setLoading(true);
           const dataNascimento = moment(
             values.dataNascimento,
             'DD-MM-YYYY HH:mm:ss',
           ).format('DD-MM-YYYY');
-          await postPaciente({...values, dataNascimento});
+          const {data} = await postPaciente({...values, dataNascimento});
+          setLoading(false);
+          navigation.navigate('CadastroFeedback', {id: data});
         } catch (e) {
+          setLoading(false);
           Alert.alert(
             'Erro no cadastro',
             'Algo deu errado no momento do cadastro',
@@ -37,7 +43,7 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
         }
       }
     },
-    [postPaciente],
+    [navigation, postPaciente],
   );
 
   const backAction = () => {
@@ -69,6 +75,7 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
       canGoBack
       pageTitle="Cadastrar Paciente"
       navigation={navigation}>
+      <FadeLoading loading={loading} />
       <CadastroPacienteProvider>
         <CadastroPacienteConsumer>
           {({newPaciente}) => (
