@@ -53,14 +53,27 @@ const HistoricoPage: React.FC<Props> = ({navigation, route}: any) => {
           accessoryRight={addButton}
           appearance="outline"
           size="small"
-          onPress={() => navigation.navigate()}>
+          onPress={() =>
+            Alert.alert(
+              'Feature prestes a ser implementada',
+              'Logo logo estamos com isso funfando',
+              [{text: 'Voltar'}],
+            )
+          }>
           Novo Atendimento
         </BotaoNovaAcao>
         {usuarioLogado.nivelAtencao === 'SECUNDARIA' && (
           <BotaoNovaAcao
             accessoryRight={addButton}
             appearance="outline"
-            size="small">
+            size="small"
+            onPress={() =>
+              Alert.alert(
+                'Feature prestes a ser implementada',
+                'Logo logo estamos com isso funfando',
+                [{text: 'Voltar'}],
+              )
+            }>
             Nova Intervenção
           </BotaoNovaAcao>
         )}
