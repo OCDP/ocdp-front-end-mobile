@@ -1,8 +1,6 @@
 import {Divider, Text, Toggle} from '@ui-kitten/components';
 import React, {memo, useContext, useState} from 'react';
 import {Alert, View} from 'react-native';
-import MaleDoctor from '../../assets/img/MaleDoctor';
-import FemaleDoctor from '../../assets/img/FemaleDoctor';
 import {logout} from '../../components/icons';
 import PageContainer from '../../components/PageContainer/PageContainer';
 import {CustomThemeContext} from '../../contexts/CustomThemeContext';
@@ -10,22 +8,18 @@ import UsuarioLogadoContext from '../../contexts/UsuarioLogadoContext';
 import {
   PerfilContainer,
   LogoutButton,
-  HeaderContainer,
   FooterItens,
   InfoListPerfil,
   InfoItemPerfil,
-  InfosHeader,
-  HeaderLine,
-  LogoContainer,
   FooterContent,
 } from './PerfilUsuarioPage.styles';
 import atencaoLabels from '../../utils/atencaoLabels';
+import PerfilHeader from '../../components/PerfilHeader/PerfilHeader';
 
 interface Props {}
 
 const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
   const customThemeContext = useContext(CustomThemeContext);
-  const {themeColors} = useContext(UsuarioLogadoContext);
   const {usuarioLogado, logout: logoutSystem} = useContext(
     UsuarioLogadoContext,
   );
@@ -55,27 +49,13 @@ const PerfilUsuarioPage: React.FC<Props> = ({navigation}: any) => {
       pageTitle="Perfil do usuário"
       navigation={navigation}>
       <PerfilContainer>
-        <HeaderLine color={themeColors['color-primary-300']} />
-        <HeaderContainer>
-          <LogoContainer>
-            {false ? (
-              <MaleDoctor size={80} color={themeColors['color-primary-500']} />
-            ) : (
-              <FemaleDoctor
-                size={80}
-                color={themeColors['color-primary-400']}
-              />
-            )}
-          </LogoContainer>
+        <PerfilHeader
+          type="MEDICO"
+          sexo={usuarioLogado.sexo}
+          title={usuarioLogado.nome}
+          subtitle={atencaoLabels[usuarioLogado.nivelAtencao]}
+        />
 
-          <InfosHeader>
-            <Text category="h3">{usuarioLogado.nome}</Text>
-            <Text category="s1">
-              Atenção {atencaoLabels[usuarioLogado.nivelAtencao]}
-            </Text>
-          </InfosHeader>
-        </HeaderContainer>
-        <Divider />
         <InfoListPerfil>
           {infoUsuario.map(({title, description}, i) => (
             <View key={i}>
