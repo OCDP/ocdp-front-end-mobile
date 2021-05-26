@@ -49,7 +49,6 @@ const LoginPage = ({navigation}: any) => {
         setLoading(false);
         navigation.navigate('HomePage');
       } catch (e) {
-        console.error('erro >> ', e);
         Alert.alert('Erro no login', 'Algo deu errado no momento do login', [
           {text: 'Voltar'},
         ]);

@@ -86,7 +86,7 @@ const FieldSetDadosPessoais: React.FC<Props> = ({}) => {
               sexo: sexoArr[value],
             }));
           }}
-          selectedIndex={selectedIndex}>
+          selectedIndex={newPaciente.sexo ? selectedIndex : undefined}>
           <Radio>Masculino</Radio>
           <Radio>Feminino</Radio>
         </RadioGroup>
