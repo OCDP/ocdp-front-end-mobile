@@ -32,7 +32,7 @@ const CadastrarPacientePage: React.FC<Props> = ({navigation}: any) => {
           ).format('DD-MM-YYYY');
           const {data} = await postPaciente({...values, dataNascimento});
           setLoading(false);
-          navigation.navigate('CadastroFeedback', {id: data});
+          navigation.navigate('CadastroFeedbackPage', {id: data});
         } catch (e) {
           setLoading(false);
           Alert.alert(

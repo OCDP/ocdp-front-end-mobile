@@ -1,9 +1,12 @@
 import React, {memo} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './RegistrarAcompanhamento.styles';
+import {HomeText} from './RegistrarAtendimentoPage.styles';
 
 interface Props {}
-const RegistrarAcompanhamento: React.FC<Props> = ({navigation, route}: any) => {
+const RegistrarAtendimentoPage: React.FC<Props> = ({
+  navigation,
+  route,
+}: any) => {
   const {id} = route.params;
 
   return (
@@ -12,9 +15,9 @@ const RegistrarAcompanhamento: React.FC<Props> = ({navigation, route}: any) => {
       canGoBack
       pageTitle="Rsgistrar um atendimento"
       navigation={navigation}>
-      <HomeText>registrar acompanhamento de {id}</HomeText>
+      <HomeText>registrar atendimento de {id}</HomeText>
     </PageContainer>
   );
 };
 
-export default memo(RegistrarAcompanhamento);
+export default memo(RegistrarAtendimentoPage);
