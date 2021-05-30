@@ -5,9 +5,13 @@ const CadastroAtendimentoContext = createContext(
 );
 
 export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
-  const [atendimento, setAtendimento] = useState<Models.Atendimento>(
-    {} as Models.Atendimento,
-  );
+  const [atendimento, setAtendimento] = useState<Models.Atendimento>({
+    fatoresDeRisco: [],
+    atendimento: {} as Models.AtendimentoObj,
+    dataSugeridaAcompanhamento: '',
+    regioesLesoes: [],
+    dataSugeridaTratamento: '',
+  });
 
   return (
     <CadastroAtendimentoContext.Provider

@@ -12,13 +12,14 @@ import {
   CadastroAtendimentoProvider,
   CadastroAtendimentoConsumer,
 } from '../../contexts/CadastroAtendimentoContext';
+import getFirstName from '../../utils/getFirstName';
 
 interface Props {}
 const CadastrarAtendimentoPage: React.FC<Props> = ({
   navigation,
   route,
 }: any) => {
-  const {id} = route.params;
+  const {id, nome} = route.params;
   const [loading, setLoading] = useState(false);
   const [possuiLesoes, setPossuiLesoes] = useState(false);
 
@@ -26,7 +27,22 @@ const CadastrarAtendimentoPage: React.FC<Props> = ({
     async (values: Models.Atendimento) => {
       try {
         setLoading(true);
-        console.log({values, id});
+        const regioes = values.regioesLesoes.map(regiao => {
+          return regiao.id;
+        });
+
+        const valuesToSubmit = {
+          regioes: regioes,
+          fatoresRisco: values.fatoresDeRisco,
+          id: id,
+        };
+
+        Alert.alert(
+          'Alguns dados do atendimento',
+          JSON.stringify(valuesToSubmit),
+          [{text: 'Voltar'}],
+        );
+
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -78,7 +94,7 @@ const CadastrarAtendimentoPage: React.FC<Props> = ({
     <PageContainer
       withHeader
       canGoBack
-      pageTitle="Cadastrar um atendimento"
+      pageTitle={`Atendendo ${nome ? getFirstName(nome) : 'paciente'}`}
       navigation={navigation}>
       <FadeLoading loading={loading} />
       <CadastroAtendimentoProvider>

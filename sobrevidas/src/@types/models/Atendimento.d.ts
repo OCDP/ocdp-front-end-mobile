@@ -19,7 +19,9 @@ declare namespace Models {
 
   interface RegioesLesoes {
     id: number;
-    lesoes: Lesoes[];
+    imagemBase64?: string;
+    nome?: string;
+    lesoes?: Lesoes[];
   }
 
   interface Lesoes {
