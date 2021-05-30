@@ -4,7 +4,7 @@ declare namespace Models {
     dataSugeridaAcompanhamento: string;
     dataSugeridaTratamento: string;
     fatoresDeRisco: number[];
-    regioesLesoes: RegioesLesoes[];
+    regioesLesoes: RegiaoLesao[];
   }
 
   interface AtendimentoObj {
@@ -17,11 +17,16 @@ declare namespace Models {
     usuarioId: number;
   }
 
-  interface RegioesLesoes {
+  interface RegiaoLesao {
     id: number;
     imagemBase64?: string;
     nome?: string;
-    lesoes?: Lesoes[];
+    subRegioes?: Subregiao[];
+  }
+
+  interface Subregiao {
+    id: number;
+    nome: string;
   }
 
   interface Lesoes {

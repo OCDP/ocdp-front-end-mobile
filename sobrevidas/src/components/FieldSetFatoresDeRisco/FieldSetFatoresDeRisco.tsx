@@ -1,9 +1,6 @@
 import {CheckBox, Divider} from '@ui-kitten/components';
-import React, {memo, useState, useContext, useCallback} from 'react';
-import {useGetFatoresRisco} from '../../hooks/networking/fatorRisco';
+import React, {memo, useContext, useCallback} from 'react';
 import CadastroAtendimentoContext from '../../contexts/CadastroAtendimentoContext';
-import useMountEffect from '../../hooks/utils/useMountEffect';
-import {Alert} from 'react-native';
 import FadeLoading from '../FadeLoading/FadeLoading';
 import {FieldSetItem} from '../../styles/index.styles';
 interface Props {
@@ -14,31 +11,12 @@ const FieldSetFatoresDeRisco: React.FC<Props> = ({
   onChangeLesoes,
   possuiLesoes,
 }) => {
-  const {atendimento, setAtendimento} = useContext(CadastroAtendimentoContext);
-  const [loading, setLoading] = useState(false);
-  const [fatoresRiscoList, setFatoresRiscoList] = useState<
-    Models.FatorRisco[]
-  >();
-  const getFatoresRisco = useGetFatoresRisco();
-
-  const _getFatoresRisco = useCallback(async () => {
-    try {
-      setLoading(true);
-      const {data} = await getFatoresRisco();
-      console.log(data);
-      setFatoresRiscoList(data);
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      Alert.alert(
-        'Erro ao buscar fatores de risco',
-        'Algo deu errado ao buscar fatores de risco',
-        [{text: 'Voltar'}],
-      );
-    }
-  }, [getFatoresRisco]);
-
-  useMountEffect(_getFatoresRisco);
+  const {
+    atendimento,
+    setAtendimento,
+    loading,
+    choicesFatoresRisco,
+  } = useContext(CadastroAtendimentoContext);
 
   const updateArray = useCallback(
     (value: number) => {
@@ -60,9 +38,9 @@ const FieldSetFatoresDeRisco: React.FC<Props> = ({
   return (
     <>
       <FadeLoading loading={loading} />
-      {fatoresRiscoList && fatoresRiscoList.length > 0 && (
+      {choicesFatoresRisco && choicesFatoresRisco.length > 0 && (
         <>
-          {fatoresRiscoList.map((fator, i) => (
+          {choicesFatoresRisco.map((fator, i) => (
             <FieldSetItem key={i} level="2">
               <CheckBox
                 checked={atendimento.fatoresDeRisco?.includes(fator.id)}
@@ -74,7 +52,7 @@ const FieldSetFatoresDeRisco: React.FC<Props> = ({
           <Divider />
           <FieldSetItem level="4">
             <CheckBox onChange={onChangeLesoes} checked={possuiLesoes}>
-              Possui lesões?
+              Possui lesões
             </CheckBox>
           </FieldSetItem>
         </>

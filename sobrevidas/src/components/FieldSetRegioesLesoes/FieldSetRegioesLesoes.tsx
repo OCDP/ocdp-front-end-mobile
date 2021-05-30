@@ -1,40 +1,15 @@
 import {CheckBox} from '@ui-kitten/components';
-import React, {memo, useCallback, useContext, useState} from 'react';
-import {Alert} from 'react-native';
-import {useGetRegioesLesoes} from '../../hooks/networking/regiaoLesao';
+import React, {memo, useCallback, useContext} from 'react';
 import CadastroAtendimentoContext from '../../contexts/CadastroAtendimentoContext';
-import useMountEffect from '../../hooks/utils/useMountEffect';
 import FadeLoading from '../FadeLoading/FadeLoading';
 import {FieldSetItem} from '../../styles/index.styles';
 import {ImagemRegiao} from './FieldSetRegioesLesoes.styles';
 
 interface Props {}
 const FieldSetRegioesLesoes: React.FC<Props> = () => {
-  const {atendimento, setAtendimento} = useContext(CadastroAtendimentoContext);
-  const [loading, setLoading] = useState(false);
-  const [regioesLesoes, setRegioesLesoes] = useState<Models.RegioesLesoes[]>(
-    [],
+  const {atendimento, setAtendimento, loading, choicesRegioes} = useContext(
+    CadastroAtendimentoContext,
   );
-  const getRegioesLesoes = useGetRegioesLesoes();
-
-  const _getRegioesLesoes = useCallback(async () => {
-    try {
-      setLoading(true);
-      const {data} = await getRegioesLesoes();
-      console.log(data);
-      setRegioesLesoes(data);
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      Alert.alert(
-        'Erro ao buscar regiões',
-        'Algo deu errado ao buscar as regiões',
-        [{text: 'Voltar'}],
-      );
-    }
-  }, [getRegioesLesoes]);
-
-  useMountEffect(_getRegioesLesoes);
 
   const updateArray = useCallback(
     (value: number) => {
@@ -44,22 +19,22 @@ const FieldSetRegioesLesoes: React.FC<Props> = () => {
         oldRegioes.splice(index, 1);
         setAtendimento(old => ({...old, regioesLesoes: oldRegioes}));
       } else {
-        const newRegiao = regioesLesoes.find(regiao => regiao.id === value);
+        const newRegiao = choicesRegioes.find(regiao => regiao.id === value);
         setAtendimento(old => ({
           ...old,
           regioesLesoes: [...old.regioesLesoes, newRegiao!],
         }));
       }
     },
-    [atendimento, regioesLesoes, setAtendimento],
+    [atendimento, choicesRegioes, setAtendimento],
   );
 
   return (
     <>
       <FadeLoading loading={loading} />
-      {regioesLesoes && regioesLesoes.length > 0 && (
+      {choicesRegioes && choicesRegioes.length > 0 && (
         <>
-          {regioesLesoes.map((regItem, i) => (
+          {choicesRegioes.map((regItem, i) => (
             <FieldSetItem key={i} level="2">
               <CheckBox
                 checked={atendimento.regioesLesoes.some(
