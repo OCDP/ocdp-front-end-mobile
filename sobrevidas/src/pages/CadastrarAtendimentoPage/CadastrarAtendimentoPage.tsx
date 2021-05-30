@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
 import PageContainer from '../../components/PageContainer/PageContainer';
-import {HomeText} from './RegistrarAtendimentoPage.styles';
+import {HomeText} from './CadastrarAtendimentoPage.styles';
 
 interface Props {}
-const RegistrarAtendimentoPage: React.FC<Props> = ({
+const CadastrarAtendimentoPage: React.FC<Props> = ({
   navigation,
   route,
 }: any) => {
@@ -13,11 +13,11 @@ const RegistrarAtendimentoPage: React.FC<Props> = ({
     <PageContainer
       withHeader
       canGoBack
-      pageTitle="Rsgistrar um atendimento"
+      pageTitle="Cadastrar um atendimento"
       navigation={navigation}>
       <HomeText>registrar atendimento de {id}</HomeText>
     </PageContainer>
   );
 };
 
-export default memo(RegistrarAtendimentoPage);
+export default memo(CadastrarAtendimentoPage);

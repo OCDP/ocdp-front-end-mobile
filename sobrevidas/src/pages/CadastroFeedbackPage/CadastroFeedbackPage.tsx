@@ -37,7 +37,7 @@ const CadastroFeedbackPage: React.FC<Props> = ({navigation, route}: any) => {
           </CardFeedback>
           <CardFeedback
             onTouchStart={() =>
-              navigation.navigate('RegistrarAtendimentoPage', {id: id})
+              navigation.navigate('CadastrarAtendimentoPage', {id: id})
             }
             level="2">
             <AcompPrancheta

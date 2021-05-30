@@ -7,7 +7,7 @@ import PerfilUsuarioPage from '../pages/PerfilUsuarioPage/PerfilUsuarioPage';
 import HistoricoPage from '../pages/HistoricoPage/HistoricoPage';
 import DadosPacientePage from '../pages/DadosPacientePage/DadosPacientePage';
 import CadastroFeedbackPage from '../pages/CadastroFeedbackPage/CadastroFeedbackPage';
-import RegistrarAtendimentoPage from '../pages/RegistrarAtendimentoPage/RegistrarAtendimentoPage';
+import CadastrarAtendimentoPage from '../pages/CadastrarAtendimentoPage/CadastrarAtendimentoPage';
 
 export const routes = [
   {
@@ -47,7 +47,7 @@ export const routes = [
     component: CadastroFeedbackPage,
   },
   {
-    name: 'RegistrarAtendimentoPage',
-    component: RegistrarAtendimentoPage,
+    name: 'CadastrarAtendimentoPage',
+    component: CadastrarAtendimentoPage,
   },
 ];
