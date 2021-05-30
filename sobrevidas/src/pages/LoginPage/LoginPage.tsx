@@ -49,10 +49,10 @@ const LoginPage = ({navigation}: any) => {
         setLoading(false);
         navigation.navigate('HomePage');
       } catch (e) {
+        setLoading(false);
         Alert.alert('Erro no login', 'Algo deu errado no momento do login', [
           {text: 'Voltar'},
         ]);
-        setLoading(false);
       }
     },
     [loginUsuario, navigation, setThemeColors, setUsuarioLogado],

@@ -54,11 +54,10 @@ const HistoricoPage: React.FC<Props> = ({navigation, route}: any) => {
           appearance="outline"
           size="small"
           onPress={() =>
-            Alert.alert(
-              'Feature prestes a ser implementada',
-              'Logo logo estamos com isso funfando',
-              [{text: 'Voltar'}],
-            )
+            navigation.navigate('CadastrarAtendimentoPage', {
+              id: id,
+              nome: nome,
+            })
           }>
           Novo Atendimento
         </BotaoNovaAcao>

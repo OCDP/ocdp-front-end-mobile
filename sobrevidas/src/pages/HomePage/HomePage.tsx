@@ -52,7 +52,6 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         onChangeText={(value: string) => onFilterThrottle(value)}
       />
       <ListPacientes pacientes={pacientes} navigation={navigation} />
-
       <ButtonFooterContainer>
         <ButtonFooterBig
           onPress={() => navigation.navigate('CadastrarPacientePage')}

@@ -11,10 +11,10 @@ import {
   OptionsFeedback,
   CardFeedback,
   TextCard,
-} from './CadastroFeedback.styles';
+} from './CadastroFeedbackPage.styles';
 
 interface Props {}
-const CadastroFeedback: React.FC<Props> = ({navigation, route}: any) => {
+const CadastroFeedbackPage: React.FC<Props> = ({navigation, route}: any) => {
   const {id} = route.params;
   const {themeColors} = useContext(UsuarioLogadoContext);
 
@@ -37,7 +37,7 @@ const CadastroFeedback: React.FC<Props> = ({navigation, route}: any) => {
           </CardFeedback>
           <CardFeedback
             onTouchStart={() =>
-              navigation.navigate('RegistrarAcompanhamento', {id: id})
+              navigation.navigate('CadastrarAtendimentoPage', {id: id})
             }
             level="2">
             <AcompPrancheta
@@ -46,7 +46,7 @@ const CadastroFeedback: React.FC<Props> = ({navigation, route}: any) => {
               colorShadow={themeColors['color-primary-600']}
               colorCross={themeColors['color-danger-500']}
             />
-            <TextCard category="c2">Inserir um novo acompanhamento</TextCard>
+            <TextCard category="c2">Inserir um novo atendimento</TextCard>
           </CardFeedback>
         </OptionsFeedback>
       </FeedbackContainer>
@@ -54,4 +54,4 @@ const CadastroFeedback: React.FC<Props> = ({navigation, route}: any) => {
   );
 };
 
-export default memo(CadastroFeedback);
+export default memo(CadastroFeedbackPage);

@@ -1,7 +1,7 @@
 import {Input} from '@ui-kitten/components';
 import React, {memo, useContext} from 'react';
 import CadastroPacienteContext from '../../contexts/CadastroPacienteContext';
-import {FieldSetItem} from '../../pages/CadastrarPacientePage/CadastrarPacientePage.styles';
+import {FieldSetItem} from '../../styles/index.styles';
 import SearchBairros from '../SearchBairros/SearchBairros';
 
 interface Props {}
