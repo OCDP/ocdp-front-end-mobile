@@ -15,7 +15,7 @@ const CadastrarAtendimentoPage: React.FC<Props> = ({
       canGoBack
       pageTitle="Cadastrar um atendimento"
       navigation={navigation}>
-      <HomeText>registrar atendimento de {id}</HomeText>
+      <HomeText>Cadastrar um atendimento de {id}</HomeText>
     </PageContainer>
   );
 };
