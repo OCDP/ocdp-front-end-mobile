@@ -20,7 +20,6 @@ export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
   );
 };
 
-export const CadastroAcompanhamentoConsumer =
-  CadastroAtendimentoContext.Consumer;
+export const CadastroAtendimentoConsumer = CadastroAtendimentoContext.Consumer;
 
 export default CadastroAtendimentoContext;
