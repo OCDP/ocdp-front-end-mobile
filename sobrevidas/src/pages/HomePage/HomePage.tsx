@@ -13,6 +13,7 @@ import {
   ButtonFooterContainer,
   ButtonFooterBig,
 } from '../../styles/index.styles';
+import {Button} from '@ui-kitten/components';
 
 interface Props {}
 const HomePage: React.FC<Props> = ({navigation}: any) => {
@@ -51,6 +52,12 @@ const HomePage: React.FC<Props> = ({navigation}: any) => {
         accessoryRight={loading ? LoadingIndicator : search}
         onChangeText={(value: string) => onFilterThrottle(value)}
       />
+      <Button
+        onPress={() =>
+          navigation.navigate('CadastrarAtendimentoPage', {id: 14})
+        }>
+        tela de atendimento
+      </Button>
       <ListPacientes pacientes={pacientes} navigation={navigation} />
 
       <ButtonFooterContainer>
