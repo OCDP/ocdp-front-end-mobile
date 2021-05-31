@@ -1,4 +1,5 @@
 import {Button, Layout} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 
 export const BemVindoContainer = styled(Layout)`
@@ -9,12 +10,11 @@ export const BemVindoContainer = styled(Layout)`
   position: relative;
 `;
 
-export const ButtonContainer = styled(Layout)`
+export const ButtonContainer = styled(View)`
   width: 130px;
   position: absolute;
   bottom: 8px;
   justify-content: center;
-  background-color: transparent;
 `;
 
 export const ButtonGoLogin = styled(Button)`

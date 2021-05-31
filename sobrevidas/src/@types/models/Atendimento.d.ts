@@ -18,7 +18,7 @@ declare namespace Models {
   }
 
   interface RegiaoLesao {
-    id: number;
+    id?: number;
     imagemBase64?: string;
     nome?: string;
     subRegioes?: Subregiao[];
@@ -26,13 +26,7 @@ declare namespace Models {
 
   interface Subregiao {
     id: number;
-    nome: string;
-  }
-
-  interface Lesoes {
-    subregiao: number;
-    tipoLesao: TipoLesao;
-    foto_sub_regiao_enviada: FotoSubRegiaoEnviada;
+    nome?: string;
   }
 
   interface FotoSubRegiaoEnviada {
@@ -40,7 +34,7 @@ declare namespace Models {
     url: string;
   }
 
-  interface TipoLesao {
+  interface Lesao {
     id: number;
     descricao: number;
   }

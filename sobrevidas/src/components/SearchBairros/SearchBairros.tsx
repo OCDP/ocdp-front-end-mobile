@@ -116,7 +116,6 @@ const SearchBairros: React.FC<Props> = ({onSelect}) => {
             onSelect={value => {
               _getBairros(cidades[value].id);
               setCidadeSeleionada(cidades[value]);
-              console.log(cidades[value]);
               setValueSearchCidades(cidades[value].nome);
             }}>
             {cidades.map(({nome}, index) => (

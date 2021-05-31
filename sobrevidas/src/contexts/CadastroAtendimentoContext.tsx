@@ -17,7 +17,7 @@ export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
     fatoresDeRisco: [],
     atendimento: {} as Models.AtendimentoObj,
     dataSugeridaAcompanhamento: '',
-    regioesLesoes: [],
+    regioesLesoes: [] as Models.Subregiao[],
     dataSugeridaTratamento: '',
   });
   const [choicesFatoresRisco, setChoicesFatoresRisco] = useState<
@@ -26,12 +26,18 @@ export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
   const [choicesRegioes, setChoicesRegioes] = useState<Models.RegiaoLesao[]>(
     [] as Models.RegiaoLesao[],
   );
+  const [currentRegioes, setCurrentRegioes] = useState<Models.RegiaoLesao[]>(
+    [],
+  );
+
+  const [currentRegioesSub, setCurrentRegioesSub] = useState<
+    Models.RegiaoLesao[]
+  >([{subRegioes: []}]);
 
   const _getFatoresRisco = useCallback(async () => {
     try {
       setLoading(true);
       const {data} = await getFatoresRisco();
-      console.log(data);
       setChoicesFatoresRisco(data);
       setLoading(false);
     } catch (e) {
@@ -48,7 +54,6 @@ export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
     try {
       setLoading(true);
       const {data} = await getRegioesLesoes();
-      console.log(data);
       setChoicesRegioes(data);
       setLoading(false);
     } catch (e) {
@@ -73,6 +78,10 @@ export const CadastroAtendimentoProvider: React.FC = ({children}: any) => {
         setAtendimento,
         choicesFatoresRisco,
         choicesRegioes,
+        currentRegioes,
+        setCurrentRegioes,
+        currentRegioesSub,
+        setCurrentRegioesSub,
         loading,
       }}>
       {children}

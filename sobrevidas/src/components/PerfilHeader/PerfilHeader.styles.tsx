@@ -1,11 +1,11 @@
 import {Layout} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components';
 
-export const HeaderContainer = styled(Layout)`
+export const HeaderContainer = styled(View)`
   margin-top: 32px;
   flex-direction: column;
   justify-content: space-evenly;
-  background-color: transparent;
   align-items: center;
   margin-bottom: 8px;
 `;
@@ -33,8 +33,7 @@ export const LogoContainer = styled(Layout)`
   align-items: center;
 `;
 
-export const InfosHeader = styled(Layout)`
-  background-color: transparent;
+export const InfosHeader = styled(View)`
   flex-direction: column;
   margin: 0px 32px;
   align-items: center;

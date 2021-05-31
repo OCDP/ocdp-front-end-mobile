@@ -1,4 +1,5 @@
-import {Layout, Text, Button} from '@ui-kitten/components';
+import {Text, Button} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
@@ -7,12 +8,11 @@ export const Container = styled.View`
   justify-content: center;
 `;
 
-export const FormContainer = styled(Layout)`
+export const FormContainer = styled(View)`
   padding: 0px 32px;
   flex-direction: column;
   justify-content: space-around;
   width: 100%;
-  background-color: transparent;
 `;
 
 export const LogoContainer = styled.View`

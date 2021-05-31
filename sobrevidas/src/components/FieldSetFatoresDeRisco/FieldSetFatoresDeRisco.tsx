@@ -22,9 +22,9 @@ const FieldSetFatoresDeRisco: React.FC<Props> = ({
     (value: number) => {
       if (atendimento.fatoresDeRisco?.includes(value)) {
         const index = atendimento.fatoresDeRisco.indexOf(value);
-        const oldFatores = [...atendimento.fatoresDeRisco];
-        oldFatores.splice(index, 1);
-        setAtendimento(old => ({...old, fatoresDeRisco: oldFatores}));
+        const fatoresDeRisco = [...atendimento.fatoresDeRisco];
+        fatoresDeRisco.splice(index, 1);
+        setAtendimento(old => ({...old, fatoresDeRisco}));
       } else {
         setAtendimento(old => ({
           ...old,

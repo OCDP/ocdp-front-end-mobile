@@ -1,4 +1,5 @@
 import {Button, Layout} from '@ui-kitten/components';
+import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
@@ -8,8 +9,7 @@ export const PerfilContainer = styled(ScrollView)`
   /* justify-content: space-between; */
 `;
 
-export const FooterItens = styled(Layout)`
-  background-color: transparent;
+export const FooterItens = styled(View)`
   justify-content: space-around;
   align-items: center;
   height: 100px;

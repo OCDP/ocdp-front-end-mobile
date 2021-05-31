@@ -39,7 +39,6 @@ const LoginPage = ({navigation}: any) => {
       try {
         setLoading(true);
         const {data} = await loginUsuario(values.cpf, values.password);
-        console.log(data);
         setUsuarioLogado({...data, senhaUsuario: values.password});
         if (data.nivelAtencao === 'PRIMARIA') {
           setThemeColors(primariaColors);

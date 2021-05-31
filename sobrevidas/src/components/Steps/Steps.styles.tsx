@@ -18,6 +18,7 @@ export const StepDescription = styled(Text)`
 
 export const CurrentStep = styled(Layout)`
   padding: 0px 16px;
+  height: 100%;
   flex: 1;
 `;
 

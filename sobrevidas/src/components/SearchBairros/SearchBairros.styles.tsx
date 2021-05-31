@@ -1,4 +1,5 @@
 import {Layout, Button, Autocomplete} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 
 export const DisplayEndereco = styled(Layout)`
@@ -9,26 +10,23 @@ export const DisplayEndereco = styled(Layout)`
   align-items: center;
 `;
 
-export const EnderecoCard = styled(Layout)`
-  background-color: transparent;
+export const EnderecoCard = styled(View)`
   flex: 1;
   flex-direction: row;
   align-items: center;
 `;
 
-export const LogoPinContainer = styled(Layout)`
+export const LogoPinContainer = styled(View)`
   flex: 0.5;
   justify-content: center;
   align-items: center;
   height: 100px;
-  background-color: transparent;
 `;
 
-export const TextEnderecoContainer = styled(Layout)`
+export const TextEnderecoContainer = styled(View)`
   flex: 1;
   height: 100px;
   justify-content: center;
-  background-color: transparent;
 `;
 
 export const ButtonModalContainer = styled(Button)`

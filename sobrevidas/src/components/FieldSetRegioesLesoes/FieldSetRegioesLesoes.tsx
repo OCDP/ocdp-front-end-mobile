@@ -7,26 +7,26 @@ import {ImagemRegiao} from './FieldSetRegioesLesoes.styles';
 
 interface Props {}
 const FieldSetRegioesLesoes: React.FC<Props> = () => {
-  const {atendimento, setAtendimento, loading, choicesRegioes} = useContext(
-    CadastroAtendimentoContext,
-  );
+  const {
+    loading,
+    choicesRegioes,
+    currentRegioes,
+    setCurrentRegioes,
+  } = useContext(CadastroAtendimentoContext);
 
   const updateArray = useCallback(
     (value: number) => {
-      if (atendimento.regioesLesoes.some(regiao => regiao.id === value)) {
-        const index = atendimento.regioesLesoes.map(e => e.id).indexOf(value);
-        const oldRegioes = [...atendimento.regioesLesoes];
+      if (currentRegioes.some(regiao => regiao.id === value)) {
+        const index = currentRegioes.map(e => e.id).indexOf(value);
+        const oldRegioes = [...currentRegioes];
         oldRegioes.splice(index, 1);
-        setAtendimento(old => ({...old, regioesLesoes: oldRegioes}));
+        setCurrentRegioes(oldRegioes);
       } else {
         const newRegiao = choicesRegioes.find(regiao => regiao.id === value);
-        setAtendimento(old => ({
-          ...old,
-          regioesLesoes: [...old.regioesLesoes, newRegiao!],
-        }));
+        setCurrentRegioes(old => [...old, newRegiao!]);
       }
     },
-    [atendimento, choicesRegioes, setAtendimento],
+    [choicesRegioes, currentRegioes, setCurrentRegioes],
   );
 
   return (
@@ -37,10 +37,10 @@ const FieldSetRegioesLesoes: React.FC<Props> = () => {
           {choicesRegioes.map((regItem, i) => (
             <FieldSetItem key={i} level="2">
               <CheckBox
-                checked={atendimento.regioesLesoes.some(
+                checked={currentRegioes.some(
                   regiao => regiao.id === regItem.id,
                 )}
-                onChange={() => updateArray(regItem.id)}>
+                onChange={() => updateArray(regItem.id!)}>
                 {regItem.nome}
               </CheckBox>
               <ImagemRegiao source={{uri: regItem.imagemBase64}} />

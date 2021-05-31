@@ -1,24 +1,20 @@
-import {Layout, Text} from '@ui-kitten/components';
+import {Text} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 
-export const SliderContent = styled(Layout)`
+export const SliderContent = styled(View)`
   height: 550px;
-  background-color: transparent;
 `;
 
-export const ItemSliderContainer = styled(Layout)`
-  background-color: transparent;
+export const ItemSliderContainer = styled(View)`
   align-items: center;
   text-align: left;
 `;
 
-export const ImageContainer = styled(Layout)`
-  background-color: transparent;
-`;
+export const ImageContainer = styled(View)``;
 
-export const TextContainer = styled(Layout)`
+export const TextContainer = styled(View)`
   margin: 0px 30px;
-  background-color: transparent;
 `;
 
 export const TitleSliderContainer = styled(Text)`

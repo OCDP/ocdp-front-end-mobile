@@ -1,4 +1,5 @@
 import {Layout, Text} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components';
 import {buildStyledShadow} from '../../styles/buildShadow';
 
@@ -14,11 +15,10 @@ export const HistoricoItemContainer = styled(Layout)`
   height: 110px;
 `;
 
-export const TimeLineContent = styled(Layout)`
+export const TimeLineContent = styled(View)`
   flex-direction: column;
   margin-right: 16px;
   height: 100%;
-  background-color: transparent;
   align-items: center;
 `;
 
@@ -50,8 +50,7 @@ export const ItemListHistorico = styled(Layout)`
   padding: 16px 8px;
 `;
 
-export const HistoricoInfos = styled(Layout)`
-  background-color: transparent;
+export const HistoricoInfos = styled(View)`
   flex: 1;
   flex-direction: column;
   margin-left: 12px;

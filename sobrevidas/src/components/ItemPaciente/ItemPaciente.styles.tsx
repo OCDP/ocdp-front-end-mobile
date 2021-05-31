@@ -1,4 +1,5 @@
 import {Layout, Text, Button} from '@ui-kitten/components';
+import {View} from 'react-native';
 import styled from 'styled-components';
 import {buildStyledShadow} from '../../styles/buildShadow';
 const shadow = buildStyledShadow(6);
@@ -14,8 +15,7 @@ export const ItemListPaciente = styled(Layout)`
   padding: 16px 8px;
 `;
 
-export const PacienteInfos = styled(Layout)`
-  background-color: transparent;
+export const PacienteInfos = styled(View)`
   flex: 1;
   flex-direction: column;
   margin-left: 12px;

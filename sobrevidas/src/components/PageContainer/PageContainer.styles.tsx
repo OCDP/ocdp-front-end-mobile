@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {Layout, Text} from '@ui-kitten/components';
+import {View} from 'react-native';
 
 export const Container = styled(Layout)`
   flex: 1;
@@ -14,8 +15,7 @@ export const HeaderContainer = styled(Layout)`
   align-items: center;
 `;
 
-export const HeaderItem = styled(Layout)`
-  background-color: transparent;
+export const HeaderItem = styled(View)`
   align-items: center;
   flex: 1;
 `;
