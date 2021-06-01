@@ -1,7 +1,7 @@
-import {Button, CheckBox, Text} from '@ui-kitten/components';
-import React, {memo, useCallback, useContext} from 'react';
+import { Button, CheckBox, Text } from '@ui-kitten/components';
+import React, { memo, useCallback, useContext, useEffect, useState } from 'react';
 import CadastroAtendimentoContext from '../../contexts/CadastroAtendimentoContext';
-import {FieldSetItem} from '../../styles/index.styles';
+import { FieldSetItem } from '../../styles/index.styles';
 import EmptyContent from '../EmptyContent/EmptyContent';
 import {
   EmptySubRegiaoContent,
@@ -10,59 +10,31 @@ import {
   RegiaoContent,
 } from './FieldSetSuRegioes.styles';
 
-interface Props {}
+interface Props { }
 const FieldSetSubRegioes: React.FC<Props> = () => {
-  const {currentRegioes, currentRegioesSub, setCurrentRegioesSub} = useContext(
+  const { currentRegioes, currentRegioesSub, setCurrentRegioesSub } = useContext(
     CadastroAtendimentoContext,
   );
+  const [auxRegioes, setAuxRegioes] = useState<number[]>([]);
 
-  const updateArray = useCallback(
-    (regiaoId: number, subId: number, subName: string) => {
-      if (
-        currentRegioesSub &&
-        currentRegioesSub.some(regiao => regiao.id === subId)
-      ) {
-        let selectedRegiao = currentRegioes.find(
-          regiao => regiao.id === regiaoId,
-        );
+  const updateArray = (idSubregiao: number) => {
+    let newAuxRegioes = auxRegioes;
+    const idEstaNoVetor = verificarSeIdEstaNoVetor(idSubregiao);
+    idEstaNoVetor.isTrue ? newAuxRegioes.splice(idEstaNoVetor.index, 1) : newAuxRegioes.push(idSubregiao);
+    // console.log("newAuxRegioes", newAuxRegioes);
+    setAuxRegioes(newAuxRegioes);
+  }
 
-        const regioesOld = [...currentRegioesSub];
-        const indexRegiao = currentRegioesSub.map(e => e.id).indexOf(regiaoId);
+  const verificarSeIdEstaNoVetor = (idSubregiao: number) => {
+    const isTrue = auxRegioes.indexOf(idSubregiao) == -1 ? false : true;
+    return { isTrue, index: auxRegioes.indexOf(idSubregiao) };
+  }
 
-        const indexSubRegiao = selectedRegiao
-          ?.subRegioes!.map(e => e.id)
-          .indexOf(subId);
+  // useEffect(() => {
+  //   console.log("currentRegioes", currentRegioes);
+  //   console.log("currentRegioesSub", currentRegioesSub);
 
-        const oldSubRegioes = [...selectedRegiao?.subRegioes!];
-
-        oldSubRegioes.splice(indexSubRegiao!, 1);
-
-        regioesOld[indexRegiao].subRegioes = oldSubRegioes;
-
-        setCurrentRegioesSub(regioesOld);
-      } else {
-        let selectedRegiao = currentRegioes.find(
-          regiao => regiao.id === regiaoId,
-        );
-
-        const indexRegiao = currentRegioes
-          .map(e => e.id)
-          .indexOf(selectedRegiao!.id);
-
-        let regioesOld = [...currentRegioes];
-        let subOld = regioesOld[indexRegiao].subRegioes;
-        const newSubOld = [
-          ...subOld!,
-          {
-            id: subId,
-            nome: subName,
-          },
-        ];
-        setCurrentRegioesSub(newSubOld);
-      }
-    },
-    [currentRegioes, currentRegioesSub, setCurrentRegioesSub],
-  );
+  // }, [])
 
   return (
     <>
@@ -70,7 +42,7 @@ const FieldSetSubRegioes: React.FC<Props> = () => {
         currentRegioes.map((regiao, i) => (
           <FieldSetItem key={i} level="2">
             <RegiaoContent>
-              <ImageRegiaoContainer source={{uri: regiao.imagemBase64}} />
+              <ImageRegiaoContainer source={{ uri: regiao.imagemBase64 }} />
               <Text category="s1">{regiao.nome}</Text>
               <Button onPress={() => console.log(currentRegioesSub)}>
                 o que tem no sub
@@ -81,9 +53,9 @@ const FieldSetSubRegioes: React.FC<Props> = () => {
                     <FieldSetItem key={index} level="3">
                       <CheckBox
                         onChange={() =>
-                          updateArray(regiao.id!, subregiao.id, subregiao.nome!)
+                          updateArray(subregiao.id)
                         }
-                        checked={false}>
+                        checked={verificarSeIdEstaNoVetor(subregiao.id).isTrue}>
                         {subregiao.nome}
                       </CheckBox>
                     </FieldSetItem>
